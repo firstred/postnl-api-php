@@ -43,33 +43,43 @@ use function in_array;
  */
 class GetSentDate extends AbstractEntity
 {
+    /** @var bool|null $AllowSundaySorting */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $AllowSundaySorting = null;
 
+    /** @var string|null $City */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
+    /** @var string|null $CountryCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CountryCode = null;
 
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
+    /** @var string|null $HouseNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
+    /** @var string|null $HouseNrExt */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
+    /** @var array|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
+    /** @var string|null $PostalCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PostalCode = null;
 
+    /** @var string|null $ShippingDuration */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShippingDuration = null;
 
+    /** @var string|null $Street */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
@@ -102,11 +112,19 @@ class GetSentDate extends AbstractEntity
         $this->setShippingDuration(ShippingDuration: $ShippingDuration);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): ?string
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(?string $City): static
     {
         $this->City = $City;
@@ -114,11 +132,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryCode(): ?string
     {
         return $this->CountryCode;
     }
 
+    /**
+     * @param string|null $CountryCode
+     *
+     * @return $this
+     */
     public function setCountryCode(?string $CountryCode): static
     {
         $this->CountryCode = $CountryCode;
@@ -126,11 +152,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNr(): ?string
     {
         return $this->HouseNr;
     }
 
+    /**
+     * @param string|null $HouseNr
+     *
+     * @return $this
+     */
     public function setHouseNr(?string $HouseNr): static
     {
         $this->HouseNr = $HouseNr;
@@ -138,11 +172,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): ?string
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -150,11 +192,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array|null
+     */
     public function getOptions(): ?array
     {
         return $this->Options;
     }
 
+    /**
+     * @param array|null $Options
+     *
+     * @return $this
+     */
     public function setOptions(?array $Options): static
     {
         $this->Options = $Options;
@@ -162,11 +212,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShippingDuration(): ?string
     {
         return $this->ShippingDuration;
     }
 
+    /**
+     * @param string|null $ShippingDuration
+     *
+     * @return $this
+     */
     public function setShippingDuration(?string $ShippingDuration): static
     {
         $this->ShippingDuration = $ShippingDuration;
@@ -174,11 +232,19 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): ?string
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(?string $Street): static
     {
         $this->Street = $Street;
@@ -186,16 +252,25 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAllowSundaySorting(): ?bool
     {
         return $this->AllowSundaySorting;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryDate(): ?DateTimeInterface
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): ?string
     {
         return $this->PostalCode;
@@ -221,6 +296,11 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param string|null $postcode
+     *
+     * @return $this
+     */
     public function setPostalCode(?string $postcode = null): static
     {
         if (is_null(value: $postcode)) {
@@ -247,6 +327,11 @@ class GetSentDate extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

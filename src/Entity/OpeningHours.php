@@ -50,28 +50,43 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
 {
     private int $currentDay = 0;
 
-    /** @var string|string[]|null */
+    /** @var string|string[]|null $Monday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Monday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Tuesday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Tuesday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Wednesday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Wednesday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Thursday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Thursday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Friday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Friday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Saturday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Saturday = null;
-    /** @var string|string[]|null */
+
+    /** @var string|string[]|null $Sunday */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected string|array|null $Sunday = null;
 
+    /**
+     * @param string|array|null $Monday
+     * @param string|array|null $Tuesday
+     * @param string|array|null $Wednesday
+     * @param string|array|null $Thursday
+     * @param string|array|null $Friday
+     * @param string|array|null $Saturday
+     * @param string|array|null $Sunday
+     */
     public function __construct(
         /** @param string|string[]|null $Monday */
         string|array|null $Monday = null,
@@ -90,13 +105,153 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     ) {
         parent::__construct();
 
-        $this->setMonday($Monday);
-        $this->setTuesday($Tuesday);
-        $this->setWednesday($Wednesday);
-        $this->setThursday($Thursday);
-        $this->setFriday($Friday);
-        $this->setSaturday($Saturday);
-        $this->setSunday($Sunday);
+        $this->setMonday(Monday: $Monday);
+        $this->setTuesday(Tuesday: $Tuesday);
+        $this->setWednesday(Wednesday: $Wednesday);
+        $this->setThursday(Thursday: $Thursday);
+        $this->setFriday(Friday: $Friday);
+        $this->setSaturday(Saturday: $Saturday);
+        $this->setSunday(Sunday: $Sunday);
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getMonday(): array|string|null
+    {
+        return $this->Monday;
+    }
+
+    /**
+     * @param array|string|null $Monday
+     *
+     * @return OpeningHours
+     */
+    public function setMonday(array|string|null $Monday): OpeningHours
+    {
+        $this->Monday = $Monday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getTuesday(): array|string|null
+    {
+        return $this->Tuesday;
+    }
+
+    /**
+     * @param array|string|null $Tuesday
+     *
+     * @return OpeningHours
+     */
+    public function setTuesday(array|string|null $Tuesday): OpeningHours
+    {
+        $this->Tuesday = $Tuesday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getWednesday(): array|string|null
+    {
+        return $this->Wednesday;
+    }
+
+    /**
+     * @param array|string|null $Wednesday
+     *
+     * @return OpeningHours
+     */
+    public function setWednesday(array|string|null $Wednesday): OpeningHours
+    {
+        $this->Wednesday = $Wednesday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getThursday(): array|string|null
+    {
+        return $this->Thursday;
+    }
+
+    /**
+     * @param array|string|null $Thursday
+     *
+     * @return OpeningHours
+     */
+    public function setThursday(array|string|null $Thursday): OpeningHours
+    {
+        $this->Thursday = $Thursday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getFriday(): array|string|null
+    {
+        return $this->Friday;
+    }
+
+    /**
+     * @param array|string|null $Friday
+     *
+     * @return OpeningHours
+     */
+    public function setFriday(array|string|null $Friday): OpeningHours
+    {
+        $this->Friday = $Friday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getSaturday(): array|string|null
+    {
+        return $this->Saturday;
+    }
+
+    /**
+     * @param array|string|null $Saturday
+     *
+     * @return OpeningHours
+     */
+    public function setSaturday(array|string|null $Saturday): OpeningHours
+    {
+        $this->Saturday = $Saturday;
+
+        return $this;
+    }
+
+    /**
+     * @return array|string|null
+     */
+    public function getSunday(): array|string|null
+    {
+        return $this->Sunday;
+    }
+
+    /**
+     * @param array|string|null $Sunday
+     *
+     * @return OpeningHours
+     */
+    public function setSunday(array|string|null $Sunday): OpeningHours
+    {
+        $this->Sunday = $Sunday;
+
+        return $this;
     }
 
     /**

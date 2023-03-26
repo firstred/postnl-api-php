@@ -147,6 +147,11 @@ class PostNL implements LoggerAwareInterface
 {
     /**
      * 3S (or EU Pack Special) countries.
+     *
+     * @var array                $threeSCountries
+     *
+     * @phpstan-var list<string> $threeSCountries
+     * @psalm-var list<string>   $threeSCountries
      */
     public static array $threeSCountries = [
         'AT',
@@ -180,6 +185,10 @@ class PostNL implements LoggerAwareInterface
     /**
      * A6 positions
      * (index = amount of a6 left on the page).
+     *
+     * @var array $a6positions
+     * @phpstan-var array{1: array{int, int}, 2: array{int, int}, 3: array{int, int}, 4: array{int, int}} $a6positions
+     * @psalm-var array{1: array{int, int}, 2: array{int, int}, 3: array{int, int}, 4: array{int, int}} $a6positions
      */
     public static array $a6positions = [
         4 => [-276, 2],
@@ -187,42 +196,69 @@ class PostNL implements LoggerAwareInterface
         2 => [-276, 110],
         1 => [-132, 110],
     ];
+
+    /** @var HiddenString $apiKey */
     protected HiddenString $apiKey;
+
+    /** @var Customer $customer */
     protected Customer $customer;
+
+    /** @var bool $sandbox */
     protected bool $sandbox = false;
+
+    /** @var HttpClientInterface $httpClient */
     protected HttpClientInterface $httpClient;
+
+    /** @var LoggerInterface $logger */
     protected LoggerInterface $logger;
+
+    /** @var RequestFactoryInterface $requestFactory */
     protected RequestFactoryInterface $requestFactory;
+    /** @var ResponseFactoryInterface $responseFactory */
     protected ResponseFactoryInterface $responseFactory;
+    /** @var StreamFactoryInterface $streamFactory */
     protected StreamFactoryInterface $streamFactory;
+
+    /** @var PostNLApiMode $apiMode */
     protected PostNLApiMode $apiMode = PostNLApiMode::Rest;
+
+    /** @var BarcodeServiceInterface $barcodeService */
     protected BarcodeServiceInterface $barcodeService;
+    /** @var LabellingServiceInterface $labellingService */
     protected LabellingServiceInterface $labellingService;
+    /** @var ConfirmingServiceInterface $confirmingService */
     protected ConfirmingServiceInterface $confirmingService;
+    /** @var ShippingStatusServiceInterface $shippingStatusService */
     protected ShippingStatusServiceInterface $shippingStatusService;
+    /** @var DeliveryDateServiceInterface $deliveryDateService */
     protected DeliveryDateServiceInterface $deliveryDateService;
+    /** @var TimeframeServiceInterface $timeframeService */
     protected TimeframeServiceInterface $timeframeService;
+    /** @var LocationServiceInterface $locationService */
     protected LocationServiceInterface $locationService;
+    /** @var ShippingServiceInterface $shippingService */
     protected ShippingServiceInterface $shippingService;
 
     /**
      * PostNL constructor.
      *
-     * @param Customer $customer Customer object.
-     * @param string|UsernameToken $apiKey API key or UsernameToken object.
-     * @param bool $sandbox Whether the testing environment should be used.
-     * @param int $mode Set the preferred connection strategy.
-     *                                       Valid options are:
-     *                                       - `MODE_REST`: New REST API
-     *                                       - `MODE_SOAP`: New SOAP API
+     * @param Customer                       $customer Customer object.
+     * @param string|UsernameToken           $apiKey   API key or UsernameToken object.
+     * @param bool                           $sandbox  Whether the testing environment should be used.
+     * @param PostNLApiMode|int              $mode     Set the preferred connection strategy.
+     *                                                 Valid options are:
+     *                                                 - `PostNLApiMode.Rest` or `1`: New REST API
+     *                                                 - `PostNLApiMode.Soap` or `2`: New SOAP API
+     * @phpstan-param PostNLApiMode|int<1,2> $mode
+     * @psalm-param PostNLApiMode|int<1,2>   $mode
      *
-     * @throws InvalidArgumentException
+     * @throws PostNLInvalidArgumentException
      */
     public function __construct(
         Customer             $customer,
         string|UsernameToken $apiKey,
         bool                 $sandbox,
-        PostNLApiMode        $mode = PostNLApiMode::Rest,
+        PostNLApiMode|int    $mode = PostNLApiMode::Rest,
     ) {
         $this->checkEnvironment();
 
@@ -237,7 +273,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      * @since 2.0.0 Support `HiddenString`
-     * 
+     *
      * @deprecated
      */
     public function setToken(string|HiddenString|UsernameToken $apiKey): static
@@ -254,13 +290,14 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * @throws PostNLInvalidArgumentException
      * @deprecated
      */
-    public function getToken(): UsernameToken 
+    public function getToken(): UsernameToken
     {
         return new UsernameToken(Password: $this->getApiKey());
     }
-    
+
 
     /**
      * Get API Key
@@ -283,7 +320,7 @@ class PostNL implements LoggerAwareInterface
     public function setApiKey(HiddenString|string $apiKey): static
     {
         $this->apiKey = is_string(value: $apiKey) ? HiddenString(value: $apiKey) : $apiKey;
-        
+
         return $this;
     }
 
@@ -458,7 +495,7 @@ class PostNL implements LoggerAwareInterface
         $this->getShippingService()->setHttpClient(httpClient: $httpClient);
         $this->getShippingStatusService()->setHttpClient(httpClient: $httpClient);
         $this->getTimeframeService()->setHttpClient(httpClient: $httpClient);
-        
+
         $this->httpClient->setLogger(logger: $this->getLogger());
     }
 
@@ -966,7 +1003,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Generate a single barcode by country code.
      *
-     * @param array $isos key = iso code, value = amount of barcodes requested
+     * @param array                      $isos key = iso code, value = amount of barcodes requested
+     *
      * @phpstan-param array<string, int> $isos
      *
      * @return array Country isos with the barcodes as string
@@ -1032,8 +1070,8 @@ class PostNL implements LoggerAwareInterface
      * Send a single shipment.
      *
      * @param Shipment $shipment
-     * @param string $printertype
-     * @param bool $confirm
+     * @param string   $printertype
+     * @param bool     $confirm
      *
      * @return SendShipmentResponse
      *
@@ -1058,15 +1096,20 @@ class PostNL implements LoggerAwareInterface
     /**
      * Send multiple shipments.
      *
-     * @param Shipment[] $shipments Array of shipments
-     * @param string $printertype Printer type, see PostNL dev docs for available types
-     * @param bool $confirm Immediately confirm the shipments
-     * @param bool $merge Merge the PDFs and return them in a MyParcel way
-     * @param int $format A4 or A6
+     * @param Shipment[]                                        $shipments     Array of shipments
+     * @param string                                            $printertype   Printer type, see PostNL dev docs for
+     *                                                                         available types
+     * @param bool                                              $confirm       Immediately confirm the shipments
+     * @param bool                                              $merge         Merge the PDFs and return them in a
+     *                                                                         MyParcel way
+     * @param int                                               $format        A4 or A6
+     *
      * @phpstan-param array{1: bool, 2: bool, 3: bool, 4: bool} $positions
-     * @param array $positions Set the positions of the A6s on the first A4
-     *                                                                         The indices should be the position number, marked with `true` or `false`
-     *                                                                         These are the position numbers:
+     *
+     * @param array                                             $positions     Set the positions of the A6s on the
+     *                                                                         first A4 The indices should be the
+     *                                                                         position number, marked with `true` or
+     *                                                                         `false` These are the position numbers:
      *                                                                         ```
      *                                                                         +-+-+
      *                                                                         |2|4|
@@ -1091,7 +1134,7 @@ class PostNL implements LoggerAwareInterface
      *                                                                         4 => true,
      *                                                                         ]
      *                                                                         ```
-     * @param string $a6Orientation A6 orientation (P or L)
+     * @param string                                            $a6Orientation A6 orientation (P or L)
      *
      * @return SendShipmentResponse|string
      *
@@ -1265,8 +1308,8 @@ class PostNL implements LoggerAwareInterface
      * Generate a single label.
      *
      * @param Shipment $shipment
-     * @param string $printertype
-     * @param bool $confirm
+     * @param string   $printertype
+     * @param bool     $confirm
      *
      * @return GenerateLabelResponse
      *
@@ -1302,12 +1345,12 @@ class PostNL implements LoggerAwareInterface
      * Note that instead of returning a GenerateLabelResponse this function can merge the labels and return a
      * string which contains the PDF with the merged pages as well.
      *
-     * @param Shipment[] $shipments (key = ID) Shipments
-     * @param string $printertype Printer type, see PostNL dev docs for available types
-     * @param bool $confirm Immediately confirm the shipments
-     * @param bool $merge Merge the PDFs and return them in a MyParcel way
-     * @param int $format A4 or A6
-     * @param array $positions Set the positions of the A6s on the first A4
+     * @param Shipment[] $shipments     (key = ID) Shipments
+     * @param string     $printertype   Printer type, see PostNL dev docs for available types
+     * @param bool       $confirm       Immediately confirm the shipments
+     * @param bool       $merge         Merge the PDFs and return them in a MyParcel way
+     * @param int        $format        A4 or A6
+     * @param array      $positions     Set the positions of the A6s on the first A4
      *                                  The indices should be the position number, marked with `true` or `false`
      *                                  These are the position numbers:
      *                                  ```
@@ -1334,7 +1377,7 @@ class PostNL implements LoggerAwareInterface
      *                                  4 => true,
      *                                  ]
      *                                  ```
-     * @param string $a6Orientation A6 orientation (P or L)
+     * @param string     $a6Orientation A6 orientation (P or L)
      *
      * @return GenerateLabelResponse[]|string
      *
@@ -1571,7 +1614,7 @@ class PostNL implements LoggerAwareInterface
      * @throws ResponseException
      * @throws PostNLNotFoundException
      *
-     * @since 1.0.0
+     * @since      1.0.0
      *
      * @deprecated 1.2.0 Use the dedicated methods (get by phase and status are no longer working)
      */
@@ -1599,8 +1642,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get the current status of the given shipment by barcode.
      *
-     * @param string $barcode Pass a single barcode
-     * @param bool $complete Return the complete status (incl. shipment history)
+     * @param string $barcode  Pass a single barcode
+     * @param bool   $complete Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
      *
@@ -1644,7 +1687,7 @@ class PostNL implements LoggerAwareInterface
      * Get the current statuses of the given shipments by barcodes.
      *
      * @param string[] $barcodes Pass multiple barcodes
-     * @param bool $complete Return the complete status (incl. shipment history)
+     * @param bool     $complete Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
      * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
@@ -1689,7 +1732,7 @@ class PostNL implements LoggerAwareInterface
      * Get the current status of the given shipment by reference.
      *
      * @param string $reference Pass a single reference
-     * @param bool $complete Return the complete status (incl. shipment history)
+     * @param bool   $complete  Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
      *
@@ -1734,7 +1777,7 @@ class PostNL implements LoggerAwareInterface
      * Get the current statuses of the given shipments by references.
      *
      * @param string[] $references Pass multiple references
-     * @param bool $complete Return the complete status (incl. shipment history)
+     * @param bool     $complete   Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
      * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
@@ -1801,7 +1844,7 @@ class PostNL implements LoggerAwareInterface
      * @throws ResponseException
      * @throws PostNLNotFoundException
      *
-     * @since 1.0.0
+     * @since      1.0.0
      *
      * @deprecated 1.2.0 Use the dedicated getShippingStatus* methods (get by phase and status are no longer working)
      */
@@ -1849,7 +1892,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetSignatureResponseSignature
      *
-     * @since 1.0.0
+     * @since      1.0.0
      *
      * @deprecated 1.2.0 Use the getSignature(s)By* alternatives
      */
@@ -1976,9 +2019,9 @@ class PostNL implements LoggerAwareInterface
      * - locations
      * - delivery date.
      *
-     * @param GetTimeframes $getTimeframes
+     * @param GetTimeframes       $getTimeframes
      * @param GetNearestLocations $getNearestLocations
-     * @param GetDeliveryDate $getDeliveryDate
+     * @param GetDeliveryDate     $getDeliveryDate
      *
      * @return array [
      *                   timeframes => ResponseTimeframes,
@@ -2125,7 +2168,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @param string $type
      * @param string $range
-     * @param bool $eps Indicates whether it is an EPS Shipment
+     * @param bool   $eps Indicates whether it is an EPS Shipment
      *
      * @return string
      *

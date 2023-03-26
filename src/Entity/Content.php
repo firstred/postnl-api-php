@@ -35,28 +35,43 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Content extends AbstractEntity
 {
+    /** @var string|null $CountryOfOrigin */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CountryOfOrigin = null;
 
+    /** @var string|null $Description */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Description = null;
 
+    /** @var string|null $HSTariffNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HSTariffNr = null;
 
+    /** @var string|null $Quantity */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Quantity = null;
 
+    /** @var string|null $Value */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Value = null;
 
+    /** @var string|null $Weight */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Weight = null;
 
-    /** @var Content[]|null */
+    /** @var Content[]|null $Content */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Content = null;
 
+    /**
+     * @param string|null $CountryOfOrigin
+     * @param string|null $Description
+     * @param string|null $HSTariffNr
+     * @param string|null $Quantity
+     * @param string|null $Value
+     * @param string|null $Weight
+     * @param array|null  $Content
+     */
     public function __construct(
         ?string $CountryOfOrigin = null,
         ?string $Description = null,
@@ -77,11 +92,19 @@ class Content extends AbstractEntity
         $this->setContent(Content: $Content);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountryOfOrigin(): ?string
     {
         return $this->CountryOfOrigin;
     }
 
+    /**
+     * @param string|null $CountryOfOrigin
+     *
+     * @return $this
+     */
     public function setCountryOfOrigin(?string $CountryOfOrigin): static
     {
         $this->CountryOfOrigin = $CountryOfOrigin;
@@ -89,11 +112,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(?string $Description): static
     {
         $this->Description = $Description;
@@ -101,11 +132,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHSTariffNr(): ?string
     {
         return $this->HSTariffNr;
     }
 
+    /**
+     * @param string|null $HSTariffNr
+     *
+     * @return $this
+     */
     public function setHSTariffNr(?string $HSTariffNr): static
     {
         $this->HSTariffNr = $HSTariffNr;
@@ -113,11 +152,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getQuantity(): ?string
     {
         return $this->Quantity;
     }
 
+    /**
+     * @param string|null $Quantity
+     *
+     * @return $this
+     */
     public function setQuantity(?string $Quantity): static
     {
         $this->Quantity = $Quantity;
@@ -125,11 +172,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue(): ?string
     {
         return $this->Value;
     }
 
+    /**
+     * @param string|null $Value
+     *
+     * @return $this
+     */
     public function setValue(?string $Value): static
     {
         $this->Value = $Value;
@@ -137,11 +192,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getWeight(): ?string
     {
         return $this->Weight;
     }
 
+    /**
+     * @param string|null $Weight
+     *
+     * @return $this
+     */
     public function setWeight(?string $Weight): static
     {
         $this->Weight = $Weight;
@@ -149,11 +212,19 @@ class Content extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Content|null
+     */
     public function getContent(): ?array
     {
         return $this->Content;
     }
 
+    /**
+     * @param array|null $Content
+     *
+     * @return $this
+     */
     public function setContent(?array $Content): static
     {
         $this->Content = $Content;

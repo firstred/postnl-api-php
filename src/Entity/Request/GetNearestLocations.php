@@ -38,15 +38,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GetNearestLocations extends AbstractEntity
 {
+    /** @var string|null $Countrycode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Countrycode = null;
 
+    /** @var Location|null $Location */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Location $Location = null;
 
+    /** @var Message|null $Messages */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
+    /**
+     * @param string|null   $Countrycode
+     * @param Location|null $Location
+     * @param Message|null  $Message
+     */
     public function __construct(
         ?string   $Countrycode = null,
         ?Location $Location = null,
@@ -59,11 +67,19 @@ class GetNearestLocations extends AbstractEntity
         $this->setMessage(Message: $Message ?: new Message());
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountrycode(): ?string
     {
         return $this->Countrycode;
     }
 
+    /**
+     * @param string|null $Countrycode
+     *
+     * @return $this
+     */
     public function setCountrycode(?string $Countrycode): static
     {
         $this->Countrycode = $Countrycode;
@@ -71,11 +87,19 @@ class GetNearestLocations extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Location|null
+     */
     public function getLocation(): ?Location
     {
         return $this->Location;
     }
 
+    /**
+     * @param Location|null $Location
+     *
+     * @return $this
+     */
     public function setLocation(?Location $Location): static
     {
         $this->Location = $Location;
@@ -83,11 +107,19 @@ class GetNearestLocations extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;

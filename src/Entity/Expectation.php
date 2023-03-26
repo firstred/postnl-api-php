@@ -41,9 +41,11 @@ use function is_string;
  */
 class Expectation extends AbstractEntity
 {
+    /** @var DateTimeInterface|null $ETAFrom */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $ETAFrom = null;
 
+    /** @var DateTimeInterface|null $ETATo */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $ETATo = null;
 

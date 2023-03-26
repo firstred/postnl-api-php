@@ -40,16 +40,23 @@ use TypeError;
  */
 class SendShipment extends AbstractEntity
 {
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var LabellingMessage|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?LabellingMessage $Message = null;
 
-    /** @var Shipment[]|null */
+    /** @var Shipment[]|null $Shipments */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Shipments = null;
 
+    /**
+     * @param array|null            $Shipments
+     * @param LabellingMessage|null $Message
+     * @param Customer|null         $Customer
+     */
     public function __construct(
         ?array            $Shipments = null,
         ?LabellingMessage $Message = null,
@@ -62,11 +69,19 @@ class SendShipment extends AbstractEntity
         $this->setCustomer(Customer: $Customer);
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -74,11 +89,19 @@ class SendShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return LabellingMessage|null
+     */
     public function getMessage(): ?LabellingMessage
     {
         return $this->Message;
     }
 
+    /**
+     * @param LabellingMessage|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?LabellingMessage $Message): static
     {
         $this->Message = $Message;
@@ -96,6 +119,7 @@ class SendShipment extends AbstractEntity
 
     /**
      * @param Shipment[]|null $Shipments
+     *
      * @return static
      */
     public function setShipments(?array $Shipments): static
@@ -113,6 +137,9 @@ class SendShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

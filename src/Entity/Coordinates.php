@@ -35,12 +35,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Coordinates extends AbstractEntity
 {
+    /** @var string|null $Latitude */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Latitude = null;
 
+    /** @var string|null $Longitude */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Longitude = null;
 
+    /**
+     * @param string|null $Latitude
+     * @param string|null $Longitude
+     */
     public function __construct(?string $Latitude = null, ?string $Longitude = null)
     {
         parent::__construct();
@@ -49,11 +55,19 @@ class Coordinates extends AbstractEntity
         $this->setLongitude(Longitude: $Longitude);
     }
 
+    /**
+     * @return string|null
+     */
     public function getLatitude(): ?string
     {
         return $this->Latitude;
     }
 
+    /**
+     * @param string|null $Latitude
+     *
+     * @return $this
+     */
     public function setLatitude(?string $Latitude): static
     {
         $this->Latitude = $Latitude;
@@ -61,11 +75,19 @@ class Coordinates extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLongitude(): ?string
     {
         return $this->Longitude;
     }
 
+    /**
+     * @param string|null $Longitude
+     *
+     * @return $this
+     */
     public function setLongitude(?string $Longitude): static
     {
         $this->Longitude = $Longitude;

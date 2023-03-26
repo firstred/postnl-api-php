@@ -41,12 +41,15 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
  */
 class GetSignatureResponseSignature extends AbstractEntity
 {
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
+    /** @var string|null $SignatureDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $SignatureDate = null;
 
+    /** @var string|null $SignatureImage */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $SignatureImage = null;
 
@@ -65,11 +68,19 @@ class GetSignatureResponseSignature extends AbstractEntity
         $this->setSignatureImage(SignatureImage: $SignatureImage);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -77,11 +88,19 @@ class GetSignatureResponseSignature extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSignatureImage(): ?string
     {
         return $this->SignatureImage;
     }
 
+    /**
+     * @param string|null $SignatureImage
+     *
+     * @return $this
+     */
     public function setSignatureImage(?string $SignatureImage): static
     {
         $this->SignatureImage = $SignatureImage;
@@ -89,6 +108,9 @@ class GetSignatureResponseSignature extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSignatureDate(): ?string
     {
         return $this->SignatureDate;

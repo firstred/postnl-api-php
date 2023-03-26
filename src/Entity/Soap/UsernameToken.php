@@ -39,11 +39,18 @@ use Sabre\Xml\Writer;
  */
 class UsernameToken extends AbstractEntity
 {
+    /** @var string|null $Username */
     #[SerializableProperty(namespace: SoapNamespace::Security)]
     protected ?string $Username = null;
+
+    /** @var HiddenString|null $Password */
     #[SerializableProperty(namespace: SoapNamespace::Security)]
     protected ?HiddenString $Password = null;
 
+    /**
+     * @param string|null              $Username
+     * @param HiddenString|string|null $Password
+     */
     public function __construct(
         ?string                  $Username = null,
         HiddenString|string|null $Password = null /* Plaintext password */,
@@ -54,11 +61,19 @@ class UsernameToken extends AbstractEntity
         $this->setPassword(Password: $Password);
     }
 
+    /**
+     * @return string|null
+     */
     public function getUsername(): ?string
     {
         return $this->Username;
     }
 
+    /**
+     * @param string|null $Username
+     *
+     * @return $this
+     */
     public function setUsername(?string $Username): static
     {
         $this->Username = $Username;
@@ -66,11 +81,19 @@ class UsernameToken extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return HiddenString|null
+     */
     public function getPassword(): ?HiddenString
     {
         return $this->Password;
     }
 
+    /**
+     * @param HiddenString|string|null $Password
+     *
+     * @return $this
+     */
     public function setPassword(HiddenString|string|null $Password): static
     {
         if (is_string(value: $Password)) {

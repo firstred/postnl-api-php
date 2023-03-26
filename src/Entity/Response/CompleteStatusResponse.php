@@ -32,6 +32,9 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use ReflectionObject;
 use ReflectionProperty;
 use Sabre\Xml\Writer;
@@ -44,13 +47,18 @@ use function count;
  */
 class CompleteStatusResponse extends AbstractEntity
 {
-    /** @var CompleteStatusResponseShipment[]|null */
+    /** @var CompleteStatusResponseShipment[]|null $Shipments */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Shipments = null;
 
+    /** @var Warning|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Warning $Warnings = null;
 
+    /**
+     * @param array|null $Shipments
+     * @param array|null $Warnings
+     */
     public function __construct(
         ?array $Shipments = null,
         ?array $Warnings = null
@@ -71,6 +79,7 @@ class CompleteStatusResponse extends AbstractEntity
 
     /**
      * @param CompleteStatusResponseShipment[]|null $Shipments
+     *
      * @return static
      */
     public function setShipments(?array $Shipments): static
@@ -89,11 +98,19 @@ class CompleteStatusResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Warning|null
+     */
     public function getWarnings(): ?Warning
     {
         return $this->Warnings;
     }
 
+    /**
+     * @param Warning|null $Warnings
+     *
+     * @return $this
+     */
     public function setWarnings(?Warning $Warnings): static
     {
         $this->Warnings = $Warnings;
@@ -101,6 +118,11 @@ class CompleteStatusResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
@@ -127,6 +149,15 @@ class CompleteStatusResponse extends AbstractEntity
         $writer->write(value: $xml);
     }
 
+    /**
+     * @param stdClass $json
+     *
+     * @return static
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotSupportedException
+     */
     public static function jsonDeserialize(stdClass $json): static
     {
         // Find the entity name

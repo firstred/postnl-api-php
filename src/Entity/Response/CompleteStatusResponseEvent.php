@@ -41,24 +41,31 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
  */
 class CompleteStatusResponseEvent extends AbstractEntity
 {
+    /** @var string|null $Code */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Code = null;
 
+    /** @var string|null $Description */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Description = null;
 
+    /** @var string|null $DestinationLocationCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DestinationLocationCode = null;
 
+    /** @var string|null $LocationCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LocationCode = null;
 
+    /** @var string|null $RouteCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RouteCode = null;
 
+    /** @var string|null $RouteName */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RouteName = null;
 
+    /** @var string|null $TimeStamp */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TimeStamp = null;
 
@@ -85,11 +92,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         $this->setTimeStamp(TimeStamp: $TimeStamp);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCode(): ?string
     {
         return $this->Code;
     }
 
+    /**
+     * @param string|null $Code
+     *
+     * @return $this
+     */
     public function setCode(?string $Code): static
     {
         $this->Code = $Code;
@@ -97,11 +112,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(?string $Description): static
     {
         $this->Description = $Description;
@@ -109,11 +132,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDestinationLocationCode(): ?string
     {
         return $this->DestinationLocationCode;
     }
 
+    /**
+     * @param string|null $DestinationLocationCode
+     *
+     * @return $this
+     */
     public function setDestinationLocationCode(?string $DestinationLocationCode): static
     {
         $this->DestinationLocationCode = $DestinationLocationCode;
@@ -121,11 +152,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLocationCode(): ?string
     {
         return $this->LocationCode;
     }
 
+    /**
+     * @param string|null $LocationCode
+     *
+     * @return $this
+     */
     public function setLocationCode(?string $LocationCode): static
     {
         $this->LocationCode = $LocationCode;
@@ -133,11 +172,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRouteCode(): ?string
     {
         return $this->RouteCode;
     }
 
+    /**
+     * @param string|null $RouteCode
+     *
+     * @return $this
+     */
     public function setRouteCode(?string $RouteCode): static
     {
         $this->RouteCode = $RouteCode;
@@ -145,11 +192,19 @@ class CompleteStatusResponseEvent extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRouteName(): ?string
     {
         return $this->RouteName;
     }
 
+    /**
+     * @param string|null $RouteName
+     *
+     * @return $this
+     */
     public function setRouteName(?string $RouteName): static
     {
         $this->RouteName = $RouteName;

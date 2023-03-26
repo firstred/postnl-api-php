@@ -42,18 +42,23 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
  */
 class UpdatedShipmentsResponse extends AbstractEntity
 {
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
+    /** @var DateTimeInterface|null $CreationDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $CreationDate = null;
 
+    /** @var string|null $CustomerNumber */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerNumber = null;
 
+    /** @var string|null $CustomerCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerCode = null;
 
+    /** @var Status|null $Status */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Status $Status = null;
 
@@ -77,11 +82,19 @@ class UpdatedShipmentsResponse extends AbstractEntity
         $this->setStatus(Status: $Status);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -89,11 +102,19 @@ class UpdatedShipmentsResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerNumber(): ?string
     {
         return $this->CustomerNumber;
     }
 
+    /**
+     * @param string|null $CustomerNumber
+     *
+     * @return $this
+     */
     public function setCustomerNumber(?string $CustomerNumber): static
     {
         $this->CustomerNumber = $CustomerNumber;
@@ -101,11 +122,19 @@ class UpdatedShipmentsResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerCode(): ?string
     {
         return $this->CustomerCode;
     }
 
+    /**
+     * @param string|null $CustomerCode
+     *
+     * @return $this
+     */
     public function setCustomerCode(?string $CustomerCode): static
     {
         $this->CustomerCode = $CustomerCode;
@@ -113,11 +142,19 @@ class UpdatedShipmentsResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Status|null
+     */
     public function getStatus(): ?Status
     {
         return $this->Status;
     }
 
+    /**
+     * @param Status|null $Status
+     *
+     * @return $this
+     */
     public function setStatus(?Status $Status): static
     {
         $this->Status = $Status;
@@ -125,6 +162,9 @@ class UpdatedShipmentsResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getCreationDate(): ?DateTimeInterface
     {
         return $this->CreationDate;

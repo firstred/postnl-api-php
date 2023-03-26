@@ -30,10 +30,6 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
-use Firstred\PostNL\Service\LabellingServiceRestAdapter;
-use Firstred\PostNL\Service\LocationServiceRestAdapter;
-use Firstred\PostNL\Service\Rest\BarcodeServiceMessageProcessor;
-use Firstred\PostNL\Service\TimeframeServiceRestAdapter;
 
 /**
  * @since 1.0.0
@@ -42,15 +38,19 @@ class ResponseGroup extends AbstractEntity
 {
     /**
      * Amount of shipments in the ResponseGroup.
+     *
+     * @var string|null $GroupCount
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GroupCount = null;
 
     /**
      * Sequence number.
+     *
+     * @var string|null $GroupSequence
      */
-    protected ?string $GroupSequence = null;
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    protected ?string $GroupSequence = null;
 
     /**
      * The type of Group.
@@ -60,16 +60,26 @@ class ResponseGroup extends AbstractEntity
      * - `01`: Collection request
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
+     *
+     * @var string|null $GroupType
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GroupType = null;
 
     /**
      * Main barcode for the shipment.
+     *
+     * @var string|null $MainBarcode
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode = null;
 
+    /**
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
+     */
     public function __construct(
         ?string $GroupCount = null,
         ?string $GroupSequence = null,
@@ -84,11 +94,19 @@ class ResponseGroup extends AbstractEntity
         $this->setMainBarcode(MainBarcode: $MainBarcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupCount(): ?string
     {
         return $this->GroupCount;
     }
 
+    /**
+     * @param string|null $GroupCount
+     *
+     * @return $this
+     */
     public function setGroupCount(?string $GroupCount): static
     {
         $this->GroupCount = $GroupCount;
@@ -96,11 +114,19 @@ class ResponseGroup extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupSequence(): ?string
     {
         return $this->GroupSequence;
     }
 
+    /**
+     * @param string|null $GroupSequence
+     *
+     * @return $this
+     */
     public function setGroupSequence(?string $GroupSequence): static
     {
         $this->GroupSequence = $GroupSequence;
@@ -108,11 +134,19 @@ class ResponseGroup extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupType(): ?string
     {
         return $this->GroupType;
     }
 
+    /**
+     * @param string|null $GroupType
+     *
+     * @return $this
+     */
     public function setGroupType(?string $GroupType): static
     {
         $this->GroupType = $GroupType;
@@ -120,11 +154,19 @@ class ResponseGroup extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): ?string
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $MainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(?string $MainBarcode): static
     {
         $this->MainBarcode = $MainBarcode;

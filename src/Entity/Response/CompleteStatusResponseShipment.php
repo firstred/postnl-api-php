@@ -46,6 +46,7 @@ use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException as PostNLNotSupportedExceptionAlias;
 use Sabre\Xml\Writer;
@@ -56,67 +57,79 @@ use stdClass;
  */
 class CompleteStatusResponseShipment extends AbstractEntity
 {
-    /** @var StatusAddress[]|null */
+    /** @var StatusAddress[]|null $Addresses */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Addresses = null;
 
-    /** @var Amount[]|null */
+    /** @var Amount[]|null $Amounts */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Amounts = null;
 
+    /** @var Barcode|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Barcode $Barcode = null;
 
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
+    /** @var Dimension|null $Dimension */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
-    /** @var CompleteStatusResponseEvent[]|null */
+    /** @var CompleteStatusResponseEvent[]|null $Events */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Events = null;
 
+    /** @var Expectation|null $Expectation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Expectation $Expectation = null;
 
-    /** @var Group[]|null */
+    /** @var Group[]|null $Groups */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Groups = null;
 
+    /** @var string|null $MainBarcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode = null;
 
-    /** @var CompleteStatusResponseOldStatus[]|null */
+    /** @var CompleteStatusResponseOldStatus[]|null $OldStatuses */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $OldStatuses = null;
 
+    /** @var string|null $ProductCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCode = null;
 
+    /** @var string|null $ProductDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductDescription = null;
 
-    /** @var ProductOption[]|null */
+    /** @var ProductOption[]|null $ProductOptions */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $ProductOptions = null;
 
+    /** @var string|null $Reference */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
+    /** @var string|null $ShipmentAmount */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentAmount = null;
 
+    /** @var string|null $ShipmentCounter */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentCounter = null;
 
+    /** @var Status|null $Status */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Status $Status = null;
 
-    /** @var Warning[]|null */
+    /** @var Warning[]|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
@@ -184,6 +197,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param Amount[]|null $Addresses
+     *
      * @return static
      */
     public function setAddresses(?array $Addresses): static
@@ -201,6 +215,11 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this->Amounts;
     }
 
+    /**
+     * @param array|null $Amounts
+     *
+     * @return $this
+     */
     public function setAmounts(?array $Amounts): static
     {
         $this->Amounts = $Amounts;
@@ -208,11 +227,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Barcode|null
+     */
     public function getBarcode(): ?Barcode
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param Barcode|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?Barcode $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -220,11 +247,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -232,11 +267,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Dimension|null
+     */
     public function getDimension(): ?Dimension
     {
         return $this->Dimension;
     }
 
+    /**
+     * @param Dimension|null $Dimension
+     *
+     * @return $this
+     */
     public function setDimension(?Dimension $Dimension): static
     {
         $this->Dimension = $Dimension;
@@ -254,6 +297,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param CompleteStatusResponseEvent[]|null $Events
+     *
      * @return CompleteStatusResponseShipment
      */
     public function setEvents(?array $Events): static
@@ -263,11 +307,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Expectation|null
+     */
     public function getExpectation(): ?Expectation
     {
         return $this->Expectation;
     }
 
+    /**
+     * @param Expectation|null $Expectation
+     *
+     * @return $this
+     */
     public function setExpectation(?Expectation $Expectation): static
     {
         $this->Expectation = $Expectation;
@@ -285,6 +337,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param array|null $Groups
+     *
      * @return CompleteStatusResponseShipment
      */
     public function setGroups(?array $Groups): static
@@ -294,11 +347,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): ?string
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $MainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(?string $MainBarcode): static
     {
         $this->MainBarcode = $MainBarcode;
@@ -316,6 +377,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param CompleteStatusResponseOldStatus[]|null $OldStatuses
+     *
      * @return static
      */
     public function setOldStatuses(?array $OldStatuses): static
@@ -325,11 +387,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCode(): ?string
     {
         return $this->ProductCode;
     }
 
+    /**
+     * @param string|null $ProductCode
+     *
+     * @return $this
+     */
     public function setProductCode(?string $ProductCode): static
     {
         $this->ProductCode = $ProductCode;
@@ -337,11 +407,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductDescription(): ?string
     {
         return $this->ProductDescription;
     }
 
+    /**
+     * @param string|null $ProductDescription
+     *
+     * @return $this
+     */
     public function setProductDescription(?string $ProductDescription): static
     {
         $this->ProductDescription = $ProductDescription;
@@ -359,6 +437,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param ProductOption[]|null $ProductOptions
+     *
      * @return static
      */
     public function setProductOptions(?array $ProductOptions): static
@@ -368,11 +447,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReference(): ?string
     {
         return $this->Reference;
     }
 
+    /**
+     * @param string|null $Reference
+     *
+     * @return $this
+     */
     public function setReference(?string $Reference): static
     {
         $this->Reference = $Reference;
@@ -380,11 +467,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShipmentAmount(): ?string
     {
         return $this->ShipmentAmount;
     }
 
+    /**
+     * @param string|null $ShipmentAmount
+     *
+     * @return $this
+     */
     public function setShipmentAmount(?string $ShipmentAmount): static
     {
         $this->ShipmentAmount = $ShipmentAmount;
@@ -400,6 +495,11 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this->ShipmentCounter;
     }
 
+    /**
+     * @param string|null $ShipmentCounter
+     *
+     * @return $this
+     */
     public function setShipmentCounter(?string $ShipmentCounter): static
     {
         $this->ShipmentCounter = $ShipmentCounter;
@@ -407,11 +507,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Status|null
+     */
     public function getStatus(): ?Status
     {
         return $this->Status;
     }
 
+    /**
+     * @param Status|null $Status
+     *
+     * @return $this
+     */
     public function setStatus(?Status $Status): static
     {
         $this->Status = $Status;
@@ -429,6 +537,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
 
     /**
      * @param array|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static
@@ -438,6 +547,9 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryDate(): ?DateTimeInterface
     {
         return $this->DeliveryDate;
@@ -464,10 +576,12 @@ class CompleteStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * @throws InvalidArgumentException
-     * @throws PostNLNotSupportedExceptionAlias
-     * @throws DeserializationException
+     * @param stdClass $json
      *
+     * @return CompleteStatusResponseShipment
+     * @throws DeserializationException
+     * @throws PostNLNotSupportedExceptionAlias
+     * @throws EntityNotFoundException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -484,6 +598,11 @@ class CompleteStatusResponseShipment extends AbstractEntity
         return parent::jsonDeserialize(json: $json);
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

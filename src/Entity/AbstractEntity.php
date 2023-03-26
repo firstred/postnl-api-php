@@ -49,10 +49,18 @@ use TypeError;
 use function array_keys;
 use function is_array;
 
+/**
+ *
+ */
 abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
+    /** @var string $id*/
     protected string $id;
-    /** @phpstan-var array<SoapNamespace, string> $namespaces */
+    /**
+     * @var array $namespaces
+     * @phpstan-var array<SoapNamespace, string> $namespaces
+     * @psalm-var array<SoapNamespace, string> $namespaces
+     */
     protected array $namespaces = [];
 
     public function __construct()
@@ -64,8 +72,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Create an instance of this class without touching the constructor.
      *
-     * @throws InvalidArgumentException
+     * @param array $properties
      *
+     * @return AbstractEntity
      * @since 1.0.0
      */
     public static function create(array $properties = []): static
@@ -90,11 +99,19 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         return $instance;
     }
 
+    /**
+     * @return string
+     */
     public function getId(): string
     {
         return $this->id;
     }
 
+    /**
+     * @param string $id
+     *
+     * @return $this
+     */
     public function setId(string $id): static
     {
         $this->id = $id;
@@ -103,7 +120,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @phpstan-param array<SoapNamespace, string> $namespaces
+     * @phpstan-param array<string, string> $namespaces
+     * @psalm-param array<string, string> $namespaces
      * @throws InvalidArgumentException
      */
     public function setNamespaces(array $namespaces): static
@@ -122,13 +140,19 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @phpstan-return array<SoapNamespace, string>
+     * @phpstan-return array<string, string>
      */
     public function getNamespaces(): array
     {
         return $this->namespaces;
     }
 
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return mixed
+     */
     public function __call(string $name, mixed $value): mixed
     {
         $methodName = substr(string: $name, offset: 0, length: 3);
@@ -159,7 +183,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
+     * @return array
      * @phpstan-return array<string, SoapNamespace>
+     * @psalm-return array<string, SoapNamespace>
      */
     public function getSerializableProperties(): array
     {
@@ -178,6 +204,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Return a serializable array for `json_encode`.
      *
+     * @return array
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
@@ -203,8 +230,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Return a serializable array for the XMLWriter.
      *
-     * @throws ServiceNotSetException
+     * @param Writer $writer
      *
+     * @throws ServiceNotSetException
      * @since 1.0.0
      */
     public function xmlSerialize(Writer $writer): void
@@ -216,7 +244,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
         $properties = [];
         foreach (static::getSerializableProperties() as $propertyName => $namespaceReference) {
-            $namespace = $this->namespaces[$namespaceReference];
+            $namespace = $this->namespaces[$namespaceReference->value];
             if (isset($this->$propertyName)) {
                 $xml[$namespace ? "{{$namespace}}$propertyName" : $propertyName] = $this->$propertyName;
             }
@@ -226,10 +254,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @throws NotSupportedException
+     * @param stdClass $json
+     *
+     * @return AbstractEntity|array|bool|int|string|float|null
      * @throws DeserializationException
      * @throws EntityNotFoundException
-     *
+     * @throws NotSupportedException
      * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json /* `{"EntityName": object}` */): static|array|bool|int|string|float|null
@@ -332,6 +362,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         return $object;
     }
 
+    /**
+     * @param array $xml
+     *
+     * @return static
+     * @throws EntityNotFoundException
+     */
     public static function xmlDeserialize(array $xml): static
     {
         if (!isset($xml['name']) && isset($xml[0]['name'])) {
@@ -403,6 +439,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Whether the given property should be an array
      *
+     * @param string $fqcn
+     * @param string $propertyName
+     *
+     * @return string|false
      * @since 1.2.0
      */
     public static function shouldBeAnArray(string $fqcn, string $propertyName): string|false

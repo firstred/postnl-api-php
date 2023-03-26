@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
  */
 class LabellingMessage extends Message
 {
+    /** @var string|null $Printertype */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Printertype = null;
 
@@ -53,11 +54,19 @@ class LabellingMessage extends Message
         $this->setPrintertype(Printertype: $Printertype);
     }
 
+    /**
+     * @return string|null
+     */
     public function getPrintertype(): ?string
     {
         return $this->Printertype;
     }
 
+    /**
+     * @param string|null $Printertype
+     *
+     * @return $this
+     */
     public function setPrintertype(?string $Printertype): static
     {
         $this->Printertype = $Printertype;

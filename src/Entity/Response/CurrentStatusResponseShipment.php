@@ -43,7 +43,10 @@ use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
@@ -64,15 +67,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Amounts = null;
 
+    /** @var Barcode|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Barcode $Barcode = null;
 
+    /** @var string|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DeliveryDate = null;
 
+    /** @var Dimension|null $Dimension */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
+    /** @var Expectation|null $Expectation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Expectation $Expectation = null;
 
@@ -80,12 +87,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Groups = null;
 
+    /** @var string|null $MainBarcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode = null;
 
+    /** @var string|null $ProductCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCode = null;
 
+    /** @var string|null $ProductDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductDescription = null;
 
@@ -93,20 +103,23 @@ class CurrentStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $ProductOptions = null;
 
+    /** @var string|null $Reference */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
+    /** @var string|null $ShipmentAmount */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentAmount = null;
 
+    /** @var string|null $ShipmentCounter */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentCounter = null;
 
-    /** @var Status|null */
+    /** @var Status|null $Status */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Status $Status = null;
 
-    /** @var Warning[]|null */
+    /** @var Warning[]|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
@@ -186,6 +199,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
     /**
      * @param StatusAddress[]|null $Addresses
+     *
      * @return static
      */
     public function setAddresses(?array $Addresses): static
@@ -213,6 +227,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
     /**
      * @param Amount[]|null $Amounts
+     *
      * @return static
      */
     public function setAmounts(?array $Amounts): static
@@ -230,11 +245,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Barcode|null
+     */
     public function getBarcode(): ?Barcode
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param Barcode|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?Barcode $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -242,11 +265,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Dimension|null
+     */
     public function getDimension(): ?Dimension
     {
         return $this->Dimension;
     }
 
+    /**
+     * @param Dimension|null $Dimension
+     *
+     * @return $this
+     */
     public function setDimension(?Dimension $Dimension): static
     {
         $this->Dimension = $Dimension;
@@ -254,11 +285,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Expectation|null
+     */
     public function getExpectation(): ?Expectation
     {
         return $this->Expectation;
     }
 
+    /**
+     * @param Expectation|null $Expectation
+     *
+     * @return $this
+     */
     public function setExpectation(?Expectation $Expectation): static
     {
         $this->Expectation = $Expectation;
@@ -276,6 +315,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
     /**
      * @param Group[]|null $Groups
+     *
      * @return static
      */
     public function setGroups(?array $Groups): static
@@ -293,11 +333,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): ?string
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $MainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(?string $MainBarcode): static
     {
         $this->MainBarcode = $MainBarcode;
@@ -305,11 +353,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCode(): ?string
     {
         return $this->ProductCode;
     }
 
+    /**
+     * @param string|null $ProductCode
+     *
+     * @return $this
+     */
     public function setProductCode(?string $ProductCode): static
     {
         $this->ProductCode = $ProductCode;
@@ -317,11 +373,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductDescription(): ?string
     {
         return $this->ProductDescription;
     }
 
+    /**
+     * @param string|null $ProductDescription
+     *
+     * @return $this
+     */
     public function setProductDescription(?string $ProductDescription): static
     {
         $this->ProductDescription = $ProductDescription;
@@ -339,6 +403,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
     /**
      * @param ProductOption[]|null $ProductOptions
+     *
      * @return static
      */
     public function setProductOptions(?array $ProductOptions): static
@@ -356,11 +421,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReference(): ?string
     {
         return $this->Reference;
     }
 
+    /**
+     * @param string|null $Reference
+     *
+     * @return $this
+     */
     public function setReference(?string $Reference): static
     {
         $this->Reference = $Reference;
@@ -368,11 +441,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShipmentAmount(): ?string
     {
         return $this->ShipmentAmount;
     }
 
+    /**
+     * @param string|null $ShipmentAmount
+     *
+     * @return $this
+     */
     public function setShipmentAmount(?string $ShipmentAmount): static
     {
         $this->ShipmentAmount = $ShipmentAmount;
@@ -380,11 +461,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShipmentCounter(): ?string
     {
         return $this->ShipmentCounter;
     }
 
+    /**
+     * @param string|null $ShipmentCounter
+     *
+     * @return $this
+     */
     public function setShipmentCounter(?string $ShipmentCounter): static
     {
         $this->ShipmentCounter = $ShipmentCounter;
@@ -392,11 +481,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Status|null
+     */
     public function getStatus(): ?Status
     {
         return $this->Status;
     }
 
+    /**
+     * @param Status|null $Status
+     *
+     * @return $this
+     */
     public function setStatus(?Status $Status): static
     {
         $this->Status = $Status;
@@ -414,6 +511,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
     /**
      * @param Warning[]|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static
@@ -423,15 +521,21 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryDate(): ?string
     {
         return $this->DeliveryDate;
     }
 
     /**
-     * @throws InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @param stdClass $json
      *
+     * @return CurrentStatusResponseShipment
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
+     * @throws NotSupportedException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -448,6 +552,11 @@ class CurrentStatusResponseShipment extends AbstractEntity
         return parent::jsonDeserialize(json: $json);
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

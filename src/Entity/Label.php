@@ -40,16 +40,25 @@ class Label extends AbstractEntity
 
     /**
      * Base 64 encoded content
+     *
+     * @var string|null $Content
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Content = null;
 
+    /** @var string|null $Contenttype */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Contenttype = null;
 
+    /** @var string|null $Labeltype */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Labeltype = null;
 
+    /**
+     * @param string|null $Content
+     * @param string|null $ContentType
+     * @param string|null $Labeltype
+     */
     public function __construct(
         ?string $Content = null,
         ?string $ContentType = null,
@@ -62,11 +71,19 @@ class Label extends AbstractEntity
         $this->setLabeltype(Labeltype: $Labeltype);
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->Content;
     }
 
+    /**
+     * @param string|null $Content
+     *
+     * @return $this
+     */
     public function setContent(?string $Content): static
     {
         $this->Content = $Content;
@@ -74,11 +91,19 @@ class Label extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContenttype(): ?string
     {
         return $this->Contenttype;
     }
 
+    /**
+     * @param string|null $Contenttype
+     *
+     * @return $this
+     */
     public function setContenttype(?string $Contenttype): static
     {
         $this->Contenttype = $Contenttype;
@@ -86,11 +111,19 @@ class Label extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLabeltype(): ?string
     {
         return $this->Labeltype;
     }
 
+    /**
+     * @param string|null $Labeltype
+     *
+     * @return $this
+     */
     public function setLabeltype(?string $Labeltype): static
     {
         $this->Labeltype = $Labeltype;

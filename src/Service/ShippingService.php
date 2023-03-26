@@ -38,11 +38,9 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\Rest\ShippingServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
 use Firstred\PostNL\Service\Adapter\ShippingServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -62,6 +60,19 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
 
     protected ShippingServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     *
+     * @since 2.0.0
+     */
     public function __construct(
         HiddenString                       $apiKey,
         PostNLApiMode                      $apiMode,
@@ -89,6 +100,10 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     /**
      * Generate a single Shipping vai REST.
      *
+     * @param SendShipment $sendShipment
+     * @param bool         $confirm
+     *
+     * @return SendShipmentResponse|null
      * @throws HttpClientException
      * @throws NotFoundException
      * @throws NotSupportedException
@@ -136,6 +151,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     }
 
     /**
+     * @param PostNLApiMode $mode
+     *
      * @since 2.0.0
      */
     public function setAPIMode(PostNLApiMode $mode): void

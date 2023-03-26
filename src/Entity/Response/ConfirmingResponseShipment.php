@@ -37,13 +37,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class ConfirmingResponseShipment extends AbstractEntity
 {
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
-    /** @var Warning[]|null */
+    /** @var Warning[]|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
+    /**
+     * @param string|null $Barcode
+     * @param array|null  $Warnings
+     */
     public function __construct(
         ?string $Barcode = null,
         /** @param Warning[]|null $Warnings */
@@ -55,11 +60,19 @@ class ConfirmingResponseShipment extends AbstractEntity
         $this->setWarnings(Warnings: $Warnings);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -77,6 +90,7 @@ class ConfirmingResponseShipment extends AbstractEntity
 
     /**
      * @param Warning[]|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static

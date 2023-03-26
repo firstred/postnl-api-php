@@ -37,12 +37,16 @@ class Group extends AbstractEntity
 {
     /**
      * Amount of shipments in the group.
+     *
+     * @var string|null $GroupCount
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GroupCount = null;
 
     /**
      * Sequence number.
+     *
+     * @var string|null $GroupSequence
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GroupSequence = null;
@@ -55,16 +59,26 @@ class Group extends AbstractEntity
      * - `01`: Collection request
      * - `03`: Multiple parcels in one shipment (multi-colli)
      * - `04`: Single parcel in one shipment
+     *
+     * @var string|null $GroupType
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GroupType;
 
     /**
      * Main barcode for the shipment.
+     *
+     * @var string|null $MainBarcode
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode;
 
+    /**
+     * @param string|null $GroupCount
+     * @param string|null $GroupSequence
+     * @param string|null $GroupType
+     * @param string|null $MainBarcode
+     */
     public function __construct(
         ?string $GroupCount = null,
         ?string $GroupSequence = null,
@@ -79,11 +93,19 @@ class Group extends AbstractEntity
         $this->setMainBarcode(MainBarcode: $MainBarcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupCount(): ?string
     {
         return $this->GroupCount;
     }
 
+    /**
+     * @param string|null $GroupCount
+     *
+     * @return $this
+     */
     public function setGroupCount(?string $GroupCount): static
     {
         $this->GroupCount = $GroupCount;
@@ -91,11 +113,19 @@ class Group extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupSequence(): ?string
     {
         return $this->GroupSequence;
     }
 
+    /**
+     * @param string|null $GroupSequence
+     *
+     * @return $this
+     */
     public function setGroupSequence(?string $GroupSequence): static
     {
         $this->GroupSequence = $GroupSequence;
@@ -103,11 +133,19 @@ class Group extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGroupType(): ?string
     {
         return $this->GroupType;
     }
 
+    /**
+     * @param string|null $GroupType
+     *
+     * @return $this
+     */
     public function setGroupType(?string $GroupType): static
     {
         $this->GroupType = $GroupType;
@@ -115,11 +153,19 @@ class Group extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getMainBarcode(): ?string
     {
         return $this->MainBarcode;
     }
 
+    /**
+     * @param string|null $MainBarcode
+     *
+     * @return $this
+     */
     public function setMainBarcode(?string $MainBarcode): static
     {
         $this->MainBarcode = $MainBarcode;

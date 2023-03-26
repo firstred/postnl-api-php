@@ -42,9 +42,11 @@ use function in_array;
  */
 class Location extends AbstractEntity
 {
+    /** @var string|null $AllowSundaySorting */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $AllowSundaySorting = null;
 
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
@@ -52,6 +54,7 @@ class Location extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $DeliveryOptions = null;
 
+    /** @var string|null $OpeningTime */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $OpeningTime = null;
 
@@ -59,45 +62,59 @@ class Location extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
+    /** @var string|null $City */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
+    /** @var string|null $HouseNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
+    /** @var string|null $HouseNrExt */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
+    /** @var string|null $Postalcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Postalcode = null;
 
+    /** @var string|null $Street */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
+    /** @var Coordinates|null $Coordinates */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Coordinates $Coordinates = null;
 
+    /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?CoordinatesNorthWest $CoordinatesNorthWest = null;
 
+    /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?CoordinatesSouthEast $CoordinatesSouthEast = null;
 
+    /** @var string|null $LocationCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LocationCode = null;
 
+    /** @var string|null $Saleschannel */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Saleschannel = null;
 
+    /** @var string|null $TerminalType */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TerminalType = null;
 
+    /** @var string|null $RetailNetworkID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RetailNetworkID = null;
 
+    /** @var string|null $DownPartnerID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
+    /** @var string|null $DownPartnerLocation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
@@ -173,6 +190,11 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param string|null $Postalcode
+     *
+     * @return $this
+     */
     public function setPostalcode(?string $Postalcode = null): static
     {
         if (is_null(value: $Postalcode)) {
@@ -209,6 +231,7 @@ class Location extends AbstractEntity
 
     /**
      * @param string[]|null $DeliveryOptions
+     *
      * @return static
      */
     public function setDeliveryOptions(?array $DeliveryOptions): static
@@ -226,11 +249,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOpeningTime(): ?string
     {
         return $this->OpeningTime;
     }
 
+    /**
+     * @param string|null $OpeningTime
+     *
+     * @return $this
+     */
     public function setOpeningTime(?string $OpeningTime): static
     {
         $this->OpeningTime = $OpeningTime;
@@ -248,6 +279,7 @@ class Location extends AbstractEntity
 
     /**
      * @param string[]|null $Options
+     *
      * @return static
      */
     public function setOptions(?array $Options): static
@@ -265,11 +297,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): ?string
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(?string $City): static
     {
         $this->City = $City;
@@ -277,11 +317,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNr(): ?string
     {
         return $this->HouseNr;
     }
 
+    /**
+     * @param string|null $HouseNr
+     *
+     * @return $this
+     */
     public function setHouseNr(?string $HouseNr): static
     {
         $this->HouseNr = $HouseNr;
@@ -289,11 +337,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): ?string
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -301,11 +357,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): ?string
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(?string $Street): static
     {
         $this->Street = $Street;
@@ -313,11 +377,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Coordinates|null
+     */
     public function getCoordinates(): ?Coordinates
     {
         return $this->Coordinates;
     }
 
+    /**
+     * @param Coordinates|null $Coordinates
+     *
+     * @return $this
+     */
     public function setCoordinates(?Coordinates $Coordinates): static
     {
         $this->Coordinates = $Coordinates;
@@ -325,11 +397,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return CoordinatesNorthWest|null
+     */
     public function getCoordinatesNorthWest(): ?CoordinatesNorthWest
     {
         return $this->CoordinatesNorthWest;
     }
 
+    /**
+     * @param CoordinatesNorthWest|null $CoordinatesNorthWest
+     *
+     * @return $this
+     */
     public function setCoordinatesNorthWest(?CoordinatesNorthWest $CoordinatesNorthWest): static
     {
         $this->CoordinatesNorthWest = $CoordinatesNorthWest;
@@ -337,11 +417,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return CoordinatesSouthEast|null
+     */
     public function getCoordinatesSouthEast(): ?CoordinatesSouthEast
     {
         return $this->CoordinatesSouthEast;
     }
 
+    /**
+     * @param CoordinatesSouthEast|null $CoordinatesSouthEast
+     *
+     * @return $this
+     */
     public function setCoordinatesSouthEast(?CoordinatesSouthEast $CoordinatesSouthEast): static
     {
         $this->CoordinatesSouthEast = $CoordinatesSouthEast;
@@ -349,11 +437,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLocationCode(): ?string
     {
         return $this->LocationCode;
     }
 
+    /**
+     * @param string|null $LocationCode
+     *
+     * @return $this
+     */
     public function setLocationCode(?string $LocationCode): static
     {
         $this->LocationCode = $LocationCode;
@@ -361,11 +457,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSaleschannel(): ?string
     {
         return $this->Saleschannel;
     }
 
+    /**
+     * @param string|null $Saleschannel
+     *
+     * @return $this
+     */
     public function setSaleschannel(?string $Saleschannel): static
     {
         $this->Saleschannel = $Saleschannel;
@@ -373,11 +477,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTerminalType(): ?string
     {
         return $this->TerminalType;
     }
 
+    /**
+     * @param string|null $TerminalType
+     *
+     * @return $this
+     */
     public function setTerminalType(?string $TerminalType): static
     {
         $this->TerminalType = $TerminalType;
@@ -385,11 +497,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRetailNetworkID(): ?string
     {
         return $this->RetailNetworkID;
     }
 
+    /**
+     * @param string|null $RetailNetworkID
+     *
+     * @return $this
+     */
     public function setRetailNetworkID(?string $RetailNetworkID): static
     {
         $this->RetailNetworkID = $RetailNetworkID;
@@ -397,11 +517,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerID(): ?string
     {
         return $this->DownPartnerID;
     }
 
+    /**
+     * @param string|null $DownPartnerID
+     *
+     * @return $this
+     */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
         $this->DownPartnerID = $DownPartnerID;
@@ -409,11 +537,19 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerLocation(): ?string
     {
         return $this->DownPartnerLocation;
     }
 
+    /**
+     * @param string|null $DownPartnerLocation
+     *
+     * @return $this
+     */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
         $this->DownPartnerLocation = $DownPartnerLocation;
@@ -421,21 +557,35 @@ class Location extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getAllowSundaySorting(): ?string
     {
         return $this->AllowSundaySorting;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryDate(): ?DateTimeInterface
     {
         return $this->DeliveryDate;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalcode(): ?string
     {
         return $this->Postalcode;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

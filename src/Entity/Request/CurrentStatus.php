@@ -40,15 +40,23 @@ use Sabre\Xml\Writer;
  */
 class CurrentStatus extends AbstractEntity
 {
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var Shipment|null $Shipment */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Shipment $Shipment = null;
 
+    /**
+     * @param Shipment|null $Shipment
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
+     */
     public function __construct(?Shipment $Shipment = null, ?Customer $Customer = null, ?Message $Message = null)
     {
         parent::__construct();
@@ -58,11 +66,19 @@ class CurrentStatus extends AbstractEntity
         $this->setCustomer(Customer: $Customer);
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;
@@ -70,11 +86,19 @@ class CurrentStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -82,11 +106,19 @@ class CurrentStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Shipment|null
+     */
     public function getShipment(): ?Shipment
     {
         return $this->Shipment;
     }
 
+    /**
+     * @param Shipment|null $Shipment
+     *
+     * @return $this
+     */
     public function setShipment(?Shipment $Shipment): static
     {
         $this->Shipment = $Shipment;
@@ -94,6 +126,11 @@ class CurrentStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

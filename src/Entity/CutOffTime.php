@@ -36,15 +36,23 @@ use Sabre\Xml\Writer;
  */
 class CutOffTime extends AbstractEntity
 {
+    /** @var string|null $Day */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Day = null;
 
+    /** @var string|null $Time */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Time = null;
 
+    /** @var bool|null $Available */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $Available = null;
 
+    /**
+     * @param string|null $Day
+     * @param string|null $Time
+     * @param bool|null   $Available
+     */
     public function __construct(?string $Day = null, ?string $Time = null, ?bool $Available = null)
     {
         parent::__construct();
@@ -54,11 +62,19 @@ class CutOffTime extends AbstractEntity
         $this->setAvailable(Available: $Available);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDay(): ?string
     {
         return $this->Day;
     }
 
+    /**
+     * @param string|null $Day
+     *
+     * @return $this
+     */
     public function setDay(?string $Day): static
     {
         $this->Day = $Day;
@@ -66,11 +82,19 @@ class CutOffTime extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTime(): ?string
     {
         return $this->Time;
     }
 
+    /**
+     * @param string|null $Time
+     *
+     * @return $this
+     */
     public function setTime(?string $Time): static
     {
         $this->Time = $Time;
@@ -78,11 +102,19 @@ class CutOffTime extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getAvailable(): ?bool
     {
         return $this->Available;
     }
 
+    /**
+     * @param bool|null $Available
+     *
+     * @return $this
+     */
     public function setAvailable(?bool $Available): static
     {
         $this->Available = $Available;
@@ -90,6 +122,11 @@ class CutOffTime extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

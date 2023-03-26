@@ -35,15 +35,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Barcode extends AbstractEntity
 {
+    /** @var string|null $Type */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Type = null;
 
+    /** @var string|null $Range */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Range = null;
 
+    /** @var string|null $Serie */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Serie = null;
 
+    /**
+     * @param string|null $Type
+     * @param string|null $Range
+     * @param string|null $Serie
+     */
     public function __construct(
         ?string $Type = null,
         ?string $Range = null,
@@ -56,11 +64,19 @@ class Barcode extends AbstractEntity
         $this->setSerie(Serie: $Serie);
     }
 
+    /**
+     * @return string|null
+     */
     public function getType(): ?string
     {
         return $this->Type;
     }
 
+    /**
+     * @param string|null $Type
+     *
+     * @return $this
+     */
     public function setType(?string $Type): static
     {
         $this->Type = $Type;
@@ -68,11 +84,19 @@ class Barcode extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRange(): ?string
     {
         return $this->Range;
     }
 
+    /**
+     * @param string|null $Range
+     *
+     * @return $this
+     */
     public function setRange(?string $Range): static
     {
         $this->Range = $Range;
@@ -80,11 +104,19 @@ class Barcode extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSerie(): ?string
     {
         return $this->Serie;
     }
 
+    /**
+     * @param string|null $Serie
+     *
+     * @return $this
+     */
     public function setSerie(?string $Serie): static
     {
         $this->Serie = $Serie;

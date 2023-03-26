@@ -39,15 +39,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GenerateBarcode extends AbstractEntity
 {
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var Barcode|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Barcode $Barcode = null;
 
+    /**
+     * @param Barcode|null  $Barcode
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
+     */
     public function __construct(?Barcode $Barcode = null, ?Customer $Customer = null, ?Message $Message = null)
     {
         parent::__construct();
@@ -57,11 +65,19 @@ class GenerateBarcode extends AbstractEntity
         $this->setMessage(Message: $Message ?: new Message());
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;
@@ -69,11 +85,19 @@ class GenerateBarcode extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -81,11 +105,19 @@ class GenerateBarcode extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Barcode|null
+     */
     public function getBarcode(): ?Barcode
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param Barcode|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?Barcode $Barcode): static
     {
         $this->Barcode = $Barcode;

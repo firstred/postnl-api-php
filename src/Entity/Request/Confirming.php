@@ -40,16 +40,23 @@ use Sabre\Xml\Writer;
  */
 class Confirming extends AbstractEntity
 {
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
-    /** @var Shipment[]|null */
+    /** @var Shipment[]|null $Shipments */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Shipments = null;
 
+    /**
+     * @param array|null    $Shipments
+     * @param Customer|null $Customer
+     * @param Message|null  $Message
+     */
     public function __construct(
         /** @param $Shipments Shipment[]|null */
         ?array    $Shipments = null,
@@ -63,11 +70,19 @@ class Confirming extends AbstractEntity
         $this->setCustomer(Customer: $Customer);
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -75,11 +90,19 @@ class Confirming extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;
@@ -97,6 +120,7 @@ class Confirming extends AbstractEntity
 
     /**
      * @param Shipment[]|null $Shipments
+     *
      * @return static
      */
     public function setShipments(?array $Shipments): static
@@ -114,6 +138,11 @@ class Confirming extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
@@ -138,6 +167,9 @@ class Confirming extends AbstractEntity
         $writer->write(value: $xml);
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

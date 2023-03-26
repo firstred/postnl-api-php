@@ -33,6 +33,8 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
@@ -45,16 +47,19 @@ use function is_string;
  */
 class TimeframeTimeFrame extends AbstractEntity
 {
+    /** @var string|null $Date */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Date = null;
 
+    /** @var string|null $From */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $From = null;
 
+    /** @var string|null $To */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $To = null;
 
-    /** @var string[]|null */
+    /** @var string[]|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
@@ -76,6 +81,9 @@ class TimeframeTimeFrame extends AbstractEntity
         $this->setOptions(Options: $Options);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDate(): ?string
     {
         return $this->Date;
@@ -101,11 +109,19 @@ class TimeframeTimeFrame extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFrom(): ?string
     {
         return $this->From;
     }
 
+    /**
+     * @param string|null $From
+     *
+     * @return $this
+     */
     public function setFrom(?string $From): static
     {
         $this->From = $From;
@@ -113,11 +129,19 @@ class TimeframeTimeFrame extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTo(): ?string
     {
         return $this->To;
     }
 
+    /**
+     * @param string|null $To
+     *
+     * @return $this
+     */
     public function setTo(?string $To): TimeframeTimeFrame
     {
         $this->To = $To;
@@ -135,6 +159,7 @@ class TimeframeTimeFrame extends AbstractEntity
 
     /**
      * @param string[]|null $Options
+     *
      * @return static
      */
     public function setOptions(?array $Options): static
@@ -145,8 +170,12 @@ class TimeframeTimeFrame extends AbstractEntity
     }
 
     /**
-     * @throws NotSupportedException
+     * @param stdClass $json
      *
+     * @return TimeframeTimeFrame
+     * @throws NotSupportedException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static

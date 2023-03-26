@@ -39,14 +39,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Body extends AbstractEntity
 {
+    /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
     #[SerializableProperty(namespace: SoapNamespace::Envelope)]
     protected ?GenerateBarcodeResponse $GenerateBarcodeResponse = null;
 
+    /**
+     * @return GenerateBarcodeResponse|null
+     */
     public function getGenerateBarcodeResponse(): ?GenerateBarcodeResponse
     {
         return $this->GenerateBarcodeResponse;
     }
 
+    /**
+     * @param GenerateBarcodeResponse|null $GenerateBarcodeResponse
+     *
+     * @return $this
+     */
     public function setGenerateBarcodeResponse(?GenerateBarcodeResponse $GenerateBarcodeResponse): static
     {
         $this->GenerateBarcodeResponse = $GenerateBarcodeResponse;

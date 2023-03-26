@@ -38,29 +38,43 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class ResponseShipment extends AbstractEntity
 {
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
+    /** @var string|null $DownPartnerBarcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerBarcode = null;
 
+    /** @var string|null $DownPartnerID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
+    /** @var string|null $DownPartnerLocation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
-    /** @var Label[]|null */
+    /** @var Label[]|null $Labels */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Labels = null;
 
+    /** @var string|null $ProductCodeDelivery */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeDelivery = null;
 
-    /** @var Warning[]|null */
+    /** @var Warning[]|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
+    /**
+     * @param string|null $Barcode
+     * @param string|null $ProductCodeDelivery
+     * @param array|null  $Labels
+     * @param string|null $DownPartnerBarcode
+     * @param string|null $DownPartnerID
+     * @param string|null $DownPartnerLocation
+     * @param array|null  $Warnings
+     */
     public function __construct(
         ?string $Barcode = null,
         ?string $ProductCodeDelivery = null,
@@ -83,11 +97,19 @@ class ResponseShipment extends AbstractEntity
         $this->setWarnings(Warnings: $Warnings);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -95,11 +117,19 @@ class ResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerBarcode(): ?string
     {
         return $this->DownPartnerBarcode;
     }
 
+    /**
+     * @param string|null $DownPartnerBarcode
+     *
+     * @return $this
+     */
     public function setDownPartnerBarcode(?string $DownPartnerBarcode): static
     {
         $this->DownPartnerBarcode = $DownPartnerBarcode;
@@ -107,11 +137,19 @@ class ResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerID(): ?string
     {
         return $this->DownPartnerID;
     }
 
+    /**
+     * @param string|null $DownPartnerID
+     *
+     * @return $this
+     */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
         $this->DownPartnerID = $DownPartnerID;
@@ -119,11 +157,19 @@ class ResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerLocation(): ?string
     {
         return $this->DownPartnerLocation;
     }
 
+    /**
+     * @param string|null $DownPartnerLocation
+     *
+     * @return $this
+     */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
         $this->DownPartnerLocation = $DownPartnerLocation;
@@ -141,6 +187,7 @@ class ResponseShipment extends AbstractEntity
 
     /**
      * @param Label[]|null $Labels
+     *
      * @return static
      */
     public function setLabels(?array $Labels): static
@@ -150,11 +197,19 @@ class ResponseShipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeDelivery(): ?string
     {
         return $this->ProductCodeDelivery;
     }
 
+    /**
+     * @param string|null $ProductCodeDelivery
+     *
+     * @return $this
+     */
     public function setProductCodeDelivery(?string $ProductCodeDelivery): static
     {
         $this->ProductCodeDelivery = $ProductCodeDelivery;
@@ -172,6 +227,7 @@ class ResponseShipment extends AbstractEntity
 
     /**
      * @param Warning[]|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static

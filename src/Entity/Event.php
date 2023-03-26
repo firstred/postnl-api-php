@@ -36,9 +36,13 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Event extends AbstractEntity
 {
+    /** @var CompleteStatusResponseEvent|null $CompleteStatusResponseEvent */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null;
 
+    /**
+     * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
+     */
     public function __construct(?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null)
     {
         parent::__construct();
@@ -46,11 +50,19 @@ class Event extends AbstractEntity
         $this->setCompleteStatusResponseEvent(CompleteStatusResponseEvent: $CompleteStatusResponseEvent);
     }
 
+    /**
+     * @return CompleteStatusResponseEvent|null
+     */
     public function getCompleteStatusResponseEvent(): ?CompleteStatusResponseEvent
     {
         return $this->CompleteStatusResponseEvent;
     }
 
+    /**
+     * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
+     *
+     * @return $this
+     */
     public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $CompleteStatusResponseEvent): static
     {
         $this->CompleteStatusResponseEvent = $CompleteStatusResponseEvent;

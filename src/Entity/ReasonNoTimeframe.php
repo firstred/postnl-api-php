@@ -49,22 +49,27 @@ use function is_string;
  */
 class ReasonNoTimeframe extends AbstractEntity
 {
+    /** @var string|null $Code */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Code = null;
 
+    /** @var DateTimeInterface|null $Date */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $Date = null;
 
+    /** @var string|null $Description */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Description = null;
 
-    /** @var string[]|null */
+    /** @var string[]|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
+    /** @var string|null $From */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $From = null;
 
+    /** @var string|null $To */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $To = null;
 
@@ -90,11 +95,19 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setTo(To: $To);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCode(): ?string
     {
         return $this->Code;
     }
 
+    /**
+     * @param string|null $Code
+     *
+     * @return $this
+     */
     public function setCode(?string $Code): ReasonNoTimeframe
     {
         $this->Code = $Code;
@@ -102,11 +115,19 @@ class ReasonNoTimeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(?string $Description): ReasonNoTimeframe
     {
         $this->Description = $Description;
@@ -124,6 +145,7 @@ class ReasonNoTimeframe extends AbstractEntity
 
     /**
      * @param array|null $Options
+     *
      * @return ReasonNoTimeframe
      */
     public function setOptions(?array $Options): static
@@ -141,11 +163,19 @@ class ReasonNoTimeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFrom(): ?string
     {
         return $this->From;
     }
 
+    /**
+     * @param string|null $From
+     *
+     * @return $this
+     */
     public function setFrom(?string $From): static
     {
         $this->From = $From;
@@ -153,11 +183,19 @@ class ReasonNoTimeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTo(): ?string
     {
         return $this->To;
     }
 
+    /**
+     * @param string|null $To
+     *
+     * @return $this
+     */
     public function setTo(?string $To): static
     {
         $this->To = $To;
@@ -222,6 +260,11 @@ class ReasonNoTimeframe extends AbstractEntity
         return parent::jsonDeserialize(json: $json);
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

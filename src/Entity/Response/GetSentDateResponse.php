@@ -42,10 +42,11 @@ use Sabre\Xml\Writer;
  */
 class GetSentDateResponse extends AbstractEntity
 {
+    /** @var DateTimeInterface|null $SentDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $SentDate = null;
 
-    /** @var string[]|null */
+    /** @var string[]|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
@@ -93,6 +94,7 @@ class GetSentDateResponse extends AbstractEntity
 
     /**
      * @param strinmg[]|null $Options
+     *
      * @return static
      */
     public function setOptions(?array $Options): static
@@ -102,11 +104,19 @@ class GetSentDateResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getSentDate(): ?DateTimeInterface
     {
         return $this->SentDate;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

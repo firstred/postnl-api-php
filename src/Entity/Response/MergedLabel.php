@@ -37,14 +37,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class MergedLabel extends AbstractEntity
 {
-    /** @var string[]|null */
+    /** @var string[]|null $Barcodes */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Barcodes = null;
 
-    /** @var Label[]|null */
+    /** @var Label[]|null $Labels */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Labels = null;
 
+    /**
+     * @param array|null $Barcodes
+     * @param array|null $Labels
+     */
     public function __construct(
         /** @param string[]|null $Barcodes */
         ?array $Barcodes = null,
@@ -67,6 +71,7 @@ class MergedLabel extends AbstractEntity
 
     /**
      * @param string[]|null $Barcodes
+     *
      * @return static
      */
     public function setBarcodes(?array $Barcodes): static
@@ -86,6 +91,7 @@ class MergedLabel extends AbstractEntity
 
     /**
      * @param Label[]|null $Labels
+     *
      * @return static
      */
     public function setLabels(?array $Labels): static

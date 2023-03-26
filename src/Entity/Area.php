@@ -35,12 +35,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Area extends AbstractEntity
 {
+    /** @var Coordinates|null $CoordinatesNorthWest */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Coordinates $CoordinatesNorthWest = null;
 
+    /** @var Coordinates|null $CoordinatesSouthEast */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Coordinates $CoordinatesSouthEast = null;
 
+    /**
+     * @param Coordinates|null $CoordinatesNorthWest
+     * @param Coordinates|null $CoordinatesSouthEast
+     */
     public function __construct(
         ?Coordinates $CoordinatesNorthWest = null,
         ?Coordinates $CoordinatesSouthEast = null,
@@ -51,11 +57,19 @@ class Area extends AbstractEntity
         $this->setCoordinatesSouthEast(CoordinatesSouthEast: $CoordinatesSouthEast);
     }
 
+    /**
+     * @return Coordinates|null
+     */
     public function getCoordinatesNorthWest(): ?Coordinates
     {
         return $this->CoordinatesNorthWest;
     }
 
+    /**
+     * @param Coordinates|null $CoordinatesNorthWest
+     *
+     * @return $this
+     */
     public function setCoordinatesNorthWest(?Coordinates $CoordinatesNorthWest): static
     {
         $this->CoordinatesNorthWest = $CoordinatesNorthWest;
@@ -63,11 +77,19 @@ class Area extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Coordinates|null
+     */
     public function getCoordinatesSouthEast(): ?Coordinates
     {
         return $this->CoordinatesSouthEast;
     }
 
+    /**
+     * @param Coordinates|null $CoordinatesSouthEast
+     *
+     * @return $this
+     */
     public function setCoordinatesSouthEast(?Coordinates $CoordinatesSouthEast): static
     {
         $this->CoordinatesSouthEast = $CoordinatesSouthEast;

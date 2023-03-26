@@ -37,15 +37,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GetLocation extends AbstractEntity
 {
+    /** @var string|null $LocationCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LocationCode = null;
 
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
+    /** @var string|null $RetailNetworkID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RetailNetworkID = null;
 
+    /**
+     * @param string|null  $LocationCode
+     * @param Message|null $Message
+     * @param string|null  $RetailNetworkID
+     */
     public function __construct(
         ?string  $LocationCode = null,
         ?Message $Message = null,
@@ -58,11 +66,19 @@ class GetLocation extends AbstractEntity
         $this->setRetailNetworkID(RetailNetworkID: $RetailNetworkID);
     }
 
+    /**
+     * @return string|null
+     */
     public function getLocationCode(): ?string
     {
         return $this->LocationCode;
     }
 
+    /**
+     * @param string|null $LocationCode
+     *
+     * @return $this
+     */
     public function setLocationCode(?string $LocationCode): static
     {
         $this->LocationCode = $LocationCode;
@@ -70,11 +86,19 @@ class GetLocation extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;
@@ -82,11 +106,19 @@ class GetLocation extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRetailNetworkID(): ?string
     {
         return $this->RetailNetworkID;
     }
 
+    /**
+     * @param string|null $RetailNetworkID
+     *
+     * @return $this
+     */
     public function setRetailNetworkID(?string $RetailNetworkID): static
     {
         $this->RetailNetworkID = $RetailNetworkID;

@@ -46,6 +46,10 @@ class CurrentStatusResponse extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
+    /**
+     * @param array|null $Shipments
+     * @param array|null $Warnings
+     */
     public function __construct(
         /** @param CurrentStatusResponseShipment[]|null $Shipments */
         ?array $Shipments = null,
@@ -68,6 +72,7 @@ class CurrentStatusResponse extends AbstractEntity
 
     /**
      * @param CurrentStatusResponseShipment[]|null $Shipments
+     *
      * @return static
      */
     public function setShipments(?array $Shipments): static
@@ -95,6 +100,7 @@ class CurrentStatusResponse extends AbstractEntity
 
     /**
      * @param Warning[]|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static
@@ -112,6 +118,11 @@ class CurrentStatusResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

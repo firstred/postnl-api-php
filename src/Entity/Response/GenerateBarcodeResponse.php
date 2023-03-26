@@ -36,9 +36,13 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GenerateBarcodeResponse extends AbstractEntity
 {
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
+    /**
+     * @param string|null $Barcode
+     */
     public function __construct(?string $Barcode = null)
     {
         parent::__construct();
@@ -46,11 +50,19 @@ class GenerateBarcodeResponse extends AbstractEntity
         $this->setBarcode(Barcode: $Barcode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;

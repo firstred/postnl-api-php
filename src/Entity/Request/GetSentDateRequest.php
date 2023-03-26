@@ -37,12 +37,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GetSentDateRequest extends AbstractEntity
 {
+    /** @var GetSentDate|null $GetSentDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?GetSentDate $GetSentDate = null;
 
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
+    /**
+     * @param GetSentDate|null $GetSentDate
+     * @param Message|null     $Message
+     */
     public function __construct(
         ?GetSentDate $GetSentDate = null,
         ?Message     $Message = null
@@ -53,11 +59,19 @@ class GetSentDateRequest extends AbstractEntity
         $this->setMessage(Message: $Message ?: new Message());
     }
 
+    /**
+     * @return GetSentDate|null
+     */
     public function getGetSentDate(): ?GetSentDate
     {
         return $this->GetSentDate;
     }
 
+    /**
+     * @param GetSentDate|null $GetSentDate
+     *
+     * @return $this
+     */
     public function setGetSentDate(?GetSentDate $GetSentDate): static
     {
         $this->GetSentDate = $GetSentDate;
@@ -65,11 +79,19 @@ class GetSentDateRequest extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;

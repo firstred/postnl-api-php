@@ -36,13 +36,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Signature extends AbstractEntity
 {
+    /** @var GetSignatureResponseSignature|null $GetSignatureResponseSignature */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?GetSignatureResponseSignature $GetSignatureResponseSignature = null;
 
-    /** @var Warning[]|null */
+    /** @var Warning[]|null $Warnings */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
+    /**
+     * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
+     * @param array|null                         $Warnings
+     */
     public function __construct(
         ?GetSignatureResponseSignature $GetSignatureResponseSignature = null,
         /** @param Warning[]|null $Warnings */
@@ -54,11 +59,19 @@ class Signature extends AbstractEntity
         $this->setWarnings(Warnings: $Warnings);
     }
 
+    /**
+     * @return GetSignatureResponseSignature|null
+     */
     public function getGetSignatureResponseSignature(): ?GetSignatureResponseSignature
     {
         return $this->GetSignatureResponseSignature;
     }
 
+    /**
+     * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
+     *
+     * @return $this
+     */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature): static
     {
         $this->GetSignatureResponseSignature = $GetSignatureResponseSignature;
@@ -76,6 +89,7 @@ class Signature extends AbstractEntity
 
     /**
      * @param Warning[]|null $Warnings
+     *
      * @return static
      */
     public function setWarnings(?array $Warnings): static

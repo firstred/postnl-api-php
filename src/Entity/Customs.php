@@ -35,50 +35,78 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Customs extends AbstractEntity
 {
+    /** @var string|null $Certificate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Certificate = null;
 
+    /** @var string|null $CertificateNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CertificateNr = null;
 
-    /** @var Content[]|null */
+    /** @var Content[]|null $Content */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Content = null;
 
+    /** @var string|null $Currency */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Currency = null;
 
+    /** @var string|null $HandleAsNonDeliverable*/
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HandleAsNonDeliverable = null;
 
+    /** @var string|null $Invoice */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Invoice = null;
 
+    /** @var string|null $InvoiceNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
-
     protected ?string $InvoiceNr = null;
 
+    /** @var string|null $License */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $License = null;
 
+    /** @var string|null $LicenseNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LicenseNr = null;
 
+    /** @var string|null $ShipmentType */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentType = null;
 
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    /** @var string|null $TrustedShipperID */
+    #[SerializableProperty(namespace: Soapamespace::Domain)]
     protected ?string $TrustedShipperID = null;
 
+    /** @var string|null $TransactionCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TransactionCode = null;
 
+    /** @var string|null $TransactionDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TransactionDescription = null;
 
+    /** @var string|null $ImporterReferenceCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ImporterReferenceCode = null;
 
+    /**
+     * @param string|null $Certificate
+     * @param string|null $CertificateNr
+     * @param array|null  $Content
+     * @param string|null $Currency
+     * @param string|null $HandleAsNonDeliverable
+     * @param string|null $Invoice
+     * @param string|null $InvoiceNr
+     * @param string|null $License
+     * @param string|null $LicenseNr
+     * @param string|null $ShipmentType
+     * @param string|null $TrustedShipperID
+     * @param string|null $TransactionCode
+     * @param string|null $TransactionDescription
+     * @param string|null $ImporterReferenceCode
+     */
     public function __construct(
         ?string $Certificate = null,
         ?string $CertificateNr = null,
@@ -113,11 +141,19 @@ class Customs extends AbstractEntity
         $this->setImporterReferenceCode(ImporterReferenceCode: $ImporterReferenceCode);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCertificate(): ?string
     {
         return $this->Certificate;
     }
 
+    /**
+     * @param string|null $Certificate
+     *
+     * @return $this
+     */
     public function setCertificate(?string $Certificate): static
     {
         $this->Certificate = $Certificate;
@@ -125,11 +161,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCertificateNr(): ?string
     {
         return $this->CertificateNr;
     }
 
+    /**
+     * @param string|null $CertificateNr
+     *
+     * @return $this
+     */
     public function setCertificateNr(?string $CertificateNr): static
     {
         $this->CertificateNr = $CertificateNr;
@@ -147,6 +191,7 @@ class Customs extends AbstractEntity
 
     /**
      * @param Content[]|null $Content
+     *
      * @return $this
      */
     public function setContent(?array $Content): static
@@ -164,11 +209,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrency(): ?string
     {
         return $this->Currency;
     }
 
+    /**
+     * @param string|null $Currency
+     *
+     * @return $this
+     */
     public function setCurrency(?string $Currency): static
     {
         $this->Currency = $Currency;
@@ -176,11 +229,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHandleAsNonDeliverable(): ?string
     {
         return $this->HandleAsNonDeliverable;
     }
 
+    /**
+     * @param string|null $HandleAsNonDeliverable
+     *
+     * @return $this
+     */
     public function setHandleAsNonDeliverable(?string $HandleAsNonDeliverable): static
     {
         $this->HandleAsNonDeliverable = $HandleAsNonDeliverable;
@@ -188,11 +249,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInvoice(): ?string
     {
         return $this->Invoice;
     }
 
+    /**
+     * @param string|null $Invoice
+     *
+     * @return $this
+     */
     public function setInvoice(?string $Invoice): static
     {
         $this->Invoice = $Invoice;
@@ -200,11 +269,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInvoiceNr(): ?string
     {
         return $this->InvoiceNr;
     }
 
+    /**
+     * @param string|null $InvoiceNr
+     *
+     * @return $this
+     */
     public function setInvoiceNr(?string $InvoiceNr): static
     {
         $this->InvoiceNr = $InvoiceNr;
@@ -212,11 +289,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLicense(): ?string
     {
         return $this->License;
     }
 
+    /**
+     * @param string|null $License
+     *
+     * @return $this
+     */
     public function setLicense(?string $License): static
     {
         $this->License = $License;
@@ -224,11 +309,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLicenseNr(): ?string
     {
         return $this->LicenseNr;
     }
 
+    /**
+     * @param string|null $LicenseNr
+     *
+     * @return $this
+     */
     public function setLicenseNr(?string $LicenseNr): static
     {
         $this->LicenseNr = $LicenseNr;
@@ -236,11 +329,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getShipmentType(): ?string
     {
         return $this->ShipmentType;
     }
 
+    /**
+     * @param string|null $ShipmentType
+     *
+     * @return $this
+     */
     public function setShipmentType(?string $ShipmentType): static
     {
         $this->ShipmentType = $ShipmentType;
@@ -248,11 +349,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTrustedShipperID(): ?string
     {
         return $this->TrustedShipperID;
     }
 
+    /**
+     * @param string|null $TrustedShipperID
+     *
+     * @return $this
+     */
     public function setTrustedShipperID(?string $TrustedShipperID): static
     {
         $this->TrustedShipperID = $TrustedShipperID;
@@ -260,11 +369,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTransactionCode(): ?string
     {
         return $this->TransactionCode;
     }
 
+    /**
+     * @param string|null $TransactionCode
+     *
+     * @return $this
+     */
     public function setTransactionCode(?string $TransactionCode): static
     {
         $this->TransactionCode = $TransactionCode;
@@ -272,11 +389,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTransactionDescription(): ?string
     {
         return $this->TransactionDescription;
     }
 
+    /**
+     * @param string|null $TransactionDescription
+     *
+     * @return $this
+     */
     public function setTransactionDescription(?string $TransactionDescription): static
     {
         $this->TransactionDescription = $TransactionDescription;
@@ -284,11 +409,19 @@ class Customs extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getImporterReferenceCode(): ?string
     {
         return $this->ImporterReferenceCode;
     }
 
+    /**
+     * @param string|null $ImporterReferenceCode
+     *
+     * @return $this
+     */
     public function setImporterReferenceCode(?string $ImporterReferenceCode): static
     {
         $this->ImporterReferenceCode = $ImporterReferenceCode;

@@ -44,47 +44,59 @@ use function is_string;
  */
 class Timeframe extends AbstractEntity
 {
+    /** @var string|null $City */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
+    /** @var string|null $CountryCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CountryCode = null;
 
+    /** @var DateTimeInterface|null $Date */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $Date = null;
 
+    /** @var DateTimeInterface|null $EndDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $EndDate = null;
 
+    /** @var string|null $HouseNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
+    /** @var string|null $HouseNrExt */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
-    /** @var string[]|null */
+    /** @var string[]|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
+    /** @var string|null $PostalCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PostalCode = null;
 
+    /** @var DateTimeInterface|null $StartDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $StartDate = null;
 
+    /** @var string|null $Street */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
+    /** @var bool|null $SundaySorting */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $SundaySorting = null;
 
+    /** @var string|null $Interval */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Interval = null;
 
+    /** @var string|null $TimeframeRange */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TimeframeRange = null;
 
-    /** @var TimeframeTimeFrame[]|Timeframe[]|null */
+    /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Timeframes = null;
 
@@ -188,6 +200,11 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param string|null $PostalCode
+     *
+     * @return $this
+     */
     public function setPostalCode(?string $PostalCode = null): static
     {
         if (is_null(value: $PostalCode)) {
@@ -209,6 +226,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param string|null $City
+     *
      * @return Timeframe
      */
     public function setCity(?string $City): Timeframe
@@ -228,6 +246,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param string|null $CountryCode
+     *
      * @return Timeframe
      */
     public function setCountryCode(?string $CountryCode): Timeframe
@@ -247,6 +266,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param string|null $HouseNr
+     *
      * @return Timeframe
      */
     public function setHouseNr(?string $HouseNr): Timeframe
@@ -266,6 +286,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param string|null $HouseNrExt
+     *
      * @return Timeframe
      */
     public function setHouseNrExt(?string $HouseNrExt): Timeframe
@@ -285,6 +306,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param array|null $Options
+     *
      * @return Timeframe
      */
     public function setOptions(?array $Options): Timeframe
@@ -294,11 +316,19 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): ?string
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(?string $Street): static
     {
         $this->Street = $Street;
@@ -306,11 +336,19 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInterval(): ?string
     {
         return $this->Interval;
     }
 
+    /**
+     * @param string|null $Interval
+     *
+     * @return $this
+     */
     public function setInterval(?string $Interval): static
     {
         $this->Interval = $Interval;
@@ -318,11 +356,19 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTimeframeRange(): ?string
     {
         return $this->TimeframeRange;
     }
 
+    /**
+     * @param string|null $TimeframeRange
+     *
+     * @return $this
+     */
     public function setTimeframeRange(?string $TimeframeRange): static
     {
         $this->TimeframeRange = $TimeframeRange;
@@ -340,6 +386,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @param TimeframeTimeFrame[]|Timeframe[]|null $Timeframes
+     *
      * @return static
      */
     public function setTimeframes(?array $Timeframes): static
@@ -349,26 +396,41 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDate(): ?DateTimeInterface
     {
         return $this->Date;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getEndDate(): ?DateTimeInterface
     {
         return $this->EndDate;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPostalCode(): ?string
     {
         return $this->PostalCode;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getStartDate(): ?DateTimeInterface
     {
         return $this->StartDate;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getSundaySorting(): ?bool
     {
         return $this->SundaySorting;
@@ -389,6 +451,9 @@ class Timeframe extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

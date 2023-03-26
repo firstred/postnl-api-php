@@ -35,21 +35,33 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class OldStatus extends AbstractEntity
 {
+    /** @var string|null $CurrentPhaseCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentPhaseCode = null;
 
+    /** @var string|null $CurrentPhaseDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentPhaseDescription = null;
 
+    /** @var string|null $CurrentOldStatusCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusCode = null;
 
+    /** @var string|null $CurrentOldStatusDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusDescription = null;
 
+    /** @var string|null $CurrentOldStatusTimeStamp */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusTimeStamp = null;
 
+    /**
+     * @param string|null $PhaseCode
+     * @param string|null $PhaseDescription
+     * @param string|null $OldStatusCode
+     * @param string|null $OldStatusDescription
+     * @param string|null $TimeStamp
+     */
     public function __construct(
         ?string $PhaseCode = null,
         ?string $PhaseDescription = null,
@@ -66,11 +78,19 @@ class OldStatus extends AbstractEntity
         $this->setCurrentOldStatusTimeStamp(CurrentOldStatusTimeStamp: $TimeStamp);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentPhaseCode(): ?string
     {
         return $this->CurrentPhaseCode;
     }
 
+    /**
+     * @param string|null $CurrentPhaseCode
+     *
+     * @return $this
+     */
     public function setCurrentPhaseCode(?string $CurrentPhaseCode): static
     {
         $this->CurrentPhaseCode = $CurrentPhaseCode;
@@ -78,11 +98,19 @@ class OldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentPhaseDescription(): ?string
     {
         return $this->CurrentPhaseDescription;
     }
 
+    /**
+     * @param string|null $CurrentPhaseDescription
+     *
+     * @return $this
+     */
     public function setCurrentPhaseDescription(?string $CurrentPhaseDescription): static
     {
         $this->CurrentPhaseDescription = $CurrentPhaseDescription;
@@ -90,11 +118,19 @@ class OldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentOldStatusCode(): ?string
     {
         return $this->CurrentOldStatusCode;
     }
 
+    /**
+     * @param string|null $CurrentOldStatusCode
+     *
+     * @return $this
+     */
     public function setCurrentOldStatusCode(?string $CurrentOldStatusCode): static
     {
         $this->CurrentOldStatusCode = $CurrentOldStatusCode;
@@ -102,11 +138,19 @@ class OldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentOldStatusDescription(): ?string
     {
         return $this->CurrentOldStatusDescription;
     }
 
+    /**
+     * @param string|null $CurrentOldStatusDescription
+     *
+     * @return $this
+     */
     public function setCurrentOldStatusDescription(?string $CurrentOldStatusDescription): static
     {
         $this->CurrentOldStatusDescription = $CurrentOldStatusDescription;
@@ -114,11 +158,19 @@ class OldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCurrentOldStatusTimeStamp(): ?string
     {
         return $this->CurrentOldStatusTimeStamp;
     }
 
+    /**
+     * @param string|null $CurrentOldStatusTimeStamp
+     *
+     * @return $this
+     */
     public function setCurrentOldStatusTimeStamp(?string $CurrentOldStatusTimeStamp): static
     {
         $this->CurrentOldStatusTimeStamp = $CurrentOldStatusTimeStamp;

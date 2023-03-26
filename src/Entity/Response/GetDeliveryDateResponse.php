@@ -46,10 +46,11 @@ use function is_array;
  */
 class GetDeliveryDateResponse extends AbstractEntity
 {
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected DateTimeInterface|null $DeliveryDate = null;
 
-    /** @var string[]|null */
+    /** @var string[]|null $Options */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
@@ -77,6 +78,7 @@ class GetDeliveryDateResponse extends AbstractEntity
 
     /**
      * @param string[]|null $Options
+     *
      * @return GetDeliveryDateResponse
      */
     public function setOptions(?array $Options): GetDeliveryDateResponse
@@ -94,6 +96,9 @@ class GetDeliveryDateResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryDate(): DateTimeInterface|null
     {
         return $this->DeliveryDate;
@@ -119,6 +124,11 @@ class GetDeliveryDateResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

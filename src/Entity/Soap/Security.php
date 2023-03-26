@@ -38,6 +38,7 @@ class Security extends AbstractEntity
 {
     const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
+    /** @var UsernameToken $UsernameToken */
     #[SerializableProperty(namespace: SoapNamespace::Security)]
     protected UsernameToken $UsernameToken;
 
@@ -53,11 +54,19 @@ class Security extends AbstractEntity
         $this->setUsernameToken(UsernameToken: $UserNameToken);
     }
 
+    /**
+     * @return UsernameToken
+     */
     public function getUsernameToken(): UsernameToken
     {
         return $this->UsernameToken;
     }
 
+    /**
+     * @param UsernameToken $UsernameToken
+     *
+     * @return $this
+     */
     public function setUsernameToken(UsernameToken $UsernameToken): static
     {
         $this->UsernameToken = $UsernameToken;

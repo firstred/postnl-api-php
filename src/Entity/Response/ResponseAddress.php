@@ -65,60 +65,97 @@ class ResponseAddress extends AbstractEntity
      *
      * At least one other AddressType must be specified, other than AddressType 02
      * In most cases this will be AddressType 01, the receiver ResponseAddress.
+     *
+     * @var string|null $AddressType
      */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $AddressType = null;
 
+    /** @var string|null $Area */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Area = null;
 
+    /** @var string|null $Buildingname */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Buildingname = null;
 
+    /** @var string|null $City */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
+    /** @var string|null $CompanyName */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CompanyName = null;
 
+    /** @var string|null $Countrycode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Countrycode = null;
 
+    /** @var string|null $Department */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Department = null;
 
+    /** @var string|null $Doorcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Doorcode = null;
 
+    /** @var string|null $FirstName */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $FirstName = null;
 
+    /** @var string|null $Floor */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Floor = null;
 
+    /** @var string|null $HouseNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
+    /** @var string|null $HouseNrExt */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
+    /** @var string|null $Name */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Name = null;
 
+    /** @var string|null $Region */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Region = null;
 
+    /** @var string|null $Remark */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Remark = null;
 
+    /** @var string|null $Street */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
+    /** @var string|null $Zipcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Zipcode = null;
 
     protected ?array $other = [];
 
+    /**
+     * @param string|null $AddressType
+     * @param string|null $FirstName
+     * @param string|null $Name
+     * @param string|null $CompanyName
+     * @param string|null $Street
+     * @param string|null $HouseNr
+     * @param string|null $HouseNrExt
+     * @param string|null $Zipcode
+     * @param string|null $City
+     * @param string|null $Countrycode
+     * @param string|null $Area
+     * @param string|null $BuildingName
+     * @param string|null $Department
+     * @param string|null $Doorcode
+     * @param string|null $Floor
+     * @param string|null $Region
+     * @param string|null $Remark
+     */
     public function __construct(
         ?string $AddressType = null,
         ?string $FirstName = null,
@@ -161,11 +198,19 @@ class ResponseAddress extends AbstractEntity
         $this->setRemark(Remark: $Remark);
     }
 
+    /**
+     * @return string|null
+     */
     public function getAddressType(): ?string
     {
         return $this->AddressType;
     }
 
+    /**
+     * @param string|null $AddressType
+     *
+     * @return $this
+     */
     public function setAddressType(?string $AddressType): static
     {
         $this->AddressType = $AddressType;
@@ -173,11 +218,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getArea(): ?string
     {
         return $this->Area;
     }
 
+    /**
+     * @param string|null $Area
+     *
+     * @return $this
+     */
     public function setArea(?string $Area): static
     {
         $this->Area = $Area;
@@ -185,11 +238,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBuildingname(): ?string
     {
         return $this->Buildingname;
     }
 
+    /**
+     * @param string|null $Buildingname
+     *
+     * @return $this
+     */
     public function setBuildingname(?string $Buildingname): static
     {
         $this->Buildingname = $Buildingname;
@@ -197,11 +258,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCity(): ?string
     {
         return $this->City;
     }
 
+    /**
+     * @param string|null $City
+     *
+     * @return $this
+     */
     public function setCity(?string $City): static
     {
         $this->City = $City;
@@ -209,11 +278,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCompanyName(): ?string
     {
         return $this->CompanyName;
     }
 
+    /**
+     * @param string|null $CompanyName
+     *
+     * @return $this
+     */
     public function setCompanyName(?string $CompanyName): static
     {
         $this->CompanyName = $CompanyName;
@@ -221,11 +298,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCountrycode(): ?string
     {
         return $this->Countrycode;
     }
 
+    /**
+     * @param string|null $Countrycode
+     *
+     * @return $this
+     */
     public function setCountrycode(?string $Countrycode): static
     {
         $this->Countrycode = $Countrycode;
@@ -233,11 +318,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDepartment(): ?string
     {
         return $this->Department;
     }
 
+    /**
+     * @param string|null $Department
+     *
+     * @return $this
+     */
     public function setDepartment(?string $Department): static
     {
         $this->Department = $Department;
@@ -245,11 +338,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDoorcode(): ?string
     {
         return $this->Doorcode;
     }
 
+    /**
+     * @param string|null $Doorcode
+     *
+     * @return $this
+     */
     public function setDoorcode(?string $Doorcode): static
     {
         $this->Doorcode = $Doorcode;
@@ -257,11 +358,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->FirstName;
     }
 
+    /**
+     * @param string|null $FirstName
+     *
+     * @return $this
+     */
     public function setFirstName(?string $FirstName): static
     {
         $this->FirstName = $FirstName;
@@ -269,11 +378,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFloor(): ?string
     {
         return $this->Floor;
     }
 
+    /**
+     * @param string|null $Floor
+     *
+     * @return $this
+     */
     public function setFloor(?string $Floor): static
     {
         $this->Floor = $Floor;
@@ -281,11 +398,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNr(): ?string
     {
         return $this->HouseNr;
     }
 
+    /**
+     * @param string|null $HouseNr
+     *
+     * @return $this
+     */
     public function setHouseNr(?string $HouseNr): static
     {
         $this->HouseNr = $HouseNr;
@@ -293,11 +418,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHouseNrExt(): ?string
     {
         return $this->HouseNrExt;
     }
 
+    /**
+     * @param string|null $HouseNrExt
+     *
+     * @return $this
+     */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
         $this->HouseNrExt = $HouseNrExt;
@@ -305,11 +438,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->Name;
     }
 
+    /**
+     * @param string|null $Name
+     *
+     * @return $this
+     */
     public function setName(?string $Name): static
     {
         $this->Name = $Name;
@@ -317,11 +458,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRegion(): ?string
     {
         return $this->Region;
     }
 
+    /**
+     * @param string|null $Region
+     *
+     * @return $this
+     */
     public function setRegion(?string $Region): static
     {
         $this->Region = $Region;
@@ -329,11 +478,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRemark(): ?string
     {
         return $this->Remark;
     }
 
+    /**
+     * @param string|null $Remark
+     *
+     * @return $this
+     */
     public function setRemark(?string $Remark): static
     {
         $this->Remark = $Remark;
@@ -341,11 +498,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStreet(): ?string
     {
         return $this->Street;
     }
 
+    /**
+     * @param string|null $Street
+     *
+     * @return $this
+     */
     public function setStreet(?string $Street): static
     {
         $this->Street = $Street;
@@ -363,6 +528,7 @@ class ResponseAddress extends AbstractEntity
 
     /**
      * @param array|null $other
+     *
      * @return ResponseAddress
      */
     public function setOther(?array $other): static
@@ -372,11 +538,19 @@ class ResponseAddress extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getZipcode(): ?string
     {
         return $this->Zipcode;
     }
 
+    /**
+     * @param string|null $Zipcode
+     *
+     * @return $this
+     */
     public function setZipcode(string $Zipcode = null): static
     {
         if (is_null(value: $Zipcode)) {

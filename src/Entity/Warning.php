@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
@@ -38,12 +40,18 @@ use stdClass;
  */
 class Warning extends AbstractEntity
 {
+    /** @var string|null $Code */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Code = null;
 
+    /** @var string|null $Description */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Description = null;
 
+    /**
+     * @param string|null $Code
+     * @param string|null $Description
+     */
     public function __construct(?string $Code = null, ?string $Description = null)
     {
         parent::__construct();
@@ -52,11 +60,19 @@ class Warning extends AbstractEntity
         $this->setDescription(Description: $Description);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCode(): ?string
     {
         return $this->Code;
     }
 
+    /**
+     * @param string|null $Code
+     *
+     * @return $this
+     */
     public function setCode(?string $Code): static
     {
         $this->Code = $Code;
@@ -64,11 +80,19 @@ class Warning extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->Description;
     }
 
+    /**
+     * @param string|null $Description
+     *
+     * @return $this
+     */
     public function setDescription(?string $Description): static
     {
         $this->Description = $Description;
@@ -77,8 +101,12 @@ class Warning extends AbstractEntity
     }
 
     /**
+     * @param stdClass $json
+     *
+     * @return Warning
      * @throws NotSupportedException
-     * @throws InvalidArgumentException|\Firstred\PostNL\Exception\DeserializationException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

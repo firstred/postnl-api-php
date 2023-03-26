@@ -44,13 +44,18 @@ use Sabre\Xml\Writer;
  */
 class GetTimeframes extends AbstractEntity
 {
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
-    /** @var Timeframe[]|null */
+    /** @var Timeframe[]|null $Timeframe */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Timeframe = null;
 
+    /**
+     * @param Message|null $Message
+     * @param array|null   $Timeframes
+     */
     public function __construct(
         ?Message $Message = null,
         /** @param $Timeframes Timeframe[]|null */
@@ -113,11 +118,19 @@ class GetTimeframes extends AbstractEntity
         return $this->Timeframe;
     }
 
+    /**
+     * @return Message|null
+     */
     public function getMessage(): ?Message
     {
         return $this->Message;
     }
 
+    /**
+     * @param Message|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?Message $Message): static
     {
         $this->Message = $Message;
@@ -125,6 +138,11 @@ class GetTimeframes extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

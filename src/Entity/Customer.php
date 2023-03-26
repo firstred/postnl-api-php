@@ -35,33 +35,53 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Customer extends AbstractEntity
 {
+    /** @var Address|null $Address */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Address $Address = null;
 
+    /** @var string|null $CollectionLocation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CollectionLocation = null;
 
+    /** @var string|null $ContactPerson */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ContactPerson = null;
 
+    /** @var string|null $CustomerCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerCode = null;
 
+    /** @var string|null $CustomerNumber */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerNumber = null;
 
+    /** @var string|null $GlobalPackCustomerCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GlobalPackCustomerCode = null;
 
+    /** @var string|null $GlobalPackBarcodeType */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $GlobalPackBarcodeType = null;
 
+    /** @var string|null $Email */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Email = null;
 
+    /** @var string|null $Name */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Name = null;
 
+    /**
+     * @param string|null  $CustomerNumber
+     * @param string|null  $CustomerCode
+     * @param string|null  $CollectionLocation
+     * @param string|null  $ContactPerson
+     * @param string|null  $Email
+     * @param string|null  $Name
+     * @param Address|null $Address
+     * @param string|null  $GlobalPackCustomerCode
+     * @param string|null  $GlobalPackBarcodeType
+     */
     public function __construct(
         ?string  $CustomerNumber = null,
         ?string  $CustomerCode = null,
@@ -86,11 +106,19 @@ class Customer extends AbstractEntity
         $this->setGlobalPackBarcodeType(GlobalPackBarcodeType: $GlobalPackBarcodeType);
     }
 
+    /**
+     * @return Address|null
+     */
     public function getAddress(): ?Address
     {
         return $this->Address;
     }
 
+    /**
+     * @param Address|null $Address
+     *
+     * @return $this
+     */
     public function setAddress(?Address $Address): static
     {
         $this->Address = $Address;
@@ -98,11 +126,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCollectionLocation(): ?string
     {
         return $this->CollectionLocation;
     }
 
+    /**
+     * @param string|null $CollectionLocation
+     *
+     * @return $this
+     */
     public function setCollectionLocation(?string $CollectionLocation): static
     {
         $this->CollectionLocation = $CollectionLocation;
@@ -110,11 +146,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContactPerson(): ?string
     {
         return $this->ContactPerson;
     }
 
+    /**
+     * @param string|null $ContactPerson
+     *
+     * @return $this
+     */
     public function setContactPerson(?string $ContactPerson): static
     {
         $this->ContactPerson = $ContactPerson;
@@ -122,11 +166,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerCode(): ?string
     {
         return $this->CustomerCode;
     }
 
+    /**
+     * @param string|null $CustomerCode
+     *
+     * @return $this
+     */
     public function setCustomerCode(?string $CustomerCode): static
     {
         $this->CustomerCode = $CustomerCode;
@@ -134,11 +186,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerNumber(): ?string
     {
         return $this->CustomerNumber;
     }
 
+    /**
+     * @param string|null $CustomerNumber
+     *
+     * @return $this
+     */
     public function setCustomerNumber(?string $CustomerNumber): static
     {
         $this->CustomerNumber = $CustomerNumber;
@@ -146,11 +206,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGlobalPackCustomerCode(): ?string
     {
         return $this->GlobalPackCustomerCode;
     }
 
+    /**
+     * @param string|null $GlobalPackCustomerCode
+     *
+     * @return $this
+     */
     public function setGlobalPackCustomerCode(?string $GlobalPackCustomerCode): static
     {
         $this->GlobalPackCustomerCode = $GlobalPackCustomerCode;
@@ -158,11 +226,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getGlobalPackBarcodeType(): ?string
     {
         return $this->GlobalPackBarcodeType;
     }
 
+    /**
+     * @param string|null $GlobalPackBarcodeType
+     *
+     * @return $this
+     */
     public function setGlobalPackBarcodeType(?string $GlobalPackBarcodeType): static
     {
         $this->GlobalPackBarcodeType = $GlobalPackBarcodeType;
@@ -170,11 +246,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->Email;
     }
 
+    /**
+     * @param string|null $Email
+     *
+     * @return $this
+     */
     public function setEmail(?string $Email): static
     {
         $this->Email = $Email;
@@ -182,11 +266,19 @@ class Customer extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getName(): ?string
     {
         return $this->Name;
     }
 
+    /**
+     * @param string|null $Name
+     *
+     * @return $this
+     */
     public function setName(?string $Name): static
     {
         $this->Name = $Name;

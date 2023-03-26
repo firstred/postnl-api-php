@@ -37,10 +37,13 @@ use Sabre\Xml\Writer;
  */
 class GetLocationsResult extends AbstractEntity
 {
-    /** @var ResponseLocation[]|null */
+    /** @var ResponseLocation[]|null $ResponseLocation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $ResponseLocation = null;
 
+    /**
+     * @param array|null $ResponseLocation
+     */
     public function __construct(
         /** @param ResponseLocation[]|null $ResponseLocation */
         ?array $ResponseLocation = null,
@@ -60,6 +63,7 @@ class GetLocationsResult extends AbstractEntity
 
     /**
      * @param ResponseLocation[]|null $ResponseLocation
+     *
      * @return static
      */
     public function setResponseLocation(?array $ResponseLocation): static
@@ -77,6 +81,11 @@ class GetLocationsResult extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

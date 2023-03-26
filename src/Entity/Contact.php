@@ -40,18 +40,28 @@ use function is_null;
  */
 class Contact extends AbstractEntity
 {
+    /** @var string|null $ContactType */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ContactType = null;
 
+    /** @var string|null $Email */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Email = null;
 
+    /** @var string|null $SMSNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $SMSNr = null;
 
+    /** @var string|null $TelNr */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TelNr = null;
 
+    /**
+     * @param string|null $ContactType
+     * @param string|null $Email
+     * @param string|null $SMSNr
+     * @param string|null $TelNr
+     */
     public function __construct(
         ?string $ContactType = null,
         ?string $Email = null,
@@ -66,11 +76,19 @@ class Contact extends AbstractEntity
         $this->setTelNr(TelNr: $TelNr);
     }
 
+    /**
+     * @return string|null
+     */
     public function getContactType(): ?string
     {
         return $this->ContactType;
     }
 
+    /**
+     * @param string|null $ContactType
+     *
+     * @return $this
+     */
     public function setContactType(?string $ContactType): static
     {
         $this->ContactType = $ContactType;
@@ -78,11 +96,19 @@ class Contact extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->Email;
     }
 
+    /**
+     * @param string|null $Email
+     *
+     * @return $this
+     */
     public function setEmail(?string $Email): static
     {
         $this->Email = $Email;
@@ -90,11 +116,17 @@ class Contact extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSMSNr(): ?string
     {
         return $this->SMSNr;
     }
 
+    /**
+     * @return string|null
+     */
     public function getTelNr(): ?string
     {
         return $this->TelNr;

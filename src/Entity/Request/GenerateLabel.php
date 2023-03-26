@@ -40,9 +40,11 @@ use Sabre\Xml\Writer;
  */
 class GenerateLabel extends AbstractEntity
 {
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var LabellingMessage|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?LabellingMessage $Message = null;
 
@@ -50,9 +52,16 @@ class GenerateLabel extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Shipments = null;
 
+    /** @var string|null $LabelSignature */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LabelSignature;
 
+    /**
+     * @param array|null            $Shipments
+     * @param LabellingMessage|null $Message
+     * @param Customer|null         $Customer
+     * @param string|null           $LabelSignature
+     */
     public function __construct(
         /** @param $Shipments Shipment[]|null */
         ?array            $Shipments = null,
@@ -70,11 +79,19 @@ class GenerateLabel extends AbstractEntity
         }
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -82,11 +99,19 @@ class GenerateLabel extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return LabellingMessage|null
+     */
     public function getMessage(): ?LabellingMessage
     {
         return $this->Message;
     }
 
+    /**
+     * @param LabellingMessage|null $Message
+     *
+     * @return $this
+     */
     public function setMessage(?LabellingMessage $Message): static
     {
         $this->Message = $Message;
@@ -104,6 +129,7 @@ class GenerateLabel extends AbstractEntity
 
     /**
      * @param Shipment[]|null $Shipments
+     *
      * @return static
      */
     public function setShipments(?array $Shipments): static
@@ -113,11 +139,19 @@ class GenerateLabel extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLabelSignature(): ?string
     {
         return $this->LabelSignature;
     }
 
+    /**
+     * @param string|null $LabelSignature
+     *
+     * @return $this
+     */
     public function setLabelSignature(?string $LabelSignature): static
     {
         $this->LabelSignature = $LabelSignature;
@@ -125,6 +159,9 @@ class GenerateLabel extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];
@@ -146,6 +183,11 @@ class GenerateLabel extends AbstractEntity
         return $json;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

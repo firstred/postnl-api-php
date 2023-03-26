@@ -41,9 +41,11 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
  */
 class Message extends AbstractEntity
 {
+    /** @var string|null $MessageID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MessageID = null;
 
+    /** @var DateTimeInterface|null $MessageTimeStamp */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $MessageTimeStamp = null;
 
@@ -62,11 +64,19 @@ class Message extends AbstractEntity
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getMessageID(): ?string
     {
         return $this->MessageID;
     }
 
+    /**
+     * @param string|null $MessageID
+     *
+     * @return $this
+     */
     public function setMessageID(?string $MessageID): static
     {
         $this->MessageID = $MessageID;
@@ -74,6 +84,9 @@ class Message extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getMessageTimeStamp(): ?DateTimeInterface
     {
         return $this->MessageTimeStamp;

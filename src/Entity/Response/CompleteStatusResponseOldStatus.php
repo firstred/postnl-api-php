@@ -42,18 +42,23 @@ use function is_string;
  */
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {
+    /** @var string|null $StatusCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusCode = null;
 
+    /** @var string|null $StatusDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusDescription = null;
 
+    /** @var string|null $PhaseCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhaseCode = null;
 
+    /** @var string|null $PhaseDescription */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhaseDescription = null;
 
+    /** @var DateTimeInterface|null $TimeStamp */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $TimeStamp = null;
 
@@ -84,6 +89,11 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         return $this->StatusCode;
     }
 
+    /**
+     * @param string|null $StatusCode
+     *
+     * @return $this
+     */
     public function setStatusCode(?string $StatusCode): static
     {
         $this->StatusCode = $StatusCode;
@@ -91,11 +101,19 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatusDescription(): ?string
     {
         return $this->StatusDescription;
     }
 
+    /**
+     * @param string|null $StatusDescription
+     *
+     * @return $this
+     */
     public function setStatusDescription(?string $StatusDescription): static
     {
         $this->StatusDescription = $StatusDescription;
@@ -103,11 +121,19 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPhaseCode(): ?string
     {
         return $this->PhaseCode;
     }
 
+    /**
+     * @param string|null $PhaseCode
+     *
+     * @return $this
+     */
     public function setPhaseCode(?string $PhaseCode): static
     {
         $this->PhaseCode = $PhaseCode;
@@ -115,11 +141,19 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPhaseDescription(): ?string
     {
         return $this->PhaseDescription;
     }
 
+    /**
+     * @param string|null $PhaseDescription
+     *
+     * @return $this
+     */
     public function setPhaseDescription(?string $PhaseDescription): static
     {
         $this->PhaseDescription = $PhaseDescription;
@@ -127,6 +161,9 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getTimeStamp(): ?DateTimeInterface
     {
         return $this->TimeStamp;

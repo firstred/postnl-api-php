@@ -35,14 +35,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Timeframes extends AbstractEntity
 {
-    /** @var Timeframe[]|null */
+    /** @var Timeframe[]|null $Timeframes */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Timeframes = null;
 
-    /** @var TimeframeTimeFrame[]|null */
+    /** @var TimeframeTimeFrame[]|null $TimeframeTimeFrames */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $TimeframeTimeFrames = null;
 
+    /**
+     * @param array|null $timeframes
+     * @param array|null $timeframetimeframes
+     */
     public function __construct(
         /** @param Timeframe[]|null $timeframes */
         array $timeframes = null,
@@ -65,6 +69,7 @@ class Timeframes extends AbstractEntity
 
     /**
      * @param Timeframe[]|null $Timeframes
+     *
      * @return static
      */
     public function setTimeframes(?array $Timeframes): static
@@ -84,6 +89,7 @@ class Timeframes extends AbstractEntity
 
     /**
      * @param TimeframeTimeFrame[]|null $TimeframeTimeFrames
+     *
      * @return static
      */
     public function setTimeframeTimeFrames(?array $TimeframeTimeFrames): static
@@ -93,6 +99,9 @@ class Timeframes extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

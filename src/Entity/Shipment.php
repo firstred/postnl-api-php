@@ -41,123 +41,155 @@ use Sabre\Xml\Writer;
  */
 class Shipment extends AbstractEntity
 {
-    /** @var Address[]|null */
+    /** @var Address[]|null $Addresses */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Addresses = null;
 
-    /** @var Amount[]|null */
+    /** @var Amount[]|null $Amounts */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Amounts = null;
 
+    /** @var string|null $Barcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
+    /** @var DateTimeInterface|null $CollectionTimeStampEnd */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $CollectionTimeStampEnd = null;
 
+    /** @var DateTimeInterface|null $CollectionTimeStampStart */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $CollectionTimeStampStart = null;
 
-    /** @var Contact[]|null */
+    /** @var Contact[]|null $Contacts */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Contacts = null;
 
+    /** @var string|null $Content */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Content = null;
 
+    /** @var string|null $CostCenter */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CostCenter = null;
 
+    /** @var string|null $CustomerOrderNumber */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerOrderNumber = null;
 
+    /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
+    /** @var Customs|null $Customs */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customs $Customs = null;
 
+    /** @var string|null $StatusCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusCode = null;
 
+    /** @var int|null $PhaseCode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?int $PhaseCode = null;
 
+    /** @var DateTimeInterface|null $DateFrom */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DateFrom = null;
 
+    /** @var DateTimeInterface|null $DateTo */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DateTo = null;
 
+    /** @var string|null $DeliveryAddress */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DeliveryAddress = null;
 
+    /** @var DateTimeInterface|null $DeliveryTimeStampStart */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryTimeStampStart = null;
 
+    /** @var DateTimeInterface|null $DeliveryTimeStampEnd */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryTimeStampEnd = null;
 
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
+    /** @var Dimension|null $Dimension */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
+    /** @var string|null $DownPartnerBarcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerBarcode = null;
 
+    /** @var string|null $DownPartnerID */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
+    /** @var string|null $DownPartnerLocation */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
-    /** @var Event[]|null */
+    /** @var Event[]|null $Events */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Events = null;
 
-    /** @var Group[]|null */
+    /** @var Group[]|null $Groups */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Groups = null;
 
+    /** @var string|null $IDExpiration */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDExpiration = null;
 
+    /** @var string|null $IDNumber */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDNumber = null;
 
+    /** @var string|null $IDType */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDType = null;
 
+    /** @var string|null $OldStatuses */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $OldStatuses = null;
 
+    /** @var string|null $ProductCodeCollect */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeCollect = null;
 
+    /** @var string|null $ProductCodeDelivery */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeDelivery = null;
 
-    /** @var ProductOption[]|null */
+    /** @var ProductOption[]|null $ProductOptions */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $ProductOptions = null;
 
+    /** @var string|null $ReceiverDateOfBirth */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReceiverDateOfBirth = null;
 
+    /** @var string|null $Reference */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
+    /** @var string|null $ReferenceCollect */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReferenceCollect = null;
 
+    /** @var string|null $Remark */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Remark = null;
 
+    /** @var string|null $ReturnBarcode */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReturnBarcode = null;
 
+    /** @var string|null $ReturnReference */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReturnReference = null;
 
@@ -263,6 +295,7 @@ class Shipment extends AbstractEntity
 
     /**
      * @param Address[]|null $Addresses
+     *
      * @return static
      */
     public function setAddresses(?array $Addresses): static
@@ -282,6 +315,7 @@ class Shipment extends AbstractEntity
 
     /**
      * @param Amount[]|null $Amounts
+     *
      * @return $this
      */
     public function setAmounts(?array $Amounts): static
@@ -291,11 +325,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
+    /**
+     * @param string|null $Barcode
+     *
+     * @return $this
+     */
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
@@ -303,11 +345,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Contact|null
+     */
     public function getContacts(): ?array
     {
         return $this->Contacts;
     }
 
+    /**
+     * @param array|null $Contacts
+     *
+     * @return $this
+     */
     public function setContacts(?array $Contacts): static
     {
         $this->Contacts = $Contacts;
@@ -315,11 +365,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getContent(): ?string
     {
         return $this->Content;
     }
 
+    /**
+     * @param string|null $Content
+     *
+     * @return $this
+     */
     public function setContent(?string $Content): static
     {
         $this->Content = $Content;
@@ -327,11 +385,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCostCenter(): ?string
     {
         return $this->CostCenter;
     }
 
+    /**
+     * @param string|null $CostCenter
+     *
+     * @return $this
+     */
     public function setCostCenter(?string $CostCenter): static
     {
         $this->CostCenter = $CostCenter;
@@ -339,11 +405,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getCustomerOrderNumber(): ?string
     {
         return $this->CustomerOrderNumber;
     }
 
+    /**
+     * @param string|null $CustomerOrderNumber
+     *
+     * @return $this
+     */
     public function setCustomerOrderNumber(?string $CustomerOrderNumber): static
     {
         $this->CustomerOrderNumber = $CustomerOrderNumber;
@@ -351,11 +425,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Customer|null
+     */
     public function getCustomer(): ?Customer
     {
         return $this->Customer;
     }
 
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return $this
+     */
     public function setCustomer(?Customer $Customer): static
     {
         $this->Customer = $Customer;
@@ -363,11 +445,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Customs|null
+     */
     public function getCustoms(): ?Customs
     {
         return $this->Customs;
     }
 
+    /**
+     * @param Customs|null $Customs
+     *
+     * @return $this
+     */
     public function setCustoms(?Customs $Customs): static
     {
         $this->Customs = $Customs;
@@ -375,11 +465,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatusCode(): ?string
     {
         return $this->StatusCode;
     }
 
+    /**
+     * @param string|null $StatusCode
+     *
+     * @return $this
+     */
     public function setStatusCode(?string $StatusCode): static
     {
         $this->StatusCode = $StatusCode;
@@ -387,11 +485,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPhaseCode(): ?int
     {
         return $this->PhaseCode;
     }
 
+    /**
+     * @param int|null $PhaseCode
+     *
+     * @return $this
+     */
     public function setPhaseCode(?int $PhaseCode): static
     {
         $this->PhaseCode = $PhaseCode;
@@ -399,11 +505,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDateFrom(): ?DateTimeInterface
     {
         return $this->DateFrom;
     }
 
+    /**
+     * @param DateTimeInterface|null $DateFrom
+     *
+     * @return $this
+     */
     public function setDateFrom(?DateTimeInterface $DateFrom): static
     {
         $this->DateFrom = $DateFrom;
@@ -411,11 +525,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDateTo(): ?DateTimeInterface
     {
         return $this->DateTo;
     }
 
+    /**
+     * @param DateTimeInterface|null $DateTo
+     *
+     * @return $this
+     */
     public function setDateTo(?DateTimeInterface $DateTo): static
     {
         $this->DateTo = $DateTo;
@@ -423,11 +545,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDeliveryAddress(): ?string
     {
         return $this->DeliveryAddress;
     }
 
+    /**
+     * @param string|null $DeliveryAddress
+     *
+     * @return $this
+     */
     public function setDeliveryAddress(?string $DeliveryAddress): static
     {
         $this->DeliveryAddress = $DeliveryAddress;
@@ -435,11 +565,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Dimension|null
+     */
     public function getDimension(): ?Dimension
     {
         return $this->Dimension;
     }
 
+    /**
+     * @param Dimension|null $Dimension
+     *
+     * @return $this
+     */
     public function setDimension(?Dimension $Dimension): static
     {
         $this->Dimension = $Dimension;
@@ -447,11 +585,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerBarcode(): ?string
     {
         return $this->DownPartnerBarcode;
     }
 
+    /**
+     * @param string|null $DownPartnerBarcode
+     *
+     * @return $this
+     */
     public function setDownPartnerBarcode(?string $DownPartnerBarcode): static
     {
         $this->DownPartnerBarcode = $DownPartnerBarcode;
@@ -459,11 +605,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerID(): ?string
     {
         return $this->DownPartnerID;
     }
 
+    /**
+     * @param string|null $DownPartnerID
+     *
+     * @return $this
+     */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
         $this->DownPartnerID = $DownPartnerID;
@@ -471,11 +625,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDownPartnerLocation(): ?string
     {
         return $this->DownPartnerLocation;
     }
 
+    /**
+     * @param string|null $DownPartnerLocation
+     *
+     * @return $this
+     */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
         $this->DownPartnerLocation = $DownPartnerLocation;
@@ -493,6 +655,7 @@ class Shipment extends AbstractEntity
 
     /**
      * @param Event[]|null $Events
+     *
      * @return static
      */
     public function setEvents(?array $Events): static
@@ -512,6 +675,7 @@ class Shipment extends AbstractEntity
 
     /**
      * @param Group[]|null $Groups
+     *
      * @return static
      */
     public function setGroups(?array $Groups): static
@@ -521,11 +685,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDExpiration(): ?string
     {
         return $this->IDExpiration;
     }
 
+    /**
+     * @param string|null $IDExpiration
+     *
+     * @return $this
+     */
     public function setIDExpiration(?string $IDExpiration): static
     {
         $this->IDExpiration = $IDExpiration;
@@ -533,11 +705,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDNumber(): ?string
     {
         return $this->IDNumber;
     }
 
+    /**
+     * @param string|null $IDNumber
+     *
+     * @return $this
+     */
     public function setIDNumber(?string $IDNumber): static
     {
         $this->IDNumber = $IDNumber;
@@ -545,11 +725,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIDType(): ?string
     {
         return $this->IDType;
     }
 
+    /**
+     * @param string|null $IDType
+     *
+     * @return $this
+     */
     public function setIDType(?string $IDType): static
     {
         $this->IDType = $IDType;
@@ -557,11 +745,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOldStatuses(): ?string
     {
         return $this->OldStatuses;
     }
 
+    /**
+     * @param string|null $OldStatuses
+     *
+     * @return $this
+     */
     public function setOldStatuses(?string $OldStatuses): static
     {
         $this->OldStatuses = $OldStatuses;
@@ -569,11 +765,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeCollect(): ?string
     {
         return $this->ProductCodeCollect;
     }
 
+    /**
+     * @param string|null $ProductCodeCollect
+     *
+     * @return $this
+     */
     public function setProductCodeCollect(?string $ProductCodeCollect): static
     {
         $this->ProductCodeCollect = $ProductCodeCollect;
@@ -581,11 +785,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProductCodeDelivery(): ?string
     {
         return $this->ProductCodeDelivery;
     }
 
+    /**
+     * @param string|null $ProductCodeDelivery
+     *
+     * @return $this
+     */
     public function setProductCodeDelivery(?string $ProductCodeDelivery): static
     {
         $this->ProductCodeDelivery = $ProductCodeDelivery;
@@ -603,6 +815,7 @@ class Shipment extends AbstractEntity
 
     /**
      * @param ProductOption[]|null $ProductOptions
+     *
      * @return static
      */
     public function setProductOptions(?array $ProductOptions): static
@@ -612,11 +825,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReceiverDateOfBirth(): ?string
     {
         return $this->ReceiverDateOfBirth;
     }
 
+    /**
+     * @param string|null $ReceiverDateOfBirth
+     *
+     * @return $this
+     */
     public function setReceiverDateOfBirth(?string $ReceiverDateOfBirth): static
     {
         $this->ReceiverDateOfBirth = $ReceiverDateOfBirth;
@@ -624,11 +845,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReference(): ?string
     {
         return $this->Reference;
     }
 
+    /**
+     * @param string|null $Reference
+     *
+     * @return $this
+     */
     public function setReference(?string $Reference): static
     {
         $this->Reference = $Reference;
@@ -636,11 +865,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReferenceCollect(): ?string
     {
         return $this->ReferenceCollect;
     }
 
+    /**
+     * @param string|null $ReferenceCollect
+     *
+     * @return $this
+     */
     public function setReferenceCollect(?string $ReferenceCollect): static
     {
         $this->ReferenceCollect = $ReferenceCollect;
@@ -648,11 +885,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getRemark(): ?string
     {
         return $this->Remark;
     }
 
+    /**
+     * @param string|null $Remark
+     *
+     * @return $this
+     */
     public function setRemark(?string $Remark): static
     {
         $this->Remark = $Remark;
@@ -660,11 +905,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReturnBarcode(): ?string
     {
         return $this->ReturnBarcode;
     }
 
+    /**
+     * @param string|null $ReturnBarcode
+     *
+     * @return $this
+     */
     public function setReturnBarcode(?string $ReturnBarcode): static
     {
         $this->ReturnBarcode = $ReturnBarcode;
@@ -672,11 +925,19 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getReturnReference(): ?string
     {
         return $this->ReturnReference;
     }
 
+    /**
+     * @param string|null $ReturnReference
+     *
+     * @return $this
+     */
     public function setReturnReference(?string $ReturnReference): static
     {
         $this->ReturnReference = $ReturnReference;
@@ -684,26 +945,41 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getCollectionTimeStampEnd(): ?DateTimeInterface
     {
         return $this->CollectionTimeStampEnd;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getCollectionTimeStampStart(): ?DateTimeInterface
     {
         return $this->CollectionTimeStampStart;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryTimeStampStart(): ?DateTimeInterface
     {
         return $this->DeliveryTimeStampStart;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryTimeStampEnd(): ?DateTimeInterface
     {
         return $this->DeliveryTimeStampEnd;
     }
 
+    /**
+     * @return DateTimeInterface|null
+     */
     public function getDeliveryDate(): ?DateTimeInterface
     {
         return $this->DeliveryDate;
@@ -809,6 +1085,11 @@ class Shipment extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @param Writer $writer
+     *
+     * @return void
+     */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];

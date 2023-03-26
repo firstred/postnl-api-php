@@ -36,9 +36,13 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class GetLocationsInAreaResponse extends AbstractEntity
 {
+    /** @var GetLocationsResult|null $GetLocationsResult */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
+    /**
+     * @param GetLocationsResult|null $GetLocationsResult
+     */
     public function __construct(
         /** @param GetLocationsResult|null $GetLocationsResult */
         GetLocationsResult $GetLocationsResult = null,
@@ -48,11 +52,19 @@ class GetLocationsInAreaResponse extends AbstractEntity
         $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
     }
 
+    /**
+     * @return GetLocationsResult|null
+     */
     public function getGetLocationsResult(): ?GetLocationsResult
     {
         return $this->GetLocationsResult;
     }
 
+    /**
+     * @param GetLocationsResult|null $GetLocationsResult
+     *
+     * @return $this
+     */
     public function setGetLocationsResult(?GetLocationsResult $GetLocationsResult): static
     {
         $this->GetLocationsResult = $GetLocationsResult;
@@ -60,6 +72,9 @@ class GetLocationsInAreaResponse extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

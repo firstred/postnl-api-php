@@ -36,14 +36,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class SendShipmentResponse extends AbstractEntity
 {
-    /** @var MergedLabel[]|null */
+    /** @var MergedLabel[]|null $MergedLabels */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $MergedLabels = null;
 
-    /** @var ResponseShipment[]|null */
+    /** @var ResponseShipment[]|null $ResponseShipments */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?array $ResponseShipments = null;
 
+    /**
+     * @param array|null $MergedLabels
+     * @param array|null $ResponseShipments
+     */
     public function __construct(
         /** @param MergedLabel[]|null $MergedLabels */
         array $MergedLabels = null,
@@ -66,6 +70,7 @@ class SendShipmentResponse extends AbstractEntity
 
     /**
      * @param MergedLabel[]|null $MergedLabels
+     *
      * @return static
      */
     public function setMergedLabels(?array $MergedLabels): static
@@ -85,6 +90,7 @@ class SendShipmentResponse extends AbstractEntity
 
     /**
      * @param ResponseShipment[]|null $ResponseShipments
+     *
      * @return static
      */
     public function setResponseShipments(?array $ResponseShipments): static

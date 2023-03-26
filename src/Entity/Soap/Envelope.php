@@ -38,12 +38,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Envelope extends AbstractEntity
 {
+    /** @var Header|null $Header */
     #[SerializableProperty(namespace: SoapNamespace::Envelope)]
     protected ?Header $Header = null;
 
+    /** @var Body|null $Body */
     #[SerializableProperty(namespace: SoapNamespace::Envelope)]
     protected ?Body $Body = null;
 
+    /**
+     * @param Header|null $Header
+     * @param Body|null   $Body
+     */
     public function __construct(Header $Header = null, Body $Body = null)
     {
         parent::__construct();
@@ -56,11 +62,19 @@ class Envelope extends AbstractEntity
         }
     }
 
+    /**
+     * @return Header|null
+     */
     public function getHeader(): ?Header
     {
         return $this->Header;
     }
 
+    /**
+     * @param Header|null $Header
+     *
+     * @return $this
+     */
     public function setHeader(?Header $Header): static
     {
         $this->Header = $Header;
@@ -68,11 +82,19 @@ class Envelope extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return Body|null
+     */
     public function getBody(): ?Body
     {
         return $this->Body;
     }
 
+    /**
+     * @param Body|null $Body
+     *
+     * @return $this
+     */
     public function setBody(?Body $Body): static
     {
         $this->Body = $Body;

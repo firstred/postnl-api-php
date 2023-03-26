@@ -31,6 +31,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
@@ -41,9 +42,13 @@ use function is_array;
  */
 class GetNearestLocationsResponse extends AbstractEntity
 {
+    /** @var GetLocationsResult|null $GetLocationsResult */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
+    /**
+     * @param GetLocationsResult|null $GetLocationsResult
+     */
     public function __construct(GetLocationsResult $GetLocationsResult = null)
     {
         parent::__construct();
@@ -51,11 +56,19 @@ class GetNearestLocationsResponse extends AbstractEntity
         $this->setGetLocationsResult(GetLocationsResult: $GetLocationsResult);
     }
 
+    /**
+     * @return GetLocationsResult|null
+     */
     public function getGetLocationsResult(): ?GetLocationsResult
     {
         return $this->GetLocationsResult;
     }
 
+    /**
+     * @param GetLocationsResult|null $GetLocationsResult
+     *
+     * @return $this
+     */
     public function setGetLocationsResult(?GetLocationsResult $GetLocationsResult): static
     {
         $this->GetLocationsResult = $GetLocationsResult;
@@ -64,10 +77,12 @@ class GetNearestLocationsResponse extends AbstractEntity
     }
 
     /**
-     * @throws PostNLInvalidArgumentException
-     * @throws NotSupportedException
-     * @throws DeserializationException
+     * @param stdClass $json
      *
+     * @return GetNearestLocationsResponse
+     * @throws DeserializationException
+     * @throws NotSupportedException
+     * @throws EntityNotFoundException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -81,6 +96,9 @@ class GetNearestLocationsResponse extends AbstractEntity
         return parent::jsonDeserialize(json: $json);
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize(): array
     {
         $json = [];

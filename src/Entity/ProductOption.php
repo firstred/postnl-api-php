@@ -35,12 +35,18 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class ProductOption extends AbstractEntity
 {
+    /** @var string|null $Characteristic */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Characteristic = null;
 
+    /** @var string|null $Option */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Option = null;
 
+    /**
+     * @param string|null $Characteristic
+     * @param string|null $Option
+     */
     public function __construct(?string $Characteristic = null, ?string $Option = null)
     {
         parent::__construct();
@@ -49,11 +55,19 @@ class ProductOption extends AbstractEntity
         $this->setOption(Option: $Option);
     }
 
+    /**
+     * @return string|null
+     */
     public function getCharacteristic(): ?string
     {
         return $this->Characteristic;
     }
 
+    /**
+     * @param string|null $Characteristic
+     *
+     * @return $this
+     */
     public function setCharacteristic(?string $Characteristic): static
     {
         $this->Characteristic = $Characteristic;
@@ -61,11 +75,19 @@ class ProductOption extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOption(): ?string
     {
         return $this->Option;
     }
 
+    /**
+     * @param string|null $Option
+     *
+     * @return $this
+     */
     public function setOption(?string $Option): static
     {
         $this->Option = $Option;
