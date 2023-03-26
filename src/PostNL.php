@@ -63,7 +63,7 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -2170,7 +2170,7 @@ class PostNL implements LoggerAwareInterface
             } else {
                 switch ($type) {
                     case 'timeframes':
-                        if (static::MODE_REST === $this->getApiMode()) {
+                        if (PostNLApiMode::Rest === $this->getApiMode()) {
                             TimeframeServiceRestAdapter::validateRESTResponse(response: $response);
                         }
 
@@ -2181,7 +2181,7 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
-                        if (static::MODE_REST === $this->getApiMode()) {
+                        if (PostNLApiMode::Rest === $this->getApiMode()) {
                             LocationServiceRestAdapter::validateRESTResponse(response: $response);
                         }
 
@@ -2192,7 +2192,7 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
-                        if (static::MODE_REST === $this->getApiMode()) {
+                        if (PostNLApiMode::Rest === $this->getApiMode()) {
                             DeliveryDateService::validateRESTResponse(response: $response);
                         }
 
