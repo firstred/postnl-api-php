@@ -111,6 +111,7 @@ use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\NotFoundException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
+use JetBrains\PhpStorm\Deprecated;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -150,18 +151,30 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated See `PostNLApiMode::Rest`
      */
+    #[Deprecated(
+        reason: 'since version 2.0.0, use PostNLApiMode::Rest instead',
+        replacement: PostNLApiMode::class.'::Rest',
+    )]
     const MODE_REST = 1;
     /**
      * SOAP API
      *
      * @deprecated See `PostNLApiMode::Soap`
      */
+    #[Deprecated(
+        reason: 'since version 2.0.0, use PostNLApiMode::Soap instead',
+        replacement: PostNLApiMode::class.'::Soap',
+    )]
     const MODE_SOAP = 2;
     /**
      * Legacy SOAP API
      *
      * @deprecated See `PostNLApiMode::Soap`
      */
+    #[Deprecated(
+        reason: 'since version 2.0.0, use PostNLApiMode::Soap instead',
+        replacement: PostNLApiMode::class.'::Soap',
+    )]
     const MODE_LEGACY = 2;
 
     /**
