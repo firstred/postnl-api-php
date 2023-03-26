@@ -160,7 +160,7 @@ class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements Confir
         }
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponse(xml: $xml);
+        $this->validateResponseContent(xml: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

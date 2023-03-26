@@ -111,7 +111,7 @@ class BarcodeServiceRestAdapter extends AbstractRestAdapter implements BarcodeSe
     public function processGenerateBarcodeResponse(ResponseInterface $response): string
     {
         $responseContent = $this->getResponseText(response: $response);
-        $this->validateResponse(responseContent: $responseContent);
+        $this->validateResponseContent(responseContent: $responseContent);
 
         $json = json_decode(json: $responseContent);
 

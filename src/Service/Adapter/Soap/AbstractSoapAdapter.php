@@ -133,8 +133,16 @@ abstract class AbstractSoapAdapter extends AbstractApiAdapter
      *
      * @since 2.0.0
      */
-    protected function validateResponse(SimpleXMLElement $xml): bool
+    protected function validateResponseContent(string $xml): bool
     {
+        try {
+            $xml = new SimpleXMLElement(data: $xml);
+        } catch (\Exception $e) {
+            throw new CifDownException(
+                message: "Invalid response from server",
+                previous: $e,
+            );
+        }
         if (count(value: $xml->xpath(expression: '//env:Fault/env:Reason/env:Text')) >= 1) {
             throw new CifDownException(message: (string) $xml->xpath(expression: '//env:Fault/env:Reason/env:Text')[0]);
         }

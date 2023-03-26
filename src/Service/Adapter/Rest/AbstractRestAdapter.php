@@ -45,7 +45,7 @@ abstract class AbstractRestAdapter extends AbstractApiAdapter
      *
      * @since 2.0.0
      */
-    protected function validateResponse(string $responseContent): bool
+    protected function validateResponseContent(string $responseContent): bool
     {
         $body = json_decode(json: $responseContent);
 

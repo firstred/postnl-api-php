@@ -87,7 +87,7 @@ class ConfirmingServiceRestAdapter extends AbstractRestAdapter implements Confir
      */
     public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment
     {
-        $this->validateResponse(responseContent: (string) $response->getBody());
+        $this->validateResponseContent(responseContent: (string) $response->getBody());
         $body = json_decode(json: $this->getResponseText(response: $response));
 
         if (isset($body->ResponseShipments)) {

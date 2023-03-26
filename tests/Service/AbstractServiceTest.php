@@ -35,19 +35,21 @@ use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\AbstractService;
 use Firstred\PostNL\Service\Adapter\AbstractApiAdapter;
+use Firstred\PostNL\Service\Adapter\BarcodeServiceAdapterInterface;
+use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
+use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
+use Firstred\PostNL\Service\BarcodeService;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\MockObject\Exception;
 
 /**
  * @testdox The AbstractService class
  */
 class AbstractServiceTest extends ServiceTestCase
 {
-    /**
-     * @testdox can get the response text from the value property
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     */
+    /** @throws */
+    #[TestDox(text: 'can get the response text from the value property')]
     public function testGetResponseTextFromArray(): void
     {
         $response = new Response(status: 200, headers: [], body: 'test');
@@ -57,10 +59,8 @@ class AbstractServiceTest extends ServiceTestCase
         $this->assertEquals(expected: 'test', actual: $result);
     }
 
-    /**
-     * @throws HttpClientException
-     * @throws ResponseException
-     */
+    /** @throws */
+    #[TestDox(text: 'can get a response text from an exception')]
     public function testGetResponseTextFromException(): void
     {
         $response = new HttpClientException(message: '', code: 0, previous: null, response: new Response(status: 500, headers: [], body: 'test'));
@@ -68,16 +68,8 @@ class AbstractServiceTest extends ServiceTestCase
         $this->assertEquals(expected: 'test', actual: AbstractApiAdapter::getResponseText(response: ['value' => $response]));
     }
 
-    /**
-     * @testdox can detect and throw a CifDownException (REST)
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws ApiException
-     * @throws InvalidConfigurationException
-     */
+    /** @throws */
+    #[TestDox(text: 'can detect and throw a CifDownException (REST)')]
     public function testCifDownExceptionRest(): void
     {
         $this->expectException(exception: CifDownException::class);
@@ -86,18 +78,18 @@ class AbstractServiceTest extends ServiceTestCase
             'Envelope' => ['Body' => ['Fault' => ['Reason' => ['Text' => ['' => 'error']]]]],
         ]));
 
-        AbstractService::validateRestResponse(response: $response);
+        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
+        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceRestAdapter::class);
+        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
+        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
+        $adapterReflection = new \ReflectionObject(object: $adapter);
+        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
     }
 
-    /**
-     * @testdox can detect and throw a CifException (REST)
-     *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
-     */
+    /** @throws */
+    #[TestDox(text: 'can detect and throw a CifException (REST)')]
     public function testCifExceptionRest(): void
     {
         $this->expectException(exception: CifException::class);
@@ -114,15 +106,18 @@ class AbstractServiceTest extends ServiceTestCase
             ],
         ]));
 
-        AbstractService::validateRestResponse(response: $response);
+        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
+        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapAdapter::class);
+        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
+        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
+        $adapterReflection = new \ReflectionObject(object: $adapter);
+        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
     }
 
-    /**
-     * @testdox can detect and throw a CifDownException (SOAP)
-     *
-     * @throws CifDownException
-     * @throws CifException
-     */
+    /** @throws */
+    #[TestDox(text: 'can detect and throw a CifDownException (SOAP)')]
     public function testCifDownExceptionSoap(): void
     {
         $this->expectException(exception: CifDownException::class);
@@ -147,15 +142,18 @@ XML
         $response->registerXPathNamespace(prefix: 'env', namespace: 'http://www.w3.org/2003/05/soap-envelope');
         $response->registerXPathNamespace(prefix: 'common', namespace: 'http://postnl.nl/cif/services/common/');
 
-        AbstractService::validateSoapResponse(xml: $response);
+        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
+        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapAdapter::class);
+        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
+        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
+        $adapterReflection = new \ReflectionObject(object: $adapter);
+        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response]);
     }
 
-    /**
-     * @testdox can detect and throw a CifException (SOAP)
-     *
-     * @throws CifDownException
-     * @throws CifException
-     */
+    /** @throws */
+    #[TestDox(text: 'can detect and throw a CifException (SOAP)')]
     public function testCifExceptionSoap(): void
     {
         $this->expectException(exception: CifException::class);
@@ -179,6 +177,13 @@ XML
         $response->registerXPathNamespace(prefix: 'env', namespace: 'http://www.w3.org/2003/05/soap-envelope');
         $response->registerXPathNamespace(prefix: 'common', namespace: 'http://postnl.nl/cif/services/common/');
 
-        AbstractService::validateSoapResponse(xml: $response);
+        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
+        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapAdapter::class);
+        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
+        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
+        $adapterReflection = new \ReflectionObject(object: $adapter);
+        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
     }
 }

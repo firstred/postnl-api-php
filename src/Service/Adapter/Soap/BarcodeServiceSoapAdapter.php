@@ -178,7 +178,7 @@ class BarcodeServiceSoapAdapter extends AbstractSoapAdapter implements BarcodeSe
         }
 
         $this->registerNamespaces(element: $xml);
-        $this->validateResponse(xml: $xml);
+        $this->validateResponseContent(xml: $xml);
 
         return (string) $xml->xpath(expression: '//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
     }

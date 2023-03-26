@@ -161,7 +161,7 @@ class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements Timefra
         $xml = simplexml_load_string(data: static::getResponseText(response: $response));
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponse(xml: $xml);
+        $this->validateResponseContent(xml: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

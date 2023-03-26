@@ -170,7 +170,7 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
         }
 
         $this->registerNamespaces(element: $xml);
-        $this->validateResponse(xml: $xml);
+        $this->validateResponseContent(xml: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
@@ -259,7 +259,7 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
         }
 
         $this->registerNamespaces(element: $xml);
-        $this->validateResponse(xml: $xml);
+        $this->validateResponseContent(xml: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
