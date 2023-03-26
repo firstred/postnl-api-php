@@ -46,6 +46,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LabellingServiceRestAdapter extends AbstractRestAdapter implements LabellingServiceAdapterInterface
 {
@@ -88,6 +89,7 @@ class LabellingServiceRestAdapter extends AbstractRestAdapter implements Labelli
      * Process the GenerateLabel REST Response.
      *
      * @param ResponseInterface $response
+     *
      * @return GenerateLabelResponse|null
      * @throws HttpClientException
      * @throws NotSupportedException

@@ -48,6 +48,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
@@ -55,15 +56,26 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
 
     protected BarcodeServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = self::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = self::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(

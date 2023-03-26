@@ -28,23 +28,17 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\Adapter;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
-use Http\Message\RequestFactory;
-use Http\Message\StreamFactory;
-use ParagonIE\HiddenString\HiddenString;
-use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 interface BarcodeServiceAdapterInterface
 {

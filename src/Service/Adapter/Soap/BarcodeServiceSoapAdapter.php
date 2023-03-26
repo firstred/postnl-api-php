@@ -74,6 +74,7 @@ use SimpleXMLElement;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class BarcodeServiceSoapAdapter extends AbstractSoapAdapter implements BarcodeServiceAdapterInterface
 {
@@ -84,6 +85,13 @@ class BarcodeServiceSoapAdapter extends AbstractSoapAdapter implements BarcodeSe
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,

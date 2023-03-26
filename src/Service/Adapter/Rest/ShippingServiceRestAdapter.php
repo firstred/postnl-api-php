@@ -44,6 +44,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ShippingServiceRestAdapter extends AbstractRestAdapter implements ShippingServiceAdapterInterface
 {
@@ -53,7 +54,7 @@ class ShippingServiceRestAdapter extends AbstractRestAdapter implements Shipping
 
     /**
      * @param SendShipment $sendShipment
-     * @param bool $confirm
+     * @param bool         $confirm
      *
      * @return RequestInterface
      *

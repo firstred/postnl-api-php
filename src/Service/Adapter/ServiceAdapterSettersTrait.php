@@ -31,6 +31,10 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
+/**
+ * @since 2.0.0
+ * @internal
+ */
 trait ServiceAdapterSettersTrait
 {
     /**

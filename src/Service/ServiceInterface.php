@@ -33,6 +33,9 @@ use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
+/**
+ * @internal
+ */
 interface ServiceInterface
 {
     /**

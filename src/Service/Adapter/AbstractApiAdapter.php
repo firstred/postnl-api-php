@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\Adapter;
 
 use DateTimeImmutable;
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Response;
@@ -36,14 +35,21 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionClass;
 use Sabre\Xml\Writer;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 abstract class AbstractApiAdapter
 {
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         private HiddenString            $apiKey,
         private bool                    $sandbox,

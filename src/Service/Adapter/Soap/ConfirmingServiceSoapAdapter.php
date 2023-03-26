@@ -37,7 +37,9 @@ use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\Adapter\ConfirmingServiceAdapterInterface;
 use Firstred\PostNL\Util\Util;
@@ -53,6 +55,7 @@ use SimpleXMLElement;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements ConfirmingServiceAdapterInterface
 {
@@ -63,12 +66,19 @@ class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements Confir
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ConfirmingWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
-        HiddenString $apiKey,
-        bool $sandbox,
+        HiddenString            $apiKey,
+        bool                    $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version,
+        StreamFactoryInterface  $streamFactory,
+        string                  $version,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -79,7 +89,7 @@ class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements Confir
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Domain->value => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
             SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
         ]);
     }
@@ -128,11 +138,15 @@ class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements Confir
     /**
      * Process Confirm SOAP response.
      *
+     * @param ResponseInterface $response
+     *
+     * @return ConfirmingResponseShipment
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws HttpClientException
-     *
+     * @throws ResponseException
+     * @throws EntityNotFoundException
+     * @throws InvalidArgumentException
      * @since 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment

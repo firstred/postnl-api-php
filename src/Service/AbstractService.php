@@ -31,7 +31,6 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -44,6 +43,7 @@ use ReflectionClass;
  * Class AbstractService.
  *
  * @since 1.0.0
+ * @internal
  */
 abstract class AbstractService
 {
@@ -65,6 +65,17 @@ abstract class AbstractService
      */
     private ?CacheItemPoolInterface $cache;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
         private HiddenString               $apiKey,
         private PostNLApiMode              $apiMode,
@@ -254,6 +265,7 @@ abstract class AbstractService
 
     /**
      * @param HttpClientInterface $httpClient
+     *
      * @return AbstractService
      */
     public function setHttpClient(HttpClientInterface $httpClient): AbstractService

@@ -48,6 +48,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class DeliveryDateServiceRestAdapter extends AbstractRestAdapter implements DeliveryDateServiceAdapterInterface
 {

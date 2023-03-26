@@ -72,6 +72,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 interface ShippingStatusServiceAdapterInterface
 {
@@ -162,7 +163,7 @@ interface ShippingStatusServiceAdapterInterface
     /**
      * Build get updated shipments request REST.
      *
-     * @param Customer $customer
+     * @param Customer               $customer
      * @param DateTimeInterface|null $dateTimeFrom
      * @param DateTimeInterface|null $dateTimeTo
      *

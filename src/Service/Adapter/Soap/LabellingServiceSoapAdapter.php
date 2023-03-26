@@ -33,8 +33,8 @@ use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Enum\SoapNamespace;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
@@ -46,7 +46,6 @@ use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -62,6 +61,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements LabellingServiceAdapterInterface
 {
@@ -73,6 +73,13 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
@@ -89,8 +96,8 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value           => self::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value             => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -100,19 +107,17 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      * Generate a single barcode via REST.
      *
      * @param GenerateLabel $generateLabel
-     * @param bool $confirm
+     * @param bool          $confirm
      *
      * @return GenerateLabelResponse
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws NotFoundException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function generateLabelREST(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
@@ -164,12 +169,12 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      *
      * @return array
      *
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 2.0.0
      */
     public function generateLabelsREST(array $generateLabels): array
@@ -220,16 +225,14 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      * Generate a single label via SOAP.
      *
      * @param GenerateLabel $generateLabel
-     * @param bool $confirm
+     * @param bool          $confirm
      *
      * @return GenerateLabelResponse
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
-     *
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
@@ -268,13 +271,10 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      *
      * @return array
      *
-     * @throws CifDownException
-     * @throws CifException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
-     * @throws ResponseException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function generateLabelsSOAP(array $generateLabels): array
@@ -326,10 +326,11 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      * Build the GenerateLabel request for the REST API.
      *
      * @param GenerateLabel $generateLabel
-     * @param bool $confirm
+     * @param bool          $confirm
      *
      * @return RequestInterface
      *
+     * @throws PostNLInvalidArgumentException
      * @since 2.0.0
      */
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
@@ -362,11 +363,12 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      *
      * @return GenerateLabelResponse|null
      *
-     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
+     * @throws DeserializationException
      * @since 2.0.0
      */
     public function processGenerateLabelResponseREST(ResponseInterface $response): ?GenerateLabelResponse
@@ -387,10 +389,11 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      * Build the GenerateLabel request for the SOAP API.
      *
      * @param GenerateLabel $generateLabel
-     * @param bool $confirm
+     * @param bool          $confirm
      *
      * @return RequestInterface
      *
+     * @throws PostNLInvalidArgumentException
      * @since 2.0.0
      */
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
@@ -440,11 +443,10 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
      *
      * @return GenerateLabelResponse
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
      * @throws HttpClientException
-     *
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGenerateLabelResponseSOAP(ResponseInterface $response): GenerateLabelResponse

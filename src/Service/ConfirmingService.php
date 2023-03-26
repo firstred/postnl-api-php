@@ -49,6 +49,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
@@ -56,15 +57,26 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
 
     protected ConfirmingServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = ConfirmingServiceInterface::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = ConfirmingServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
         parent::__construct(
@@ -110,7 +122,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
     /**
      * Confirm multiple shipments.
      *
-     * @param Confirming[] $confirms ['uuid' => Confirming, ...]
+     * @param Confirming[]                      $confirms ['uuid' => Confirming, ...]
+     *
      * @phpstan-param array<string, Confirming> $confirms
      *
      * @return ConfirmingResponseShipment[]

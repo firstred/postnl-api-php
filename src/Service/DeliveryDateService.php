@@ -37,14 +37,11 @@ use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Service\Adapter\DeliveryDateServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\Rest\DeliveryDateServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
 use Firstred\PostNL\Service\Adapter\Soap\DeliveryDateServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
@@ -58,6 +55,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
 {
@@ -65,15 +63,26 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
 
     protected DeliveryDateServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = DeliveryDateServiceInterface::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = DeliveryDateServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -140,7 +149,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @since 1.0.0

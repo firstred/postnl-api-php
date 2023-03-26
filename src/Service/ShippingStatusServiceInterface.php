@@ -27,8 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use DateTimeInterface;
-use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
@@ -37,21 +35,18 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 1.2.0
+ * @internal
  */
 interface ShippingStatusServiceInterface extends ServiceInterface
 {
@@ -111,7 +106,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      *
      * @param CompleteStatus|CompleteStatusByReference $completeStatus
      *
-     * @return UpdatedShipmentsResponse
+     * @return CompleteStatusResponse
      *
      * @throws CifDownException
      * @throws CifException
@@ -120,7 +115,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse;

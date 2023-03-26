@@ -44,6 +44,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ConfirmingServiceRestAdapter extends AbstractRestAdapter implements ConfirmingServiceAdapterInterface
 {
@@ -72,6 +73,7 @@ class ConfirmingServiceRestAdapter extends AbstractRestAdapter implements Confir
      * Proces Confirm REST Response.
      *
      * @param ResponseInterface $response
+     *
      * @return ConfirmingResponseShipment
      * @throws CifDownException
      * @throws CifException

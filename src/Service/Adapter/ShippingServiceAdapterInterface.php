@@ -52,14 +52,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\Adapter;
 
-use Firstred\PostNL\Entity\Request\GetDeliveryDate;
-use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Request\SendShipment;
-use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
-use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -69,12 +63,13 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 interface ShippingServiceAdapterInterface
 {
     /**
      * @param SendShipment $sendShipment
-     * @param bool $confirm
+     * @param bool         $confirm
      *
      * @return RequestInterface
      *

@@ -30,7 +30,6 @@ namespace Firstred\PostNL\Service\Adapter\Rest;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
-use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
@@ -40,21 +39,13 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\Service\Adapter\ShippingServiceAdapterInterface;
 use Firstred\PostNL\Service\Adapter\ShippingStatusServiceAdapterInterface;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function json_decode;
@@ -62,6 +53,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements ShippingStatusServiceAdapterInterface
 {
@@ -131,12 +123,14 @@ class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements Sh
     /**
      * Process CurrentStatus Response REST.
      *
-     * @throws ResponseException
+     * @param ResponseInterface $response
+     *
+     * @return CurrentStatusResponse
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws DeserializationException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse
@@ -230,11 +224,12 @@ class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements Sh
      *
      * @return CompleteStatusResponse|null
      *
-     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processCompleteStatusResponse(mixed $response): ?CompleteStatusResponse
@@ -338,11 +333,11 @@ class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements Sh
      *
      * @return GetSignatureResponseSignature|null
      *
-     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processGetSignatureResponse(mixed $response): ?GetSignatureResponseSignature
@@ -356,7 +351,7 @@ class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements Sh
     /**
      * Build get updated shipments request REST.
      *
-     * @param Customer $customer
+     * @param Customer               $customer
      * @param DateTimeInterface|null $dateTimeFrom
      * @param DateTimeInterface|null $dateTimeTo
      *
@@ -391,11 +386,11 @@ class ShippingStatusServiceRestAdapter extends AbstractRestAdapter implements Sh
      *
      * @return UpdatedShipmentsResponse[]
      *
+     * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGetUpdatedShipmentsResponse(ResponseInterface $response): array

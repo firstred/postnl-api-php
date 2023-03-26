@@ -42,10 +42,8 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Service\Adapter\LocationServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\Rest\LocationServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
 use Firstred\PostNL\Service\Adapter\Soap\LocationServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
@@ -59,6 +57,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LocationService extends AbstractService implements LocationServiceInterface
 {
@@ -66,15 +65,26 @@ class LocationService extends AbstractService implements LocationServiceInterfac
 
     protected LocationServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = LocationServiceInterface::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = LocationServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(

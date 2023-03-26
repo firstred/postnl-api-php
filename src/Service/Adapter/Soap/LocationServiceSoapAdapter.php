@@ -29,43 +29,33 @@ namespace Firstred\PostNL\Service\Adapter\Soap;
 
 use DateTimeImmutable;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Address;
-use Firstred\PostNL\Entity\Coordinates;
-use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\Response\ResponseLocation;
 use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
-use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\Adapter\LocationServiceAdapterInterface;
 use Firstred\PostNL\Util\Util;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
-use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LocationServiceSoapAdapter extends AbstractSoapAdapter implements LocationServiceAdapterInterface
 {
@@ -77,6 +67,13 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
@@ -145,12 +142,16 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
     /**
      * Process GetNearestLocations Response SOAP.
      *
+     * @param mixed $response
+     *
+     * @return GetNearestLocationsResponse
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
-     *
+     * @throws LibXMLException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processGetNearestLocationsResponse(mixed $response): GetNearestLocationsResponse
@@ -233,11 +234,16 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
     }
 
     /**
+     * @param mixed $response
+     *
+     * @return GetLocationsInAreaResponse
      * @throws CifDownException
      * @throws CifException
+     * @throws EntityNotFoundException
+     * @throws HttpClientException
      * @throws LibXMLException
+     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 2.0.0
      */
     public function processGetLocationsInAreaResponse(mixed $response): GetLocationsInAreaResponse
@@ -328,10 +334,11 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
-     * @throws ResponseException
      * @throws HttpClientException
-     *
+     * @throws LibXMLException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGetLocationResponse(mixed $response): GetLocationsInAreaResponse

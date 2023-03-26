@@ -33,8 +33,6 @@ use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Enum\PostNLApiMode;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
@@ -42,10 +40,8 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Service\Adapter\LabellingServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\Rest\LabellingServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
 use Firstred\PostNL\Service\Adapter\Soap\LabellingServiceSoapAdapter;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
@@ -59,6 +55,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
@@ -68,15 +65,26 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = LabellingServiceInterface::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = LabellingServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(

@@ -36,6 +36,7 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -51,6 +52,7 @@ use Sabre\Xml\Service as XmlService;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements TimeframeServiceAdapterInterface
 {
@@ -63,6 +65,13 @@ class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements Timefra
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
@@ -91,6 +100,7 @@ class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements Timefra
      *
      * @return RequestInterface
      *
+     * @throws PostNLInvalidArgumentException
      * @since 2.0.0
      */
     public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface
@@ -141,9 +151,9 @@ class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements Timefra
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws ResponseException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGetTimeframesResponse(mixed $response): ResponseTimeframes

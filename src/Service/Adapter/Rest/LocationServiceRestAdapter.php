@@ -37,6 +37,7 @@ use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseLocation;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -48,6 +49,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class LocationServiceRestAdapter extends AbstractRestAdapter implements LocationServiceAdapterInterface
 {
@@ -123,19 +125,20 @@ class LocationServiceRestAdapter extends AbstractRestAdapter implements Location
     /**
      * Process GetNearestLocations Response REST.
      *
-     * @throws ResponseException
+     * @param mixed $response
+     *
+     * @return GetNearestLocationsResponse|null
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws DeserializationException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processGetNearestLocationsResponse(mixed $response): ?GetNearestLocationsResponse
     {
         $body = json_decode(json: static::getResponseText(response: $response));
 
-        /** @var GetNearestLocationsResponse $object */
         $object = GetNearestLocationsResponse::jsonDeserialize(json: (object) ['GetNearestLocationsResponse' => $body]);
 
         return $object;
@@ -191,9 +194,14 @@ class LocationServiceRestAdapter extends AbstractRestAdapter implements Location
     /**
      * Process GetLocationsInArea Response REST.
      *
-     * @throws ResponseException
+     * @param mixed $response
+     *
+     * @return GetLocationsInAreaResponse|null
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processGetLocationsInAreaResponse(mixed $response): ?GetLocationsInAreaResponse
@@ -207,7 +215,6 @@ class LocationServiceRestAdapter extends AbstractRestAdapter implements Location
 
         return $object;
     }
-
 
 
     /**
@@ -238,10 +245,15 @@ class LocationServiceRestAdapter extends AbstractRestAdapter implements Location
     /**
      * Process GetLocation Response REST.
      *
-     * @throws ResponseException
+     * @param mixed $response
+     *
+     * @return GetLocationsInAreaResponse|null
+     * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotSupportedException
-     *
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGetLocationResponse(mixed $response): ?GetLocationsInAreaResponse

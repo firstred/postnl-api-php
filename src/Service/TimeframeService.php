@@ -32,18 +32,14 @@ use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Enum\PostNLApiMode;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\Rest\LocationServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\Rest\TimeframeServiceRestAdapter;
 use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\LocationServiceSoapAdapter;
 use Firstred\PostNL\Service\Adapter\Soap\TimeframeServiceSoapAdapter;
 use Firstred\PostNL\Service\Adapter\TimeframeServiceAdapterInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -58,6 +54,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
@@ -65,15 +62,26 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
 
     protected TimeframeServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
-        HiddenString $apiKey,
-        PostNLApiMode $apiMode,
-        bool $sandbox,
-        HttpClientInterface $httpClient,
-        RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface $streamFactory,
-        string $version = TimeframeServiceInterface::DEFAULT_VERSION,
-        CacheItemPoolInterface $cache = null,
+        HiddenString                       $apiKey,
+        PostNLApiMode                      $apiMode,
+        bool                               $sandbox,
+        HttpClientInterface                $httpClient,
+        RequestFactoryInterface            $requestFactory,
+        StreamFactoryInterface             $streamFactory,
+        string                             $version = TimeframeServiceInterface::DEFAULT_VERSION,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -96,15 +104,12 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @return ResponseTimeframes
      *
-     * @throws CifDownException
-     * @throws CifException
      * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
+     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes

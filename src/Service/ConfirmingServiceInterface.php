@@ -36,11 +36,10 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 1.2.0
+ * @internal
  */
 interface ConfirmingServiceInterface extends ServiceInterface
 {

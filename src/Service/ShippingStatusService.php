@@ -38,6 +38,7 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Enum\PostNLApiMode;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
@@ -59,6 +60,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
 {
@@ -66,6 +68,17 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
     protected ShippingStatusServiceAdapterInterface $adapter;
 
+    /**
+     * @param HiddenString                            $apiKey
+     * @param PostNLApiMode                           $apiMode
+     * @param bool                                    $sandbox
+     * @param HttpClientInterface                     $httpClient
+     * @param RequestFactoryInterface                 $requestFactory
+     * @param StreamFactoryInterface                  $streamFactory
+     * @param string                                  $version
+     * @param CacheItemPoolInterface|null             $cache
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     */
     public function __construct(
         HiddenString                       $apiKey,
         PostNLApiMode                      $apiMode,
@@ -108,12 +121,13 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *
      * @return CurrentStatusResponse
      *
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.0.0
      */
     public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse
@@ -150,7 +164,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     /**
      * Get current statuses REST.
      *
-     * @param CurrentStatus[]|CurrentStatusByReference[] $currentStatuses
+     * @param CurrentStatus[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
      *
@@ -159,7 +173,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws DeserializationException
      * @since 1.2.0
      */
     public function currentStatuses(array $currentStatuses): array

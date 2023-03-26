@@ -63,6 +63,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 interface LabellingServiceAdapterInterface
 {

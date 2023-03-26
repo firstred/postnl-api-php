@@ -39,6 +39,7 @@ use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -56,6 +57,7 @@ use SimpleXMLElement;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements DeliveryDateServiceAdapterInterface
 {
@@ -66,6 +68,13 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/DeliveryDateWebService/';
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/DeliveryDateWebService/';
 
+    /**
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
+     * @param string                  $version
+     */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
@@ -82,8 +91,8 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value           => self::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value             => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -144,6 +153,7 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws ResponseException
@@ -227,11 +237,15 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
     /**
      * Process GetSentDate SOAP Response.
      *
+     * @param ResponseInterface $response
+     *
+     * @return GetSentDateResponse
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws HttpClientException
-     *
+     * @throws InvalidArgumentException
+     * @throws ResponseException
+     * @throws EntityNotFoundException
      * @since 2.0.0
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse

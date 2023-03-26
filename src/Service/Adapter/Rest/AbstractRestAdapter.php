@@ -34,6 +34,7 @@ use Firstred\PostNL\Service\Adapter\AbstractApiAdapter;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 abstract class AbstractRestAdapter extends AbstractApiAdapter
 {

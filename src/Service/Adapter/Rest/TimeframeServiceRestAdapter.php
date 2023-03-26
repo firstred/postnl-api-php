@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\TimeframeTimeFrame;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\Adapter\TimeframeServiceAdapterInterface;
@@ -45,6 +44,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class TimeframeServiceRestAdapter extends AbstractRestAdapter implements TimeframeServiceAdapterInterface
 {
@@ -105,12 +105,14 @@ class TimeframeServiceRestAdapter extends AbstractRestAdapter implements Timefra
     /**
      * Process GetTimeframes Response REST.
      *
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws ResponseException
+     * @param mixed $response
+     *
+     * @return ResponseTimeframes|null
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws ResponseException
      * @since 2.0.0
      */
     public function processGetTimeframesResponse(mixed $response): ?ResponseTimeframes

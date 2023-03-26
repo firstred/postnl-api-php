@@ -53,6 +53,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ * @internal
  */
 class ShippingService extends AbstractService implements ShippingServiceInterface
 {
