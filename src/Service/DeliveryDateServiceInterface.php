@@ -52,6 +52,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface DeliveryDateServiceInterface extends ServiceInterface
 {

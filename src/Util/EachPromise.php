@@ -55,6 +55,8 @@ use Iterator;
 /**
  * Represents a promise that iterates over many promises and invokes
  * side-effect functions in the process.
+ *
+ * @internal
  */
 class EachPromise
 {

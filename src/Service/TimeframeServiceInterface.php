@@ -47,6 +47,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface TimeframeServiceInterface extends ServiceInterface
 {

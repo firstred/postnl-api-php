@@ -76,6 +76,7 @@ use const PHP_QUERY_RFC3986;
  * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.0.0
+ * @internal
  */
 class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
 {

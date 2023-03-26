@@ -55,6 +55,7 @@ use SimpleXMLElement;
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  *
  * @since 1.0.0
+ * @internal
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {

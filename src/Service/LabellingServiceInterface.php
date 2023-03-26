@@ -48,6 +48,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  *
  * @since 1.2.0
+ * @internal
  */
 interface LabellingServiceInterface extends ServiceInterface
 {

@@ -60,6 +60,7 @@ use const PHP_QUERY_RFC3986;
  * @method ResponseTimeframes processGetTimeframesResponse(mixed $response)
  *
  * @since 1.0.0
+ * @internal
  */
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {

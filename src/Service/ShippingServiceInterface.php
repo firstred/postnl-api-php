@@ -47,6 +47,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface ShippingServiceInterface extends ServiceInterface
 {

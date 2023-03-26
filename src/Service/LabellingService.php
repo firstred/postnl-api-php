@@ -63,6 +63,7 @@ use const PHP_QUERY_RFC3986;
  * @method GenerateLabelResponse[] generateLabels(GenerateLabel[] $generateLabel, bool $confirm)
  *
  * @since 1.0.0
+ * @internal
  */
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {

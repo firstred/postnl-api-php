@@ -56,6 +56,8 @@ use LogicException;
  * Promises/A+ implementation that avoids recursion when possible.
  *
  * @see https://promisesaplus.com/
+ *
+ * @internal
  */
 class PendingPromise implements Promise
 {

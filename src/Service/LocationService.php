@@ -70,6 +70,7 @@ use const PHP_QUERY_RFC3986;
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
  *
  * @since 1.0.0
+ * @internal
  */
 class LocationService extends AbstractService implements LocationServiceInterface
 {

@@ -47,6 +47,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method ConfirmingResponseShipment   processConfirmShipmentResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface ConfirmingServiceInterface extends ServiceInterface
 {

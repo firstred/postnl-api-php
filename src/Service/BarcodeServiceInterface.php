@@ -44,6 +44,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
  *
  * @since 1.2.0
+ * @internal
  */
 interface BarcodeServiceInterface extends ServiceInterface
 {

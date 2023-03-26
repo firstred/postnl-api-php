@@ -198,6 +198,7 @@ abstract class AbstractService
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @internal
      */
     public static function validateRESTResponse($response)
     {

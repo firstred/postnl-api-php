@@ -56,6 +56,8 @@ namespace Firstred\PostNL\Util;
  * by calling the `run()` function of the global task queue in an event loop.
  *
  * queue()->run();
+ *
+ * @internal
  */
 class TaskQueue
 {

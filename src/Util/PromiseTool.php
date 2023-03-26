@@ -59,6 +59,8 @@ use Iterator;
 
 /**
  * Class PromiseTool.
+ *
+ * @internal
  */
 class PromiseTool
 {

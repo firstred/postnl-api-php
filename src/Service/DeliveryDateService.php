@@ -66,6 +66,7 @@ use const PHP_QUERY_RFC3986;
  * @method GetSentDateResponse     processGetSentDateResponse(mixed $response)
  *
  * @since 1.0.0
+ * @internal
  */
 class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
 {

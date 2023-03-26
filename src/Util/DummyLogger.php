@@ -31,6 +31,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class DummyLogger.
+ *
+ * @internal
  */
 class DummyLogger implements LoggerInterface
 {

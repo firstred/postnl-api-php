@@ -53,6 +53,7 @@ use const PHP_QUERY_RFC3986;
  * @method SendShipmentResponse processSendShipmentResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 class ShippingService extends AbstractService implements ShippingServiceInterface
 {

@@ -57,6 +57,7 @@ use Sabre\Xml\LibXMLException;
  * @method GetLocationsInAreaResponse  processGetLocationResponse(mixed $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface LocationServiceInterface extends ServiceInterface
 {

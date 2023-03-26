@@ -41,6 +41,7 @@ if (interface_exists(SabreXmlSerializable::class)) {
      * @license   http://sabre.io/license/ Modified BSD License
      *
      * @since     1.2.0
+     * @internal
      */
     interface XmlSerializable
     {

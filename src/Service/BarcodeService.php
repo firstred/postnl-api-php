@@ -52,6 +52,7 @@ use const PHP_QUERY_RFC3986;
  * @method string[]         generateBarcodes(GenerateBarcode[] $generateBarcode)
  *
  * @since 1.0.0
+ * @internal
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {

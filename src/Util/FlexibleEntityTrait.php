@@ -30,6 +30,8 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * Trait FlexibleEntityTrait.
+ *
+ * @internal
  */
 trait FlexibleEntityTrait
 {

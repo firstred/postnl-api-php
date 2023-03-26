@@ -68,6 +68,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
  * @since 1.2.0
+ * @internal
  */
 interface ShippingStatusServiceInterface extends ServiceInterface
 {
