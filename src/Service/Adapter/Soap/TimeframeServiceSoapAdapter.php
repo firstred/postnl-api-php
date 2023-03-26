@@ -31,7 +31,7 @@ use DateTimeImmutable;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
@@ -161,7 +161,7 @@ class TimeframeServiceSoapAdapter extends AbstractSoapAdapter implements Timefra
         $xml = simplexml_load_string(data: static::getResponseText(response: $response));
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

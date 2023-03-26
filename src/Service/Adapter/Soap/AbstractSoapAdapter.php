@@ -28,7 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\Adapter\Soap;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -95,7 +95,7 @@ abstract class AbstractSoapAdapter extends AbstractApiAdapter
      */
     protected function registerNamespaces(SimpleXMLElement $element): void
     {
-        foreach ($this->namespaces as $namespace => $prefix) {
+        foreach ($this->namespaces as $prefix => $namespace) {
             $element->registerXPathNamespace(prefix: $prefix, namespace: $namespace);
         }
     }
@@ -133,17 +133,20 @@ abstract class AbstractSoapAdapter extends AbstractApiAdapter
      *
      * @since 2.0.0
      */
-    protected function validateResponseContent(string $xml): bool
+    protected function validateResponseContent(string $responseContent): bool
     {
         try {
-            $xml = new SimpleXMLElement(data: $xml);
+            $xml = new SimpleXMLElement(data: $responseContent);
+            $this->registerNamespaces(element: $xml);
         } catch (\Exception $e) {
             throw new CifDownException(
                 message: "Invalid response from server",
                 previous: $e,
             );
         }
-        if (count(value: $xml->xpath(expression: '//env:Fault/env:Reason/env:Text')) >= 1) {
+
+        $errorText = $xml->xpath(expression: '//env:Fault/env:Reason/env:Text');
+        if (is_countable(value: $errorText) && count(value: $errorText) >= 1) {
             throw new CifDownException(message: (string) $xml->xpath(expression: '//env:Fault/env:Reason/env:Text')[0]);
         }
 

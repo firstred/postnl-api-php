@@ -55,8 +55,8 @@ namespace Firstred\PostNL\Service\Adapter\Soap;
 use DateTimeImmutable;
 use Exception;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\Security;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -177,8 +177,7 @@ class BarcodeServiceSoapAdapter extends AbstractSoapAdapter implements BarcodeSe
             throw new ResponseException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
         }
 
-        $this->registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: (string) $response->getBody());
 
         return (string) $xml->xpath(expression: '//services:GenerateBarcodeResponse/domain:Barcode')[0][0];
     }

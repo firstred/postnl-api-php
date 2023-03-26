@@ -34,8 +34,8 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\Security;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -170,7 +170,7 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
         }
 
         $this->registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
@@ -259,7 +259,7 @@ class DeliveryDateServiceSoapAdapter extends AbstractSoapAdapter implements Deli
         }
 
         $this->registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

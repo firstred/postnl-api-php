@@ -32,8 +32,8 @@ use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
-use Firstred\PostNL\Entity\SOAP\Security;
-use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Soap\Security;
+use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -160,7 +160,7 @@ class ConfirmingServiceSoapAdapter extends AbstractSoapAdapter implements Confir
         }
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

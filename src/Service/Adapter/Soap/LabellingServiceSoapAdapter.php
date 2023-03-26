@@ -31,7 +31,7 @@ use DateTimeImmutable;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
@@ -178,7 +178,7 @@ class LabellingServiceSoapAdapter extends AbstractSoapAdapter implements Labelli
         }
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));

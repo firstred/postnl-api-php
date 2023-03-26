@@ -34,7 +34,7 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
@@ -159,7 +159,7 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
         $xml = simplexml_load_string(data: static::getResponseText(response: $response));
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
@@ -251,7 +251,7 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
         $xml = simplexml_load_string(data: static::getResponseText(response: $response));
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
@@ -346,7 +346,7 @@ class LocationServiceSoapAdapter extends AbstractSoapAdapter implements Location
         $xml = simplexml_load_string(data: static::getResponseText(response: $response));
 
         static::registerNamespaces(element: $xml);
-        $this->validateResponseContent(xml: $xml);
+        $this->validateResponseContent(responseContent: $xml);
 
         $reader = new Reader();
         $reader->xml(source: static::getResponseText(response: $response));
