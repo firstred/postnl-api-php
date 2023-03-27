@@ -350,7 +350,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function setApiKey(HiddenString|string $apiKey): static
     {
-        $this->apiKey = is_string(value: $apiKey) ? HiddenString(value: $apiKey) : $apiKey;
+        $this->apiKey = is_string(value: $apiKey) ? new HiddenString(value: $apiKey) : $apiKey;
 
         return $this;
     }
@@ -1082,7 +1082,7 @@ class PostNL implements LoggerAwareInterface
             eps: 'NL' !== strtoupper(string: $iso) && in_array(needle: strtoupper(string: $iso), haystack: static::$threeSCountries)
         );
 
-        return $this->getBarcodeService()->generateBarcode(new GenerateBarcode(Barcode: new Barcode(Type: $type, Range: $range, Serie: $serie), Customer: $this->customer));
+        return $this->getBarcodeService()->generateBarcode(generateBarcode: new GenerateBarcode(Barcode: new Barcode(Type: $type, Range: $range, Serie: $serie), Customer: $this->customer));
     }
 
     /**
@@ -1137,7 +1137,7 @@ class PostNL implements LoggerAwareInterface
             }
         }
 
-        $results = $this->getBarcodeService()->generateBarcodes($generateBarcodes);
+        $results = $this->getBarcodeService()->generateBarcodes(generateBarcodes: $generateBarcodes);
 
         $barcodes = [];
         foreach ($results as $id => $barcode) {
@@ -1170,12 +1170,12 @@ class PostNL implements LoggerAwareInterface
         bool     $confirm = true
     ): SendShipmentResponse {
         return $this->getShippingService()->sendShipment(
-            new SendShipment(
+            sendShipment: new SendShipment(
                 Shipments: [$shipment],
                 Message: new LabellingMessage(Printertype: $printertype),
                 Customer: $this->customer
             ),
-            $confirm);
+            confirm: $confirm);
     }
 
     /**
@@ -1265,12 +1265,12 @@ class PostNL implements LoggerAwareInterface
         }
 
         $responseShipments = $this->getShippingService()->sendShipment(
-            new SendShipment(
+            sendShipment: new SendShipment(
                 Shipments: $shipments,
                 Message: new LabellingMessage(Printertype: $printertype),
                 Customer: $this->customer
             ),
-            $confirm
+            confirm: $confirm
         );
 
         if (!$merge) {
@@ -1415,12 +1415,12 @@ class PostNL implements LoggerAwareInterface
         bool     $confirm = true
     ): GenerateLabelResponse {
         return $this->getLabellingService()->generateLabel(
-            new GenerateLabel(
+            generateLabel: new GenerateLabel(
                 Shipments: [$shipment],
                 Message: new LabellingMessage(Printertype: $printertype),
                 Customer: $this->customer
             ),
-            $confirm
+            confirm: $confirm
         );
     }
 
@@ -1647,7 +1647,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
     {
-        return $this->getConfirmingService()->confirmShipment(new Confirming(Shipments: [$shipment], Customer: $this->customer));
+        return $this->getConfirmingService()->confirmShipment(confirming: new Confirming(Shipments: [$shipment], Customer: $this->customer));
     }
 
     /**
@@ -1674,7 +1674,7 @@ class PostNL implements LoggerAwareInterface
             $confirmings[$uuid] = (new Confirming(Shipments: [$shipment], Customer: $this->customer))->setId(id: $uuid);
         }
 
-        return $this->getConfirmingService()->confirmShipments($confirmings);
+        return $this->getConfirmingService()->confirmShipments(confirms: $confirmings);
     }
 
     /**
@@ -1721,7 +1721,7 @@ class PostNL implements LoggerAwareInterface
             $currentStatus->setMessage(Message: new Message());
         }
 
-        return $this->getShippingStatusService()->currentStatus($currentStatus);
+        return $this->getShippingStatusService()->currentStatus(currentStatus: $currentStatus);
     }
 
     /**
@@ -1789,14 +1789,14 @@ class PostNL implements LoggerAwareInterface
     {
         $shipments = [];
         if ($complete) {
-            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(array_map(
+            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(completeStatuses: array_map(
                 callback: function ($barcode) {
                     return (new CompleteStatus())->setShipment(Shipment: (new Shipment())->setBarcode(Barcode: $barcode));
                 },
                 array: $barcodes
             ));
         } else {
-            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(array_map(
+            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(currentStatuses: array_map(
                 callback: function ($barcode) {
                     return (new CurrentStatus())->setShipment(Shipment: (new Shipment())->setBarcode(Barcode: $barcode));
                 },
@@ -1846,9 +1846,9 @@ class PostNL implements LoggerAwareInterface
         }
 
         if ($complete) {
-            $shipments = $this->getShippingStatusService()->completeStatus($statusRequest)->getShipments();
+            $shipments = $this->getShippingStatusService()->completeStatus(completeStatus: $statusRequest)->getShipments();
         } else {
-            $shipments = $this->getShippingStatusService()->currentStatus($statusRequest)->getShipments();
+            $shipments = $this->getShippingStatusService()->currentStatus(currentStatus: $statusRequest)->getShipments();
         }
 
         if (empty($shipments) || !is_array(value: $shipments)) {
@@ -1879,14 +1879,14 @@ class PostNL implements LoggerAwareInterface
     {
         $shipments = [];
         if ($complete) {
-            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(array_map(
+            $shipmentResponses = $this->getShippingStatusService()->completeStatuses(completeStatuses: array_map(
                 callback: function ($reference) {
                     return (new CompleteStatus())->setShipment(Shipment: (new Shipment())->setReference(Reference: $reference));
                 },
                 array: $references
             ));
         } else {
-            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(array_map(
+            $shipmentResponses = $this->getShippingStatusService()->currentStatuses(currentStatuses: array_map(
                 callback: function ($reference) {
                     return (new CurrentStatus())->setShipment(Shipment: (new Shipment())->setReference(Reference: $reference));
                 },
@@ -1952,7 +1952,7 @@ class PostNL implements LoggerAwareInterface
             $completeStatus->setMessage(Message: new Message());
         }
 
-        return $this->getShippingStatusService()->completeStatus($completeStatus);
+        return $this->getShippingStatusService()->completeStatus(completeStatus: $completeStatus);
     }
 
     /**
@@ -1988,7 +1988,7 @@ class PostNL implements LoggerAwareInterface
             $signature->setMessage(Message: new Message());
         }
 
-        return $this->getShippingStatusService()->getSignature($signature);
+        return $this->getShippingStatusService()->getSignature(getSignature: $signature);
     }
 
     /**
@@ -2008,7 +2008,7 @@ class PostNL implements LoggerAwareInterface
             $signatureRequest->setMessage(Message: new Message());
         }
 
-        return $this->getShippingStatusService()->getSignature($signatureRequest);
+        return $this->getShippingStatusService()->getSignature(getSignature: $signatureRequest);
     }
 
     /**
@@ -2030,7 +2030,7 @@ class PostNL implements LoggerAwareInterface
     {
         $customer = $this->getCustomer();
 
-        return $this->getShippingStatusService()->getSignatures(array_map(
+        return $this->getShippingStatusService()->getSignatures(getSignatures: array_map(
             callback: function ($barcode) use ($customer) {
                 return new GetSignature(
                     Shipment: (new Shipment())->setBarcode(Barcode: $barcode),
@@ -2053,7 +2053,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
     {
-        return $this->getDeliveryDateService()->getDeliveryDate($getDeliveryDate);
+        return $this->getDeliveryDateService()->getDeliveryDate(getDeliveryDate: $getDeliveryDate);
     }
 
     /**
@@ -2067,7 +2067,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
     {
-        return $this->getDeliveryDateService()->getSentDate($getSentDate);
+        return $this->getDeliveryDateService()->getSentDate(getSentDate: $getSentDate);
     }
 
     /**
@@ -2081,7 +2081,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes
     {
-        return $this->getTimeframeService()->getTimeframes($getTimeframes);
+        return $this->getTimeframeService()->getTimeframes(getTimeframes: $getTimeframes);
     }
 
     /**
@@ -2095,7 +2095,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
     {
-        return $this->getLocationService()->getNearestLocations($getNearestLocations);
+        return $this->getLocationService()->getNearestLocations(getNearestLocations: $getNearestLocations);
     }
 
     /**
@@ -2231,7 +2231,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getLocationsInArea(GetLocationsInArea $getLocationsInArea): GetLocationsInAreaResponse
     {
-        return $this->getLocationService()->getLocationsInArea($getLocationsInArea);
+        return $this->getLocationService()->getLocationsInArea(getLocations: $getLocationsInArea);
     }
 
     /**
@@ -2245,7 +2245,7 @@ class PostNL implements LoggerAwareInterface
      */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
     {
-        return $this->getLocationService()->getLocation($getLocation);
+        return $this->getLocationService()->getLocation(getLocation: $getLocation);
     }
 
     /**
