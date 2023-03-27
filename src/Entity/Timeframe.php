@@ -34,6 +34,7 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
 use function in_array;
@@ -453,37 +454,40 @@ class Timeframe extends AbstractEntity
 
     /**
      * @return array
+     * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            return $json;
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->$propertyName)) {
-                if ('Options' === $propertyName) {
-                    $json[$propertyName] = $this->$propertyName;
-                } elseif ('Timeframes' === $propertyName) {
-                    $timeframes = [];
-                    foreach ($this->Timeframes as $timeframe) {
-                        $timeframes[] = $timeframe;
-                    }
-                    $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
-                } elseif ('SundaySorting' === $propertyName) {
-                    if (isset($this->$propertyName)) {
-                        if (is_bool(value: $this->$propertyName)) {
-                            $value = $this->$propertyName ? 'true' : 'false';
-                        } else {
-                            $value = $this->$propertyName;
-                        }
+        foreach (array_keys(array: $this->getSerializableProperties()) as $propertyName) {
+            if (!isset($this->$propertyName)) {
+                continue;
+            }
 
-                        $json[$propertyName] = $value;
-                    }
-                } else {
-                    $json[$propertyName] = $this->$propertyName;
+            if ('Options' === $propertyName) {
+                $json[$propertyName] = $this->$propertyName;
+            } elseif ('Timeframes' === $propertyName) {
+                $timeframes = [];
+                foreach ($this->Timeframes as $timeframe) {
+                    $timeframes[] = $timeframe;
                 }
+                $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
+            } elseif ('SundaySorting' === $propertyName) {
+                if (isset($this->$propertyName)) {
+                    if (is_bool(value: $this->$propertyName)) {
+                        $value = $this->$propertyName ? 'true' : 'false';
+                    } else {
+                        $value = $this->$propertyName;
+                    }
+
+                    $json[$propertyName] = $value;
+                }
+            } else {
+                $json[$propertyName] = $this->$propertyName;
             }
         }
 
@@ -491,16 +495,16 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException|ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            throw new InvalidArgumentException(message: 'Service not set before serialization');
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
             if ('StartDate' === $propertyName) {
                 if ($this->StartDate instanceof DateTimeInterface) {
                     $xml["{{$namespace}}StartDate"] = $this->StartDate->format(format: 'd-m-Y');
@@ -525,8 +529,8 @@ class Timeframe extends AbstractEntity
                     }
                     $xml["{{$namespace}}Options"] = $options;
                 }
-            } elseif (isset($this->$propertyName)) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
+            } else {
+                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
             }
         }
 

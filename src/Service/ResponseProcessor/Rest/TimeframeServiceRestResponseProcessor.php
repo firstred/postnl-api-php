@@ -31,12 +31,16 @@ use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Entity\TimeframeTimeFrame;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
@@ -49,16 +53,20 @@ class TimeframeServiceRestResponseProcessor extends AbstractRestResponseProcesso
      *
      * @param mixed $response
      *
-     * @return ResponseTimeframes|null
+     * @return ResponseTimeframes
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
-    public function processGetTimeframesResponse(mixed $response): ?ResponseTimeframes
+    public function processGetTimeframesResponse(ResponseInterface $response): ResponseTimeframes
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
         // Standardize the object here
         if (isset($body->ReasonNoTimeframes)) {

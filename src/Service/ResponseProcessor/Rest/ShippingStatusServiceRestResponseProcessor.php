@@ -35,10 +35,13 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
@@ -81,20 +84,23 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     /**
      * Process CompleteStatus Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return CompleteStatusResponse|null
+     * @return CompleteStatusResponse
      *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
-    public function processCompleteStatusResponse(mixed $response): ?CompleteStatusResponse
+    public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
         if (isset($body->CompleteStatus->Shipment)) {
@@ -169,9 +175,9 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     /**
      * Process GetSignature Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return GetSignatureResponseSignature|null
+     * @return GetSignatureResponseSignature
      *
      * @throws DeserializationException
      * @throws EntityNotFoundException
@@ -180,7 +186,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws ResponseException
      * @since 2.0.0
      */
-    public function processGetSignatureResponse(mixed $response): ?GetSignatureResponseSignature
+    public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature
     {
         $body = json_decode(json: static::getResponseText(response: $response));
 

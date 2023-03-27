@@ -52,6 +52,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 
+use JsonException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -79,10 +80,14 @@ class BarcodeServiceRestResponseProcessor extends AbstractRestResponseProcessor 
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response): string
     {
+        $this->validateResponse(response: $response);
         $responseContent = $this->getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
 
-        $json = json_decode(json: $responseContent);
+        try {
+            $json = json_decode(json: $responseContent, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new ResponseException(message: 'Invalid API Response', previous: $e, response: $response);
+        }
 
         if (!isset($json->Barcode)) {
             throw new ResponseException(message: 'Invalid API Response', response: $response);

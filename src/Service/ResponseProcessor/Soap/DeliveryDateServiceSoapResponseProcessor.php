@@ -96,8 +96,8 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);
@@ -134,8 +134,8 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);

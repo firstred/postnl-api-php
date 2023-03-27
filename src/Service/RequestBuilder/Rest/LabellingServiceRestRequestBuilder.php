@@ -80,7 +80,7 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
-            ->withBody(body: $this->postnl->getStreamFactory()->createStream(content: json_encode(value: $generateLabel)));
+            ->withBody(body: $this->getStreamFactory()->createStream(content: json_encode(value: $generateLabel)));
     }
 
     /**

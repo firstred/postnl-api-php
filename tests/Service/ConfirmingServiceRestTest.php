@@ -215,26 +215,26 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $confirm = $this->postnl->confirmShipment(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3SDEVC201611210')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -266,26 +266,26 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $confirms = $this->postnl->confirmShipments(shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3SDEVC201611210')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -293,26 +293,26 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3SDEVC201611210')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -343,26 +343,26 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $this->postnl->confirmShipment(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3S1234567890123')
                 ->setDeliveryAddress(DeliveryAddress: '01')

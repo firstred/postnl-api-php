@@ -48,7 +48,9 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $response = new Response(status: 200, headers: [], body: 'test');
 
-        $result = AbstractResponseProcessor::getResponseText(response: ['value' => $response]);
+        $reflectionResponseProcessor = new \ReflectionClass(objectOrClass: AbstractResponseProcessor::class);
+
+        $result = $reflectionResponseProcessor->getMethod(name: 'getResponseText')->invokeArgs(object: null, args: [['value' => $response]]);
 
         $this->assertEquals(expected: 'test', actual: $result);
     }
@@ -59,7 +61,9 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $response = new HttpClientException(message: '', code: 0, previous: null, response: new Response(status: 500, headers: [], body: 'test'));
 
-        $this->assertEquals(expected: 'test', actual: AbstractResponseProcessor::getResponseText(response: ['value' => $response]));
+        $reflectionResponseProcessor = new \ReflectionClass(objectOrClass: AbstractResponseProcessor::class);
+
+        $this->assertEquals(expected: 'test', actual: $reflectionResponseProcessor->getMethod(name: 'getResponseText')->invokeArgs(object: null, args: [['value' => $response]]));
     }
 
     /** @throws */
@@ -78,8 +82,8 @@ class AbstractServiceTest extends ServiceTestCase
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
         $responseProcessorReflection = new \ReflectionObject(object: $adapter);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
+        $validateResponseMethod->invokeArgs(object: $adapter, args: [$response]);
     }
 
     /** @throws */
@@ -106,8 +110,8 @@ class AbstractServiceTest extends ServiceTestCase
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
         $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [(string) $response->getBody()]);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
+        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
     }
 
     /** @throws */
@@ -116,7 +120,7 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $this->expectException(exception: CifDownException::class);
 
-        $response = simplexml_load_string(data: <<<XML
+        $response = new Response(status: 500, body: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
@@ -133,9 +137,6 @@ class AbstractServiceTest extends ServiceTestCase
 </Envelope>
 XML
         );
-        $response->registerXPathNamespace(prefix: 'env', namespace: 'http://www.w3.org/2003/05/soap-envelope');
-        $response->registerXPathNamespace(prefix: 'common', namespace: 'http://postnl.nl/cif/services/common/');
-
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
         $responseProcessor = new BarcodeServiceSoapResponseProcessor(
@@ -148,8 +149,8 @@ XML
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
         $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [(string) $response]);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
+        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
     }
 
     /** @throws */
@@ -158,7 +159,7 @@ XML
     {
         $this->expectException(exception: CifException::class);
 
-        $response = <<<XML
+        $response = new Response(status: 500, body: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:common="http://postnl.nl/cif/services/common/">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
@@ -172,14 +173,15 @@ XML
     </common:Errors>
   </common:CifException>
 </Envelope>
-XML;
+XML
+        );
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
         $responseProcessor = $this->createMock(originalClassName: BarcodeServiceSoapResponseProcessor::class);
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
         $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
         $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
     }
 }

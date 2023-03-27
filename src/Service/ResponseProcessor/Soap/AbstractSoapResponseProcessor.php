@@ -33,10 +33,12 @@ use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\AbstractService;
 use Firstred\PostNL\Service\ResponseProcessor\AbstractResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use SimpleXMLElement;
 
@@ -90,8 +92,8 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      */
     protected function registerNamespaces(SimpleXMLElement $element): void
     {
-        foreach ($this->namespaces as $prefix => $namespace) {
-            $element->registerXPathNamespace(prefix: $prefix, namespace: $namespace);
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $element->registerXPathNamespace(prefix: $namespacePrefix, namespace: $namespace);
         }
     }
 
@@ -105,17 +107,15 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      */
     public function setService(AbstractEntity $object): void
     {
-        $object->setCurrentService(namespaces: $this->namespaces);
-
         $serializableProperties = $object->getSerializableProperties();
         foreach (array_keys(array: $serializableProperties) as $propertyName) {
             $item = $object->{'get'.$propertyName}();
             if ($item instanceof AbstractEntity) {
-                static::setService(object: $item);
+                $this->setService(object: $item);
             } elseif (is_array(value: $item)) {
                 foreach ($item as $child) {
                     if ($child instanceof AbstractEntity) {
-                        static::setService(object: $child);
+                        $this->setService(object: $child);
                     }
                 }
             }
@@ -125,18 +125,19 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
     /**
      * @throws CifDownException
      * @throws CifException
-     *
+     * @throws ResponseException
      * @since 2.0.0
      */
-    protected function validateResponseContent(string $responseContent): bool
+    protected function validateResponse(ResponseInterface $response): bool
     {
         try {
-            $xml = new SimpleXMLElement(data: $responseContent);
+            $xml = new SimpleXMLElement(data: (string) $response->getBody());
             $this->registerNamespaces(element: $xml);
-        } catch (\Exception $e) {
-            throw new CifDownException(
+        } catch (\Throwable $e) {
+            throw new ResponseException(
                 message: "Invalid response from server",
                 previous: $e,
+                response: $response,
             );
         }
 

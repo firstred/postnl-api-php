@@ -61,8 +61,8 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         $body = json_decode(json: $responseContent);
         if (isset($body->ResponseShipments)) {
             return GenerateLabelResponse::jsonDeserialize(json: (object) ['GenerateLabelResponse' => $body]);

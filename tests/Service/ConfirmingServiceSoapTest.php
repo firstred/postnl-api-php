@@ -41,12 +41,15 @@ use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 #[TestDox(text: 'The ConfirmingService (SOAP)')]
 class ConfirmingServiceSoapTest extends ServiceTestCase
@@ -106,26 +109,26 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
                 ->setShipments(Shipments: [
                     Shipment::create()
                         ->setAddresses(Addresses: [
-                            Address::create(properties: [
-                                'AddressType' => '01',
-                                'City'        => 'Utrecht',
-                                'Countrycode' => 'NL',
-                                'FirstName'   => 'Peter',
-                                'HouseNr'     => '9',
-                                'HouseNrExt'  => 'a bis',
-                                'Name'        => 'de Ruijter',
-                                'Street'      => 'Bilderdijkstraat',
-                                'Zipcode'     => '3521VA',
-                            ]),
-                            Address::create(properties: [
-                                'AddressType' => '02',
-                                'City'        => 'Hoofddorp',
-                                'CompanyName' => 'PostNL',
-                                'Countrycode' => 'NL',
-                                'HouseNr'     => '42',
-                                'Street'      => 'Siriusdreef',
-                                'Zipcode'     => '2132WT',
-                            ]),
+                            new Address(
+                                AddressType: '01',
+                                FirstName: 'Peter',
+                                Name: 'de Ruijter',
+                                Street: 'Bilderdijkstraat',
+                                HouseNr: '9',
+                                HouseNrExt: 'a bis',
+                                Zipcode: '3521VA',
+                                City: 'Utrecht',
+                                Countrycode: 'NL',
+                            ),
+                            new Address(
+                                AddressType: '02',
+                                CompanyName: 'PostNL',
+                                Street: 'Siriusdreef',
+                                HouseNr: '42',
+                                Zipcode: '2132WT',
+                                City: 'Hoofddorp',
+                                Countrycode: 'NL',
+                            ),
                         ])
                         ->setBarcode(Barcode: '3S1234567890123')
                         ->setDeliveryAddress(DeliveryAddress: '01')
@@ -172,9 +175,9 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
     <domain:CustomerNumber>11223344</domain:CustomerNumber>
    </domain:Customer>
    <domain:Message>
+    <domain:Printertype>GraphicFile|PDF</domain:Printertype>
     <domain:MessageID>{$message->getMessageID()}</domain:MessageID>
     <domain:MessageTimeStamp>{$message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s')}</domain:MessageTimeStamp>
-    <domain:Printertype>GraphicFile|PDF</domain:Printertype>
    </domain:Message>
    <domain:Shipments>
     <domain:Shipment>
@@ -247,26 +250,26 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $confirm = $this->postnl->confirmShipment(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3S1234567890123')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -318,26 +321,26 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $confirmShipments = $this->postnl->confirmShipments(shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3SDEVC201611210')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -345,26 +348,26 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3SDEVC201611211')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -393,31 +396,46 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $this->postnl->generateLabel(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3S1234567890123')
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085')
         );
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): ConfirmingServiceSoapRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var ConfirmingServiceSoapRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

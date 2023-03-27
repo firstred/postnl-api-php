@@ -43,6 +43,8 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\LocationServiceSoapRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
@@ -50,6 +52,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 /**
  * @testdox The LocationService (SOAP)
@@ -100,8 +103,8 @@ class LocationServiceSoapTest extends ServiceTestCase
         $message = new Message();
 
         /* @var Request $request */
-        $this->lastRequest = $request = $this->service->buildGetNearestLocationsRequest(
-            (new GetNearestLocations())
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetNearestLocationsRequest(
+            getNearestLocations: (new GetNearestLocations())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
                 ->setLocation(Location: Location::create(properties: [
@@ -216,7 +219,7 @@ XML
         $message = new Message();
 
         /* @var Request $request */
-        $this->lastRequest = $request = $this->service->buildGetLocationsInAreaRequest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetLocationsInAreaRequest(
             (new GetLocationsInArea())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
@@ -331,7 +334,7 @@ XML
         $message = new Message();
 
         /* @var Request $request */
-        $this->lastRequest = $request = $this->service->buildGetLocationRequest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetLocationRequest(
             (new GetLocation())
                 ->setLocationCode(LocationCode: '161503')
                 ->setMessage(Message: $message)
@@ -576,5 +579,20 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       </GetLocationsInAreaResponse>
    </s:Body>
 </s:Envelope>';
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): LocationServiceSoapRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var LocationServiceSoapRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

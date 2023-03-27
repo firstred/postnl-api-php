@@ -43,6 +43,8 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
@@ -54,6 +56,7 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionObject;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -308,5 +311,20 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         );
 
         $this->assertInstanceOf(expected: GetSignatureResponseSignature::class, actual: $signatureResponse);
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): ShippingStatusServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var ShippingStatusServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

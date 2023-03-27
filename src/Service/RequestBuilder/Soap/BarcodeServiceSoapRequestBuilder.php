@@ -114,16 +114,23 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
     /**
      * Build the `generateBarcode` HTTP request for the SOAP API.
      *
+     * @param GenerateBarcode $generateBarcode
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $prefix => $namespace) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
+
         $security = new Security(
             UserNameToken: new UsernameToken(Username: null, Password: $this->getApiKey()->getString()),
         );

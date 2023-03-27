@@ -37,6 +37,8 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\TimeframeServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -44,6 +46,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 #[TestDox(text: 'The TimeframeService (SOAP)')]
 class TimeframeServiceSoapTest extends ServiceTestCase
@@ -247,5 +250,20 @@ XML
         // Check for data loss
         $this->assertEquals(expected: 2, actual: count(value: $responseTimeframes->getReasonNoTimeframes()));
         $this->assertEquals(expected: 2, actual: count(value: $responseTimeframes->getTimeframes()));
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): TimeframeServiceSoapRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var TimeframeServiceSoapRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

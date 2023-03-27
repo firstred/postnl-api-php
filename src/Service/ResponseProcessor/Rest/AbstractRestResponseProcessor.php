@@ -30,7 +30,10 @@ namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\AbstractResponseProcessor;
+use JsonException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
@@ -42,12 +45,21 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidConfigurationException
+     * @throws ResponseException
      *
      * @since 2.0.0
      */
-    protected function validateResponseContent(string $responseContent): bool
+    protected function validateResponse(ResponseInterface $response): bool
     {
-        $body = json_decode(json: $responseContent);
+        try {
+            $body = json_decode(json: (string) $response->getBody(), flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            throw new ResponseException(
+                message: "Invalid response from server",
+                previous: $e,
+                response: $response,
+            );
+        }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
             throw new InvalidConfigurationException();

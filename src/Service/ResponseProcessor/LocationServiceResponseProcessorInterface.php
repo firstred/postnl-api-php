@@ -58,6 +58,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
@@ -73,7 +74,7 @@ interface LocationServiceResponseProcessorInterface
      *
      * @since 2.0.0
      */
-    public function processGetNearestLocationsResponse(mixed $response): ?GetNearestLocationsResponse;
+    public function processGetNearestLocationsResponse(ResponseInterface $response): GetNearestLocationsResponse;
 
     /**
      * @throws ResponseException
@@ -83,7 +84,7 @@ interface LocationServiceResponseProcessorInterface
      *
      * @since 2.0.0
      */
-    public function processGetLocationsInAreaResponse(mixed $response): ?GetLocationsInAreaResponse;
+    public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse;
 
 
     /**
@@ -94,5 +95,5 @@ interface LocationServiceResponseProcessorInterface
      *
      * @since 2.0.0
      */
-    public function processGetLocationResponse(mixed $response): ?GetLocationsInAreaResponse;
+    public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse;
 }

@@ -56,9 +56,13 @@ use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
@@ -85,25 +89,28 @@ interface ShippingStatusServiceResponseProcessorInterface
     /**
      * Process CompleteStatus Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return CompleteStatusResponse|null
+     * @return CompleteStatusResponse
      *
-     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
+     * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
-    public function processCompleteStatusResponse(mixed $response): ?CompleteStatusResponse;
+    public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse;
 
     /**
      * Process GetSignature Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return GetSignatureResponseSignature|null
+     * @return GetSignatureResponseSignature
      *
      * @throws ResponseException
      * @throws HttpClientException
@@ -112,20 +119,20 @@ interface ShippingStatusServiceResponseProcessorInterface
      *
      * @since 2.0.0
      */
-    public function processGetSignatureResponse(mixed $response): ?GetSignatureResponseSignature;
+    public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature;
 
     /**
-     * Process updated shipments response REST.
+     * Process GetSignature Response REST.
      *
      * @param ResponseInterface $response
      *
-     * @return UpdatedShipmentsResponse[]
+     * @return GetSignatureResponseSignature
      *
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 2.0.0
      */
     public function processGetUpdatedShipmentsResponse(ResponseInterface $response): array;

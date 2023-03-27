@@ -50,7 +50,7 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      *
      * @param ResponseInterface $response
      *
-     * @return ConfirmingResponseShipment
+     * @return ConfirmingResponseShipment[]
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -61,25 +61,25 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      * @throws InvalidConfigurationException
      * @since 2.0.0
      */
-    public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment
+    public function processConfirmResponse(ResponseInterface $response): array
     {
-        $this->validateResponseContent(responseContent: (string) $response->getBody());
-        $body = json_decode(json: $this->getResponseText(response: $response));
+        $this->validateResponse(response: $response);
+        $body = json_decode(json: static::getResponseText(response: $response));
 
-        if (isset($body->ResponseShipments)) {
-            if (!is_array(value: $body->ResponseShipments)) {
-                $body->ResponseShipments = [$body->ResponseShipments];
-            }
+        if (!is_array(value: $body->ResponseShipments)) {
+            $body->ResponseShipments = [$body->ResponseShipments];
+        }
 
-            $objects = [];
-            foreach ($body->ResponseShipments as $responseShipment) {
-                $object = ConfirmingResponseShipment::jsonDeserialize(json: (object) ['ConfirmingResponseShipment' => $responseShipment]);
-                $objects[] = $object;
-            }
+        $objects = [];
+        foreach ($body->ResponseShipments as $responseShipment) {
+            $object = ConfirmingResponseShipment::jsonDeserialize(json: (object) ['ConfirmingResponseShipment' => $responseShipment]);
+            $objects[] = $object;
+        }
 
+        if (!empty($objects)) {
             return $objects;
         }
 
-        throw new ResponseException(message: 'Invalid response');
+        throw new ResponseException(message: 'Invalid response', response: $response);
     }
 }

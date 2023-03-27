@@ -41,12 +41,16 @@ use Psr\Http\Message\ResponseInterface;
 interface ConfirmingServiceResponseProcessorInterface
 {
     /**
+     * @param ResponseInterface $response
+     *
+     * @return ConfirmingResponseShipment[]
+     * @phpstan-return non-empty-list<ConfirmingResponseShipment>
+     * @psalm-return non-empty-list<ConfirmingResponseShipment>
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     *
      * @since 2.0.0
      */
-    public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment;
+    public function processConfirmResponse(ResponseInterface $response): array;
 }

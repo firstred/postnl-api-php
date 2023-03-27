@@ -32,13 +32,17 @@ use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseLocation;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
@@ -49,23 +53,25 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
     /**
      * Process GetNearestLocations Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return GetNearestLocationsResponse|null
+     * @return GetNearestLocationsResponse
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
-    public function processGetNearestLocationsResponse(mixed $response): ?GetNearestLocationsResponse
+    public function processGetNearestLocationsResponse(ResponseInterface $response): GetNearestLocationsResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
-        $object = GetNearestLocationsResponse::jsonDeserialize(json: (object) ['GetNearestLocationsResponse' => $body]);
-
-        return $object;
+        return GetNearestLocationsResponse::jsonDeserialize(json: (object) ['GetNearestLocationsResponse' => $body]);
     }
 
     /**
@@ -73,16 +79,20 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      *
      * @param mixed $response
      *
-     * @return GetLocationsInAreaResponse|null
+     * @return GetLocationsInAreaResponse
+     * @throws CifDownException
+     * @throws CifException
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
      * @since 2.0.0
      */
-    public function processGetLocationsInAreaResponse(mixed $response): ?GetLocationsInAreaResponse
+    public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
         /** @var GetLocationsInAreaResponse $object */
@@ -96,19 +106,23 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
     /**
      * Process GetLocation Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return GetLocationsInAreaResponse|null
+     * @return GetLocationsInAreaResponse
+     * @throws CifDownException
+     * @throws CifException
      * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws EntityNotFoundException
      * @since 2.0.0
      */
-    public function processGetLocationResponse(mixed $response): ?GetLocationsInAreaResponse
+    public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
         if (!is_array(value: $body->GetLocationsResult->ResponseLocation)) {

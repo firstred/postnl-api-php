@@ -34,7 +34,6 @@ use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\PostNL;
@@ -107,24 +106,15 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws NotFoundException
      *
      * @since 1.0.0
      */
     public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
     {
-        $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildConfirmRequest(confirming: $confirming));
-        $objects = $this->responseProcessor->processConfirmResponse(response: $response);
-
-        if (!empty($objects) && $objects[0] instanceof ConfirmingResponseShipment) {
-            return $objects[0];
-        }
-
-        if (200 === $response->getStatusCode()) {
-            throw new ResponseException(message: 'Invalid API Response', response: $response);
-        }
-
-        throw new NotFoundException(message: 'Unable to confirm');
+        $response = $this->getHttpClient()->doRequest(
+            request: $this->requestBuilder->buildConfirmRequest(confirming: $confirming),
+        );
+        return $this->responseProcessor->processConfirmResponse(response: $response)[0];
     }
 
     /**

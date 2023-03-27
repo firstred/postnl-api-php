@@ -54,21 +54,13 @@ use function is_array;
  */
 abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
-    /** @var string $id*/
+    /** @var string $id */
     protected string $id;
 
-    /**
-     * @var string $currentService
-     * @phpstan-var class-string $currentService
-     * @psalm-var class-string $currentService
-     */
+    /** @var class-string $currentService */
     protected string $currentService;
 
-    /**
-     * @var array $namespaces
-     * @phpstan-var array<string, string> $namespaces
-     * @psalm-var array<string, string> $namespaces
-     */
+    /** @var array<string, string> $namespaces */
     protected array $namespaces = [];
 
     public function __construct()
@@ -116,27 +108,26 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @param string $id
+     * @param string|int $id
      *
      * @return $this
      */
-    public function setId(string $id): static
+    public function setId(string|int $id): static
     {
+        if (is_int(value: $id)) {
+            $id = (string) $id;
+        }
+
         $this->id = $id;
 
         return $this;
     }
 
     /**
-     * @param string                        $currentService
-     * @param array                         $namespaces
+     * @param class-string          $currentService
+     * @param array<string, string> $namespaces
      *
      * @return static
-     *
-     * @phpstan-param class-string          $currentService
-     * @psalm-param class-string            $currentService
-     * @phpstan-param array<string, string> $namespaces
-     * @psalm-param array<string, string>   $namespaces
      * @throws InvalidArgumentException
      * @throws ReflectionException
      */
@@ -168,9 +159,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @return string
-     * @phpstan-return class-string
-     * @psalm-return class-string
+     * @return class-string
      */
     public function getCurrentService(): string
     {
@@ -178,7 +167,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @phpstan-return array<string, string>
+     * @return array<string, string>
      */
     public function getNamespaces(): array
     {
@@ -222,8 +211,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
     /**
      * @return array
-     * @phpstan-return array<string, SoapNamespace>
-     * @psalm-return array<string, SoapNamespace>
+     * @phpstan-return array<string, string>
+     * @psalm-return array<string, string>
      */
     public function getSerializableProperties(): array
     {
@@ -232,10 +221,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         $reflectionClass = new ReflectionClass(objectOrClass: static::class);
         foreach ($reflectionClass->getProperties() as $property) {
             foreach ($property->getAttributes(name: SerializableProperty::class) as $attribute) {
-                $namespacePrefix = $attribute->getArguments()['namespace'];
                 $supportedServices = $attribute->getArguments()['supportedServices'];
                 if (empty($supportedServices) || in_array(needle: $this->currentService, haystack: $supportedServices)) {
-                    $serializableProperties[$property->getName()] = $attribute->getArguments()['namespace'];
+                    $serializableProperties[$property->getName()] = $this->namespaces[$attribute->getArguments()['namespace']->value];
                 }
             }
         }
@@ -284,11 +272,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        $properties = [];
         foreach ($this->getSerializableProperties() as $propertyName => $namespacePrefix) {
-            $namespace = $this->namespaces[$namespacePrefix->value];
             if (isset($this->$propertyName)) {
-                $xml[$namespace ? "{{$namespace}}$propertyName" : $propertyName] = $this->$propertyName;
+                $xml["{{$namespacePrefix}}$propertyName"] = $this->$propertyName;
             }
         }
 
@@ -409,6 +395,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @return static
      * @throws EntityNotFoundException
+     * @throws DeserializationException
      */
     public static function xmlDeserialize(array $xml): static
     {
@@ -471,7 +458,15 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                     $object->{'set'.$shortClassName}($entities);
                 }
             } else {
-                $object->{'set'.$shortClassName}(static::xmlDeserialize(xml: [$value]));
+                try {
+                    $object->{'set'.$shortClassName}(static::xmlDeserialize(xml: [$value]));
+                } catch (\Throwable) {
+                    try {
+                        $object->{'set'.$shortClassName}($value);
+                    } catch (\Throwable $e) {
+                        throw new DeserializationException(message: 'Could not deserialize object', previous: $e);
+                    }
+                }
             }
         }
 

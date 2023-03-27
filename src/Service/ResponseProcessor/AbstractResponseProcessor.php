@@ -67,7 +67,7 @@ abstract class AbstractResponseProcessor
      *
      * @since 2.0.0
      */
-    public static function getResponseText(array|ResponseInterface|HttpClientException $response): string
+    protected static function getResponseText(array|ResponseInterface|HttpClientException $response): string
     {
         // Guzzle returned promises
         if (is_array(value: $response)) {
@@ -101,7 +101,7 @@ abstract class AbstractResponseProcessor
      *
      * @since 2.0.0
      */
-    public static function defaultDateFormat(Writer $writer, DateTimeImmutable $value): void
+    protected static function defaultDateFormat(Writer $writer, DateTimeImmutable $value): void
     {
         $writer->write(value: $value->format(format: 'd-m-Y H:i:s'));
     }

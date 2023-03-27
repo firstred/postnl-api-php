@@ -41,6 +41,7 @@ use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
@@ -98,7 +99,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
     public function processGetNearestLocationsResponse(mixed $response): GetNearestLocationsResponse
     {
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
+        $this->validateResponse(response: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);
@@ -132,7 +133,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
     }
 
     /**
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
      * @throws CifDownException
@@ -144,10 +145,10 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws ResponseException
      * @since 2.0.0
      */
-    public function processGetLocationsInAreaResponse(mixed $response): GetLocationsInAreaResponse
+    public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);
@@ -196,10 +197,10 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws EntityNotFoundException
      * @since 2.0.0
      */
-    public function processGetLocationResponse(mixed $response): GetLocationsInAreaResponse
+    public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);

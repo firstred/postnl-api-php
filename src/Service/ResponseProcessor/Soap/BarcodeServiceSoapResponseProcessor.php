@@ -112,7 +112,7 @@ class BarcodeServiceSoapResponseProcessor extends AbstractSoapResponseProcessor 
     public function processGenerateBarcodeResponse(ResponseInterface $response): string
     {
         $responseContent = $this->getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: (string) $response->getBody());
+        $this->validateResponse(response: $response);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);

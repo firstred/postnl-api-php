@@ -74,22 +74,6 @@ abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder
             SoapNamespace::Envelope->value           => AbstractService::ENVELOPE_NAMESPACE,
             SoapNamespace::OldEnvelope->value        => AbstractService::OLD_ENVELOPE_NAMESPACE,
             SoapNamespace::XmlSchema->value          => AbstractService::XML_SCHEMA_NAMESPACE,
-            SoapNamespace::ArraySerialization->value => AbstractService::ARRAY_SERIALIZATION_NAMESPACE,
         ]);
-    }
-
-
-    /**
-     * Register namespaces.
-     *
-     * @param SimpleXMLElement $element
-     *
-     * @since 2.0.0
-     */
-    protected function registerNamespaces(SimpleXMLElement $element): void
-    {
-        foreach ($this->namespaces as $prefix => $namespace) {
-            $element->registerXPathNamespace(prefix: $prefix, namespace: $namespace);
-        }
     }
 }

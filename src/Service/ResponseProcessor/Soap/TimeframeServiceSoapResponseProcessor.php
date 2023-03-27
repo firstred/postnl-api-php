@@ -96,8 +96,8 @@ class TimeframeServiceSoapResponseProcessor extends AbstractSoapResponseProcesso
      */
     public function processGetTimeframesResponse(mixed $response): ResponseTimeframes
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);

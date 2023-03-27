@@ -32,6 +32,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 
 /**
  * @since 1.0.0
@@ -104,15 +105,16 @@ class ResponseTimeframes extends AbstractEntity
 
     /**
      * @return array
+     * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            return $json;
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: $this->getSerializableProperties()) as $propertyName) {
             if (isset($this->$propertyName)) {
                 if ('ReasonNoTimeframes' === $propertyName) {
                     $noTimeframes = [];

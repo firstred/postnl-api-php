@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\AbstractService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
@@ -83,8 +84,9 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value => DeliveryDateService::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value   => DeliveryDateService::DOMAIN_NAMESPACE,
+            SoapNamespace::ArraySerialization->value => AbstractService::ARRAY_SERIALIZATION_NAMESPACE,
+            SoapNamespace::Services->value           => DeliveryDateService::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value             => DeliveryDateService::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -102,8 +104,8 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 
@@ -148,8 +150,8 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 

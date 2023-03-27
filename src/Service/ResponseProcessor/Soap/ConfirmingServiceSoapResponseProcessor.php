@@ -85,7 +85,7 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
      *
      * @param ResponseInterface $response
      *
-     * @return ConfirmingResponseShipment
+     * @return ConfirmingResponseShipment[]
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -94,10 +94,10 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
      * @throws InvalidArgumentException
      * @since 2.0.0
      */
-    public function processConfirmResponse(ResponseInterface $response): ConfirmingResponseShipment
+    public function processConfirmResponse(ResponseInterface $response): array
     {
+        $this->validateResponse(response: $response);
         $responseContent = static::getResponseText(response: $response);
-        $this->validateResponseContent(responseContent: $responseContent);
         /** @noinspection PhpUnhandledExceptionInspection */
         $xml = new SimpleXMLElement(data: $responseContent);
         $this->registerNamespaces(element: $xml);
@@ -115,6 +115,6 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
         $object = AbstractEntity::xmlDeserialize(xml: $array);
         $this->setService(object: $object);
 
-        return $object;
+        return [$object];
     }
 }

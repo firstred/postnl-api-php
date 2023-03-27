@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
+use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
@@ -57,6 +58,11 @@ abstract class ServiceTestCase extends TestCase
         } elseif (is_object(value: $value)) {
             $reflectionObject = new ReflectionObject(object: $value);
             foreach ($reflectionObject->getProperties() as $property) {
+                if (!$property->isInitialized(object: $value)) {
+                    continue;
+                }
+
+                /** @noinspection PhpExpressionResultUnusedInspection */
                 $property->setAccessible(accessible: true);
                 if (static::containsStdClass(value: $property->getValue(object: $value))) {
                     return true;

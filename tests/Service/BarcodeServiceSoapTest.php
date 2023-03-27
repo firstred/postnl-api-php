@@ -41,6 +41,7 @@ use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
@@ -110,7 +111,9 @@ class BarcodeServiceSoapTest extends ServiceTestCase
 
         $this->assertEmpty(actual: $request->getHeaderLine('api-key'));
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
-        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
+
+        $this->assertXmlStringEqualsXmlString(
+            expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope
   xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -147,7 +150,9 @@ class BarcodeServiceSoapTest extends ServiceTestCase
   </soap:Body>
 </soap:Envelope>
 XML
-            , actualXml: (string) $request->getBody());
+            ,
+            actualXml: $request->getBody()->getContents(),
+        );
     }
 
     /** @throws */
@@ -158,7 +163,7 @@ XML
             new Response(
                 status: 200,
                 headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
-                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223392')
+                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223392'),
             ),
         ]);
         $handler = HandlerStack::create(handler: $mock);
@@ -177,17 +182,17 @@ XML
             new Response(
                 status: 200,
                 headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
-                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223392')
+                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223392'),
             ),
             new Response(
                 status: 200,
                 headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
-                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223393')
+                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223393'),
             ),
             new Response(
                 status: 200,
                 headers: ['Content-Type' => 'text/xml;charset=UTF-8'],
-                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223394')
+                body: $this->mockValidBarcodeResponse(barcode: '3SDEVC816223394'),
             ),
             new Response(
                 status: 200,

@@ -93,8 +93,8 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespace => $prefix) {
-            $xmlService->namespaceMap[$namespace] = $prefix;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 

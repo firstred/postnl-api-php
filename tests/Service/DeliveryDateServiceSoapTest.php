@@ -42,12 +42,17 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\DeliveryDateServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\DeliveryDateServiceSoapResponseProcessor;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 #[TestDox(text: 'The DeliveryDateService (SOAP)')]
 class DeliveryDateServiceSoapTest extends ServiceTestCase
@@ -95,7 +100,7 @@ class DeliveryDateServiceSoapTest extends ServiceTestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestSoap(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetDeliveryDateRequest(
             getDeliveryDate: (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     GetDeliveryDate: (new GetDeliveryDate())
@@ -357,5 +362,20 @@ XML
             actual: $response
         );
         $this->assertEquals(expected: '29-06-2016', actual: $response->getSentDate()->format(format: 'd-m-Y'));
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): DeliveryDateServiceSoapRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var DeliveryDateServiceSoapRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

@@ -40,6 +40,8 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\LocationServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
@@ -48,6 +50,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 #[TestDox(text: 'The ShippingService (SOAP)')]
 class ShippingServiceSoapTest extends ServiceTestCase
@@ -631,5 +634,20 @@ class ShippingServiceSoapTest extends ServiceTestCase
         );
 
         $this->assertInstanceOf(expected: SendShipmentResponse::class, actual: $shipments);
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): ShippingServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var ShippingServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

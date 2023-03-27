@@ -34,6 +34,7 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 
 /**
@@ -1089,11 +1090,20 @@ class Shipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
+        }
+
+        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
+            if (!isset($this->$propertyName)) {
+                continue;
+            }
+
             if ('Addresses' === $propertyName) {
                 if (is_array(value: $this->Addresses)) {
                     $items = [];
@@ -1142,11 +1152,11 @@ class Shipment extends AbstractEntity
                     }
                     $xml["{{$namespace}}ProductOptions"] = $items;
                 }
-            } elseif (isset($this->$propertyName)) {
+            } else {
                 if ($this->$propertyName instanceof DateTimeInterface) {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName->format('d-m-y');
+                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName->format('d-m-y');
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
+                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
                 }
             }
         }

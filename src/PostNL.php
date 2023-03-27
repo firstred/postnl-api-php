@@ -2057,7 +2057,7 @@ class PostNL implements LoggerAwareInterface
         /** @var TimeframeServiceResponseProcessorInterface $timeframeServiceResponseProcessor */
         $timeframeServiceResponseProcessor = $reflectionTimeframeServiceResponseProcessor->getValue(object: $this->getTimeframeService());
         $reflectionTimeframeServiceResponseProcessor = new ReflectionObject(object: $timeframeServiceResponseProcessor);
-        $reflectionTimeframeServiceResponseValidator = $reflectionTimeframeServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        $reflectionTimeframeServiceResponseValidator = $reflectionTimeframeServiceResponseProcessor->getMethod(name: 'validateResponse');
         /** @noinspection PhpExpressionResultUnusedInspection */
         $reflectionTimeframeServiceResponseValidator->setAccessible(accessible: true);
 
@@ -2073,7 +2073,7 @@ class PostNL implements LoggerAwareInterface
         /** @var LocationServiceResponseProcessorInterface $locationServiceResponseProcessor */
         $locationServiceResponseProcessor = $reflectionLocationServiceResponseProcessor->getValue(object: $this->getLocationService());
         $reflectionLocationServiceResponseProcessor = new ReflectionObject(object: $locationServiceResponseProcessor);
-        $reflectionLocationServiceResponseValidator = $reflectionLocationServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        $reflectionLocationServiceResponseValidator = $reflectionLocationServiceResponseProcessor->getMethod(name: 'validateResponse');
         /** @noinspection PhpExpressionResultUnusedInspection */
         $reflectionLocationServiceResponseValidator->setAccessible(accessible: true);
 
@@ -2089,7 +2089,7 @@ class PostNL implements LoggerAwareInterface
         /** @var DeliveryDateServiceResponseProcessorInterface $deliveryDateServiceResponseProcessor */
         $deliveryDateServiceResponseProcessor = $reflectionDeliveryDateServiceResponseProcessor->getValue(object: $this->getDeliveryDateService());
         $reflectionDeliveryDateServiceResponseProcessor = new ReflectionObject(object: $deliveryDateServiceResponseProcessor);
-        $reflectionDeliveryDateServiceResponseValidator = $reflectionDeliveryDateServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        $reflectionDeliveryDateServiceResponseValidator = $reflectionDeliveryDateServiceResponseProcessor->getMethod(name: 'validateResponse');
         /** @noinspection PhpExpressionResultUnusedInspection */
         $reflectionDeliveryDateServiceResponseValidator->setAccessible(accessible: true);
 
@@ -2131,7 +2131,7 @@ class PostNL implements LoggerAwareInterface
                         if (self::MODE_REST === $this->getApiMode()) {
                             $reflectionTimeframeServiceResponseValidator->invokeArgs(
                                 object: $timeframeServiceResponseProcessor,
-                                args: [(string) $response->getBody()],
+                                args: [$response],
                             );
                         }
 
@@ -2145,7 +2145,7 @@ class PostNL implements LoggerAwareInterface
                         if (self::MODE_REST === $this->getApiMode()) {
                             $reflectionLocationServiceResponseValidator->invokeArgs(
                                 object: $locationServiceResponseProcessor,
-                                args: [(string) $response->getBody()],
+                                args: [$response],
                             );
                         }
 
@@ -2159,7 +2159,7 @@ class PostNL implements LoggerAwareInterface
                         if (self::MODE_REST === $this->getApiMode()) {
                             $reflectionDeliveryDateServiceResponseValidator->invokeArgs(
                                 object: $deliveryDateServiceResponseProcessor,
-                                args: [(string) $response->getBody()],
+                                args: [$response],
                             );
                         }
 

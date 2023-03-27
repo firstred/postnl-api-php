@@ -57,6 +57,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
@@ -67,9 +68,9 @@ interface TimeframeServiceResponseProcessorInterface
     /**
      * Process GetTimeframes Response REST.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
-     * @return ResponseTimeframes|null
+     * @return ResponseTimeframes
      *
      * @throws HttpClientException
      * @throws ResponseException
@@ -78,5 +79,5 @@ interface TimeframeServiceResponseProcessorInterface
      *
      * @since 2.0.0
      */
-    public function processGetTimeframesResponse(mixed $response): ?ResponseTimeframes;
+    public function processGetTimeframesResponse(ResponseInterface $response): ResponseTimeframes;
 }

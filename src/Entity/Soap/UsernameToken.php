@@ -31,6 +31,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 use ParagonIE\HiddenString\HiddenString;
 use Sabre\Xml\Writer;
 
@@ -115,16 +116,19 @@ class UsernameToken extends AbstractEntity
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        foreach (static::getSerializableProperties() as $propertyName => $namespacePrefix) {
-            if (!isset($this->namespaces[$namespacePrefix->value])) {
-                throw new InvalidArgumentException(message: "Namespace prefix `$namespacePrefix->value` not set");
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
+        }
+
+        foreach (static::getSerializableProperties() as $propertyName => $namespace) {
+            if (!in_array(needle: $namespace, haystack: array_values(array: $this->namespaces))) {
+                throw new InvalidArgumentException(message: "Namespace prefix `$namespace` not set");
             }
-            $namespace = $this->namespaces[$namespacePrefix->value];
             if (isset($this->$propertyName)) {
                 if ('Password' === $propertyName) {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName->getString();
+                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName->getString();
                 } else {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
+                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
                 }
             }
         }

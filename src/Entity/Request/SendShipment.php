@@ -33,6 +33,7 @@ use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 use TypeError;
 
 /**
@@ -139,25 +140,28 @@ class SendShipment extends AbstractEntity
 
     /**
      * @return array
+     * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            return $json;
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
-            if (isset($this->$propertyName)) {
-                if ('Shipments' === $propertyName && count(value: $this->$propertyName) >= 1) {
-                    $properties = [];
-                    foreach ($this->$propertyName as $property) {
-                        $properties[] = $property;
-                    }
-                    $json[$propertyName] = $properties;
-                } else {
-                    $json[$propertyName] = $this->$propertyName;
+        foreach (array_keys(array: $this->getSerializableProperties()) as $propertyName) {
+            if (!isset($this->$propertyName)) {
+                continue;
+            }
+
+            if ('Shipments' === $propertyName && count(value: $this->$propertyName) >= 1) {
+                $properties = [];
+                foreach ($this->$propertyName as $property) {
+                    $properties[] = $property;
                 }
+                $json[$propertyName] = $properties;
+            } else {
+                $json[$propertyName] = $this->$propertyName;
             }
         }
 

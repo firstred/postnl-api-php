@@ -171,11 +171,11 @@ abstract class AbstractRequestBuilder
         foreach (array_keys(array: $serializableProperties) as $propertyName) {
             $item = $entity->{'get'.$propertyName}();
             if ($item instanceof AbstractEntity) {
-                static::setService(entity: $item);
+                $this->setService(entity: $item);
             } elseif (is_array(value: $item)) {
                 foreach ($item as $child) {
                     if ($child instanceof AbstractEntity) {
-                        static::setService(entity: $child);
+                        $this->setService(entity: $child);
                     }
                 }
             }

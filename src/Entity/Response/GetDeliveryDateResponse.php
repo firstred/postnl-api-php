@@ -36,6 +36,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
@@ -128,17 +129,20 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            $writer->write(value: $xml);
-
-            return;
+        if (!isset($this->currentService)) {
+            throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (static::$defaultProperties[$this->currentService] as $propertyName => $namespace) {
+        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
+            if (!isset($this->$propertyName)) {
+                continue;
+            }
+
             if ('Shipments' === $propertyName) {
                 $options = [];
                 if (is_array(value: $this->Options)) {
@@ -147,8 +151,8 @@ class GetDeliveryDateResponse extends AbstractEntity
                     }
                 }
                 $xml["{{$namespace}}Options"] = $options;
-            } elseif (isset($this->$propertyName)) {
-                $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
+            } else {
+                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
             }
         }
         // Auto extending this object with other properties is not supported with SOAP
