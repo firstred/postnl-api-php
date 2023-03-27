@@ -309,6 +309,14 @@ class PostNL implements LoggerAwareInterface
      */
     public function setToken(string|HiddenString|UsernameToken $apiKey): static
     {
+        trigger_deprecation(
+            'firstred/postnl-api-php',
+            '2.0.0',
+            'Using "%s" is deprecated, use "%s" instead.',
+            'setToken',
+            'setApiKey',
+        );
+
         if ($apiKey instanceof UsernameToken) {
             $this->apiKey = $apiKey->getPassword();
 
@@ -326,6 +334,14 @@ class PostNL implements LoggerAwareInterface
      */
     public function getToken(): UsernameToken
     {
+        trigger_deprecation(
+            'firstred/postnl-api-php',
+            '2.0.0',
+            'Using "%s" is deprecated, use "%s" instead.',
+            'getToken',
+            'getApiKey',
+        );
+
         return new UsernameToken(Password: $this->getApiKey());
     }
 
@@ -1679,53 +1695,6 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the current status of a shipment.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     *
-     * @param CurrentStatus|CurrentStatusByReference $currentStatus
-     *
-     * @return CurrentStatusResponse
-     *
-     * @throws NotSupportedException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws ResponseException
-     * @throws PostNLNotFoundException
-     *
-     * @since      1.0.0
-     *
-     * @deprecated 1.2.0 Use the dedicated methods (get by phase and status are no longer working)
-     */
-    public function getCurrentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse
-    {
-        if (null !== $currentStatus->getShipment()->getPhaseCode()) {
-            throw new NotSupportedException(message: 'Getting the current status by phase code is no longer supported.');
-        }
-        if (null !== $currentStatus->getShipment()->getStatusCode()) {
-            throw new NotSupportedException(message: 'Getting the current status by status code is no longer supported.');
-        }
-
-        $fullCustomer = $this->getCustomer();
-        $currentStatus->setCustomer(Customer: (new Customer())
-            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
-            ->setCustomerNumber(CustomerNumber: $fullCustomer->getCustomerNumber())
-        );
-        if (!$currentStatus->getMessage()) {
-            $currentStatus->setMessage(Message: new Message());
-        }
-
-        return $this->getShippingStatusService()->currentStatus(currentStatus: $currentStatus);
-    }
-
-    /**
      * Get the current status of the given shipment by barcode.
      *
      * @param string $barcode  Pass a single barcode
@@ -1905,58 +1874,6 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get the complete status of a shipment.
-     *
-     * This is a combi-function, supporting the following:
-     * - CurrentStatus (by barcode):
-     *   - Fill the Shipment->Barcode property. Leave the rest empty.
-     * - CurrentStatusByReference:
-     *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
-     *
-     * @param CompleteStatus $completeStatus
-     *
-     * @return CompleteStatusResponse
-     *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws ResponseException
-     * @throws PostNLNotFoundException
-     *
-     * @since      1.0.0
-     *
-     * @deprecated 1.2.0 Use the dedicated getShippingStatus* methods (get by phase and status are no longer working)
-     */
-    public function getCompleteStatus(CompleteStatus $completeStatus): CompleteStatusResponse
-    {
-        if (null !== $completeStatus->getShipment()->getPhaseCode()) {
-            throw new NotSupportedException(message: 'Getting the complete status by phase code is no longer supported.');
-        }
-        if (null !== $completeStatus->getShipment()->getStatusCode()) {
-            throw new NotSupportedException(message: 'Getting the complete status by status code is no longer supported.');
-        }
-
-        $fullCustomer = $this->getCustomer();
-
-        $completeStatus->setCustomer(Customer: (new Customer())
-            ->setCustomerCode(CustomerCode: $fullCustomer->getCustomerCode())
-            ->setCustomerNumber(CustomerNumber: $fullCustomer->getCustomerNumber())
-        );
-        if (!$completeStatus->getMessage()) {
-            $completeStatus->setMessage(Message: new Message());
-        }
-
-        return $this->getShippingStatusService()->completeStatus(completeStatus: $completeStatus);
-    }
-
-    /**
      * Get updated shipments
      *
      * @param DateTimeInterface|null $dateTimeFrom
@@ -1969,27 +1886,6 @@ class PostNL implements LoggerAwareInterface
     public function getUpdatedShipments(DateTimeInterface $dateTimeFrom = null, DateTimeInterface $dateTimeTo = null): array
     {
         return $this->getShippingStatusService()->getUpdatedShipments($this->getCustomer(), $dateTimeFrom, $dateTimeTo);
-    }
-
-    /**
-     * Get the signature of a shipment.
-     *
-     * @param GetSignature $signature
-     *
-     * @return GetSignatureResponseSignature
-     *
-     * @since      1.0.0
-     *
-     * @deprecated 1.2.0 Use the getSignature(s)By* alternatives
-     */
-    public function getSignature(GetSignature $signature): GetSignatureResponseSignature
-    {
-        $signature->setCustomer(Customer: $this->getCustomer());
-        if (!$signature->getMessage()) {
-            $signature->setMessage(Message: new Message());
-        }
-
-        return $this->getShippingStatusService()->getSignature(getSignature: $signature);
     }
 
     /**
