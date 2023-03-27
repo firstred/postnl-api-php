@@ -291,8 +291,6 @@ class PostNL implements LoggerAwareInterface
         bool                 $sandbox,
         PostNLApiMode|int    $mode = PostNLApiMode::Rest,
     ) {
-        $this->checkEnvironment();
-
         $this->setCustomer(customer: $customer);
         $this->setApiKey(apiKey: $apiKey);
         $this->setSandbox(sandbox: $sandbox);
@@ -2202,26 +2200,5 @@ class PostNL implements LoggerAwareInterface
         }
 
         return $serie;
-    }
-
-    /**
-     * Check whether this library will work in the current environment
-     *
-     * @since 1.2.0
-     */
-    private function checkEnvironment()
-    {
-        // Check access to `ini_get` function && check OPCache save_comments setting
-        if (function_exists(function: 'ini_get')
-            && (php_sapi_name() === 'cli' && ini_get(option: 'opcache.enable_cli')
-                || php_sapi_name() !== 'cli' && ini_get(option: 'opcache.enable')
-            )
-            && !ini_get(option: 'opcache.save_comments')
-        ) {
-            trigger_error(
-                message: 'OPCache has been enabled, but comments are removed from the cache. Please set `opcache.save_comments` to `1` in order to use the PostNL library.',
-                error_level: E_USER_WARNING
-            );
-        }
     }
 }
