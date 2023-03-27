@@ -1173,9 +1173,10 @@ class PostNL implements LoggerAwareInterface
             sendShipment: new SendShipment(
                 Shipments: [$shipment],
                 Message: new LabellingMessage(Printertype: $printertype),
-                Customer: $this->customer
+                Customer: $this->customer,
             ),
-            confirm: $confirm);
+            confirm: $confirm,
+        );
     }
 
     /**
