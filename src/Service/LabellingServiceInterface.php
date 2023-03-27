@@ -29,6 +29,7 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -65,14 +66,14 @@ interface LabellingServiceInterface extends ServiceInterface
     /**
      * Generate multiple labels at once.
      *
-     * @phpstan-param array<int, array<GenerateBarcode, bool>> $generateLabels
+     * @param array<string, array<GenerateBarcode, bool>> $generateLabels
      *
+     * @return array<string, GenerateBarcodeResponse>
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.0.0
      */
     public function generateLabels(array $generateLabels): array;

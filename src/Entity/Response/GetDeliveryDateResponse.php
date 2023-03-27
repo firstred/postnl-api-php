@@ -31,7 +31,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
@@ -48,11 +50,11 @@ use function is_array;
 class GetDeliveryDateResponse extends AbstractEntity
 {
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected DateTimeInterface|null $DeliveryDate = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /**

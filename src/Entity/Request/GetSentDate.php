@@ -31,7 +31,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -45,31 +47,31 @@ use function in_array;
 class GetSentDate extends AbstractEntity
 {
     /** @var bool|null $AllowSundaySorting */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $AllowSundaySorting = null;
 
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
-    /** @var array|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    /** @var string[]|null $Options */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */

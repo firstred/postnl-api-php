@@ -27,7 +27,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message\Message;
@@ -39,15 +41,15 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GetNearestLocations extends AbstractEntity
 {
     /** @var string|null $Countrycode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Countrycode = null;
 
     /** @var Location|null $Location */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Location $Location = null;
 
     /** @var Message|null $Messages */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
     /**

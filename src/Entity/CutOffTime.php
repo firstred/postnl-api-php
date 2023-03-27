@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
@@ -38,15 +39,15 @@ use Sabre\Xml\Writer;
 class CutOffTime extends AbstractEntity
 {
     /** @var string|null $Day */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Day = null;
 
     /** @var string|null $Time */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Time = null;
 
     /** @var bool|null $Available */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $Available = null;
 
     /**

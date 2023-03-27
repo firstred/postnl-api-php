@@ -43,9 +43,7 @@ interface ConfirmingServiceResponseProcessorInterface
     /**
      * @param ResponseInterface $response
      *
-     * @return ConfirmingResponseShipment[]
-     * @phpstan-return non-empty-list<ConfirmingResponseShipment>
-     * @psalm-return non-empty-list<ConfirmingResponseShipment>
+     * @return non-empty-list<ConfirmingResponseShipment>
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException

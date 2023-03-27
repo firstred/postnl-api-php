@@ -27,10 +27,22 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
+use Throwable;
+
 /**
  * @since 2.0.0
  */
 class DeserializationException extends PostNLException
 {
+    /**
+     * @param string         $message
+     * @param int            $code
+     * @param Throwable|null $previous
+     * @param mixed|null     $value
+     */
+    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, public mixed $value = null)
+    {
+        parent::__construct(message: $message, code: $code, previous: $previous);
+    }
 }
 

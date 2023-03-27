@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -37,7 +38,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Event extends AbstractEntity
 {
     /** @var CompleteStatusResponseEvent|null $CompleteStatusResponseEvent */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?CompleteStatusResponseEvent $CompleteStatusResponseEvent = null;
 
     /**

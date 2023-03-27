@@ -32,6 +32,8 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
@@ -48,19 +50,19 @@ use function is_string;
 class TimeframeTimeFrame extends AbstractEntity
 {
     /** @var string|null $Date */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Date = null;
 
     /** @var string|null $From */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $From = null;
 
     /** @var string|null $To */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $To = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /**

@@ -31,7 +31,11 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
@@ -43,155 +47,155 @@ use Sabre\Xml\Writer;
 class Shipment extends AbstractEntity
 {
     /** @var Address[]|null $Addresses */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Address::class)]
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Amount::class)]
     protected ?array $Amounts = null;
 
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
     /** @var DateTimeInterface|null $CollectionTimeStampEnd */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $CollectionTimeStampEnd = null;
 
     /** @var DateTimeInterface|null $CollectionTimeStampStart */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $CollectionTimeStampStart = null;
 
     /** @var Contact[]|null $Contacts */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Contact::class)]
     protected ?array $Contacts = null;
 
     /** @var string|null $Content */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Content = null;
 
     /** @var string|null $CostCenter */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CostCenter = null;
 
     /** @var string|null $CustomerOrderNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerOrderNumber = null;
 
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
     /** @var Customs|null $Customs */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Customs $Customs = null;
 
     /** @var string|null $StatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusCode = null;
 
     /** @var int|null $PhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?int $PhaseCode = null;
 
     /** @var DateTimeInterface|null $DateFrom */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DateFrom = null;
 
     /** @var DateTimeInterface|null $DateTo */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DateTo = null;
 
     /** @var string|null $DeliveryAddress */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DeliveryAddress = null;
 
     /** @var DateTimeInterface|null $DeliveryTimeStampStart */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryTimeStampStart = null;
 
     /** @var DateTimeInterface|null $DeliveryTimeStampEnd */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryTimeStampEnd = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
     /** @var string|null $DownPartnerBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerBarcode = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
     /** @var Event[]|null $Events */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Event::class)]
     protected ?array $Events = null;
 
     /** @var Group[]|null $Groups */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Group::class)]
     protected ?array $Groups = null;
 
     /** @var string|null $IDExpiration */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDExpiration = null;
 
     /** @var string|null $IDNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDNumber = null;
 
     /** @var string|null $IDType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IDType = null;
 
     /** @var string|null $OldStatuses */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $OldStatuses = null;
 
     /** @var string|null $ProductCodeCollect */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeCollect = null;
 
     /** @var string|null $ProductCodeDelivery */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeDelivery = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ProductOption::class)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $ReceiverDateOfBirth */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReceiverDateOfBirth = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
     /** @var string|null $ReferenceCollect */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReferenceCollect = null;
 
     /** @var string|null $Remark */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Remark = null;
 
     /** @var string|null $ReturnBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReturnBarcode = null;
 
     /** @var string|null $ReturnReference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ReturnReference = null;
 
     /**

@@ -31,7 +31,11 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
+use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
@@ -46,23 +50,23 @@ use function is_string;
 class Timeframe extends AbstractEntity
 {
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $Date */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $Date = null;
 
     /** @var DateTimeInterface|null $EndDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $EndDate = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
@@ -70,11 +74,11 @@ class Timeframe extends AbstractEntity
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PostalCode = null;
 
     /** @var DateTimeInterface|null $StartDate */
@@ -82,23 +86,23 @@ class Timeframe extends AbstractEntity
     protected ?DateTimeInterface $StartDate = null;
 
     /** @var string|null $Street */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
     /** @var bool|null $SundaySorting */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?bool $SundaySorting = null;
 
     /** @var string|null $Interval */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Interval = null;
 
     /** @var string|null $TimeframeRange */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TimeframeRange = null;
 
     /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableCustomArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Timeframes = null;
 
     /**

@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -39,7 +40,7 @@ use Sabre\Xml\Writer;
 class GetLocationsResult extends AbstractEntity
 {
     /** @var ResponseLocation[]|null $ResponseLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ResponseLocation::class)]
     protected ?array $ResponseLocation = null;
 
     /**

@@ -31,7 +31,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
@@ -41,23 +43,23 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class Status extends AbstractEntity
 {
     /** @var string|null $PhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhaseCode = null;
 
     /** @var string|null $PhaseDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhaseDescription = null;
 
     /** @var string|null $StatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusCode = null;
 
     /** @var string|null $StatusDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StatusDescription = null;
 
     /** @var DateTimeInterface|null $TimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
     protected ?DateTimeInterface $TimeStamp = null;
 
     /**

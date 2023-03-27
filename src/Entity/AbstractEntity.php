@@ -210,9 +210,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @return array
-     * @phpstan-return array<string, string>
-     * @psalm-return array<string, string>
+     * @return array<string, string>
+     * @since 2.0.0
      */
     public function getSerializableProperties(): array
     {
@@ -436,9 +435,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                 }
             }
 
-            if (!$value['value']) {
-                $object->{'set'.$shortClassName}($value['value']);
-            } elseif (is_array(value: $value['value'])
+            if (is_array(value: $value['value'])
                 && count(value: $value['value']) >= 1
                 && !in_array(needle: $shortClassName, haystack: ['Customer', 'OpeningHours', 'Customs'])
                 && is_subclass_of(object_or_class: $fqcn, class: AbstractEntity::class)
@@ -462,9 +459,17 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                     $object->{'set'.$shortClassName}(static::xmlDeserialize(xml: [$value]));
                 } catch (\Throwable) {
                     try {
-                        $object->{'set'.$shortClassName}($value);
+                        if (isset($value['value'])) {
+                            $object->{'set'.$shortClassName}($value['value']);
+                        } else {
+                            $object->{'set'.$shortClassName}($value);
+                        }
                     } catch (\Throwable $e) {
-                        throw new DeserializationException(message: 'Could not deserialize object', previous: $e);
+                        throw new DeserializationException(
+                            message: 'Could not deserialize object',
+                            previous: $e,
+                            value: $value,
+                        );
                     }
                 }
             }

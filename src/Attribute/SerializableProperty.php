@@ -33,17 +33,15 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 
-#[Attribute(flags: Attribute::TARGET_PROPERTY)]
-class SerializableProperty
+abstract class SerializableProperty
 {
     /**
-     * @param SoapNamespace          $namespace
-     * @param array                  $supportedServices Supported services, empty array = all
+     * @param SoapNamespace  $namespace
+     * @param class-string[] $supportedServices Supported services, empty array = all
      *
-     * @phpstan-param class-string[] $supportedServices
-     * @psalm-param   class-string[] $supportedServices
      * @throws InvalidArgumentException
      * @throws ReflectionException
+     * @since 2.0.0
      */
     public function __construct(
         public SoapNamespace $namespace,

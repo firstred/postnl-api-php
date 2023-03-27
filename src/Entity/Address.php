@@ -28,7 +28,9 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * @since 1.0.0
@@ -67,77 +69,79 @@ class Address extends AbstractEntity
      *
      * @var string|null $AddressType
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $AddressType = null;
 
     /** @var string|null $Area */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Area = null;
 
     /** @var string|null $Buildingname */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Buildingname = null;
 
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $City = null;
 
     /** @var string|null $CompanyName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CompanyName = null;
 
     /** @var string|null $Countrycode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Countrycode = null;
 
     /** @var string|null $Department */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Department = null;
 
     /** @var string|null $Doorcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Doorcode = null;
 
     /** @var string|null $FirstName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $FirstName = null;
 
     /** @var string|null $Floor */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Floor = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HouseNrExt = null;
 
     /** @var string|null $StreetHouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $StreetHouseNrExt = null;
 
     /** @var string|null $Name */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Name = null;
 
     /** @var string|null $Region */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Region = null;
 
     /** @var string|null $Remark */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Remark = null;
 
     /** @var string|null $Street */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Street = null;
 
     /** @var string|null $Zipcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Zipcode = null;
 
+    /** @deprecated 2.0.0 */
+    #[Deprecated]
     protected ?array $other = null;
 
     /**
@@ -582,19 +586,35 @@ class Address extends AbstractEntity
 
     /**
      * @return array|null
+     * @deprecated 2.0.0
      */
+    #[Deprecated(reason: 'Using `other` on `Address` is deprecated')]
     public function getOther(): ?array
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `other` on `Address` is deprecated',
+        );
+
         return $this->other;
     }
 
     /**
      * @param array|null $other
      *
-     * @return $this
+     * @return static
+     * @deprecated 2.0.0
      */
+    #[Deprecated(reason: 'Using `other` on `Address` is deprecated')]
     public function setOther(?array $other): Address
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `other` on `Address` is deprecated',
+        );
+
         $this->other = $other;
 
         return $this;

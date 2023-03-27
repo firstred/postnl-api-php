@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
@@ -36,23 +37,23 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class OldStatus extends AbstractEntity
 {
     /** @var string|null $CurrentPhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentPhaseCode = null;
 
     /** @var string|null $CurrentPhaseDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentPhaseDescription = null;
 
     /** @var string|null $CurrentOldStatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusCode = null;
 
     /** @var string|null $CurrentOldStatusDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusDescription = null;
 
     /** @var string|null $CurrentOldStatusTimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CurrentOldStatusTimeStamp = null;
 
     /**

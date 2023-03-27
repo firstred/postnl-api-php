@@ -318,8 +318,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-        ]
-        );
+        ]);
 
         $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirms[1]);
         $this->assertEquals(expected: '3SDEVC201611210', actual: $confirms[1]->getBarcode());

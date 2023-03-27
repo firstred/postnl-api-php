@@ -27,7 +27,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
@@ -36,59 +37,59 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Customs extends AbstractEntity
 {
     /** @var string|null $Certificate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Certificate = null;
 
     /** @var string|null $CertificateNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CertificateNr = null;
 
     /** @var Content[]|null $Content */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Content::class)]
     protected ?array $Content = null;
 
     /** @var string|null $Currency */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Currency = null;
 
     /** @var string|null $HandleAsNonDeliverable*/
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $HandleAsNonDeliverable = null;
 
     /** @var string|null $Invoice */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Invoice = null;
 
     /** @var string|null $InvoiceNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $InvoiceNr = null;
 
     /** @var string|null $License */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $License = null;
 
     /** @var string|null $LicenseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LicenseNr = null;
 
     /** @var string|null $ShipmentType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentType = null;
 
     /** @var string|null $TrustedShipperID */
-    #[SerializableProperty(namespace: Soapamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TrustedShipperID = null;
 
     /** @var string|null $TransactionCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TransactionCode = null;
 
     /** @var string|null $TransactionDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TransactionDescription = null;
 
     /** @var string|null $ImporterReferenceCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ImporterReferenceCode = null;
 
     /**

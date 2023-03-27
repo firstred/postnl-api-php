@@ -27,7 +27,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
@@ -42,7 +44,7 @@ use Firstred\PostNL\Service\TimeframeServiceInterface;
 class Customer extends AbstractEntity
 {
     /** @var Address|null $Address */
-    #[SerializableProperty(
+    #[SerializableEntityProperty(
         namespace: SoapNamespace::Domain,
         supportedServices: [
             ConfirmingServiceInterface::class,
@@ -56,7 +58,7 @@ class Customer extends AbstractEntity
     protected ?Address $Address = null;
 
     /** @var string|null $CollectionLocation */
-    #[SerializableProperty(
+    #[SerializableScalarProperty(
         namespace: SoapNamespace::Domain,
         supportedServices: [
             ConfirmingServiceInterface::class,
@@ -70,7 +72,7 @@ class Customer extends AbstractEntity
     protected ?string $CollectionLocation = null;
 
     /** @var string|null $ContactPerson */
-    #[SerializableProperty(
+    #[SerializableScalarProperty(
         namespace: SoapNamespace::Domain,
         supportedServices: [
             ConfirmingServiceInterface::class,
@@ -84,11 +86,11 @@ class Customer extends AbstractEntity
     protected ?string $ContactPerson = null;
 
     /** @var string|null $CustomerCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerCode = null;
 
     /** @var string|null $CustomerNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $CustomerNumber = null;
 
     /** @var string|null $GlobalPackCustomerCode */
@@ -98,7 +100,7 @@ class Customer extends AbstractEntity
     protected ?string $GlobalPackBarcodeType = null;
 
     /** @var string|null $Email */
-    #[SerializableProperty(
+    #[SerializableScalarProperty(
         namespace: SoapNamespace::Domain,
         supportedServices: [
             ConfirmingServiceInterface::class,
@@ -112,7 +114,7 @@ class Customer extends AbstractEntity
     protected ?string $Email = null;
 
     /** @var string|null $Name */
-    #[SerializableProperty(
+    #[SerializableScalarProperty(
         namespace: SoapNamespace::Domain,
         supportedServices: [
             ConfirmingServiceInterface::class,

@@ -107,7 +107,7 @@ class ShippingServiceSoapTest extends ServiceTestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildSendShipmentRequest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildSendShipmentRequest(
             SendShipment::create()
                 ->setShipments(Shipments: [
                     Shipment::create()

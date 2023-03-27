@@ -120,18 +120,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
     /**
      * Confirm multiple shipments.
      *
-     * @param Confirming[]                      $confirms ['uuid' => Confirming, ...]
+     * @param array<string, Confirming> $confirms ['uuid' => Confirming, ...]
      *
-     * @phpstan-param array<string, Confirming> $confirms
-     *
-     * @return ConfirmingResponseShipment[]
-     * @phpstan-return array<string, ConfirmingResponseShipment>
-     *
+     * @return array<string, ConfirmingResponseShipment>
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
-     *
      * @since 1.0.0
      */
     public function confirmShipments(array $confirms): array

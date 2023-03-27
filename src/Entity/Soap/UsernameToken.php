@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Soap;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -42,11 +43,11 @@ use Sabre\Xml\Writer;
 class UsernameToken extends AbstractEntity
 {
     /** @var string|null $Username */
-    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Security)]
     protected ?string $Username = null;
 
     /** @var HiddenString|null $Password */
-    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Security)]
     protected ?HiddenString $Password = null;
 
     /**

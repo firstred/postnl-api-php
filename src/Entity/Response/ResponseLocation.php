@@ -27,7 +27,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
@@ -44,67 +48,67 @@ use stdClass;
 class ResponseLocation extends AbstractEntity
 {
     /** @var Address|null $Address */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Address $Address = null;
 
     /** @var string[]|null $DeliveryOptions */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $DeliveryOptions = null;
 
     /** @var string|null $Distance */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Distance = null;
 
     /** @var string|null $Latitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Latitude = null;
 
     /** @var string|null $Longitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Longitude = null;
 
     /** @var string|null $Name */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Name = null;
 
     /** @var OpeningHours|null $OpeningHours */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?OpeningHours $OpeningHours = null;
 
     /** @var string|null $PartnerName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PartnerName = null;
 
     /** @var string|null $PhoneNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhoneNumber = null;
 
     /** @var string|null $LocationCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LocationCode = null;
 
     /** @var string|null $RetailNetworkID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RetailNetworkID = null;
 
     /** @var string|null $Saleschannel */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Saleschannel = null;
 
     /** @var string|null $TerminalType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TerminalType = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain)]
     protected ?array $Warnings = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
     /**

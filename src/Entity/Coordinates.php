@@ -36,11 +36,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Coordinates extends AbstractEntity
 {
     /** @var string|null $Latitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Latitude = null;
 
     /** @var string|null $Longitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Longitude = null;
 
     /**

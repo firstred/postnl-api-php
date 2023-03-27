@@ -28,7 +28,9 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
+use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
@@ -50,58 +52,58 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
 {
     private int $currentDay = 0;
 
-    /** @var string|string[]|null $Monday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Monday = null;
+    /** @var string[]|null $Monday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Monday = null;
 
-    /** @var string|string[]|null $Tuesday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Tuesday = null;
+    /** @var string[]|null $Tuesday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Tuesday = null;
 
-    /** @var string|string[]|null $Wednesday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Wednesday = null;
+    /** @var string[]|null $Wednesday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Wednesday = null;
 
-    /** @var string|string[]|null $Thursday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Thursday = null;
+    /** @var string[]|null $Thursday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Thursday = null;
 
-    /** @var string|string[]|null $Friday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Friday = null;
+    /** @var string[]|null $Friday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Friday = null;
 
-    /** @var string|string[]|null $Saturday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Saturday = null;
+    /** @var string[]|null $Saturday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Saturday = null;
 
-    /** @var string|string[]|null $Sunday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected string|array|null $Sunday = null;
+    /** @var string[]|null $Sunday */
+    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    protected array|null $Sunday = null;
 
     /**
-     * @param string|array|null $Monday
-     * @param string|array|null $Tuesday
-     * @param string|array|null $Wednesday
-     * @param string|array|null $Thursday
-     * @param string|array|null $Friday
-     * @param string|array|null $Saturday
-     * @param string|array|null $Sunday
+     * @param array|null $Monday
+     * @param array|null $Tuesday
+     * @param array|null $Wednesday
+     * @param array|null $Thursday
+     * @param array|null $Friday
+     * @param array|null $Saturday
+     * @param array|null $Sunday
      */
     public function __construct(
-        /** @param string|string[]|null $Monday */
-        string|array|null $Monday = null,
-        /** @param string|string[]|null $Tuesday */
-        string|array|null $Tuesday = null,
-        /** @param string|string[]|null $Wednesday */
-        string|array|null $Wednesday = null,
-        /** @param string|string[]|null $Thursday */
-        string|array|null $Thursday = null,
-        /** @param string|string[]|null $Friday */
-        string|array|null $Friday = null,
-        /** @param string|string[]|null $Saturday */
-        string|array|null $Saturday = null,
-        /** @param string|string[]|null $Sunday */
-        string|array|null $Sunday = null
+        /** @param string[]|null $Monday */
+        array|null $Monday = null,
+        /** @param string[]|null $Tuesday */
+        array|null $Tuesday = null,
+        /** @param string[]|null $Wednesday */
+        array|null $Wednesday = null,
+        /** @param string[]|null $Thursday */
+        array|null $Thursday = null,
+        /** @param string[]|null $Friday */
+        array|null $Friday = null,
+        /** @param string[]|null $Saturday */
+        array|null $Saturday = null,
+        /** @param string[]|null $Sunday */
+        array|null $Sunday = null,
     ) {
         parent::__construct();
 
@@ -115,19 +117,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getMonday(): array|string|null
+    public function getMonday(): array|null
     {
         return $this->Monday;
     }
 
     /**
-     * @param array|string|null $Monday
+     * @param array|null $Monday
      *
      * @return OpeningHours
      */
-    public function setMonday(array|string|null $Monday): OpeningHours
+    public function setMonday(array|null $Monday): static
     {
         $this->Monday = $Monday;
 
@@ -135,19 +137,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getTuesday(): array|string|null
+    public function getTuesday(): array|null
     {
         return $this->Tuesday;
     }
 
     /**
-     * @param array|string|null $Tuesday
+     * @param array|null $Tuesday
      *
      * @return OpeningHours
      */
-    public function setTuesday(array|string|null $Tuesday): OpeningHours
+    public function setTuesday(array|null $Tuesday): static
     {
         $this->Tuesday = $Tuesday;
 
@@ -155,19 +157,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getWednesday(): array|string|null
+    public function getWednesday(): array|null
     {
         return $this->Wednesday;
     }
 
     /**
-     * @param array|string|null $Wednesday
+     * @param array|null $Wednesday
      *
      * @return OpeningHours
      */
-    public function setWednesday(array|string|null $Wednesday): OpeningHours
+    public function setWednesday(array|null $Wednesday): static
     {
         $this->Wednesday = $Wednesday;
 
@@ -175,19 +177,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getThursday(): array|string|null
+    public function getThursday(): array|null
     {
         return $this->Thursday;
     }
 
     /**
-     * @param array|string|null $Thursday
+     * @param array|null $Thursday
      *
      * @return OpeningHours
      */
-    public function setThursday(array|string|null $Thursday): OpeningHours
+    public function setThursday(array|null $Thursday): static
     {
         $this->Thursday = $Thursday;
 
@@ -203,11 +205,11 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @param array|string|null $Friday
+     * @param array|null $Friday
      *
      * @return OpeningHours
      */
-    public function setFriday(array|string|null $Friday): OpeningHours
+    public function setFriday(array|null $Friday): static
     {
         $this->Friday = $Friday;
 
@@ -215,19 +217,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getSaturday(): array|string|null
+    public function getSaturday(): array|null
     {
         return $this->Saturday;
     }
 
     /**
-     * @param array|string|null $Saturday
+     * @param array|null $Saturday
      *
      * @return OpeningHours
      */
-    public function setSaturday(array|string|null $Saturday): OpeningHours
+    public function setSaturday(array|null $Saturday): static
     {
         $this->Saturday = $Saturday;
 
@@ -235,19 +237,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array|string|null
+     * @return array|null
      */
-    public function getSunday(): array|string|null
+    public function getSunday(): array|null
     {
         return $this->Sunday;
     }
 
     /**
-     * @param array|string|null $Sunday
+     * @param array|null $Sunday
      *
      * @return OpeningHours
      */
-    public function setSunday(array|string|null $Sunday): OpeningHours
+    public function setSunday(array|null $Sunday): static
     {
         $this->Sunday = $Sunday;
 
@@ -255,11 +257,12 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @param stdClass $json
+     *
+     * @return OpeningHours
      * @throws DeserializationException
      * @throws EntityNotFoundException
-     *
+     * @throws NotSupportedException
      * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -330,12 +333,12 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     }
 
     /**
-     * @return array
+     * @return array{Monday: string[], Tuesday: string[], Wednesday: string[], Thursday: string[], Friday: string[], Saturday: string[], Sunday: string[]}
      */
     public function toArray(): array
     {
         $array = [];
-        foreach (array_keys(array: static::$defaultProperties['Barcode']) as $property) {
+        foreach (array_keys(array: $this->getSerializableProperties()) as $property) {
             if (isset($this->$property)) {
                 $array[$property] = $this->$property;
             }

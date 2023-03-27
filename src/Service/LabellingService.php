@@ -167,20 +167,14 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     /**
      * Generate multiple labels at once.
      *
-     * @param array $generateLabels
-     * @phpstan-param array<string, array<GenerateBarcode, bool>> $generateLabels
-     * @psalm-param array<string, array<GenerateBarcode, bool>> $generateLabels
+     * @param array<string, array<GenerateBarcode, bool>> $generateLabels
      *
-     * @return array
-     * @phpstan-return array<string, GenerateBarcodeResponse>
-     * @psalm-return array<string, GenerateBarcodeResponse>
-     *
+     * @return array<string, GenerateBarcodeResponse>
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.0.0
      */
     public function generateLabels(array $generateLabels): array

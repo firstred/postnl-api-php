@@ -64,8 +64,7 @@ class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, Lo
     const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /**
-     * @var array
-     * @phpstan-var array{string, mixed}
+     * @var array<string, mixed>
      */
     protected array $defaultOptions = [];
 

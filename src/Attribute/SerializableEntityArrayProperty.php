@@ -25,43 +25,31 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-namespace Firstred\PostNL\Entity\Soap;
+namespace Firstred\PostNL\Attribute;
 
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
+use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
 
-/**
- * NOTE: this class has been introduced for deserializing
- *
- * @since 1.0.0
- * @deprecated 2.0.0
- */
-class Body extends AbstractEntity
+#[Attribute(flags: Attribute::TARGET_PROPERTY)]
+class SerializableEntityArrayProperty extends SerializableProperty
 {
-    /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Envelope)]
-    protected ?GenerateBarcodeResponse $GenerateBarcodeResponse = null;
-
     /**
-     * @return GenerateBarcodeResponse|null
-     */
-    public function getGenerateBarcodeResponse(): ?GenerateBarcodeResponse
-    {
-        return $this->GenerateBarcodeResponse;
-    }
-
-    /**
-     * @param GenerateBarcodeResponse|null $GenerateBarcodeResponse
+     * @param SoapNamespace $namespace
+     * @param class-string  $entityFqcn
+     * @param array         $supportedServices Supported services, empty array = all
      *
-     * @return $this
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
      */
-    public function setGenerateBarcodeResponse(?GenerateBarcodeResponse $GenerateBarcodeResponse): static
-    {
-        $this->GenerateBarcodeResponse = $GenerateBarcodeResponse;
-
-        return $this;
+    public function __construct(
+        public SoapNamespace $namespace,
+        public string        $entityFqcn,
+        public array         $supportedServices = [],
+    ) {
+        parent::__construct(namespace: $namespace, supportedServices: $supportedServices);
     }
 }

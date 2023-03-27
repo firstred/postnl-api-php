@@ -179,9 +179,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * 3S (or EU Pack Special) countries.
      *
-     * @var array                $threeSCountries
-     * @phpstan-var list<string> $threeSCountries
-     * @psalm-var list<string>   $threeSCountries
+     * @var list<string> $threeSCountries
      */
     public static array $threeSCountries = [
         'AT',
@@ -216,9 +214,7 @@ class PostNL implements LoggerAwareInterface
      * A6 positions
      * (index = amount of a6 left on the page).
      *
-     * @var array $a6positions
-     * @phpstan-var array{1: array{int, int}, 2: array{int, int}, 3: array{int, int}, 4: array{int, int}} $a6positions
-     * @psalm-var array{1: array{int, int}, 2: array{int, int}, 3: array{int, int}, 4: array{int, int}} $a6positions
+     * @var array{1: array{int, int}, 2: array{int, int}, 3: array{int, int}, 4: array{int, int}} $a6positions
      */
     public static array $a6positions = [
         4 => [-276, 2],
@@ -275,12 +271,10 @@ class PostNL implements LoggerAwareInterface
      * @param Customer                       $customer Customer object.
      * @param string|UsernameToken           $apiKey   API key or UsernameToken object.
      * @param bool                           $sandbox  Whether the testing environment should be used.
-     * @param int                            $mode     Avoid setting the API mode, this feature is deprecated.
+     * @param int<1,2>                       $mode     Avoid setting the API mode, this feature is deprecated.
      *                                                 Valid options are:
      *                                                 - `1` / `self::MODE_REST`: New REST API
      *                                                 - `2` / `self::MODE_SOAP`: New SOAP API
-     * @phpstan-param int<1,2>               $mode
-     * @psalm-param int<1,2>                 $mode
      *
      * @throws PostNLInvalidArgumentException
      */
@@ -1107,17 +1101,16 @@ class PostNL implements LoggerAwareInterface
     /**
      * Generate a single barcode by country code.
      *
-     * @param array                      $isos key = iso code, value = amount of barcodes requested
+     * @param array<string, int> $isos key = iso code, value = amount of barcodes requested
      *
-     * @phpstan-param array<string, int> $isos
+     * @return array<string, array<string>> Country isos with the barcodes as string
      *
-     * @return array Country isos with the barcodes as string
-     * @phpstan-return array<string, array<string>>
-     *
-     * @throws InvalidConfigurationException
-     * @throws InvalidConfigurationException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
      * @throws InvalidBarcodeException
-     *
+     * @throws InvalidConfigurationException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function generateBarcodesByCountryCodes(array $isos): array
@@ -1209,9 +1202,7 @@ class PostNL implements LoggerAwareInterface
      *                                                                         MyParcel way
      * @param int                                               $format        A4 or A6
      *
-     * @phpstan-param array{1: bool, 2: bool, 3: bool, 4: bool} $positions
-     *
-     * @param array                                             $positions     Set the positions of the A6s on the
+     * @param array{1: bool, 2: bool, 3: bool, 4: bool}         $positions     Set the positions of the A6s on the
      *                                                                         first A4 The indices should be the
      *                                                                         position number, marked with `true` or
      *                                                                         `false` These are the position numbers:
@@ -1242,7 +1233,6 @@ class PostNL implements LoggerAwareInterface
      * @param string                                            $a6Orientation A6 orientation (P or L)
      *
      * @return SendShipmentResponse|string
-     *
      * @throws NotSupportedException
      * @throws CrossReferenceException
      * @throws FilterException
@@ -1256,7 +1246,6 @@ class PostNL implements LoggerAwareInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws PostNLInvalidArgumentException
-     *
      * @since 1.2.0
      */
     public function sendShipments(
@@ -1673,7 +1662,12 @@ class PostNL implements LoggerAwareInterface
      */
     public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
     {
-        return $this->getConfirmingService()->confirmShipment(confirming: new Confirming(Shipments: [$shipment], Customer: $this->customer));
+        return $this->getConfirmingService()->confirmShipment(
+            confirming: new Confirming(
+                Shipments: [$shipment],
+                Customer: $this->customer,
+            ),
+        );
     }
 
     /**

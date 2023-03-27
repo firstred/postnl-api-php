@@ -27,16 +27,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Firstred\PostNL\Service\LabellingServiceRestAdapter;
-use Firstred\PostNL\Service\LocationServiceRestAdapter;
-use Firstred\PostNL\Service\Rest\BarcodeServiceMessageProcessor;
-use Firstred\PostNL\Service\TimeframeServiceRestAdapter;
 use http\Exception\InvalidArgumentException;
 use Sabre\Xml\Writer;
 
@@ -46,11 +43,11 @@ use Sabre\Xml\Writer;
 class GetTimeframes extends AbstractEntity
 {
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
     /** @var Timeframe[]|null $Timeframe */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Timeframe::class)]
     protected ?array $Timeframe = null;
 
     /**

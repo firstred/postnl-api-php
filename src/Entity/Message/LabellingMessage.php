@@ -29,6 +29,7 @@ namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
@@ -39,7 +40,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class LabellingMessage extends Message
 {
     /** @var string|null $Printertype */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Printertype = null;
 
     /**
