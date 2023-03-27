@@ -34,6 +34,7 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\TimeframeService;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -109,13 +110,13 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         $this->setService(object: $getTimeframes);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.TimeframeService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.TimeframeService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
+                '{'.TimeframeService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.TimeframeService::SERVICES_NAMESPACE.'}GetTimeframes' => $getTimeframes,
                 ],
             ]
         );

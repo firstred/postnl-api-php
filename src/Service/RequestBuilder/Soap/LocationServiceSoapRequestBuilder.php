@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
@@ -108,13 +109,13 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
         $this->setService(object: $getNearestLocations);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetNearestLocations' => $getNearestLocations,
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.LocationService::SERVICES_NAMESPACE.'}GetNearestLocations' => $getNearestLocations,
                 ],
             ]
         );
@@ -152,13 +153,13 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
         $this->setService(object: $getLocations);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.LocationService::SERVICES_NAMESPACE.'}GetLocationsInArea' => $getLocations,
                 ],
             ]
         );
@@ -196,13 +197,13 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
         $this->setService(object: $getLocations);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
+                '{'.LocationService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.LocationService::SERVICES_NAMESPACE.'}GetLocation' => $getLocations,
                 ],
             ]
         );

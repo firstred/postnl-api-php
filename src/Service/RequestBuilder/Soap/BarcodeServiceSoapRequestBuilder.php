@@ -128,13 +128,13 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
         $this->setService(object: $generateBarcode);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.BarcodeService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.BarcodeService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
+                '{'.BarcodeService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.BarcodeService::SERVICES_NAMESPACE.'}GenerateBarcode' => $generateBarcode,
                 ],
             ],
         );

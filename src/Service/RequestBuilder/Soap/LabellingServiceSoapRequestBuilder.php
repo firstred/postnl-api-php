@@ -33,6 +33,7 @@ use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
@@ -115,13 +116,13 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         $this->setService(object: $generateLabel);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.LabellingService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.LabellingService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
+                '{'.LabellingService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.LabellingService::SERVICES_NAMESPACE.'}GenerateLabel' => $generateLabel,
                 ],
             ]
         );

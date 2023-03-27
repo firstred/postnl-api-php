@@ -32,6 +32,7 @@ use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
@@ -77,8 +78,8 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
-            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => ConfirmingService::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => ConfirmingService::SERVICES_NAMESPACE,
         ]);
     }
 
@@ -100,13 +101,13 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
         $this->setService(object: $confirming);
 
         $body = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.ConfirmingService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.ConfirmingService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}Confirming' => $confirming,
+                '{'.ConfirmingService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.ConfirmingService::SERVICES_NAMESPACE.'}Confirming' => $confirming,
                 ],
             ]
         );

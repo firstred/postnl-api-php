@@ -53,9 +53,9 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
     {
         $endpoint = '/nearest';
-        $location = $getNearestNearestLocations->getLocation();
+        $location = $getNearestLocations->getLocation();
         $query = [
-            'CountryCode' => $getNearestNearestLocations->getCountrycode(),
+            'CountryCode' => $getNearestLocations->getCountrycode(),
             'PostalCode'  => $location->getPostalcode(),
         ];
         if ($city = $location->getCity()) {

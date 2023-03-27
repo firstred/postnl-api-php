@@ -31,6 +31,7 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -166,7 +167,13 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     /**
      * Generate multiple labels at once.
      *
-     * @phpstan-param array<int, array<GenerateBarcode, bool>> $generateLabels
+     * @param array $generateLabels
+     * @phpstan-param array<string, array<GenerateBarcode, bool>> $generateLabels
+     * @psalm-param array<string, array<GenerateBarcode, bool>> $generateLabels
+     *
+     * @return array
+     * @phpstan-return array<string, GenerateBarcodeResponse>
+     * @psalm-return array<string, GenerateBarcodeResponse>
      *
      * @throws HttpClientException
      * @throws NotSupportedException

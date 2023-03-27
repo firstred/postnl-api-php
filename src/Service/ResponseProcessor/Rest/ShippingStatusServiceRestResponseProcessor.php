@@ -189,37 +189,6 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     }
 
     /**
-     * Build get updated shipments request REST.
-     *
-     * @param Customer               $customer
-     * @param DateTimeInterface|null $dateTimeFrom
-     * @param DateTimeInterface|null $dateTimeTo
-     *
-     * @return RequestInterface
-     *
-     * @since 2.0.0
-     */
-    public function buildGetUpdatedShipmentsRequest(
-        Customer          $customer,
-        DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null
-    ): RequestInterface {
-        $apiKey = $this->postnl->getRestApiKey();
-
-        $range = '';
-        if ($dateTimeFrom) {
-            $range = "?period={$dateTimeFrom->format(format:'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format:'Y-m-d\TH:i:s')}";
-        }
-
-        return $this->postnl->getRequestFactory()->createRequest(
-            method: 'GET',
-            uri: ($this->postnl->getSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/{$customer->getCustomerNumber()}/updatedshipments$range"
-        )
-            ->withHeader('apikey', value: $apiKey)
-            ->withHeader('Accept', value: 'application/json');
-    }
-
-    /**
      * Process updated shipments response REST.
      *
      * @param ResponseInterface $response

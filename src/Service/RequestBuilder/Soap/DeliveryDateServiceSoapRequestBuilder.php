@@ -111,13 +111,13 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
         $this->setService(object: $getDeliveryDate);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
+                '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.DeliveryDateService::SERVICES_NAMESPACE.'}GetDeliveryDate' => $getDeliveryDate,
                 ],
             ]
         );
@@ -157,13 +157,13 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
         $this->setService(object: $getSentDate);
 
         $request = $xmlService->write(
-            rootElementName: '{'.static::ENVELOPE_NAMESPACE.'}Envelope',
+            rootElementName: '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Envelope',
             value: [
-                '{'.static::ENVELOPE_NAMESPACE.'}Header' => [
+                '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Header' => [
                     ['{'.Security::SECURITY_NAMESPACE.'}Security' => $security],
                 ],
-                '{'.static::ENVELOPE_NAMESPACE.'}Body'   => [
-                    '{'.static::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
+                '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Body'   => [
+                    '{'.DeliveryDateService::SERVICES_NAMESPACE.'}GetSentDateRequest' => $getSentDate,
                 ],
             ]
         );
