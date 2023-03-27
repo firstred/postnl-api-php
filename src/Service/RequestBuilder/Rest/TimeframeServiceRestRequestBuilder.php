@@ -27,9 +27,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Firstred\PostNL\Util\Util;
+use PHPUnit\Runner\ReflectionException;
 use Psr\Http\Message\RequestInterface;
 use const PHP_QUERY_RFC3986;
 
@@ -40,8 +44,8 @@ use const PHP_QUERY_RFC3986;
 class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder implements TimeframeServiceRequestBuilderInterface
 {
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/timeframes';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/timeframes';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/timeframes';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/timeframes';
 
     /**
      * Build the GetTimeframes request for the REST API.
@@ -91,5 +95,20 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
             ))
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: TimeframeServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

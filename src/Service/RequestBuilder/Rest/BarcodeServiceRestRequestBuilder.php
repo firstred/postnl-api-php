@@ -52,10 +52,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -64,16 +68,24 @@ use const PHP_QUERY_RFC3986;
  */
 class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implements BarcodeServiceRequestBuilderInterface
 {
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
+    // Endpoints
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
 
     /**
      * Build the `generateBarcode` HTTP request for the REST API.
      *
+     * @param GenerateBarcode $generateBarcode
+     *
+     * @return RequestInterface
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
     {
+        $this->setService(entity: $generateBarcode);
+
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
             uri: Util::versionStringToURLString(
@@ -89,5 +101,20 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
         )
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('apikey', value: $this->getApiKey()->getString());
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    public function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: BarcodeServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

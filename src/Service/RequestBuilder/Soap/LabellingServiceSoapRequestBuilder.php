@@ -56,14 +56,12 @@ use function str_replace;
 class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LabellingServiceRequestBuilderInterface
 {
     // Endpoints
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
-    public const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
+    private const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
 
     /**
      * @param HiddenString            $apiKey
@@ -88,8 +86,8 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => LabellingService::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => LabellingService::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -117,8 +115,8 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $generateLabel);
+        $this->setService(entity: $security);
+        $this->setService(entity: $generateLabel);
 
         $request = $xmlService->write(
             rootElementName: '{'.LabellingService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -152,20 +150,20 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    protected function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: LabellingServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }

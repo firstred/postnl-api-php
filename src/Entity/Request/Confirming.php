@@ -172,11 +172,7 @@ class Confirming extends AbstractEntity
     public function jsonSerialize(): array
     {
         $json = [];
-        if (!$this->currentService || !in_array(needle: $this->currentService, haystack: array_keys(array: static::$defaultProperties))) {
-            return $json;
-        }
-
-        foreach (array_keys(array: static::$defaultProperties[$this->currentService]) as $propertyName) {
+        foreach (array_keys(array: $this->getSerializableProperties()) as $propertyName) {
             if (isset($this->$propertyName)) {
                 // The REST API only seems to accept one shipment per request at the moment of writing (Sep. 24th, 2017)
                 if ('Shipments' === $propertyName && count(value: $this->$propertyName) >= 1) {

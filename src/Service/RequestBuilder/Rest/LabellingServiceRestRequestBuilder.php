@@ -27,10 +27,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use function http_build_query;
 use function in_array;
 use function json_encode;
@@ -44,9 +48,10 @@ use const PHP_QUERY_RFC3986;
 class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LabellingServiceRequestBuilderInterface
 {
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
 
+    /** @var int[] */
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
 
     /**
@@ -76,5 +81,20 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
             ->withBody(body: $this->postnl->getStreamFactory()->createStream(content: json_encode(value: $generateLabel)));
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: LabellingServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

@@ -232,7 +232,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         $reflectionClass = new ReflectionClass(objectOrClass: static::class);
         foreach ($reflectionClass->getProperties() as $property) {
             foreach ($property->getAttributes(name: SerializableProperty::class) as $attribute) {
-                $serializableProperties[$property->getName()] = $attribute->getArguments()['namespace'];
+                $namespacePrefix = $attribute->getArguments()['namespace'];
+                $supportedServices = $attribute->getArguments()['supportedServices'];
+                if (empty($supportedServices) || in_array(needle: $this->currentService, haystack: $supportedServices)) {
+                    $serializableProperties[$property->getName()] = $attribute->getArguments()['namespace'];
+                }
             }
         }
 
@@ -248,11 +252,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     public function jsonSerialize(): array
     {
         $json = [];
-        if (empty($this->namespaces)) {
+        if (!isset($this->currentService)) {
             throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
-        foreach (static::getSerializableProperties() as $propertyName => $_) {
+        foreach ($this->getSerializableProperties() as $propertyName => $_) {
             if (isset($this->$propertyName)) {
                 if ($this->$propertyName instanceof DateTimeInterface) {
                     $json[$propertyName] = $this->$propertyName->format('d-m-Y H:i:s');
@@ -276,12 +280,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        if (empty($this->namespaces)) {
+        if (!isset($this->currentService)) {
             throw new ServiceNotSetException(message: 'Service not set before serialization');
         }
 
         $properties = [];
-        foreach (static::getSerializableProperties() as $propertyName => $namespacePrefix) {
+        foreach ($this->getSerializableProperties() as $propertyName => $namespacePrefix) {
             $namespace = $this->namespaces[$namespacePrefix->value];
             if (isset($this->$propertyName)) {
                 $xml[$namespace ? "{{$namespace}}$propertyName" : $propertyName] = $this->$propertyName;

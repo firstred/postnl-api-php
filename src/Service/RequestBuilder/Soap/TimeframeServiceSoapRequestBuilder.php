@@ -54,13 +54,11 @@ use Sabre\Xml\Service as XmlService;
 class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements TimeframeServiceRequestBuilderInterface
 {
     // Endpoints
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/timeframes';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/timeframes';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/timeframes';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/timeframes';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/TimeframeWebService/ITimeframeWebService/GetTimeframes';
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/TimeframeWebService/ITimeframeWebService/GetTimeframes';
 
     /**
      * @param HiddenString            $apiKey
@@ -85,8 +83,8 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => TimeframeService::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => TimeframeService::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -111,8 +109,8 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $getTimeframes);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getTimeframes);
 
         $request = $xmlService->write(
             rootElementName: '{'.TimeframeService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -139,20 +137,20 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    protected function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: TimeframeServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }

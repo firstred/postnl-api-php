@@ -27,10 +27,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 
 /**
  * @since 2.0.0
@@ -39,14 +43,18 @@ use Psr\Http\Message\RequestInterface;
 class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ConfirmingServiceRequestBuilderInterface
 {
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/confirm';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/confirm';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/confirm';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/confirm';
 
     /**
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildConfirmRequest(Confirming $confirming): RequestInterface
     {
+        $this->setService(entity: $confirming);
+
         return $this->getRequestFactory()->createRequest(
             method: 'POST',
             uri: Util::versionStringToURLString(
@@ -57,5 +65,20 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: json_encode(value: $confirming)));
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: ConfirmingServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

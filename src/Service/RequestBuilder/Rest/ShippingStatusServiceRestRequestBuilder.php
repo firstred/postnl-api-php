@@ -28,14 +28,19 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
 use DateTimeInterface;
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -45,8 +50,8 @@ use const PHP_QUERY_RFC3986;
 class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingStatusServiceRequestBuilderInterface
 {
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/status';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/status';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/status';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/status';
 
     /**
      * Build the CurrentStatus request for the REST API.
@@ -226,5 +231,20 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
             ))
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: ShippingStatusServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

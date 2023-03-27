@@ -92,29 +92,4 @@ abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder
             $element->registerXPathNamespace(prefix: $prefix, namespace: $namespace);
         }
     }
-
-    /**
-     * Set the webservice on the object.
-     *
-     * This lets the object know for which service it should serialize
-     *
-     * @throws InvalidArgumentException
-     * @since 2.0.0
-     */
-    public function setService(AbstractEntity $object): void
-    {
-        $serializableProperties = $object->getSerializableProperties();
-        foreach (array_keys(array: $serializableProperties) as $propertyName) {
-            $item = $object->{'get'.$propertyName}();
-            if ($item instanceof AbstractEntity) {
-                static::setService(object: $item);
-            } elseif (is_array(value: $item)) {
-                foreach ($item as $child) {
-                    if ($child instanceof AbstractEntity) {
-                        static::setService(object: $child);
-                    }
-                }
-            }
-        }
-    }
 }

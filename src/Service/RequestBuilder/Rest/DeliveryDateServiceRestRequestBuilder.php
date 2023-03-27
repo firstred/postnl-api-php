@@ -27,12 +27,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use function strcasecmp;
 use const PHP_QUERY_RFC3986;
 
@@ -42,16 +47,24 @@ use const PHP_QUERY_RFC3986;
  */
 class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder implements DeliveryDateServiceRequestBuilderInterface
 {
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/date';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/date';
+    // Endpoints
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/date';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/date';
 
     /**
      * Build the GetDeliveryDate request for the REST API.
      *
+     * @param GetDeliveryDate $getDeliveryDate
+     *
+     * @return RequestInterface
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface
     {
+        $this->setService(entity: $getDeliveryDate);
+
         $deliveryDate = $getDeliveryDate->getGetDeliveryDate();
 
         $query = [
@@ -136,10 +149,17 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
     /**
      * Build the GetSentDate request for the REST API.
      *
+     * @param GetSentDateRequest $getSentDate
+     *
+     * @return RequestInterface
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGetSentDateRequest(GetSentDateRequest $getSentDate): RequestInterface
     {
+        $this->setService(entity: $getSentDate);
+
         $sentDate = $getSentDate->getGetSentDate();
         $query = [
             'ShippingDate' => $sentDate->getDeliveryDate(),
@@ -171,5 +191,20 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
             ))
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: DeliveryDateServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

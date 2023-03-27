@@ -54,11 +54,11 @@ use Sabre\Xml\Service as XmlService;
 class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements DeliveryDateServiceRequestBuilderInterface
 {
     // Endpoints
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/date';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/date';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/date';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/date';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/DeliveryDateWebService/IDeliveryDateWebService/GetDeliveryDate';
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/DeliveryDateWebService/IDeliveryDateWebService/GetDeliveryDate';
 
     /**
      * @param HiddenString            $apiKey
@@ -111,8 +111,8 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
             UserNameToken: new UsernameToken(Password: $this->getApiKey()),
         );
 
-        $this->setService(object: $security);
-        $this->setService(object: $getDeliveryDate);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getDeliveryDate);
 
         $request = $xmlService->write(
             rootElementName: '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -157,8 +157,8 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
             UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()),
         );
 
-        $this->setService(object: $security);
-        $this->setService(object: $getSentDate);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getSentDate);
 
         $request = $xmlService->write(
             rootElementName: '{'.DeliveryDateService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -185,20 +185,20 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    protected function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: DeliveryDateServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }

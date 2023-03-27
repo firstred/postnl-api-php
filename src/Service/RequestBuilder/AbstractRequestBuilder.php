@@ -28,6 +28,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use DateTimeImmutable;
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -153,5 +155,30 @@ abstract class AbstractRequestBuilder
         $this->streamFactory = $streamFactory;
 
         return $this;
+    }
+
+    /**
+     * Set the webservice on the object.
+     *
+     * This lets the object know for which service it should serialize
+     *
+     * @throws InvalidArgumentException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $serializableProperties = $entity->getSerializableProperties();
+        foreach (array_keys(array: $serializableProperties) as $propertyName) {
+            $item = $entity->{'get'.$propertyName}();
+            if ($item instanceof AbstractEntity) {
+                static::setService(entity: $item);
+            } elseif (is_array(value: $item)) {
+                foreach ($item as $child) {
+                    if ($child instanceof AbstractEntity) {
+                        static::setService(entity: $child);
+                    }
+                }
+            }
+        }
     }
 }

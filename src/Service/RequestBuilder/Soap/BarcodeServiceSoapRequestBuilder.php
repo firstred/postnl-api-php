@@ -77,11 +77,11 @@ use Sabre\Xml\Service as XmlService;
 class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements BarcodeServiceRequestBuilderInterface
 {
     // Endpoints
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
 
     /**
      * @param HiddenString            $apiKey
@@ -128,8 +128,8 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
             UserNameToken: new UsernameToken(Username: null, Password: $this->getApiKey()->getString()),
         );
 
-        $this->setService(object: $security);
-        $this->setService(object: $generateBarcode);
+        $this->setService(entity: $security);
+        $this->setService(entity: $generateBarcode);
 
         $request = $xmlService->write(
             rootElementName: '{'.BarcodeService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -156,20 +156,20 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    protected function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: BarcodeServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }

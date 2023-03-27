@@ -27,10 +27,14 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ShippingServiceInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use function http_build_query;
 use function json_encode;
 use const PHP_QUERY_RFC3986;
@@ -42,8 +46,8 @@ use const PHP_QUERY_RFC3986;
 class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingServiceRequestBuilderInterface
 {
     // Endpoints
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/${VERSION}/shipment';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/${VERSION}/shipment';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/${VERSION}/shipment';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/${VERSION}/shipment';
 
     /**
      * @param SendShipment $sendShipment
@@ -65,5 +69,20 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: json_encode(value: $sendShipment)));
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: ShippingServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

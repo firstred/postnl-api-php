@@ -92,31 +92,9 @@ class Customer extends AbstractEntity
     protected ?string $CustomerNumber = null;
 
     /** @var string|null $GlobalPackCustomerCode */
-    #[SerializableProperty(
-        namespace: SoapNamespace::Domain,
-        supportedServices: [
-            ConfirmingServiceInterface::class,
-            LabellingServiceInterface::class,
-            DeliveryDateServiceInterface::class,
-            LocationServiceInterface::class,
-            TimeframeServiceInterface::class,
-            ShippingServiceInterface::class,
-        ],
-    )]
     protected ?string $GlobalPackCustomerCode = null;
 
     /** @var string|null $GlobalPackBarcodeType */
-    #[SerializableProperty(
-        namespace: SoapNamespace::Domain,
-        supportedServices: [
-            ConfirmingServiceInterface::class,
-            LabellingServiceInterface::class,
-            DeliveryDateServiceInterface::class,
-            LocationServiceInterface::class,
-            TimeframeServiceInterface::class,
-            ShippingServiceInterface::class,
-        ],
-    )]
     protected ?string $GlobalPackBarcodeType = null;
 
     /** @var string|null $Email */

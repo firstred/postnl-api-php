@@ -52,12 +52,11 @@ use Sabre\Xml\Service as XmlService;
 class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements ConfirmingServiceRequestBuilderInterface
 {
     // Endpoints
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/confirm';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/confirm';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/confirm';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/confirm';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
-
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/ConfirmingWebService/IConfirmingWebService/Confirming';
 
     /**
      * @param HiddenString            $apiKey
@@ -101,8 +100,8 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $confirming);
+        $this->setService(entity: $security);
+        $this->setService(entity: $confirming);
 
         $body = $xmlService->write(
             rootElementName: '{'.ConfirmingService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -129,20 +128,20 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    protected function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: ConfirmingServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }

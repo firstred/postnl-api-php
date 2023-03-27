@@ -27,13 +27,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Coordinates;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -42,8 +46,9 @@ use const PHP_QUERY_RFC3986;
  */
 class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LocationServiceRequestBuilderInterface
 {
-    const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/locations';
-    const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/locations';
+    // Endpoints
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/locations';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/locations';
 
     /**
      * Build the GenerateLabel request for the REST API.
@@ -180,5 +185,20 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
             ))
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
+    }
+
+    /**
+     * @param AbstractEntity $entity
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    protected function setService(AbstractEntity $entity): void
+    {
+        $entity->setCurrentService(currentService: LocationServiceInterface::class);
+
+        parent::setService(entity: $entity);
     }
 }

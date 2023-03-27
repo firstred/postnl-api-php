@@ -56,14 +56,12 @@ use Sabre\Xml\Service as XmlService;
 class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LocationServiceRequestBuilderInterface
 {
     // Endpoints
-    public const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/locations';
-    public const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/locations';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/locations';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/locations';
 
     // SOAP API specific
-    public const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
-    public const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocationsInArea';
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
+    private const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
+    private const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocationsInArea';
 
     /**
      * @param HiddenString            $apiKey
@@ -88,8 +86,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
         );
 
         $this->namespaces = array_merge($this->namespaces, [
-            SoapNamespace::Services->value => self::SERVICES_NAMESPACE,
-            SoapNamespace::Domain->value   => self::DOMAIN_NAMESPACE,
+            SoapNamespace::Services->value => LocationService::SERVICES_NAMESPACE,
+            SoapNamespace::Domain->value   => LocationService::DOMAIN_NAMESPACE,
         ]);
     }
 
@@ -110,8 +108,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $getNearestLocations);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getNearestLocations);
 
         $request = $xmlService->write(
             rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -154,8 +152,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $getLocations);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getLocations);
 
         $request = $xmlService->write(
             rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -198,8 +196,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
 
         $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
-        $this->setService(object: $security);
-        $this->setService(object: $getLocations);
+        $this->setService(entity: $security);
+        $this->setService(entity: $getLocations);
 
         $request = $xmlService->write(
             rootElementName: '{'.LocationService::ENVELOPE_NAMESPACE.'}Envelope',
@@ -226,20 +224,20 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     }
 
     /**
-     * @param AbstractEntity $object
+     * @param AbstractEntity $entity
      *
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
      * @since 2.0.0
      */
-    public function setService(AbstractEntity $object): void
+    public function setService(AbstractEntity $entity): void
     {
-        $object->setCurrentService(
+        $entity->setCurrentService(
             currentService: LocationServiceInterface::class,
             namespaces: $this->namespaces,
         );
 
-        parent::setService(object: $object);
+        parent::setService(entity: $entity);
     }
 }
