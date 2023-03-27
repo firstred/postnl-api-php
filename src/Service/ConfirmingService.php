@@ -38,10 +38,13 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\ConfirmingServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\ConfirmingServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\ConfirmingServiceSoapAdapter;
+use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ConfirmingServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\ConfirmingServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\ConfirmingServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\ConfirmingServiceSoapResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -53,9 +56,14 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    // SOAP API specific
+    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ConfirmingWebService/';
+    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
 
-    protected ConfirmingServiceAdapterInterface $adapter;
+    use ResponseProcessorSettersTrait;
+
+    protected ConfirmingServiceRequestBuilderInterface $requestBuilder;
+    protected ConfirmingServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -105,8 +113,8 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      */
     public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
     {
-        $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildConfirmRequest(confirming: $confirming));
-        $objects = $this->adapter->processConfirmResponse(response: $response);
+        $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildConfirmRequest(confirming: $confirming));
+        $objects = $this->responseProcessor->processConfirmResponse(response: $response);
 
         if (!empty($objects) && $objects[0] instanceof ConfirmingResponseShipment) {
             return $objects[0];
@@ -143,14 +151,14 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         foreach ($confirms as $confirm) {
             $httpClient->addOrUpdateRequest(
                 id: $confirm->getId(),
-                request: $this->adapter->buildConfirmRequest(confirming: $confirm),
+                request: $this->requestBuilder->buildConfirmRequest(confirming: $confirm),
             );
         }
 
         $confirmingResponses = [];
         foreach ($httpClient->doRequests() as $uuid => $response) {
             $confirmingResponse = null;
-            $objects = $this->adapter->processConfirmResponse(response: $response);
+            $objects = $this->responseProcessor->processConfirmResponse(response: $response);
             foreach ($objects as $object) {
                 if (!$object instanceof ConfirmingResponseShipment) {
                     throw new ResponseException(
@@ -175,20 +183,36 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        $this->adapter = $mode == PostNLApiMode::Rest
-            ? new ConfirmingServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            )
-            : new ConfirmingServiceSoapAdapter(
+        if (PostNLApiMode::Rest === $mode) {
+            $this->requestBuilder = new ConfirmingServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
                 version: $this->getVersion(),
             );
+            $this->responseProcessor = new ConfirmingServiceRestResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        } else {
+            $this->requestBuilder = new ConfirmingServiceSoapRequestBuilder(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+            $this->responseProcessor = new ConfirmingServiceSoapResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        }
     }
 }

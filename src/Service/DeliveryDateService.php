@@ -39,10 +39,13 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\DeliveryDateServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\DeliveryDateServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\DeliveryDateServiceSoapAdapter;
+use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\DeliveryDateServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\DeliveryDateServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\DeliveryDateServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\DeliveryDateServiceSoapResponseProcessor;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -59,9 +62,14 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    // SOAP API specific
+    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/DeliveryDateWebService/';
+    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/DeliveryDateWebService/';
 
-    protected DeliveryDateServiceAdapterInterface $adapter;
+    use ResponseProcessorSettersTrait;
+
+    protected DeliveryDateServiceRequestBuilderInterface $requestBuilder;
+    protected DeliveryDateServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -124,10 +132,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate));
         }
 
-        $object = $this->adapter->processGetDeliveryDateResponse(response: $response);
+        $object = $this->responseProcessor->processGetDeliveryDateResponse(response: $response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
@@ -165,10 +173,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetSentDateRequest(getSentDate: $getSentDate));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetSentDateRequest(getSentDate: $getSentDate));
         }
 
-        $object = $this->adapter->processGetSentDateResponse(response: $response);
+        $object = $this->responseProcessor->processGetSentDateResponse(response: $response);
         if ($item instanceof CacheItemInterface
             && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
@@ -185,20 +193,36 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        $this->adapter = $mode == PostNLApiMode::Rest
-            ? new DeliveryDateServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            )
-            : new DeliveryDateServiceSoapAdapter(
+        if (PostNLApiMode::Rest === $mode) {
+            $this->requestBuilder = new DeliveryDateServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
                 version: $this->getVersion(),
             );
+            $this->responseProcessor = new DeliveryDateServiceRestResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        } else {
+            $this->requestBuilder = new DeliveryDateServiceSoapRequestBuilder(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+            $this->responseProcessor = new DeliveryDateServiceSoapResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        }
     }
 }

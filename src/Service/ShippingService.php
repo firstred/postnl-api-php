@@ -38,9 +38,11 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\Rest\ShippingServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\ShippingServiceAdapterInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\ShippingServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\ShippingServiceResponseProcessorInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -57,9 +59,10 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class ShippingService extends AbstractService implements ShippingServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    use ResponseProcessorSettersTrait;
 
-    protected ShippingServiceAdapterInterface $adapter;
+    protected ShippingServiceRequestBuilderInterface $requestBuilder;
+    protected ShippingServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -127,11 +130,11 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(
-                request: $this->adapter->buildSendShipmentRequest(sendShipment: $sendShipment, confirm: $confirm)
+                request: $this->requestBuilder->buildSendShipmentRequest(sendShipment: $sendShipment, confirm: $confirm)
             );
         }
 
-        $object = $this->adapter->processSendShipmentResponse(response: $response);
+        $object = $this->responseProcessor->processSendShipmentResponse(response: $response);
         if ($object instanceof SendShipmentResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -152,20 +155,23 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     }
 
     /**
-     * @param PostNLApiMode $mode
-     *
      * @since 2.0.0
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        if (!isset($this->adapter)) {
-            $this->adapter = new ShippingServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            );
-        }
+        $this->requestBuilder = new ShippingServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+            version: $this->getVersion(),
+        );
+        $this->responseProcessor = new ShippingServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+            version: $this->getVersion(),
+        );
     }
 }

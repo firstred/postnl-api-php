@@ -39,10 +39,13 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\LabellingServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\LabellingServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\LabellingServiceSoapAdapter;
+use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\LabellingServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\LabellingServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\LabellingServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\LabellingServiceSoapResponseProcessor;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -59,9 +62,14 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    // SOAP API specific
+    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
+    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
 
-    protected LabellingServiceAdapterInterface $adapter;
+    use ResponseProcessorSettersTrait;
+
+    protected LabellingServiceRequestBuilderInterface $requestBuilder;
+    protected LabellingServiceResponseProcessorInterface $responseProcessor;
 
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
 
@@ -126,11 +134,11 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(
-                request: $this->adapter->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
+                request: $this->responseProcessor->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
             );
         }
 
-        $object = $this->adapter->processGenerateLabelResponse(response: $response);
+        $object = $this->responseProcessor->processGenerateLabelResponse(response: $response);
         if ($object instanceof GenerateLabelResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -184,7 +192,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
             $httpClient->addOrUpdateRequest(
                 id: $uuid,
-                request: $this->adapter->buildGenerateLabelRequest(generateLabel: $generateLabel[0], confirm: $generateLabel[1])
+                request: $this->requestBuilder->buildGenerateLabelRequest(generateLabel: $generateLabel[0], confirm: $generateLabel[1])
             );
         }
         $newResponses = $httpClient->doRequests();
@@ -205,7 +213,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
         $labels = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $generateLabelResponse = $this->adapter->processGenerateLabelResponse(response: $response);
+            $generateLabelResponse = $this->responseProcessor->processGenerateLabelResponse(response: $response);
             $labels[$uuid] = $generateLabelResponse;
         }
 
@@ -217,20 +225,36 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        $this->adapter = $mode == PostNLApiMode::Rest
-            ? new LabellingServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            )
-            : new LabellingServiceSoapAdapter(
+        if (PostNLApiMode::Rest === $mode) {
+            $this->requestBuilder = new LabellingServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
                 version: $this->getVersion(),
             );
+            $this->responseProcessor = new LabellingServiceRestResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        } else {
+            $this->requestBuilder = new LabellingServiceSoapRequestBuilder(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+            $this->responseProcessor = new LabellingServiceSoapResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        }
     }
 }

@@ -36,7 +36,6 @@ use Firstred\PostNL\Exception\ResponseException;
 
 /**
  * @since 1.2.0
- * @internal
  */
 interface BarcodeServiceInterface extends ServiceInterface
 {

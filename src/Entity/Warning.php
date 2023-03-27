@@ -31,7 +31,6 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
 

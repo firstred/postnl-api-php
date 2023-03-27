@@ -100,7 +100,7 @@ class PostNLRestTest extends TestCase
     #[TestDox(text: 'returns a valid customer')]
     public function testCustomer(): void
     {
-        $this->assertInstanceOf(expected: '\\Firstred\\PostNL\\Entity\\Customer', actual: $this->postnl->getCustomer());
+        $this->assertInstanceOf(expected: Customer::class, actual: $this->postnl->getCustomer());
     }
 
     /** @throws */

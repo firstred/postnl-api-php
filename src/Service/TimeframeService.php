@@ -38,10 +38,13 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\Rest\TimeframeServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\TimeframeServiceSoapAdapter;
-use Firstred\PostNL\Service\Adapter\TimeframeServiceAdapterInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\TimeframeServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\TimeframeServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\TimeframeServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\TimeframeServiceSoapResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -58,9 +61,14 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    // SOAP API specific
+    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
+    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
-    protected TimeframeServiceAdapterInterface $adapter;
+    use ResponseProcessorSettersTrait;
+
+    protected TimeframeServiceRequestBuilderInterface $requestBuilder;
+    protected TimeframeServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -120,14 +128,14 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetTimeframesRequest(getTimeframes: $getTimeframes));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes));
         }
 
-        $object = $this->adapter->processGetTimeframesResponse(response: $response);
+        $object = $this->responseProcessor->processGetTimeframesResponse(response: $response);
         if ($object instanceof ResponseTimeframes) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -148,20 +156,36 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        $this->adapter = $mode == PostNLApiMode::Rest
-            ? new TimeframeServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            )
-            : new TimeframeServiceSoapAdapter(
+        if (PostNLApiMode::Rest === $mode) {
+            $this->requestBuilder = new TimeframeServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
                 version: $this->getVersion(),
             );
+            $this->responseProcessor = new TimeframeServiceRestResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        } else {
+            $this->requestBuilder = new TimeframeServiceSoapRequestBuilder(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+            $this->responseProcessor = new TimeframeServiceSoapResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        }
     }
 }

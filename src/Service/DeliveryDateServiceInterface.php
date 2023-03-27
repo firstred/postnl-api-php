@@ -41,8 +41,7 @@ use Firstred\PostNL\Exception\ResponseException;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 
 /**
- * @since 2.0.0
- * @internal
+ * @since 1.0.0
  */
 interface DeliveryDateServiceInterface extends ServiceInterface
 {

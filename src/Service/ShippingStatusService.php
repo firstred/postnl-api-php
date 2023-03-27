@@ -45,9 +45,10 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\Rest\ShippingStatusServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\ShippingStatusServiceAdapterInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\ShippingStatusServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -64,9 +65,10 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    use ResponseProcessorSettersTrait;
 
-    protected ShippingStatusServiceAdapterInterface $adapter;
+    protected ShippingStatusServiceRestRequestBuilder $requestBuilder;
+    protected ShippingStatusServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -142,10 +144,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildCurrentStatusRequest(currentStatus: $currentStatus));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildCurrentStatusRequest(currentStatus: $currentStatus));
         }
 
-        $object = $this->adapter->processCurrentStatusResponse(response: $response);
+        $object = $this->responseProcessor->processCurrentStatusResponse(response: $response);
         if ($object instanceof CurrentStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -192,7 +194,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
             $httpClient->addOrUpdateRequest(
                 id: $index,
-                request: $this->adapter->buildCurrentStatusRequest(currentStatus: $currentStatus)
+                request: $this->requestBuilder->buildCurrentStatusRequest(currentStatus: $currentStatus)
             );
         }
 
@@ -214,7 +216,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $currentStatusResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $currentStatusResponses[$uuid] = $this->adapter->processCurrentStatusResponse(response: $response);
+            $currentStatusResponses[$uuid] = $this->responseProcessor->processCurrentStatusResponse(response: $response);
         }
 
         return $currentStatusResponses;
@@ -253,10 +255,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildCompleteStatusRequest(completeStatus: $completeStatus));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildCompleteStatusRequest(completeStatus: $completeStatus));
         }
 
-        $object = $this->adapter->processCompleteStatusResponse(response: $response);
+        $object = $this->responseProcessor->processCompleteStatusResponse(response: $response);
         if ($object instanceof CompleteStatusResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -303,7 +305,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
             $httpClient->addOrUpdateRequest(
                 id: $index,
-                request: $this->adapter->buildCompleteStatusRequest(completeStatus: $completeStatus)
+                request: $this->requestBuilder->buildCompleteStatusRequest(completeStatus: $completeStatus)
             );
         }
 
@@ -325,7 +327,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $completeStatusResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $completeStatusResponses[$uuid] = $this->adapter->processCompleteStatusResponse(response: $response);
+            $completeStatusResponses[$uuid] = $this->responseProcessor->processCompleteStatusResponse(response: $response);
         }
 
         return $completeStatusResponses;
@@ -355,10 +357,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetSignatureRequest(getSignature: $getSignature));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetSignatureRequest(getSignature: $getSignature));
         }
 
-        $object = $this->adapter->processGetSignatureResponse(response: $response);
+        $object = $this->responseProcessor->processGetSignatureResponse(response: $response);
         if ($object instanceof GetSignatureResponseSignature) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -405,7 +407,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
             $httpClient->addOrUpdateRequest(
                 id: $index,
-                request: $this->adapter->buildGetSignatureRequest(getSignature: $getsignature)
+                request: $this->requestBuilder->buildGetSignatureRequest(getSignature: $getsignature)
             );
         }
 
@@ -427,7 +429,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $signatureResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
-            $signatureResponses[$uuid] = $this->adapter->processGetSignatureResponse(response: $response);
+            $signatureResponses[$uuid] = $this->responseProcessor->processGetSignatureResponse(response: $response);
         }
 
         return $signatureResponses;
@@ -438,14 +440,19 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        if (!isset($this->adapter)) {
-            $this->adapter = new ShippingStatusServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            );
-        }
+        $this->requestBuilder = new ShippingStatusServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+            version: $this->getVersion(),
+        );
+        $this->responseProcessor = new ShippingStatusServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+            version: $this->getVersion(),
+        );
     }
 }

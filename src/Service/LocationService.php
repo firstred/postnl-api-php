@@ -41,10 +41,13 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\Service\Adapter\LocationServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\LocationServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\ServiceAdapterSettersTrait;
-use Firstred\PostNL\Service\Adapter\Soap\LocationServiceSoapAdapter;
+use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\LocationServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Soap\LocationServiceSoapRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\LocationServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\LocationServiceSoapResponseProcessor;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -61,9 +64,14 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class LocationService extends AbstractService implements LocationServiceInterface
 {
-    use ServiceAdapterSettersTrait;
+    // SOAP API specific
+    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
+    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
 
-    protected LocationServiceAdapterInterface $adapter;
+    use ResponseProcessorSettersTrait;
+
+    protected LocationServiceRequestBuilderInterface $requestBuilder;
+    protected LocationServiceResponseProcessorInterface $responseProcessor;
 
     /**
      * @param HiddenString                            $apiKey
@@ -124,10 +132,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations));
         }
 
-        $object = $this->adapter->processGetNearestLocationsResponse(response: $response);
+        $object = $this->responseProcessor->processGetNearestLocationsResponse(response: $response);
         if ($object instanceof GetNearestLocationsResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -167,10 +175,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetLocationsInAreaRequest(getLocations: $getLocations));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetLocationsInAreaRequest(getLocations: $getLocations));
         }
 
-        $object = $this->adapter->processGetLocationsInAreaResponse(response: $response);
+        $object = $this->responseProcessor->processGetLocationsInAreaResponse(response: $response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -210,10 +218,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             }
         }
         if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(request: $this->adapter->buildGetLocationRequest(getLocation: $getLocation));
+            $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetLocationRequest(getLocation: $getLocation));
         }
 
-        $object = $this->adapter->processGetLocationResponse(response: $response);
+        $object = $this->responseProcessor->processGetLocationResponse(response: $response);
         if ($object instanceof GetLocationsInAreaResponse) {
             if ($item instanceof CacheItemInterface
                 && $response instanceof ResponseInterface
@@ -234,20 +242,36 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      */
     public function setAPIMode(PostNLApiMode $mode): void
     {
-        $this->adapter = $mode == PostNLApiMode::Rest
-            ? new LocationServiceRestAdapter(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
-            )
-            : new LocationServiceSoapAdapter(
+        if (PostNLApiMode::Rest === $mode) {
+            $this->requestBuilder = new LocationServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
                 version: $this->getVersion(),
             );
+            $this->responseProcessor = new LocationServiceRestResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        } else {
+            $this->requestBuilder = new LocationServiceSoapRequestBuilder(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+            $this->responseProcessor = new LocationServiceSoapResponseProcessor(
+                apiKey: $this->getApiKey(),
+                sandbox: $this->isSandbox(),
+                requestFactory: $this->getRequestFactory(),
+                streamFactory: $this->getStreamFactory(),
+                version: $this->getVersion(),
+            );
+        }
     }
 }

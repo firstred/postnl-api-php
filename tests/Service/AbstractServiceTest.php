@@ -27,26 +27,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\Service\AbstractService;
-use Firstred\PostNL\Service\Adapter\AbstractApiAdapter;
-use Firstred\PostNL\Service\Adapter\BarcodeServiceAdapterInterface;
-use Firstred\PostNL\Service\Adapter\Rest\BarcodeServiceRestAdapter;
-use Firstred\PostNL\Service\Adapter\Soap\BarcodeServiceSoapAdapter;
+use Firstred\PostNL\Service\ResponseProcessor\AbstractResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\BarcodeServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Soap\BarcodeServiceSoapResponseProcessor;
 use Firstred\PostNL\Service\BarcodeService;
 use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
-use Http\Discovery\Psr18ClientDiscovery;
-use Http\Message\StreamFactory;
 use ParagonIE\HiddenString\HiddenString;
 use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\MockObject\Exception;
-use Psr\Http\Message\StreamFactoryInterface;
 
 #[TestDox(text: 'The `AbstractService` class')]
 class AbstractServiceTest extends ServiceTestCase
@@ -57,7 +48,7 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $response = new Response(status: 200, headers: [], body: 'test');
 
-        $result = AbstractApiAdapter::getResponseText(response: ['value' => $response]);
+        $result = AbstractResponseProcessor::getResponseText(response: ['value' => $response]);
 
         $this->assertEquals(expected: 'test', actual: $result);
     }
@@ -68,7 +59,7 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $response = new HttpClientException(message: '', code: 0, previous: null, response: new Response(status: 500, headers: [], body: 'test'));
 
-        $this->assertEquals(expected: 'test', actual: AbstractApiAdapter::getResponseText(response: ['value' => $response]));
+        $this->assertEquals(expected: 'test', actual: AbstractResponseProcessor::getResponseText(response: ['value' => $response]));
     }
 
     /** @throws */
@@ -83,7 +74,7 @@ class AbstractServiceTest extends ServiceTestCase
 
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = $this->createMock(originalClassName: BarcodeServiceRestAdapter::class);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
         $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
         $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
         $adapterReflection = new \ReflectionObject(object: $adapter);
@@ -111,7 +102,7 @@ class AbstractServiceTest extends ServiceTestCase
 
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = $this->createMock(originalClassName: BarcodeServiceRestAdapter::class);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
         $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
         $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
         $adapterReflection = new \ReflectionObject(object: $adapter);
@@ -147,7 +138,7 @@ XML
 
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = new BarcodeServiceSoapAdapter(
+        $adapter = new BarcodeServiceSoapResponseProcessor(
             apiKey: new HiddenString(value: 'test'),
             sandbox: true,
             requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
@@ -160,6 +151,7 @@ XML
         $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
         $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response]);
     }
+
     /** @throws */
     #[TestDox(text: 'can detect and throw a CifException (SOAP)')]
     public function testCifExceptionSoap(): void
@@ -180,11 +172,10 @@ XML
     </common:Errors>
   </common:CifException>
 </Envelope>
-XML
-        ;
+XML;
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapAdapter::class);
+        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapResponseProcessor::class);
         $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
         $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
         $adapterReflection = new \ReflectionObject(object: $adapter);

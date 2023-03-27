@@ -38,7 +38,6 @@ use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
-use Firstred\PostNL\Service\Rest\BarcodeServiceMessageProcessor;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -93,7 +92,7 @@ class BarcodeServiceRestTest extends ServiceTestCase
     #[TestDox(text: 'returns a valid service objects')]
     public function testHasValidBarcodeService(): void
     {
-        $this->assertInstanceOf(expected: BarcodeServiceMessageProcessor::class, actual: $this->service);
+        $this->assertInstanceOf(expected: BarcodeServiceInterface::class, actual: $this->service);
     }
 
     /** @throws */

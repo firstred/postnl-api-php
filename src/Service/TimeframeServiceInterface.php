@@ -40,7 +40,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 
 /**
  * @since 1.2.0
- * @internal
  */
 interface TimeframeServiceInterface extends ServiceInterface
 {

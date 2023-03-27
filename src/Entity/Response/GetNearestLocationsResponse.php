@@ -32,7 +32,6 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
 use function is_array;

@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Tests\Misc;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
@@ -70,7 +71,7 @@ class PostNLTest extends TestCase
     #[TestDox(text: 'cannot generate an international barcode without a GlobalPack range')]
     public function testGlobalPackWithoutRange(): void
     {
-        $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(exception: InvalidConfigurationException::class);
 
         $this->postnl->getCustomer()->setGlobalPackCustomerCode(GlobalPackCustomerCode: null);
 
@@ -81,7 +82,7 @@ class PostNLTest extends TestCase
     #[TestDox(text: 'cannot generate an international barcode without a GlobalPack type')]
     public function testGlobalPackWithoutType(): void
     {
-        $this->expectException(exception: '\\Firstred\\PostNL\\Exception\\InvalidConfigurationException');
+        $this->expectException(exception: InvalidConfigurationException::class);
 
         $this->postnl->getCustomer()->setGlobalPackBarcodeType(GlobalPackBarcodeType: null);
 
