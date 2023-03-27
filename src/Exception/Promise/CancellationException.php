@@ -53,6 +53,7 @@ namespace Firstred\PostNL\Exception\Promise;
  * Exception that is set as the reason for a promise that has been cancelled.
  *
  * @since 1.0.0
+ * @internal
  */
 class CancellationException extends RejectionException
 {

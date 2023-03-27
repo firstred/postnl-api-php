@@ -56,6 +56,7 @@ use const E_USER_DEPRECATED;
  * Class GuzzleClient.
  *
  * @since 1.0.0
+ * @internal
  */
 class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {

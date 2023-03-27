@@ -58,6 +58,7 @@ use RuntimeException;
  * The reason value is available via the getReason() method.
  *
  * @since 1.0.0
+ * @internal
  */
 class RejectionException extends RuntimeException
 {

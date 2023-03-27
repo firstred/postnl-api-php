@@ -34,6 +34,7 @@ use Stringable;
 
 /**
  * Class DummyLogger.
+ * @internal
  */
 class DummyLogger implements LoggerInterface
 {

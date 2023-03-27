@@ -56,6 +56,7 @@ use const E_USER_DEPRECATED;
  * Class HTTPlugClient.
  *
  * @since 1.2.0
+ * @internal
  */
 class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
 {

@@ -60,6 +60,7 @@ if (!defined(constant_name: 'CURLE_SSL_CACERT_BADFILE')) {
  * Class CurlClient.
  *
  * @since 1.0.0
+ * @internal
  */
 class CurlHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {

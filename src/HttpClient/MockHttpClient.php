@@ -48,6 +48,7 @@ use const E_USER_DEPRECATED;
  * Class MockClient.
  *
  * @since 1.0.0
+ * @internal
  */
 class MockHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {

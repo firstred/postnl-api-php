@@ -53,6 +53,7 @@ namespace Firstred\PostNL\Exception\Promise;
  * Exception thrown when too many errors occur in the some() or any() methods.
  *
  * @since 1.0.0
+ * @internal
  */
 class AggregateException extends RejectionException
 {
