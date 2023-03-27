@@ -66,7 +66,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class BarcodeServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements BarcodeServiceResponseProcessorInterface
@@ -107,7 +107,7 @@ class BarcodeServiceSoapResponseProcessor extends AbstractSoapResponseProcessor 
      * @throws HttpClientException
      * @throws ResponseException
      *
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGenerateBarcodeResponse(ResponseInterface $response): string
     {

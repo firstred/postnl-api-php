@@ -43,7 +43,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
@@ -88,7 +88,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      *
      * @param SimpleXMLElement $element
      *
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function registerNamespaces(SimpleXMLElement $element): void
     {
@@ -103,7 +103,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      * This lets the object know for which service it should serialize
      *
      * @throws InvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function setService(AbstractEntity $object): void
     {
@@ -126,7 +126,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function validateResponse(ResponseInterface $response): bool
     {

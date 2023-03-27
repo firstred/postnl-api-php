@@ -50,7 +50,7 @@ use function in_array;
 use function str_replace;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LabellingServiceRequestBuilderInterface
@@ -102,7 +102,7 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @return RequestInterface
      *
      * @throws PostNLInvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
     {
@@ -155,7 +155,7 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
     {

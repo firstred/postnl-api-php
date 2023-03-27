@@ -48,10 +48,15 @@ use ReflectionClass;
 abstract class AbstractService
 {
     // SOAP API specific
+    /** @deprecated 2.0.0 */
     public const XML_SCHEMA_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
+    /** @deprecated 2.0.0 */
     public const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
+    /** @deprecated 2.0.0 */
     public const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
+    /** @deprecated 2.0.0 */
     public const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
+    /** @deprecated 2.0.0 */
     public const ARRAY_SERIALIZATION_NAMESPACE = 'http://schemas.microsoft.com/2003/10/Serialization/Arrays';
 
     /**

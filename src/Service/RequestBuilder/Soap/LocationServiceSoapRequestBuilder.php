@@ -50,7 +50,7 @@ use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LocationServiceRequestBuilderInterface
@@ -95,7 +95,7 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * Build the GenerateLabel request for the SOAP API.
      *
      * @throws PostNLInvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
     {
@@ -139,7 +139,7 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * Build the GetLocationsInArea request for the SOAP API.
      *
      * @throws PostNLInvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface
     {
@@ -183,7 +183,7 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * Build the GetLocation request for the SOAP API.
      *
      * @throws PostNLInvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetLocationRequest(GetLocation $getLocations): RequestInterface
     {
@@ -229,7 +229,7 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function setService(AbstractEntity $entity): void
     {

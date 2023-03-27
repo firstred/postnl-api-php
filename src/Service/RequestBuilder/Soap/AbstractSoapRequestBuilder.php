@@ -39,7 +39,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder

@@ -37,6 +37,7 @@ use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
+ * @deprecated 2.0.0
  */
 class UsernameToken extends AbstractEntity
 {

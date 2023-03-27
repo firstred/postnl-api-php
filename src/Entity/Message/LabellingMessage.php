@@ -34,6 +34,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @since 1.0.0
+ * @deprecated 2.0.0
  */
 class LabellingMessage extends Message
 {

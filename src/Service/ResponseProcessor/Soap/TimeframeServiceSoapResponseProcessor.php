@@ -46,7 +46,7 @@ use Sabre\Xml\Reader;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class TimeframeServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements TimeframeServiceResponseProcessorInterface
@@ -92,7 +92,7 @@ class TimeframeServiceSoapResponseProcessor extends AbstractSoapResponseProcesso
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetTimeframesResponse(mixed $response): ResponseTimeframes
     {

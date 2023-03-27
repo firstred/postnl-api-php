@@ -56,7 +56,9 @@ use Psr\Http\Message\StreamFactoryInterface;
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
     // SOAP API specific
+    /** @deprecated */
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
+    /** @deprecated */
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
 
     use ResponseProcessorSettersTrait;

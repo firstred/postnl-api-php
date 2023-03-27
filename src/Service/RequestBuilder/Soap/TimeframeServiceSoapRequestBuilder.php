@@ -48,7 +48,7 @@ use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements TimeframeServiceRequestBuilderInterface
@@ -96,7 +96,7 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @return RequestInterface
      *
      * @throws PostNLInvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface
     {
@@ -142,7 +142,7 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
     {

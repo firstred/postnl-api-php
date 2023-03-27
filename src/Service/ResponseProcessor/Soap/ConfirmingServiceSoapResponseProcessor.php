@@ -47,7 +47,7 @@ use Sabre\Xml\Reader;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements ConfirmingServiceResponseProcessorInterface
@@ -92,7 +92,7 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
      * @throws ResponseException
      * @throws EntityNotFoundException
      * @throws InvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): array
     {

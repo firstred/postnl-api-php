@@ -48,7 +48,7 @@ use Sabre\Xml\Reader;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements DeliveryDateServiceResponseProcessorInterface
@@ -92,7 +92,7 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws ResponseException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
     {
@@ -130,7 +130,7 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @throws InvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
     {

@@ -48,7 +48,7 @@ use Sabre\Xml\Reader;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements LocationServiceResponseProcessorInterface
@@ -94,7 +94,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws LibXMLException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetNearestLocationsResponse(mixed $response): GetNearestLocationsResponse
     {
@@ -143,7 +143,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws LibXMLException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {
@@ -195,7 +195,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse
     {

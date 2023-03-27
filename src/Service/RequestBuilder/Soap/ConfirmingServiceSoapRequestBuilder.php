@@ -46,7 +46,7 @@ use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements ConfirmingServiceRequestBuilderInterface
@@ -87,7 +87,7 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
     }
 
     /**
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildConfirmRequest(Confirming $confirming): RequestInterface
     {
@@ -133,7 +133,7 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
     {

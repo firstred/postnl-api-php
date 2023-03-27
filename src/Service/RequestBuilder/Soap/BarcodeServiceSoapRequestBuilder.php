@@ -71,7 +71,7 @@ use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements BarcodeServiceRequestBuilderInterface
@@ -120,7 +120,7 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
     {
@@ -168,7 +168,7 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
     {

@@ -33,10 +33,12 @@ use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
+ * @deprecated 2.0.0
  */
 class Security extends AbstractEntity
 {
-    const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
+    /** @deprecated 2.0.0 */
+    public const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
     /** @var UsernameToken $UsernameToken */
     #[SerializableProperty(namespace: SoapNamespace::Security)]

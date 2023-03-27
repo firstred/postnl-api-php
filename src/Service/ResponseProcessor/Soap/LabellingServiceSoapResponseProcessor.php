@@ -46,7 +46,7 @@ use Sabre\Xml\Reader;
 use SimpleXMLElement;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class LabellingServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements LabellingServiceResponseProcessorInterface
@@ -90,7 +90,7 @@ class LabellingServiceSoapResponseProcessor extends AbstractSoapResponseProcesso
      * @throws EntityNotFoundException
      * @throws CifDownException
      * @throws CifException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
     {

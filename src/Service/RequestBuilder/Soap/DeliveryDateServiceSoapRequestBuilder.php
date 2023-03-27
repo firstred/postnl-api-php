@@ -49,7 +49,7 @@ use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
- * @since 2.0.0
+ * @deprecated 2.0.0
  * @internal
  */
 class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements DeliveryDateServiceRequestBuilderInterface
@@ -98,7 +98,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface
     {
@@ -144,7 +144,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
      * Build the GetSentDate request for the SOAP API.
      *
      * @throws InvalidArgumentException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     public function buildGetSentDateRequest(GetSentDateRequest $getSentDate): RequestInterface
     {
@@ -192,7 +192,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
      * @return void
      * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @since 2.0.0
+     * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
     {
