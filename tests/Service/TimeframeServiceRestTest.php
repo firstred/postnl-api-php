@@ -38,6 +38,7 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\Rest\TimeframeServiceRestRequestBuilder;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -45,10 +46,10 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionObject;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -81,7 +82,6 @@ class TimeframeServiceRestTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -98,7 +98,7 @@ class TimeframeServiceRestTest extends ServiceTestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetTimeframesRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetTimeframesRequest(
             getTimeframes: (new GetTimeframes())
                 ->setMessage(Message: $message)
                 ->setTimeframe(timeframes: [
@@ -149,19 +149,20 @@ class TimeframeServiceRestTest extends ServiceTestCase
 
         $responseTimeframes = $this->postnl->getTimeframes(
             getTimeframes: (new GetTimeframes())
-                ->setTimeframe(timeframes: [(new Timeframe())
-                    ->setCity(City: 'Hoofddorp')
-                    ->setCountryCode(CountryCode: 'NL')
-                    ->setEndDate(EndDate: '02-07-2016')
-                    ->setHouseNr(HouseNr: '42')
-                    ->setHouseNrExt(HouseNrExt: 'A')
-                    ->setOptions(Options: [
-                        'Evening',
-                    ])
-                    ->setPostalCode(PostalCode: '2132WT')
-                    ->setStartDate(StartDate: '30-06-2016')
-                    ->setStreet(Street: 'Siriusdreef')
-                    ->setSundaySorting(SundaySorting: false),
+                ->setTimeframe(timeframes: [
+                    (new Timeframe())
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setEndDate(EndDate: '02-07-2016')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
+                            'Evening',
+                        ])
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setStartDate(StartDate: '30-06-2016')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setSundaySorting(SundaySorting: false),
                 ])
         );
 
@@ -185,5 +186,18 @@ class TimeframeServiceRestTest extends ServiceTestCase
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes2.http'))],
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes3.http'))],
         ];
+    }
+
+    /** @throws */
+    private function getRequestBuilder(): TimeframeServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var TimeframeServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

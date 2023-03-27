@@ -77,7 +77,7 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP,
         );
 
         global $logger;
@@ -101,7 +101,7 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmRequestSoap(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildConfirmRequest(
             confirming: Confirming::create()
                 ->setShipments(Shipments: [
                     Shipment::create()
@@ -317,60 +317,60 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 
         $confirmShipments = $this->postnl->confirmShipments(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611211')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ]
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611211')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ]
         );
 
         $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirmShipments[1]);

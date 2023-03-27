@@ -38,8 +38,8 @@ use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
-use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
@@ -50,6 +50,7 @@ use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -60,6 +61,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionObject;
 use function file_get_contents;
 use function is_array;
 use const _RESPONSES_DIR_;
@@ -95,7 +97,6 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -113,7 +114,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildCurrentStatusRequest(
             currentStatus: (new CurrentStatus())
                 ->setShipment(
                     Shipment: (new Shipment())
@@ -141,28 +142,21 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $currentStatusResponse = $this->postnl->getCurrentStatus(
-            currentStatus: (new CurrentStatus())
-                ->setShipment(
-                    Shipment: (new Shipment())
-                        ->setBarcode(Barcode: '3S8392302392342')
-                )
-        );
+        $currentStatusResponseShipment = $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
 
-        $this->assertInstanceOf(expected: CurrentStatusResponse::class, actual: $currentStatusResponse);
-        $this->assertInstanceOf(expected: CurrentStatusResponseShipment::class, actual: $currentStatusResponse->getShipments()[0]);
+        $this->assertInstanceOf(expected: CurrentStatusResponseShipment::class, actual: $currentStatusResponseShipment);
 
-        $this->assertInstanceOf(expected: Dimension::class, actual: $currentStatusResponse->getShipments()[0]->getDimension());
-        $this->assertInstanceOf(expected: StatusAddress::class, actual: $currentStatusResponse->getShipments()[0]->getAddresses()[0]);
+        $this->assertInstanceOf(expected: Dimension::class, actual: $currentStatusResponseShipment->getDimension());
+        $this->assertInstanceOf(expected: StatusAddress::class, actual: $currentStatusResponseShipment->getAddresses()[0]);
 
-        $this->assertIsString(actual: $currentStatusResponse->getShipments()[0]->getMainBarcode());
-        $this->assertIsString(actual: $currentStatusResponse->getShipments()[0]->getBarcode());
-        $this->assertIsString(actual: $currentStatusResponse->getShipments()[0]->getShipmentAmount());
-        $this->assertIsString(actual: $currentStatusResponse->getShipments()[0]->getShipmentCounter());
-        $this->assertIsString(actual: $currentStatusResponse->getShipments()[0]->getProductDescription());
+        $this->assertIsString(actual: $currentStatusResponseShipment->getMainBarcode());
+        $this->assertIsString(actual: $currentStatusResponseShipment->getBarcode());
+        $this->assertIsString(actual: $currentStatusResponseShipment->getShipmentAmount());
+        $this->assertIsString(actual: $currentStatusResponseShipment->getShipmentCounter());
+        $this->assertIsString(actual: $currentStatusResponseShipment->getProductDescription());
 
-        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $currentStatusResponse->getShipments()[0]->getStatus()->getTimeStamp());
-        $this->assertNotTrue(condition: static::containsStdClass(value: $currentStatusResponse));
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $currentStatusResponseShipment->getStatus()->getTimeStamp());
+        $this->assertNotTrue(condition: static::containsStdClass(value: $currentStatusResponseShipment));
     }
 
     /** @throws */
@@ -172,7 +166,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $reference = '339820938';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildCurrentStatusRequest(
             currentStatus: (new CurrentStatus())
                 ->setShipment(
                     Shipment: (new Shipment())
@@ -199,7 +193,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildCompleteStatusRequest(
             completeStatus: (new CompleteStatus())
                 ->setShipment(
                     Shipment: (new Shipment())
@@ -233,37 +227,31 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $completeStatusResponse = $this->postnl->getCompleteStatus(
-            completeStatus: (new CompleteStatus())
-                ->setShipment(
-                    Shipment: (new Shipment())
-                        ->setBarcode(Barcode: '3SABCD6659149')
-                )
-        );
+        $completeStatusResponse = $this->postnl->getShippingStatusByBarcode(barcode: '3SABCD6659149');
 
-        $this->assertInstanceOf(expected: CompleteStatusResponse::class, actual: $completeStatusResponse);
-        $this->assertInstanceOf(expected: StatusAddress::class, actual: $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
-        $this->assertNull(actual: $completeStatusResponse->getShipments()[0]->getAmounts());
-        if (is_array(value: $completeStatusResponse->getShipments()[0]->getProductOptions())) {
-            $this->assertInstanceOf(expected: ProductOption::class, actual: $completeStatusResponse->getShipments()[0]->getProductOptions()[0]);
+        $this->assertInstanceOf(expected: CompleteStatusResponseShipment::class, actual: $completeStatusResponse);
+        $this->assertInstanceOf(expected: StatusAddress::class, actual: $completeStatusResponse->getAddresses()[0]);
+        $this->assertNull(actual: $completeStatusResponse->getAmounts());
+        if (is_array(value: $completeStatusResponse->getProductOptions())) {
+            $this->assertInstanceOf(expected: ProductOption::class, actual: $completeStatusResponse->getProductOptions()[0]);
         } else {
-            $this->assertNull(actual: $completeStatusResponse->getShipments()[0]->getProductOptions());
+            $this->assertNull(actual: $completeStatusResponse->getProductOptions());
         }
-        $this->assertInstanceOf(expected: CompleteStatusResponseEvent::class, actual: $completeStatusResponse->getShipments()[0]->getEvents()[0]);
-        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getShipments()[0]->getEvents()[0]->getTimeStamp());
-        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getShipments()[0]->getExpectation()->getETAFrom());
-        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getShipments()[0]->getExpectation()->getETATo());
+        $this->assertInstanceOf(expected: CompleteStatusResponseEvent::class, actual: $completeStatusResponse->getEvents()[0]);
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getEvents()[0]->getTimeStamp());
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getExpectation()->getETAFrom());
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getExpectation()->getETATo());
         $this->assertEquals(expected: '01B', actual: $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
 
-        $this->assertIsString(actual: $completeStatusResponse->getShipments()[0]->getMainBarcode());
-        $this->assertIsString(actual: $completeStatusResponse->getShipments()[0]->getBarcode());
-        $this->assertIsString(actual: $completeStatusResponse->getShipments()[0]->getShipmentAmount());
-        $this->assertIsString(actual: $completeStatusResponse->getShipments()[0]->getShipmentCounter());
-        $this->assertIsString(actual: $completeStatusResponse->getShipments()[0]->getProductDescription());
+        $this->assertIsString(actual: $completeStatusResponse->getMainBarcode());
+        $this->assertIsString(actual: $completeStatusResponse->getBarcode());
+        $this->assertIsString(actual: $completeStatusResponse->getShipmentAmount());
+        $this->assertIsString(actual: $completeStatusResponse->getShipmentCounter());
+        $this->assertIsString(actual: $completeStatusResponse->getProductDescription());
 
-        $this->assertNull(actual: $completeStatusResponse->getShipments()[0]->getGroups());
-        $this->assertInstanceOf(expected: Customer::class, actual: $completeStatusResponse->getShipments()[0]->getCustomer());
-        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getShipments()[0]->getOldStatuses()[0]->getTimeStamp());
+        $this->assertNull(actual: $completeStatusResponse->getGroups());
+        $this->assertInstanceOf(expected: Customer::class, actual: $completeStatusResponse->getCustomer());
+        $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getOldStatuses()[0]->getTimeStamp());
         $this->assertNotTrue(condition: static::containsStdClass(value: $completeStatusResponse));
     }
 
@@ -274,7 +262,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $reference = '339820938';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCompleteStatusRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildCompleteStatusRequest(
             completeStatus: (new CompleteStatus())
                 ->setShipment(
                     Shipment: (new Shipment())
@@ -302,7 +290,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $barcode = '3S9283920398234';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSignatureRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetSignatureRequest(
             getSignature: (new GetSignature())
                 ->setCustomer(Customer: $this->postnl->getCustomer())
                 ->setMessage(Message: $message)
@@ -326,7 +314,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $dateTimeFrom = new DateTimeImmutable(datetime: '12-02-2021 14:00');
         $dateTimeTo = new DateTimeImmutable(datetime: '14-02-2021 16:00');
 
-        $this->lastRequest = $request = $this->service->buildGetUpdatedShipmentsRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetUpdatedShipmentsRequest(
             customer: $this->postnl->getCustomer(),
             dateTimeFrom: $dateTimeFrom,
             dateTimeTo: $dateTimeTo
@@ -339,8 +327,8 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     }
 
     /** @throws */
-    #[TestDox(text: 'can get the signature')]
-    public function testGetSignatureRest(): void
+    #[TestDox(text: 'can get the signature by barcode')]
+    public function testGetSignatureByBarcodeRest(): void
     {
         $mock = new MockHandler(queue: [
             PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/signature.http')),
@@ -350,12 +338,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $signatureResponse = $this->postnl->getSignature(
-            signature: (new GetSignature())
-                ->setShipment(Shipment: (new Shipment())
-                    ->setBarcode(Barcode: '3SABCD6659149')
-                )
-        );
+        $signatureResponse = $this->postnl->getSignatureByBarcode(barcode: '3SABCD6659149');
 
         $this->assertInstanceOf(expected: GetSignatureResponseSignature::class, actual: $signatureResponse);
         $this->assertEquals(expected: '2018-03-07 13:52:45', actual: $signatureResponse->getSignatureDate()->format(format: 'Y-m-d H:i:s'));
@@ -380,7 +363,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
 
         $updatedShipments = $this->postnl->getUpdatedShipments(
             dateTimeFrom: new DateTimeImmutable(datetime: '12-02-2021 14:00'),
-            dateTimeTo: new DateTimeImmutable(datetime: '12-02-2021 16:00')
+            dateTimeTo: new DateTimeImmutable(datetime: '12-02-2021 16:00'),
         );
 
         $this->assertInstanceOf(expected: UpdatedShipmentsResponse::class, actual: $updatedShipments[0]);
@@ -401,11 +384,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $currentStatus = $this->postnl->getCurrentStatus( currentStatus: (new CurrentStatus())
-            ->setShipment(
-                Shipment: (new Shipment())
-                    ->setBarcode(Barcode: '3S8392302392342')
-            ));
+        $currentStatus = $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
 
         $this->assertInstanceOf(expected: CurrentStatusResponse::class, actual: $currentStatus);
         $this->assertNull(actual: $currentStatus->getShipments());
@@ -457,5 +436,18 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/nocurrentshipments.http'))],
         ];
+    }
+
+    /** @throws */
+    private function getRequestBuilder(): ShippingStatusServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var ShippingStatusServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

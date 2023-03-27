@@ -28,20 +28,25 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder\Soap;
 
 use DateTimeImmutable;
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
@@ -98,8 +103,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespaceReference => $namespace) {
-            $xmlService->namespaceMap[$namespace] = $namespaceReference;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
@@ -142,8 +147,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     {
         $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespaceReference => $namespace) {
-            $xmlService->namespaceMap[$namespace] = $namespaceReference;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
@@ -186,8 +191,8 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     {
         $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespaceReference => $namespace) {
-            $xmlService->namespaceMap[$namespace] = $namespaceReference;
+        foreach ($this->namespaces as $namespacePrefix => $namespace) {
+            $xmlService->namespaceMap[$namespace] = $namespacePrefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
@@ -218,5 +223,23 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
             ->withHeader('Accept', value: 'text/xml')
             ->withHeader('Content-Type', value: 'text/xml;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: $request));
+    }
+
+    /**
+     * @param AbstractEntity $object
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    public function setService(AbstractEntity $object): void
+    {
+        $object->setCurrentService(
+            currentService: LocationServiceInterface::class,
+            namespaces: $this->namespaces,
+        );
+
+        parent::setService(object: $object);
     }
 }

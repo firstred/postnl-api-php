@@ -115,15 +115,14 @@ class UsernameToken extends AbstractEntity
     public function xmlSerialize(Writer $writer): void
     {
         $xml = [];
-        foreach (static::getSerializableProperties() as $propertyName => $namespaceReference) {
-            if (!isset($this->namespaces[$namespaceReference->value])) {
-                throw new InvalidArgumentException(message: "Namespace reference `$namespaceReference->value` not set");
+        foreach (static::getSerializableProperties() as $propertyName => $namespacePrefix) {
+            if (!isset($this->namespaces[$namespacePrefix->value])) {
+                throw new InvalidArgumentException(message: "Namespace prefix `$namespacePrefix->value` not set");
             }
-            $namespace = $this->namespaces[$namespaceReference->value];
+            $namespace = $this->namespaces[$namespacePrefix->value];
             if (isset($this->$propertyName)) {
-                // Lack of username means new API and no hash needed
                 if ('Password' === $propertyName) {
-                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = sha1(string: $this->$propertyName->getString());
+                    $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName->getString();
                 } else {
                     $xml[$namespace ? "{{$namespace}}{$propertyName}" : $propertyName] = $this->$propertyName;
                 }

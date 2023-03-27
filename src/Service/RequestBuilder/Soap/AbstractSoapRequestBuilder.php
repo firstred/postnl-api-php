@@ -103,8 +103,6 @@ abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder
      */
     public function setService(AbstractEntity $object): void
     {
-        $object->setNamespaces(namespaces: $this->namespaces);
-
         $serializableProperties = $object->getSerializableProperties();
         foreach (array_keys(array: $serializableProperties) as $propertyName) {
             $item = $object->{'get'.$propertyName}();

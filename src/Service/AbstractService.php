@@ -29,8 +29,8 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
-use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\PostNL;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -61,20 +61,24 @@ abstract class AbstractService
      * `int` is the TTL in seconds
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
+     *
+     * @var int|DateTimeInterface|DateInterval|null $ttl
      */
-    private int|null|DateTimeInterface|DateInterval $ttl;
+    private int|DateTimeInterface|DateInterval|null $ttl;
 
     /**
      * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface.
      *
      * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
      * `null` disables the cache
+     *
+     * @var CacheItemPoolInterface|null $cache
      */
     private ?CacheItemPoolInterface $cache;
 
     /**
      * @param HiddenString                            $apiKey
-     * @param PostNLApiMode                           $apiMode
+     * @param int                                     $apiMode
      * @param bool                                    $sandbox
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
@@ -85,12 +89,12 @@ abstract class AbstractService
      */
     public function __construct(
         private HiddenString               $apiKey,
-        private PostNLApiMode              $apiMode,
         private bool                       $sandbox,
         private HttpClientInterface        $httpClient,
         private RequestFactoryInterface    $requestFactory,
         private StreamFactoryInterface     $streamFactory,
         private string                     $version,
+        private int                        $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
@@ -102,14 +106,16 @@ abstract class AbstractService
     /**
      * Retrieve a cached item.
      *
-     * @throws PsrCacheInvalidArgumentException
+     * @param string $uuid
      *
+     * @return CacheItemInterface|null
+     * @throws PsrCacheInvalidArgumentException
      * @since 1.0.0
      */
     public function retrieveCachedItem(string $uuid): ?CacheItemInterface
     {
         $reflection = new ReflectionClass(objectOrClass: $this);
-        $uuid .= (PostNLApiMode::Rest == $this->getAPIMode()
+        $uuid .= (PostNL::MODE_REST == $this->getAPIMode()
             || $this instanceof ShippingServiceInterface
             || $this instanceof ShippingStatusServiceInterface
         ) ? 'rest' : 'soap';
@@ -124,6 +130,8 @@ abstract class AbstractService
 
     /**
      * Cache an item
+     *
+     * @param CacheItemInterface $item
      *
      * @since 1.0.0
      */
@@ -147,6 +155,8 @@ abstract class AbstractService
     /**
      * Delete an item from cache
      *
+     * @param CacheItemInterface $item
+     *
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.2.0
@@ -157,6 +167,8 @@ abstract class AbstractService
     }
 
     /**
+     * @return DateInterval|DateTimeInterface|int|null
+     *
      * @since 1.2.0
      */
     public function getTtl(): DateInterval|DateTimeInterface|int|null
@@ -165,9 +177,13 @@ abstract class AbstractService
     }
 
     /**
+     * @param DateInterval|DateTimeInterface|int|null $ttl
+     *
+     * @return static
+     *
      * @since 1.2.0
      */
-    public function setTtl(DateInterval|DateTimeInterface|int $ttl = null): static
+    public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static
     {
         $this->ttl = $ttl;
 
@@ -175,6 +191,8 @@ abstract class AbstractService
     }
 
     /**
+     * @return CacheItemPoolInterface|null
+     *
      * @since 1.2.0
      */
     public function getCache(): ?CacheItemPoolInterface
@@ -183,6 +201,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param CacheItemPoolInterface|null $cache
+     *
+     * @return static
      * @since 1.2.0
      */
     public function setCache(?CacheItemPoolInterface $cache = null): static
@@ -193,6 +214,8 @@ abstract class AbstractService
     }
 
     /**
+     * @return HiddenString
+     *
      * @since 2.0.0
      */
     public function getApiKey(): HiddenString
@@ -201,6 +224,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param HiddenString $apiKey
+     *
+     * @return static
      * @since 2.0.0
      */
     public function setApiKey(HiddenString $apiKey): static
@@ -211,22 +237,26 @@ abstract class AbstractService
     }
 
     /**
+     * @param int $mode
+     *
      * @since 2.0.0
      */
-    public function setAPIMode(PostNLApiMode $mode): void
+    public function setAPIMode(int $mode): void
     {
         $this->apiMode = $mode;
     }
 
     /**
+     * @return int
      * @since 2.0.0
      */
-    public function getAPIMode(): PostNLApiMode
+    public function getAPIMode(): int
     {
         return $this->apiMode;
     }
 
     /**
+     * @return bool
      * @since 2.0.0
      */
     public function isSandbox(): bool
@@ -235,6 +265,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param bool $sandbox
+     *
+     * @return static
      * @since 2.0.0
      */
     public function setSandbox(bool $sandbox): static
@@ -245,6 +278,7 @@ abstract class AbstractService
     }
 
     /**
+     * @return string
      * @since 2.0.0
      */
     public function getVersion(): string
@@ -253,6 +287,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param string $version
+     *
+     * @return static
      * @since 2.0.0
      */
     public function setVersion(string $version): static
@@ -283,6 +320,8 @@ abstract class AbstractService
     }
 
     /**
+     * @return RequestFactoryInterface
+     *
      * @since 2.0.0
      */
     public function getRequestFactory(): RequestFactoryInterface
@@ -291,6 +330,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return static
      * @since 2.0.0
      */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
@@ -301,6 +343,7 @@ abstract class AbstractService
     }
 
     /**
+     * @return StreamFactoryInterface
      * @since 2.0.0
      */
     public function getStreamFactory(): StreamFactoryInterface
@@ -309,6 +352,9 @@ abstract class AbstractService
     }
 
     /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
      * @since 2.0.0
      */
     public function setStreamFactory(StreamFactoryInterface $streamFactory): static

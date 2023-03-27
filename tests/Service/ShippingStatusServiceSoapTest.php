@@ -43,12 +43,13 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Query;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
@@ -85,7 +86,7 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP,
         );
 
         global $logger;
@@ -103,8 +104,12 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
         $barcode = '3SDEVC201611210';
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildCurrentStatusRequest(
-            (new CurrentStatus())
+        $reflectionService = new \ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $reflectionService->getProperty(name: 'requestBuilder');
+        /** @var ShippingStatusServiceRequestBuilderInterface $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+        $this->lastRequest = $request = $requestBuilder->buildCurrentStatusRequest(
+            currentStatus: (new CurrentStatus())
                 ->setShipment(
                     Shipment: (new Shipment())
                         ->setBarcode(Barcode: $barcode)
@@ -121,13 +126,12 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
     }
 
     /**
-     * @testdox
-     * @dataProvider
+     * @throws
      */
     #[TestDox(text: 'can get the current status')]
     #[DataProviderExternal(
         className: ShippingStatusServiceRestTest::class,
-        methodName: 'getCurrentStatusByBarcodeProvider()',
+        methodName: 'getCurrentStatusByBarcodeProvider',
     )]
     public function testGetCurrentStatusSoap(ResponseInterface $response): void
     {

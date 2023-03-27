@@ -105,7 +105,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      */
     public function setService(AbstractEntity $object): void
     {
-        $object->setNamespaces(namespaces: $this->namespaces);
+        $object->setCurrentService(namespaces: $this->namespaces);
 
         $serializableProperties = $object->getSerializableProperties();
         foreach (array_keys(array: $serializableProperties) as $propertyName) {

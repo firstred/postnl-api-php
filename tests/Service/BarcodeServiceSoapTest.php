@@ -37,12 +37,14 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 
 #[TestDox(text: 'The BarcodeService (SOAP)')]
 class BarcodeServiceSoapTest extends ServiceTestCase
@@ -73,7 +75,7 @@ class BarcodeServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP,
         );
 
         global $logger;
@@ -94,7 +96,7 @@ class BarcodeServiceSoapTest extends ServiceTestCase
 
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestSoap(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
             generateBarcode: GenerateBarcode::create()
                 ->setBarcode(
                     Barcode: Barcode::create()
@@ -106,7 +108,7 @@ class BarcodeServiceSoapTest extends ServiceTestCase
                 ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $this->assertEmpty(actual: $request->getHeaderLine('apikey'));
+        $this->assertEmpty(actual: $request->getHeaderLine('api-key'));
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
         $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
 <?xml version="1.0"?>
@@ -236,5 +238,20 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
   </s:Body>
 </s:Envelope>
 XML;
+    }
+
+    /**
+     * @throws
+     */
+    private function getRequestBuilder(): BarcodeServiceSoapRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var BarcodeServiceSoapRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

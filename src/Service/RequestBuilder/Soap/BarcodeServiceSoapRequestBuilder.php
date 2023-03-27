@@ -53,17 +53,21 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder\Soap;
 
 use DateTimeImmutable;
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
@@ -116,7 +120,7 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
     {
         $soapAction = static::SOAP_ACTION;
         $xmlService = new XmlService();
-        foreach ($this->namespaces as $namespace => $prefix) {
+        foreach ($this->namespaces as $prefix => $namespace) {
             $xmlService->namespaceMap[$namespace] = $prefix;
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
@@ -149,5 +153,23 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
             ->withHeader('Accept', value: 'text/xml')
             ->withHeader('Content-Type', value: 'text/xml;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: $request));
+    }
+
+    /**
+     * @param AbstractEntity $object
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    public function setService(AbstractEntity $object): void
+    {
+        $object->setCurrentService(
+            currentService: BarcodeServiceInterface::class,
+            namespaces: $this->namespaces,
+        );
+
+        parent::setService(object: $object);
     }
 }

@@ -30,10 +30,10 @@ namespace Firstred\PostNL\Tests\Service;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ResponseProcessor\AbstractResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\BarcodeServiceRestResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\Soap\BarcodeServiceSoapResponseProcessor;
-use Firstred\PostNL\Service\BarcodeService;
 use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Psr17FactoryDiscovery;
 use ParagonIE\HiddenString\HiddenString;
@@ -75,10 +75,10 @@ class AbstractServiceTest extends ServiceTestCase
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
         $adapter = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
-        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
-        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
-        $adapterReflection = new \ReflectionObject(object: $adapter);
-        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
+        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
+        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
+        $responseProcessorReflection = new \ReflectionObject(object: $adapter);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
         $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
     }
 
@@ -102,12 +102,12 @@ class AbstractServiceTest extends ServiceTestCase
 
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
-        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
-        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
-        $adapterReflection = new \ReflectionObject(object: $adapter);
-        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response->getBody()]);
+        $responseProcessor = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
+        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
+        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
+        $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [(string) $response->getBody()]);
     }
 
     /** @throws */
@@ -138,18 +138,18 @@ XML
 
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = new BarcodeServiceSoapResponseProcessor(
+        $responseProcessor = new BarcodeServiceSoapResponseProcessor(
             apiKey: new HiddenString(value: 'test'),
             sandbox: true,
             requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
             streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
             version: '1',
         );
-        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
-        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
-        $adapterReflection = new \ReflectionObject(object: $adapter);
-        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $adapter, args: [(string) $response]);
+        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
+        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
+        $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [(string) $response]);
     }
 
     /** @throws */
@@ -175,11 +175,11 @@ XML
 XML;
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $adapter = $this->createMock(originalClassName: BarcodeServiceSoapResponseProcessor::class);
-        $adapterReflection = $barcodeServiceReflection->getProperty(name: 'adapter');
-        $adapterReflection->setValue(objectOrValue: $barcodeService, value: $adapter);
-        $adapterReflection = new \ReflectionObject(object: $adapter);
-        $validateResponseMethod = $adapterReflection->getMethod(name: 'validateResponseContent');
-        $validateResponseMethod->invokeArgs(object: $adapter, args: [$response]);
+        $responseProcessor = $this->createMock(originalClassName: BarcodeServiceSoapResponseProcessor::class);
+        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
+        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
+        $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
+        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponseContent');
+        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
     }
 }

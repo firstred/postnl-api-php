@@ -34,13 +34,13 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
-use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\LocationServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\LocationServiceSoapRequestBuilder;
@@ -75,34 +75,34 @@ class LocationService extends AbstractService implements LocationServiceInterfac
 
     /**
      * @param HiddenString                            $apiKey
-     * @param PostNLApiMode                           $apiMode
      * @param bool                                    $sandbox
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
      * @param string                                  $version
+     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
         HiddenString                       $apiKey,
-        PostNLApiMode                      $apiMode,
         bool                               $sandbox,
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
         string                             $version = LocationServiceInterface::DEFAULT_VERSION,
+        int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
-            apiMode: $apiMode,
             sandbox: $sandbox,
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
             version: $version,
+            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
         );
@@ -240,9 +240,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     /**
      * @since 2.0.0
      */
-    public function setAPIMode(PostNLApiMode $mode): void
+    public function setAPIMode(int $mode): void
     {
-        if (PostNLApiMode::Rest === $mode) {
+        if (PostNL::MODE_REST === $mode) {
             $this->requestBuilder = new LocationServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),

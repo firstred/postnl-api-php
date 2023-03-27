@@ -64,7 +64,6 @@ use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
-use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -91,6 +90,12 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -120,6 +125,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use ReflectionObject;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -132,12 +138,8 @@ use function class_exists;
 use function constant;
 use function count;
 use function defined;
-use function ini_get;
 use function interface_exists;
 use function is_array;
-use function php_sapi_name;
-use function trigger_error;
-use const E_USER_WARNING;
 
 /**
  * Class PostNL.
@@ -149,31 +151,28 @@ class PostNL implements LoggerAwareInterface
     /**
      * REST API
      *
-     * @deprecated See `PostNLApiMode::Rest`
+     * @deprecated 2.0.0
      */
     #[Deprecated(
-        reason: 'since version 2.0.0, use the PostNLApiMode::Rest enum instead',
-        replacement: PostNLApiMode::class.'::Rest',
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
     const MODE_REST = 1;
     /**
      * SOAP API
      *
-     * @deprecated See `PostNLApiMode::Soap`
+     * @deprecated 2.0.0
      */
     #[Deprecated(
-        reason: 'from version 3.0.0 support for the SOAP API will be removed, use the PostNLApiMode::Rest enum instead',
-        replacement: PostNLApiMode::class.'::Rest',
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
     const MODE_SOAP = 2;
     /**
      * Legacy SOAP API
      *
-     * @deprecated See `PostNLApiMode::Soap`
+     * @deprecated 2.0.0
      */
     #[Deprecated(
-        reason: 'from version 3.0.0 support for the SOAP API will be removed, use the PostNLApiMode::Rest enum instead',
-        replacement: PostNLApiMode::class.'::Rest',
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
     const MODE_LEGACY = 2;
 
@@ -250,8 +249,8 @@ class PostNL implements LoggerAwareInterface
     /** @var StreamFactoryInterface $streamFactory */
     protected StreamFactoryInterface $streamFactory;
 
-    /** @var PostNLApiMode $apiMode */
-    protected PostNLApiMode $apiMode = PostNLApiMode::Rest;
+    /** @var int $apiMode */
+    protected int $apiMode = self::MODE_REST;
 
     /** @var BarcodeServiceInterface $barcodeService */
     protected BarcodeServiceInterface $barcodeService;
@@ -276,12 +275,12 @@ class PostNL implements LoggerAwareInterface
      * @param Customer                       $customer Customer object.
      * @param string|UsernameToken           $apiKey   API key or UsernameToken object.
      * @param bool                           $sandbox  Whether the testing environment should be used.
-     * @param PostNLApiMode|int              $mode     Set the preferred connection strategy.
+     * @param int                            $mode     Avoid setting the API mode, this feature is deprecated.
      *                                                 Valid options are:
-     *                                                 - `PostNLApiMode.Rest` or `1`: New REST API
-     *                                                 - `PostNLApiMode.Soap` or `2`: New SOAP API
-     * @phpstan-param PostNLApiMode|int<1,2> $mode
-     * @psalm-param PostNLApiMode|int<1,2>   $mode
+     *                                                 - `1` / `self::MODE_REST`: New REST API
+     *                                                 - `2` / `self::MODE_SOAP`: New SOAP API
+     * @phpstan-param int<1,2>               $mode
+     * @psalm-param int<1,2>                 $mode
      *
      * @throws PostNLInvalidArgumentException
      */
@@ -289,10 +288,13 @@ class PostNL implements LoggerAwareInterface
         Customer             $customer,
         string|UsernameToken $apiKey,
         bool                 $sandbox,
-        PostNLApiMode|int    $mode = PostNLApiMode::Rest,
+        #[Deprecated(
+            reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
+        )]
+        int                  $mode = self::MODE_REST,
     ) {
         $this->setCustomer(customer: $customer);
-        $this->setApiKey(apiKey: $apiKey);
+        $this->setApiKey(apiKey: $apiKey instanceof UsernameToken ? $apiKey->getPassword() : $apiKey);
         $this->setSandbox(sandbox: $sandbox);
         $this->setApiMode(mode: $mode);
     }
@@ -424,14 +426,17 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * @param PostNLApiMode|int $mode
+     * @param int $mode
      *
      * @return $this
      * @throws PostNLInvalidArgumentException
      *
      * @deprecated 2.0.0
      */
-    public function setMode(PostNLApiMode|int $mode): static
+    #[Deprecated(
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
+    )]
+    public function setMode(int $mode): static
     {
         trigger_deprecation(
             package: 'firstred/postnl-api-php',
@@ -447,6 +452,9 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated
      */
+    #[Deprecated(
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
+    )]
     public function getMode(): int
     {
         trigger_deprecation(
@@ -455,15 +463,19 @@ class PostNL implements LoggerAwareInterface
             message: 'Using `PostNL::getMode` is deprecated, use `PostNL::getApiMode` instead.',
         );
 
-        return $this->getApiMode()->value;
+        return $this->getApiMode();
     }
 
     /**
      * Get the current mode.
      *
+     * @return int
      * @since 1.0.0
      */
-    public function getApiMode(): PostNLApiMode
+    #[Deprecated(
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
+    )]
+    public function getApiMode(): int
     {
         return $this->apiMode;
     }
@@ -474,24 +486,17 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
-     * @since 2.0.0 PostNLApiMode enum
      */
-    public function setApiMode(PostNLApiMode|int $mode): static
+    #[Deprecated(
+        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
+    )]
+    public function setApiMode(int $mode): static
     {
-        if (is_int(value: $mode)) {
+        if (in_array(needle: $mode, haystack: [self::MODE_SOAP, self::MODE_LEGACY])) {
             trigger_deprecation(
                 package: 'firstred/postnl-api-php',
                 version: '2.0.0',
-                message: 'Using `PostNL::MODE_*` is deprecated, use the `PostNLApiMode` enum instead.',
-            );
-            $mode = PostNLApiMode::tryFrom(value: $mode);
-        }
-
-        if (PostNLApiMode::Soap === $mode) {
-            trigger_deprecation(
-                package: 'firstred/postnl-api-php',
-                version: '2.0.0',
-                message: 'Using the SOAP API is deprecated, use the REST API instead.',
+                message: 'Using the SOAP API is deprecated. Do not set an API mode to use the recommended API.',
             );
         }
 
@@ -1508,7 +1513,7 @@ class PostNL implements LoggerAwareInterface
             3 => true,
             4 => true,
         ],
-        string $a6Orientation = 'P'
+        string $a6Orientation = 'P',
     ): string|array {
         if ($merge) {
             if ('GraphicFile|PDF' !== $printertype) {
@@ -1657,7 +1662,13 @@ class PostNL implements LoggerAwareInterface
      * @param Shipment $shipment
      *
      * @return ConfirmingResponseShipment
-     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function confirmShipment(Shipment $shipment): ConfirmingResponseShipment
@@ -1671,15 +1682,12 @@ class PostNL implements LoggerAwareInterface
      * @param array $shipments
      *
      * @return ConfirmingResponseShipment[]
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PostNLNotFoundException
-     *
      * @since 1.0.0
      */
     public function confirmShipments(array $shipments): array
@@ -1699,7 +1707,6 @@ class PostNL implements LoggerAwareInterface
      * @param bool   $complete Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
-     *
      * @throws ShipmentNotFoundException
      * @throws CifDownException
      * @throws CifException
@@ -1708,7 +1715,7 @@ class PostNL implements LoggerAwareInterface
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws PostNLNotFoundException
-     *
+     * @throws PsrCacheInvalidArgumentException
      * @since 1.2.0
      */
     public function getShippingStatusByBarcode(string $barcode, bool $complete = false): CurrentStatusResponseShipment|CompleteStatusResponseShipment
@@ -1744,13 +1751,11 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
      * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function getShippingStatusesByBarcodes(array $barcodes, bool $complete = false): array
@@ -1798,7 +1803,7 @@ class PostNL implements LoggerAwareInterface
      * @throws ResponseException
      * @throws NotFoundException
      * @throws ShipmentNotFoundException
-     *
+     * @throws PostNLNotFoundException
      * @since 1.2.0
      */
     public function getShippingStatusByReference(string $reference, bool $complete = false): CurrentStatusResponseShipment|CompleteStatusResponseShipment
@@ -2016,6 +2021,7 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidConfigurationException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws \ReflectionException
      *
      * @since 1.0.0
      */
@@ -2038,17 +2044,67 @@ class PostNL implements LoggerAwareInterface
             $results['delivery_date'] = PsrMessage::parseResponse(message: $itemDeliveryDate->get());
         }
 
+        // FIXME: do not rely on reflection
+        $reflectionTimeframeService = new ReflectionObject(object: $this->getTimeframeService());
+        $reflectionTimeframeServiceRequestBuilder = $reflectionTimeframeService->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionTimeframeServiceRequestBuilder->setAccessible(accessible: true);
+        /** @var TimeframeServiceRequestBuilderInterface $timeframeServiceRequestBuilder */
+        $timeframeServiceRequestBuilder = $reflectionTimeframeServiceRequestBuilder->getValue(object: $this->getTimeframeService());
+        $reflectionTimeframeServiceResponseProcessor = $reflectionTimeframeService->getProperty(name: 'responseProcessor');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionTimeframeServiceResponseProcessor->setAccessible(accessible: true);
+        /** @var TimeframeServiceResponseProcessorInterface $timeframeServiceResponseProcessor */
+        $timeframeServiceResponseProcessor = $reflectionTimeframeServiceResponseProcessor->getValue(object: $this->getTimeframeService());
+        $reflectionTimeframeServiceResponseProcessor = new ReflectionObject(object: $timeframeServiceResponseProcessor);
+        $reflectionTimeframeServiceResponseValidator = $reflectionTimeframeServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionTimeframeServiceResponseValidator->setAccessible(accessible: true);
+
+        $reflectionLocationService = new ReflectionObject(object: $this->getLocationService());
+        $reflectionLocationServiceRequestBuilder = $reflectionLocationService->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionLocationServiceRequestBuilder->setAccessible(accessible: true);
+        /** @var LocationServiceRequestBuilderInterface $locationServiceRequestBuilder */
+        $locationServiceRequestBuilder = $reflectionLocationServiceRequestBuilder->getValue(object: $this->getLocationService());
+        $reflectionLocationServiceResponseProcessor = $reflectionLocationService->getProperty(name: 'responseProcessor');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionLocationServiceResponseProcessor->setAccessible(accessible: true);
+        /** @var LocationServiceResponseProcessorInterface $locationServiceResponseProcessor */
+        $locationServiceResponseProcessor = $reflectionLocationServiceResponseProcessor->getValue(object: $this->getLocationService());
+        $reflectionLocationServiceResponseProcessor = new ReflectionObject(object: $locationServiceResponseProcessor);
+        $reflectionLocationServiceResponseValidator = $reflectionLocationServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionLocationServiceResponseValidator->setAccessible(accessible: true);
+
+        $reflectionDeliveryDateService = new ReflectionObject(object: $this->getDeliveryDateService());
+        $reflectionDeliveryDateServiceRequestBuilder = $reflectionDeliveryDateService->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionDeliveryDateServiceRequestBuilder->setAccessible(accessible: true);
+        /** @var DeliveryDateServiceRequestBuilderInterface $deliveryDateServiceRequestBuilder */
+        $deliveryDateServiceRequestBuilder = $reflectionDeliveryDateServiceRequestBuilder->getValue(object: $this->getDeliveryDateService());
+        $reflectionDeliveryDateServiceResponseProcessor = $reflectionDeliveryDateService->getProperty(name: 'responseProcessor');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionDeliveryDateServiceResponseProcessor->setAccessible(accessible: true);
+        /** @var DeliveryDateServiceResponseProcessorInterface $deliveryDateServiceResponseProcessor */
+        $deliveryDateServiceResponseProcessor = $reflectionDeliveryDateServiceResponseProcessor->getValue(object: $this->getDeliveryDateService());
+        $reflectionDeliveryDateServiceResponseProcessor = new ReflectionObject(object: $deliveryDateServiceResponseProcessor);
+        $reflectionDeliveryDateServiceResponseValidator = $reflectionDeliveryDateServiceResponseProcessor->getMethod(name: 'validateResponseContent');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $reflectionDeliveryDateServiceResponseValidator->setAccessible(accessible: true);
+
+
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'timeframes',
-            request: $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
+            request: $timeframeServiceRequestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes)
         );
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'locations',
-            request: $this->getLocationService()->buildGetNearestLocationsRequest($getNearestLocations)
+            request: $locationServiceRequestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
         );
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'delivery_date',
-            request: $this->getDeliveryDateService()->buildGetDeliveryDateRequest($getDeliveryDate)
+            request: $deliveryDateServiceRequestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate)
         );
 
         $responses = $this->getHttpClient()->doRequests();
@@ -2072,8 +2128,11 @@ class PostNL implements LoggerAwareInterface
             } else {
                 switch ($type) {
                     case 'timeframes':
-                        if (PostNLApiMode::Rest === $this->getApiMode()) {
-                            TimeframeServiceRestAdapter::validateRESTResponse(response: $response);
+                        if (self::MODE_REST === $this->getApiMode()) {
+                            $reflectionTimeframeServiceResponseValidator->invokeArgs(
+                                object: $timeframeServiceResponseProcessor,
+                                args: [(string) $response->getBody()],
+                            );
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -2083,8 +2142,11 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
-                        if (PostNLApiMode::Rest === $this->getApiMode()) {
-                            LocationServiceRestAdapter::validateRESTResponse(response: $response);
+                        if (self::MODE_REST === $this->getApiMode()) {
+                            $reflectionLocationServiceResponseValidator->invokeArgs(
+                                object: $locationServiceResponseProcessor,
+                                args: [(string) $response->getBody()],
+                            );
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -2094,8 +2156,11 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
-                        if (PostNLApiMode::Rest === $this->getApiMode()) {
-                            DeliveryDateService::validateRESTResponse(response: $response);
+                        if (self::MODE_REST === $this->getApiMode()) {
+                            $reflectionDeliveryDateServiceResponseValidator->invokeArgs(
+                                object: $deliveryDateServiceResponseProcessor,
+                                args: [(string) $response->getBody()],
+                            );
                         }
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
@@ -2109,9 +2174,24 @@ class PostNL implements LoggerAwareInterface
         }
 
         return [
-            'timeframes'    => $this->getTimeframeService()->processGetTimeframesResponse($results['timeframes']),
-            'locations'     => $this->getLocationService()->processGetNearestLocationsResponse($results['locations']),
-            'delivery_date' => $this->getDeliveryDateService()->processGetDeliveryDateResponse($results['delivery_date']),
+            'timeframes'    => $reflectionTimeframeServiceResponseProcessor
+                ->getMethod(name: 'processGetTimeframesResponse')
+                ->invokeArgs(
+                    object: $timeframeServiceResponseProcessor,
+                    args: [$results['timeframes']],
+                ),
+            'locations'     => $reflectionLocationServiceResponseProcessor
+                ->getMethod(name: 'processGetNearestLocationsResponse')
+                ->invokeArgs(
+                    object: $locationServiceResponseProcessor,
+                    args: [$results['locations']],
+                ),
+            'delivery_date' => $reflectionDeliveryDateServiceResponseProcessor
+                ->getMethod(name: 'processGetDeliveryDateResponse')
+                ->invokeArgs(
+                    object: $deliveryDateServiceResponseProcessor,
+                    args: [$results['delivery_date']],
+                ),
         ];
     }
 

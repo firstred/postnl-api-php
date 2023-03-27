@@ -39,10 +39,10 @@ use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\DeliveryDateServiceRestRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -54,7 +54,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
+use ReflectionObject;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -87,7 +87,6 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -104,7 +103,7 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetDeliveryDateRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetDeliveryDateRequest(
             getDeliveryDate: (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     GetDeliveryDate: (new GetDeliveryDate())
@@ -195,7 +194,7 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateRequestRest(getSentDate: (new GetSentDateRequest())
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetSentDateRequest(getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
                 GetSentDate: (new GetSentDate())
                     ->setAllowSundaySorting(AllowSundaySorting: true)
@@ -267,5 +266,18 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/deliverydate/deliverydate2.http'))],
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/deliverydate/deliverydate3.http'))],
         ];
+    }
+
+    /** @throws */
+    private function getRequestBuilder(): DeliveryDateServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var DeliveryDateServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

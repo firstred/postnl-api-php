@@ -28,19 +28,23 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder\Soap;
 
 use DateTimeImmutable;
+use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Firstred\PostNL\Util\Util;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
@@ -178,5 +182,23 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
             ->withHeader('Accept', value: 'text/xml')
             ->withHeader('Content-Type', value: 'text/xml;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: $request));
+    }
+
+    /**
+     * @param AbstractEntity $object
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     * @since 2.0.0
+     */
+    public function setService(AbstractEntity $object): void
+    {
+        $object->setCurrentService(
+            currentService: DeliveryDateServiceInterface::class,
+            namespaces: $this->namespaces,
+        );
+
+        parent::setService(object: $object);
     }
 }

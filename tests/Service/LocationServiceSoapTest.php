@@ -50,7 +50,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /**
  * @testdox The LocationService (SOAP)
@@ -83,7 +82,7 @@ class LocationServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP
         );
 
         global $logger;
@@ -111,15 +110,15 @@ class LocationServiceSoapTest extends ServiceTestCase
                     'DeliveryOptions'    => [
                         'PGE',
                     ],
-                    'OpeningTime' => '09:00:00',
-                    'Options'     => [
+                    'OpeningTime'        => '09:00:00',
+                    'Options'            => [
                         'Daytime',
                     ],
-                    'City'       => 'Hoofddorp',
-                    'HouseNr'    => '42',
-                    'HouseNrExt' => 'A',
-                    'Postalcode' => '2132WT',
-                    'Street'     => 'Siriusdreef',
+                    'City'               => 'Hoofddorp',
+                    'HouseNr'            => '42',
+                    'HouseNrExt'         => 'A',
+                    'Postalcode'         => '2132WT',
+                    'Street'             => 'Siriusdreef',
                 ]))
         );
 
@@ -195,15 +194,15 @@ XML
                     'PG',
                     'PGE',
                 ],
-                'OpeningTime' => '09:00:00',
-                'Options'     => [
+                'OpeningTime'        => '09:00:00',
+                'Options'            => [
                     'Daytime',
                 ],
-                'City'       => 'Hoofddorp',
-                'HouseNr'    => '42',
-                'HouseNrExt' => 'A',
-                'Postalcode' => '2132WT',
-                'Street'     => 'Siriusdreef',
+                'City'               => 'Hoofddorp',
+                'HouseNr'            => '42',
+                'HouseNrExt'         => 'A',
+                'Postalcode'         => '2132WT',
+                'Street'             => 'Siriusdreef',
             ])));
 
         $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $response);
@@ -222,13 +221,13 @@ XML
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
                 ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
+                    'AllowSundaySorting'   => true,
+                    'DeliveryDate'         => '29-06-2016',
+                    'DeliveryOptions'      => [
                         'PG',
                     ],
-                    'OpeningTime' => '09:00:00',
-                    'Options'     => [
+                    'OpeningTime'          => '09:00:00',
+                    'Options'              => [
                         'Daytime',
                     ],
                     'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
@@ -302,13 +301,13 @@ XML
         $response = $this->postnl->getLocationsInArea(getLocationsInArea: (new GetLocationsInArea())
             ->setCountrycode(Countrycode: 'NL')
             ->setLocation(Location: Location::create(properties: [
-                'AllowSundaySorting' => true,
-                'DeliveryDate'       => '29-06-2016',
-                'DeliveryOptions'    => [
+                'AllowSundaySorting'   => true,
+                'DeliveryDate'         => '29-06-2016',
+                'DeliveryOptions'      => [
                     'PG',
                 ],
-                'OpeningTime' => '09:00:00',
-                'Options'     => [
+                'OpeningTime'          => '09:00:00',
+                'Options'              => [
                     'Daytime',
                 ],
                 'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [

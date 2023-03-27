@@ -33,13 +33,13 @@ use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\LabellingServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
@@ -76,34 +76,34 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
     /**
      * @param HiddenString                            $apiKey
-     * @param PostNLApiMode                           $apiMode
      * @param bool                                    $sandbox
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
      * @param string                                  $version
+     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
         HiddenString                       $apiKey,
-        PostNLApiMode                      $apiMode,
         bool                               $sandbox,
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
         string                             $version = LabellingServiceInterface::DEFAULT_VERSION,
+        int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
-            apiMode: $apiMode,
             sandbox: $sandbox,
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
             version: $version,
+            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
         );
@@ -135,7 +135,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(
-                request: $this->responseProcessor->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
+                request: $this->requestBuilder->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
             );
         }
 
@@ -230,9 +230,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     /**
      * @since 2.0.0
      */
-    public function setAPIMode(PostNLApiMode $mode): void
+    public function setAPIMode(int $mode): void
     {
-        if (PostNLApiMode::Rest === $mode) {
+        if (PostNL::MODE_REST === $mode) {
             $this->requestBuilder = new LabellingServiceRestRequestBuilder(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),

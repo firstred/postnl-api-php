@@ -29,11 +29,31 @@ namespace Firstred\PostNL\Attribute;
 
 use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
 
 #[Attribute(flags: Attribute::TARGET_PROPERTY)]
 class SerializableProperty
 {
-    public function __construct(public SoapNamespace $namespace)
-    {
+    /**
+     * @param SoapNamespace          $namespace
+     * @param array                  $supportedServices Supported services, empty array = all
+     *
+     * @phpstan-param class-string[] $supportedServices
+     * @psalm-param   class-string[] $supportedServices
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
+     */
+    public function __construct(
+        public SoapNamespace $namespace,
+        public array         $supportedServices = [],
+    ) {
+        foreach ($this->supportedServices as $supportedService) {
+            $reflectionSupportedService = new ReflectionClass(objectOrClass: $supportedService);
+            if (!$reflectionSupportedService->isInterface()) {
+                throw new InvalidArgumentException(message: 'Only interfaces of services can be passed');
+            }
+        }
     }
 }

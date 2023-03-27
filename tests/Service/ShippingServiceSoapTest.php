@@ -80,7 +80,7 @@ class ShippingServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP
         );
 
         global $logger;
@@ -140,8 +140,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
         );
 
         $this->assertEqualsCanonicalizing(expected: [
-            'Customer' => [
-                'Address' => [
+            'Customer'  => [
+                'Address'            => [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -155,14 +155,14 @@ class ShippingServiceSoapTest extends ServiceTestCase
                 'CustomerCode'       => 'DEVC',
                 'CustomerNumber'     => '11223344',
             ],
-            'Message' => [
+            'Message'   => [
                 'MessageID'        => (string) $message->getMessageID(),
                 'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
                 0 => [
-                    'Addresses' => [
+                    'Addresses'           => [
                         [
                             'AddressType' => '01',
                             'City'        => 'Utrecht',
@@ -184,8 +184,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
                             'Zipcode'     => '2132WT',
                         ],
                     ],
-                    'DeliveryAddress' => '01',
-                    'Dimension'       => [
+                    'DeliveryAddress'     => '01',
+                    'Dimension'           => [
                         'Weight' => '2000',
                     ],
                     'ProductCodeDelivery' => '3085',
@@ -576,58 +576,58 @@ class ShippingServiceSoapTest extends ServiceTestCase
 
         $shipments = $this->postnl->sendShipments(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ]
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ]
         );
 
         $this->assertInstanceOf(expected: SendShipmentResponse::class, actual: $shipments);

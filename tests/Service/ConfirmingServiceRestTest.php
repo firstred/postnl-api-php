@@ -37,17 +37,12 @@ use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
-use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\ConfirmingServiceRestRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -57,7 +52,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
+use ReflectionObject;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -90,7 +85,6 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -114,7 +108,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildConfirmRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildConfirmRequest(
             confirming: Confirming::create()
                 ->setShipments(Shipments: [
                     Shipment::create()
@@ -150,8 +144,8 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         );
 
         $this->assertEquals(expected: [
-            'Customer' => [
-                'Address' => [
+            'Customer'  => [
+                'Address'            => [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -165,13 +159,13 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 'CustomerCode'       => 'DEVC',
                 'CustomerNumber'     => '11223344',
             ],
-            'Message' => [
+            'Message'   => [
                 'MessageID'        => (string) $message->getMessageID(),
                 'MessageTimeStamp' => $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
-                'Addresses' => [
+                'Addresses'           => [
                     [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
@@ -193,9 +187,9 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                         'Zipcode'     => '2132WT',
                     ],
                 ],
-                'Barcode'         => '3S1234567890123',
-                'DeliveryAddress' => '01',
-                'Dimension'       => [
+                'Barcode'             => '3S1234567890123',
+                'DeliveryAddress'     => '01',
+                'Dimension'           => [
                     'Weight' => '2000',
                 ],
                 'ProductCodeDelivery' => '3085',
@@ -271,60 +265,60 @@ class ConfirmingServiceRestTest extends ServiceTestCase
 
         $confirms = $this->postnl->confirmShipments(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ]
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ]
         );
 
         $this->assertInstanceOf(expected: ConfirmingResponseShipment::class, actual: $confirms[1]);
@@ -399,18 +393,37 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     public function multipleLabelsConfirmationsProvider(): array
     {
         return [
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
-            ]],
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
-            ]],
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
-            ]],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
+                ]
+            ],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
+                ]
+            ],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
+                ]
+            ],
         ];
+    }
+
+    /** @throws */
+    private function getRequestBuilder(): ConfirmingServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var ConfirmingServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

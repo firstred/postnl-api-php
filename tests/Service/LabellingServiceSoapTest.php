@@ -39,8 +39,8 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\LabellingServiceRestAdapter;
 use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceRestAdapter;
 use Firstred\PostNL\Util\Util;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -81,7 +81,7 @@ class LabellingServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP
         );
 
         global $logger;
@@ -377,60 +377,60 @@ XML
 
         $label = $this->postnl->generateLabels(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611211')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ]
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611211')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ]
         );
 
         $this->assertInstanceOf(expected: GenerateLabelResponse::class, actual: $label[1]);

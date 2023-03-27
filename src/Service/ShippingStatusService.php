@@ -37,7 +37,6 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Enum\PostNLApiMode;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
@@ -45,6 +44,7 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\ShippingStatusServiceRestResponseProcessor;
@@ -72,34 +72,34 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
     /**
      * @param HiddenString                            $apiKey
-     * @param PostNLApiMode                           $apiMode
      * @param bool                                    $sandbox
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
      * @param string                                  $version
+     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
         HiddenString                       $apiKey,
-        PostNLApiMode                      $apiMode,
         bool                               $sandbox,
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
         string                             $version = ShippingStatusServiceInterface::DEFAULT_VERSION,
+        int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
-            apiMode: $apiMode,
             sandbox: $sandbox,
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
             version: $version,
+            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
         );
@@ -438,7 +438,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     /**
      * @since 2.0.0
      */
-    public function setAPIMode(PostNLApiMode $mode): void
+    public function setAPIMode(int $mode): void
     {
         $this->requestBuilder = new ShippingStatusServiceRestRequestBuilder(
             apiKey: $this->getApiKey(),

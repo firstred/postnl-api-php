@@ -29,6 +29,12 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
 
 /**
  * @since 1.0.0
@@ -36,15 +42,45 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Customer extends AbstractEntity
 {
     /** @var Address|null $Address */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?Address $Address = null;
 
     /** @var string|null $CollectionLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $CollectionLocation = null;
 
     /** @var string|null $ContactPerson */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $ContactPerson = null;
 
     /** @var string|null $CustomerCode */
@@ -56,19 +92,59 @@ class Customer extends AbstractEntity
     protected ?string $CustomerNumber = null;
 
     /** @var string|null $GlobalPackCustomerCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $GlobalPackCustomerCode = null;
 
     /** @var string|null $GlobalPackBarcodeType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $GlobalPackBarcodeType = null;
 
     /** @var string|null $Email */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $Email = null;
 
     /** @var string|null $Name */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(
+        namespace: SoapNamespace::Domain,
+        supportedServices: [
+            ConfirmingServiceInterface::class,
+            LabellingServiceInterface::class,
+            DeliveryDateServiceInterface::class,
+            LocationServiceInterface::class,
+            TimeframeServiceInterface::class,
+            ShippingServiceInterface::class,
+        ],
+    )]
     protected ?string $Name = null;
 
     /**

@@ -56,10 +56,18 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
     /** @var string $id*/
     protected string $id;
+
+    /**
+     * @var string $currentService
+     * @phpstan-var class-string $currentService
+     * @psalm-var class-string $currentService
+     */
+    protected string $currentService;
+
     /**
      * @var array $namespaces
-     * @phpstan-var array<SoapNamespace, string> $namespaces
-     * @psalm-var array<SoapNamespace, string> $namespaces
+     * @phpstan-var array<string, string> $namespaces
+     * @psalm-var array<string, string> $namespaces
      */
     protected array $namespaces = [];
 
@@ -120,23 +128,53 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
+     * @param string                        $currentService
+     * @param array                         $namespaces
+     *
+     * @return static
+     *
+     * @phpstan-param class-string          $currentService
+     * @psalm-param class-string            $currentService
      * @phpstan-param array<string, string> $namespaces
-     * @psalm-param array<string, string> $namespaces
+     * @psalm-param array<string, string>   $namespaces
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      */
-    public function setNamespaces(array $namespaces): static
+    public function setCurrentService(string $currentService, array $namespaces = []): static
     {
-        foreach ($namespaces as $namespaceReference => $namespace) {
-            if (!is_string(value: $namespaceReference)) {
-                throw new InvalidArgumentException(message: 'Namespace not supported');
-            } elseif (!is_string(value: $namespace)) {
+        foreach ($namespaces as $namespacePrefix => $namespaceValue) {
+            if (!is_string(value: $namespacePrefix)) {
+                throw new InvalidArgumentException(message: 'Namespace prefix is not supported');
+            } elseif (!is_string(value: $namespaceValue)) {
                 throw new InvalidArgumentException(message: 'Namespace value should be a string');
+            }
+            try {
+                /** @noinspection PhpExpressionResultUnusedInspection */
+                SoapNamespace::from(value: $namespacePrefix);
+            } catch (TypeError) {
+                throw new InvalidArgumentException(message: 'Namespace prefix is not supported');
             }
         }
 
+        $reflectionCurrentService = new ReflectionClass(objectOrClass: $currentService);
+        if (!$reflectionCurrentService->isInterface()) {
+            throw new InvalidArgumentException(message: '`$currentService` must be an interface');
+        }
+
+        $this->currentService = $currentService;
         $this->namespaces = $namespaces;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     * @phpstan-return class-string
+     * @psalm-return class-string
+     */
+    public function getCurrentService(): string
+    {
+        return $this->currentService;
     }
 
     /**
@@ -243,8 +281,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         $properties = [];
-        foreach (static::getSerializableProperties() as $propertyName => $namespaceReference) {
-            $namespace = $this->namespaces[$namespaceReference->value];
+        foreach (static::getSerializableProperties() as $propertyName => $namespacePrefix) {
+            $namespace = $this->namespaces[$namespacePrefix->value];
             if (isset($this->$propertyName)) {
                 $xml[$namespace ? "{{$namespace}}$propertyName" : $propertyName] = $this->$propertyName;
             }
@@ -454,6 +492,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         } catch (ReflectionException) {
             return false;
         }
+
+        // TODO: convert to PHP 8.1+
+
         // Quick 'n dirty annotation reader
         //
         // A property comment could look like /** @var string|null */
@@ -488,7 +529,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                      '\\Firstred\\PostNL\\Entity\\Message',
                      '\\Firstred\\PostNL\\Entity\\Request',
                      '\\Firstred\\PostNL\\Entity\\Response',
-                     '\\Firstred\\PostNL\\Entity\\SOAP',
+                     '\\Firstred\\PostNL\\Entity\\Soap',
                  ] as $namespace) {
             if (class_exists(class: "$namespace\\$shortName")) {
                 return "$namespace\\$shortName";

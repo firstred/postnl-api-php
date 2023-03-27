@@ -61,14 +61,14 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     {
         if ($currentStatus->getShipment()->getReference()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $currentStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $currentStatus->getCustomer()->getCustomerNumber(),
             ];
             $endpoint = "/reference/{$currentStatus->getShipment()->getReference()}";
         } elseif ($currentStatus->getShipment()->getStatusCode()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $currentStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $currentStatus->getCustomer()->getCustomerNumber(),
             ];
             $endpoint = '/search';
             $query['status'] = $currentStatus->getShipment()->getStatusCode();
@@ -80,8 +80,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
             }
         } elseif ($currentStatus->getShipment()->getPhaseCode()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $currentStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $currentStatus->getCustomer()->getCustomerNumber(),
             ];
             $endpoint = '/search';
             $query['phase'] = $currentStatus->getShipment()->getPhaseCode();
@@ -99,8 +99,10 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
-        )
+            uri: Util::versionStringToURLString(
+                version: $this->getVersion(),
+                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+            ))
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }
@@ -124,15 +126,15 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     {
         if ($completeStatus->getShipment()->getReference()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $completeStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $completeStatus->getCustomer()->getCustomerNumber(),
                 'detail'         => 'true',
             ];
             $endpoint = "/reference/{$completeStatus->getShipment()->getReference()}";
         } elseif ($completeStatus->getShipment()->getStatusCode()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $completeStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $completeStatus->getCustomer()->getCustomerNumber(),
                 'detail'         => 'true',
             ];
             $endpoint = '/search';
@@ -145,8 +147,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
             }
         } elseif ($completeStatus->getShipment()->getPhaseCode()) {
             $query = [
-                'customerCode'   => $this->getCustomer()->getCustomerCode(),
-                'customerNumber' => $this->getCustomer()->getCustomerNumber(),
+                'customerCode'   => $completeStatus->getCustomer()->getCustomerCode(),
+                'customerNumber' => $completeStatus->getCustomer()->getCustomerNumber(),
                 'detail'         => 'true',
             ];
             $endpoint = '/search';
@@ -209,7 +211,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     public function buildGetUpdatedShipmentsRequest(
         Customer          $customer,
         DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null
+        DateTimeInterface $dateTimeTo = null,
     ): RequestInterface {
         $range = '';
         if ($dateTimeFrom) {

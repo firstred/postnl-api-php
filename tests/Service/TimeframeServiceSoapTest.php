@@ -42,7 +42,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 
@@ -75,7 +74,7 @@ class TimeframeServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP
         );
 
         global $logger;
@@ -226,19 +225,20 @@ XML
 
         $responseTimeframes = $this->postnl->getTimeframes(
             getTimeframes: (new GetTimeframes())
-                ->setTimeframe(timeframes: [(new Timeframe())
-                                    ->setCity(City: 'Hoofddorp')
-                                    ->setCountryCode(CountryCode: 'NL')
-                                    ->setEndDate(EndDate: '02-07-2016')
-                                    ->setHouseNr(HouseNr: '42')
-                                    ->setHouseNrExt(HouseNrExt: 'A')
-                                    ->setOptions(Options: [
-                                        'Evening',
-                                    ])
-                                    ->setPostalCode(PostalCode: '2132WT')
-                                    ->setStartDate(StartDate: '30-06-2016')
-                                    ->setStreet(Street: 'Siriusdreef')
-                                    ->setSundaySorting(SundaySorting: false),
+                ->setTimeframe(timeframes: [
+                    (new Timeframe())
+                        ->setCity(City: 'Hoofddorp')
+                        ->setCountryCode(CountryCode: 'NL')
+                        ->setEndDate(EndDate: '02-07-2016')
+                        ->setHouseNr(HouseNr: '42')
+                        ->setHouseNrExt(HouseNrExt: 'A')
+                        ->setOptions(Options: [
+                            'Evening',
+                        ])
+                        ->setPostalCode(PostalCode: '2132WT')
+                        ->setStartDate(StartDate: '30-06-2016')
+                        ->setStreet(Street: 'Siriusdreef')
+                        ->setSundaySorting(SundaySorting: false),
                 ])
         );
 

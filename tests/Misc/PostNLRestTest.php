@@ -27,16 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Misc;
 
-use Firstred\PostNL\Enum\PostNLApiMode;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
@@ -49,9 +39,13 @@ use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\DummyLogger;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
@@ -85,7 +79,6 @@ class PostNLRestTest extends TestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNLApiMode::Rest,
         );
     }
 

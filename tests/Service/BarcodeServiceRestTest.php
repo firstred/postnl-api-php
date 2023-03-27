@@ -38,6 +38,7 @@ use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\BarcodeServiceRestRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -45,6 +46,7 @@ use GuzzleHttp\Psr7\Query;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
+use ReflectionObject;
 use function file_get_contents;
 use const _RESPONSES_DIR_;
 
@@ -75,9 +77,9 @@ class BarcodeServiceRestTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -103,7 +105,7 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $range = $this->getRange(type: '3S');
         $serie = $this->postnl->findBarcodeSerie(type: '3S', range: $range, eps: false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
             generateBarcode: GenerateBarcode::create()
                 ->setBarcode(
                     Barcode: Barcode::create()
@@ -117,13 +119,14 @@ class BarcodeServiceRestTest extends ServiceTestCase
 
         $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing(expected: [
-            'CustomerCode'   => 'DEVC',
-            'CustomerNumber' => '11223344',
-            'Type'           => '3S',
-            'Serie'          => '987000000-987600000',
-            'Range'          => 'DEVC',
-        ],
+        $this->assertEqualsCanonicalizing(
+            expected: [
+                'CustomerCode'   => 'DEVC',
+                'CustomerNumber' => '11223344',
+                'Type'           => '3S',
+                'Serie'          => '987000000-987600000',
+                'Range'          => 'DEVC',
+            ],
             actual: $query
         );
         $this->assertEmpty(actual: (string) $request->getBody());
@@ -140,27 +143,28 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $range = $this->getRange(type: $type);
         $serie = $this->postnl->findBarcodeSerie(type: $type, range: $range, eps: false);
 
-        $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
             generateBarcode: GenerateBarcode::create()
-                           ->setBarcode(
-                               Barcode: Barcode::create()
-                                      ->setRange(Range: $range)
-                                      ->setSerie(Serie: $serie)
-                                      ->setType(Type: $type)
-                           )
-                           ->setMessage(Message: new Message())
-                           ->setCustomer(Customer: $this->postnl->getCustomer())
+                ->setBarcode(
+                    Barcode: Barcode::create()
+                        ->setRange(Range: $range)
+                        ->setSerie(Serie: $serie)
+                        ->setType(Type: $type)
+                )
+                ->setMessage(Message: new Message())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
 
-        $this->assertEqualsCanonicalizing(expected: [
-            'CustomerCode'   => 'DEVC',
-            'CustomerNumber' => '11223344',
-            'Type'           => 'LA',
-            'Serie'          => '00000000-99999999',
-            'Range'          => '1234'
-        ],
+        $this->assertEqualsCanonicalizing(
+            expected: [
+                'CustomerCode'   => 'DEVC',
+                'CustomerNumber' => '11223344',
+                'Type'           => 'LA',
+                'Serie'          => '00000000-99999999',
+                'Range'          => '1234'
+            ],
             actual: $query
         );
         $this->assertEmpty(actual: (string) $request->getBody());
@@ -226,14 +230,15 @@ class BarcodeServiceRestTest extends ServiceTestCase
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
-        $this->assertEquals(expected: [
-            'NL' => [
-                '3SDEVC816223392',
-                '3SDEVC816223393',
-                '3SDEVC816223394',
-                '3SDEVC816223395',
+        $this->assertEquals(
+            expected: [
+                'NL' => [
+                    '3SDEVC816223392',
+                    '3SDEVC816223393',
+                    '3SDEVC816223394',
+                    '3SDEVC816223395',
+                ],
             ],
-        ],
             actual: $barcodes
         );
     }
@@ -253,5 +258,21 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
         $this->postnl->generateBarcode(type: '3S');
+    }
+
+    /**
+     * @return BarcodeServiceRestRequestBuilder
+     * @throws \ReflectionException
+     */
+    private function getRequestBuilder(): BarcodeServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var BarcodeServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }

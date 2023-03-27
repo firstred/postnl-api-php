@@ -45,9 +45,9 @@ class GetSignatureResponseSignature extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
-    /** @var string|null $SignatureDate */
+    /** @var DateTimeInterface|null $SignatureDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected ?string $SignatureDate = null;
+    protected ?DateTimeInterface $SignatureDate = null;
 
     /** @var string|null $SignatureImage */
     #[SerializableProperty(namespace: SoapNamespace::Domain)]
@@ -109,9 +109,9 @@ class GetSignatureResponseSignature extends AbstractEntity
     }
 
     /**
-     * @return string|null
+     * @return DateTimeInterface|null
      */
-    public function getSignatureDate(): ?string
+    public function getSignatureDate(): ?DateTimeInterface
     {
         return $this->SignatureDate;
     }

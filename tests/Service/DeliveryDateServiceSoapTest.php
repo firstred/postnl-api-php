@@ -39,7 +39,6 @@ use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\Soap\UsernameToken;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
@@ -49,7 +48,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 #[TestDox(text: 'The DeliveryDateService (SOAP)')]
 class DeliveryDateServiceSoapTest extends ServiceTestCase
@@ -80,7 +78,7 @@ class DeliveryDateServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
-            mode: PostNL::MODE_Soap
+            mode: PostNL::MODE_SOAP
         );
 
         global $logger;

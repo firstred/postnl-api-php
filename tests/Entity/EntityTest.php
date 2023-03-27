@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Entity;
 
-use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\ServiceNotSetException;

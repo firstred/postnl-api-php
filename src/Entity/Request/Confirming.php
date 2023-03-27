@@ -53,12 +53,11 @@ class Confirming extends AbstractEntity
     protected ?array $Shipments = null;
 
     /**
-     * @param array|null    $Shipments
-     * @param Customer|null $Customer
-     * @param Message|null  $Message
+     * @param Shipment[]|null $Shipments
+     * @param Customer|null   $Customer
+     * @param Message|null    $Message
      */
     public function __construct(
-        /** @param $Shipments Shipment[]|null */
         ?array    $Shipments = null,
         ?Customer $Customer = null,
         ?Message  $Message = null,

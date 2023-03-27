@@ -43,8 +43,10 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\LabellingServiceRestAdapter;
+use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LabellingServiceRestAdapter;
+use Firstred\PostNL\Service\RequestBuilder\Rest\LabellingServiceRestRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Message as PsrMessage;
@@ -53,6 +55,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionObject;
 use setasign\Fpdi\PdfReader\PdfReaderException;
 use function file_get_contents;
 use function json_decode;
@@ -89,7 +92,6 @@ class LabellingServiceRestTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
-            mode: PostNL::MODE_REST,
         );
 
         global $logger;
@@ -104,7 +106,7 @@ class LabellingServiceRestTest extends ServiceTestCase
     #[TestDox(text: 'returns a valid service object')]
     public function testHasValidLabellingService(): void
     {
-        $this->assertInstanceOf(expected: LabellingServiceRestAdapter::class, actual: $this->service);
+        $this->assertInstanceOf(expected: LabellingService::class, actual: $this->service);
     }
 
     /** @throws */
@@ -113,7 +115,7 @@ class LabellingServiceRestTest extends ServiceTestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateLabelRequest(
             generateLabel: GenerateLabel::create()
                 ->setShipments(Shipments: [
                     Shipment::create()
@@ -150,8 +152,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         );
 
         $this->assertEqualsCanonicalizing(expected: [
-            'Customer' => [
-                'Address' => [
+            'Customer'  => [
+                'Address'            => [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -165,13 +167,13 @@ class LabellingServiceRestTest extends ServiceTestCase
                 'CustomerCode'       => 'DEVC',
                 'CustomerNumber'     => '11223344',
             ],
-            'Message' => [
+            'Message'   => [
                 'MessageID'        => (string) $message->getMessageID(),
                 'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
-                'Addresses' => [
+                'Addresses'           => [
                     [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
@@ -193,9 +195,9 @@ class LabellingServiceRestTest extends ServiceTestCase
                         'Zipcode'     => '2132WT',
                     ],
                 ],
-                'Barcode'         => '3S1234567890123',
-                'DeliveryAddress' => '01',
-                'Dimension'       => [
+                'Barcode'             => '3S1234567890123',
+                'DeliveryAddress'     => '01',
+                'Dimension'           => [
                     'Weight' => '2000',
                 ],
                 'ProductCodeDelivery' => '3085',
@@ -214,7 +216,7 @@ class LabellingServiceRestTest extends ServiceTestCase
     {
         $message = new LabellingMessage();
 
-        $this->lastRequest = $request = $this->service->buildGenerateLabelRequestRest(
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateLabelRequest(
             generateLabel: GenerateLabel::create()
                 ->setShipments(Shipments: [
                     Shipment::create()
@@ -251,8 +253,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         );
 
         $this->assertEqualsCanonicalizing(expected: [
-            'Customer' => [
-                'Address' => [
+            'Customer'  => [
+                'Address'            => [
                     'AddressType' => '02',
                     'City'        => 'Hoofddorp',
                     'CompanyName' => 'PostNL',
@@ -266,13 +268,13 @@ class LabellingServiceRestTest extends ServiceTestCase
                 'CustomerCode'       => 'DEVC',
                 'CustomerNumber'     => '11223344',
             ],
-            'Message' => [
+            'Message'   => [
                 'MessageID'        => (string) $message->getMessageID(),
                 'MessageTimeStamp' => (string) $message->getMessageTimeStamp()->format(format: 'd-m-Y H:i:s'),
                 'Printertype'      => 'GraphicFile|PDF',
             ],
             'Shipments' => [
-                'Addresses' => [
+                'Addresses'           => [
                     [
                         'AddressType' => '01',
                         'City'        => 'Utrecht',
@@ -294,9 +296,9 @@ class LabellingServiceRestTest extends ServiceTestCase
                         'Zipcode'     => '2132WT',
                     ],
                 ],
-                'Barcode'         => '3S1234567890123',
-                'DeliveryAddress' => '01',
-                'Dimension'       => [
+                'Barcode'             => '3S1234567890123',
+                'DeliveryAddress'     => '01',
+                'Dimension'           => [
                     'Weight' => '2000',
                 ],
                 'ProductCodeDelivery' => '3094',
@@ -359,9 +361,10 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @param array $responses
+     * @param array                                     $responses
+     *
      * @phpstan-param non-empty-list<ResponseInterface> $responses
-     * @psalm-param non-empty-list<ResponseInterface> $responses
+     * @psalm-param non-empty-list<ResponseInterface>   $responses
      *
      * @throws
      */
@@ -377,60 +380,60 @@ class LabellingServiceRestTest extends ServiceTestCase
 
         $label = $this->postnl->generateLabels(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611211')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ],
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611211')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ],
             printertype: 'GraphicFile|PDF',
             confirm: true,
             merge: true,
@@ -447,9 +450,10 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @param array $responses
+     * @param array                                     $responses
+     *
      * @phpstan-param non-empty-list<ResponseInterface> $responses
-     * @psalm-param non-empty-list<ResponseInterface> $responses
+     * @psalm-param non-empty-list<ResponseInterface>   $responses
      *
      * @throws PdfReaderException
      * @throws Exception
@@ -536,9 +540,10 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @param array $responses
+     * @param array                                     $responses
+     *
      * @phpstan-param non-empty-list<ResponseInterface> $responses
-     * @psalm-param non-empty-list<ResponseInterface> $responses
+     * @psalm-param non-empty-list<ResponseInterface>   $responses
      *
      * @throws PdfReaderException
      * @throws Exception
@@ -555,60 +560,60 @@ class LabellingServiceRestTest extends ServiceTestCase
 
         $label = $this->postnl->generateLabels(shipments: [
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611210')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611210')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
-                    ->setAddresses(Addresses: [
-                        Address::create(properties: [
-                            'AddressType' => '01',
-                            'City'        => 'Utrecht',
-                            'Countrycode' => 'NL',
-                            'FirstName'   => 'Peter',
-                            'HouseNr'     => '9',
-                            'HouseNrExt'  => 'a bis',
-                            'Name'        => 'de Ruijter',
-                            'Street'      => 'Bilderdijkstraat',
-                            'Zipcode'     => '3521VA',
-                        ]),
-                        Address::create(properties: [
-                            'AddressType' => '02',
-                            'City'        => 'Hoofddorp',
-                            'CompanyName' => 'PostNL',
-                            'Countrycode' => 'NL',
-                            'HouseNr'     => '42',
-                            'Street'      => 'Siriusdreef',
-                            'Zipcode'     => '2132WT',
-                        ]),
-                    ])
-                    ->setBarcode(Barcode: '3SDEVC201611211')
-                    ->setDeliveryAddress(DeliveryAddress: '01')
-                    ->setDimension(Dimension: new Dimension(Weight: '2000'))
-                    ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
-            ]
+                ->setAddresses(Addresses: [
+                    Address::create(properties: [
+                        'AddressType' => '01',
+                        'City'        => 'Utrecht',
+                        'Countrycode' => 'NL',
+                        'FirstName'   => 'Peter',
+                        'HouseNr'     => '9',
+                        'HouseNrExt'  => 'a bis',
+                        'Name'        => 'de Ruijter',
+                        'Street'      => 'Bilderdijkstraat',
+                        'Zipcode'     => '3521VA',
+                    ]),
+                    Address::create(properties: [
+                        'AddressType' => '02',
+                        'City'        => 'Hoofddorp',
+                        'CompanyName' => 'PostNL',
+                        'Countrycode' => 'NL',
+                        'HouseNr'     => '42',
+                        'Street'      => 'Siriusdreef',
+                        'Zipcode'     => '2132WT',
+                    ]),
+                ])
+                ->setBarcode(Barcode: '3SDEVC201611211')
+                ->setDeliveryAddress(DeliveryAddress: '01')
+                ->setDimension(Dimension: new Dimension(Weight: '2000'))
+                ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
+        ]
         );
 
         $this->assertInstanceOf(expected: GenerateLabelResponse::class, actual: $label[1]);
@@ -616,9 +621,10 @@ class LabellingServiceRestTest extends ServiceTestCase
     }
 
     /**
-     * @param ResponseInterface $response
-     * @param string $exception
-     * @psalm-param class-string<ApiException> $exception
+     * @param ResponseInterface                  $response
+     * @param string                             $exception
+     *
+     * @psalm-param class-string<ApiException>   $exception
      * @phpstan-param class-string<ApiException> $exception
      *
      * @throws
@@ -684,18 +690,24 @@ class LabellingServiceRestTest extends ServiceTestCase
     public function multipleLabelsProvider(): array
     {
         return [
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))
-            ]],
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
-            ]],
-            [[
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
-            ]],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))
+                ]
+            ],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
+                ]
+            ],
+            [
+                [
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
+                ]
+            ],
         ];
     }
 
@@ -711,5 +723,18 @@ class LabellingServiceRestTest extends ServiceTestCase
                 CifException::class
             ],
         ];
+    }
+
+    /** @throws */
+    private function getRequestBuilder(): LabellingServiceRestRequestBuilder
+    {
+        $serviceReflection = new ReflectionObject(object: $this->service);
+        $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $requestBuilderReflection->setAccessible(accessible: true);
+        /** @var LabellingServiceRestRequestBuilder $requestBuilder */
+        $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
+
+        return $requestBuilder;
     }
 }
