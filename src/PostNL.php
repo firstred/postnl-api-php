@@ -77,9 +77,9 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
-use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\HttpClient\CurlHttpClient;
 use Firstred\PostNL\HttpClient\GuzzleHttpClient;
+use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
@@ -152,7 +152,7 @@ class PostNL implements LoggerAwareInterface
      * @deprecated See `PostNLApiMode::Rest`
      */
     #[Deprecated(
-        reason: 'since version 2.0.0, use PostNLApiMode::Rest instead',
+        reason: 'since version 2.0.0, use the PostNLApiMode::Rest enum instead',
         replacement: PostNLApiMode::class.'::Rest',
     )]
     const MODE_REST = 1;
@@ -162,8 +162,8 @@ class PostNL implements LoggerAwareInterface
      * @deprecated See `PostNLApiMode::Soap`
      */
     #[Deprecated(
-        reason: 'since version 2.0.0, use PostNLApiMode::Soap instead',
-        replacement: PostNLApiMode::class.'::Soap',
+        reason: 'from version 3.0.0 support for the SOAP API will be removed, use the PostNLApiMode::Rest enum instead',
+        replacement: PostNLApiMode::class.'::Rest',
     )]
     const MODE_SOAP = 2;
     /**
@@ -172,8 +172,8 @@ class PostNL implements LoggerAwareInterface
      * @deprecated See `PostNLApiMode::Soap`
      */
     #[Deprecated(
-        reason: 'since version 2.0.0, use PostNLApiMode::Soap instead',
-        replacement: PostNLApiMode::class.'::Soap',
+        reason: 'from version 3.0.0 support for the SOAP API will be removed, use the PostNLApiMode::Rest enum instead',
+        replacement: PostNLApiMode::class.'::Rest',
     )]
     const MODE_LEGACY = 2;
 
@@ -181,7 +181,6 @@ class PostNL implements LoggerAwareInterface
      * 3S (or EU Pack Special) countries.
      *
      * @var array                $threeSCountries
-     *
      * @phpstan-var list<string> $threeSCountries
      * @psalm-var list<string>   $threeSCountries
      */
@@ -295,7 +294,7 @@ class PostNL implements LoggerAwareInterface
         $this->checkEnvironment();
 
         $this->setCustomer(customer: $customer);
-        $this->setToken(apiKey: $apiKey);
+        $this->setApiKey(apiKey: $apiKey);
         $this->setSandbox(sandbox: $sandbox);
         $this->setApiMode(mode: $mode);
     }
@@ -472,6 +471,14 @@ class PostNL implements LoggerAwareInterface
                 message: 'Using `PostNL::MODE_*` is deprecated, use the `PostNLApiMode` enum instead.',
             );
             $mode = PostNLApiMode::tryFrom(value: $mode);
+        }
+
+        if (PostNLApiMode::Soap === $mode) {
+            trigger_deprecation(
+                package: 'firstred/postnl-api-php',
+                version: '2.0.0',
+                message: 'Using the SOAP API is deprecated, use the REST API instead.',
+            );
         }
 
         $this->getBarcodeService()->setApiMode(mode: $mode);
