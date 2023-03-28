@@ -33,6 +33,7 @@ use Psr\Http\Message\StreamInterface;
  * Class GuzzleStreamFactory
  *
  * @since 1.2.0
+ * @deprecated 1.4.0
  */
 final class GuzzleStreamFactory implements StreamFactoryInterface
 {

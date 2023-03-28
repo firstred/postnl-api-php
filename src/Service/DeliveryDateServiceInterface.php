@@ -90,6 +90,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate);
 
@@ -128,6 +129,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate);
 
@@ -165,6 +167,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate);
 
@@ -179,6 +182,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response);
 
@@ -217,6 +221,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate);
 
@@ -233,6 +238,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response);
 }

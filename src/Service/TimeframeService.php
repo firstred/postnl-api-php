@@ -157,6 +157,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
@@ -327,6 +328,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
@@ -377,6 +379,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {

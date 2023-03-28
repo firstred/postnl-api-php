@@ -34,6 +34,7 @@ use Psr\Http\Message\UriInterface;
  * Class GuzzleRequestFactory
  *
  * @since 1.2.0
+ * @deprecated 1.4.0
  */
 final class GuzzleRequestFactory implements RequestFactoryInterface
 {

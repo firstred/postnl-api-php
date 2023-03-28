@@ -162,6 +162,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -259,6 +260,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
@@ -418,6 +420,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate)
     {
@@ -466,6 +469,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
@@ -579,6 +583,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
@@ -629,6 +634,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {

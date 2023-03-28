@@ -33,6 +33,7 @@ use Psr\Http\Message\ResponseInterface;
  * Class GuzzleResponseFactory
  *
  * @since 1.2.0
+ * @deprecated 1.4.0
  */
 final class GuzzleResponseFactory implements ResponseFactoryInterface
 {

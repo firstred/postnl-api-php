@@ -227,6 +227,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -272,6 +273,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateLabelsSOAP(array $generateLabels)
     {
@@ -388,6 +390,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
@@ -442,6 +445,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {

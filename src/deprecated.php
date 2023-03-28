@@ -24,139 +24,289 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-class_alias('Firstred\\PostNL\\Entity\\AbstractEntity', 'ThirtyBees\\PostNL\\Entity\\AbstractEntity');
-class_alias('Firstred\\PostNL\\Entity\\Address', 'ThirtyBees\\PostNL\\Entity\\Address');
-class_alias('Firstred\\PostNL\\Entity\\Amount', 'ThirtyBees\\PostNL\\Entity\\Amount');
-class_alias('Firstred\\PostNL\\Entity\\Area', 'ThirtyBees\\PostNL\\Entity\\Area');
-class_alias('Firstred\\PostNL\\Entity\\Barcode', 'ThirtyBees\\PostNL\\Entity\\Barcode');
-class_alias('Firstred\\PostNL\\Entity\\Contact', 'ThirtyBees\\PostNL\\Entity\\Contact');
-class_alias('Firstred\\PostNL\\Entity\\Content', 'ThirtyBees\\PostNL\\Entity\\Content');
-class_alias('Firstred\\PostNL\\Entity\\Coordinates', 'ThirtyBees\\PostNL\\Entity\\Coordinates');
-class_alias('Firstred\\PostNL\\Entity\\CoordinatesNorthWest', 'ThirtyBees\\PostNL\\Entity\\CoordinatesNorthWest');
-class_alias('Firstred\\PostNL\\Entity\\CoordinatesSouthEast', 'ThirtyBees\\PostNL\\Entity\\CoordinatesSouthEast');
-class_alias('Firstred\\PostNL\\Entity\\Customer', 'ThirtyBees\\PostNL\\Entity\\Customer');
-class_alias('Firstred\\PostNL\\Entity\\Customs', 'ThirtyBees\\PostNL\\Entity\\Customs');
-class_alias('Firstred\\PostNL\\Entity\\CutOffTime', 'ThirtyBees\\PostNL\\Entity\\CutOffTime');
-class_alias('Firstred\\PostNL\\Entity\\Dimension', 'ThirtyBees\\PostNL\\Entity\\Dimension');
-class_alias('Firstred\\PostNL\\Entity\\Event', 'ThirtyBees\\PostNL\\Entity\\Event');
-class_alias('Firstred\\PostNL\\Entity\\Expectation', 'ThirtyBees\\PostNL\\Entity\\Expectation');
-class_alias('Firstred\\PostNL\\Entity\\Group', 'ThirtyBees\\PostNL\\Entity\\Group');
-class_alias('Firstred\\PostNL\\Entity\\Label', 'ThirtyBees\\PostNL\\Entity\\Label');
-class_alias('Firstred\\PostNL\\Entity\\Location', 'ThirtyBees\\PostNL\\Entity\\Location');
-class_alias('Firstred\\PostNL\\Entity\\Message\\LabellingMessage', 'ThirtyBees\\PostNL\\Entity\\Message\\LabellingMessage');
-class_alias('Firstred\\PostNL\\Entity\\Message\\Message', 'ThirtyBees\\PostNL\\Entity\\Message\\Message');
-class_alias('Firstred\\PostNL\\Entity\\OldStatus', 'ThirtyBees\\PostNL\\Entity\\OldStatus');
-class_alias('Firstred\\PostNL\\Entity\\OpeningHours', 'ThirtyBees\\PostNL\\Entity\\OpeningHours');
-class_alias('Firstred\\PostNL\\Entity\\ProductOption', 'ThirtyBees\\PostNL\\Entity\\ProductOption');
-class_alias('Firstred\\PostNL\\Entity\\ReasonNoTimeframe', 'ThirtyBees\\PostNL\\Entity\\ReasonNoTimeframe');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CompleteStatus', 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatus');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CompleteStatusByPhase', 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByPhase');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CompleteStatusByReference', 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByReference');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CompleteStatusByStatus', 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByStatus');
-class_alias('Firstred\\PostNL\\Entity\\Request\\Confirming', 'ThirtyBees\\PostNL\\Entity\\Request\\Confirming');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatus', 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatus');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatusByPhase', 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByPhase');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference', 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByReference');
-class_alias('Firstred\\PostNL\\Entity\\Request\\CurrentStatusByStatus', 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByStatus');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GenerateBarcode', 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateBarcode');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GenerateLabel', 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateLabel');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate', 'ThirtyBees\\PostNL\\Entity\\Request\\GetDeliveryDate');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetLocation', 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocation');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea', 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocationsInArea');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetNearestLocations', 'ThirtyBees\\PostNL\\Entity\\Request\\GetNearestLocations');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetSentDate', 'ThirtyBees\\PostNL\\Entity\\Request\\GetSentDate');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetSentDateRequest', 'ThirtyBees\\PostNL\\Entity\\Request\\GetSentDateRequest');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetSignature', 'ThirtyBees\\PostNL\\Entity\\Request\\GetSignature');
-class_alias('Firstred\\PostNL\\Entity\\Request\\GetTimeframes', 'ThirtyBees\\PostNL\\Entity\\Request\\GetTimeframes');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent', 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseOldStatus', 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseOldStatus');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseShipment', 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseShipment');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ConfirmingResponseShipment', 'ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment', 'ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GenerateBarcodeResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateBarcodeResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GenerateLabelResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetDeliveryDateResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetLocationsResult', 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsResult');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetSentDateResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse');
-class_alias('Firstred\\PostNL\\Entity\\Response\\GetSignatureResponseSignature', 'ThirtyBees\\PostNL\\Entity\\Response\\GetSignatureResponseSignature');
-class_alias('Firstred\\PostNL\\Entity\\Response\\MergedLabel', 'ThirtyBees\\PostNL\\Entity\\Response\\MergedLabel');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseAddress', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseAddress');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseAmount', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseAmount');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseGroup', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseGroup');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseLocation', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseLocation');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseShipment', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseShipment');
-class_alias('Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes', 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes');
-class_alias('Firstred\\PostNL\\Entity\\Response\\SignatureResponse', 'ThirtyBees\\PostNL\\Entity\\Response\\SignatureResponse');
-class_alias('Firstred\\PostNL\\Entity\\SOAP\\Body', 'ThirtyBees\\PostNL\\Entity\\SOAP\\Body');
-class_alias('Firstred\\PostNL\\Entity\\SOAP\\Envelope', 'ThirtyBees\\PostNL\\Entity\\SOAP\\Envelope');
-class_alias('Firstred\\PostNL\\Entity\\SOAP\\Header', 'ThirtyBees\\PostNL\\Entity\\SOAP\\Header');
-class_alias('Firstred\\PostNL\\Entity\\SOAP\\Security', 'ThirtyBees\\PostNL\\Entity\\SOAP\\Security');
-class_alias('Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', 'ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken');
-class_alias('Firstred\\PostNL\\Entity\\Shipment', 'ThirtyBees\\PostNL\\Entity\\Shipment');
-class_alias('Firstred\\PostNL\\Entity\\Signature', 'ThirtyBees\\PostNL\\Entity\\Signature');
-class_alias('Firstred\\PostNL\\Entity\\Status', 'ThirtyBees\\PostNL\\Entity\\Status');
-class_alias('Firstred\\PostNL\\Entity\\Timeframe', 'ThirtyBees\\PostNL\\Entity\\Timeframe');
-class_alias('Firstred\\PostNL\\Entity\\TimeframeTimeFrame', 'ThirtyBees\\PostNL\\Entity\\TimeframeTimeFrame');
-class_alias('Firstred\\PostNL\\Entity\\Timeframes', 'ThirtyBees\\PostNL\\Entity\\Timeframes');
-class_alias('Firstred\\PostNL\\Entity\\Warning', 'ThirtyBees\\PostNL\\Entity\\Warning');
-class_alias('Firstred\\PostNL\\Exception\\ApiConnectionException', 'ThirtyBees\\PostNL\\Exception\\ApiConnectionException');
-class_alias('Firstred\\PostNL\\Exception\\ApiException', 'ThirtyBees\\PostNL\\Exception\\ApiException');
-class_alias('Firstred\\PostNL\\Exception\\CifDownException', 'ThirtyBees\\PostNL\\Exception\\CifDownException');
-class_alias('Firstred\\PostNL\\Exception\\CifException', 'ThirtyBees\\PostNL\\Exception\\CifException');
-class_alias('Firstred\\PostNL\\Exception\\HttpClientException', 'ThirtyBees\\PostNL\\Exception\\HttpClientException');
-class_alias('Firstred\\PostNL\\Exception\\InvalidArgumentException', 'ThirtyBees\\PostNL\\Exception\\InvalidArgumentException');
-class_alias('Firstred\\PostNL\\Exception\\InvalidBarcodeException', 'ThirtyBees\\PostNL\\Exception\\InvalidBarcodeException');
-class_alias('Firstred\\PostNL\\Exception\\InvalidConfigurationException', 'ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException');
-class_alias('Firstred\\PostNL\\Exception\\InvalidMethodException', 'ThirtyBees\\PostNL\\Exception\\InvalidMethodException');
-class_alias('Firstred\\PostNL\\Exception\\NotImplementedException', 'ThirtyBees\\PostNL\\Exception\\NotImplementedException');
-class_alias('Firstred\\PostNL\\Exception\\NotSupportedException', 'ThirtyBees\\PostNL\\Exception\\NotSupportedException');
-class_alias('Firstred\\PostNL\\Exception\\Promise\\AggregateException', 'ThirtyBees\\PostNL\\Exception\\Promise\\AggregateException');
-class_alias('Firstred\\PostNL\\Exception\\Promise\\CancellationException', 'ThirtyBees\\PostNL\\Exception\\Promise\\CancellationException');
-class_alias('Firstred\\PostNL\\Exception\\Promise\\RejectionException', 'ThirtyBees\\PostNL\\Exception\\Promise\\RejectionException');
-class_alias('Firstred\\PostNL\\Exception\\ResponseException', 'ThirtyBees\\PostNL\\Exception\\ResponseException');
-class_alias('Firstred\\PostNL\\Factory\\GuzzleRequestFactory', 'ThirtyBees\\PostNL\\Factory\\GuzzleRequestFactory');
-class_alias('Firstred\\PostNL\\Factory\\GuzzleResponseFactory', 'ThirtyBees\\PostNL\\Factory\\GuzzleResponseFactory');
-class_alias('Firstred\\PostNL\\Factory\\GuzzleStreamFactory', 'ThirtyBees\\PostNL\\Factory\\GuzzleStreamFactory');
-class_alias('Firstred\\PostNL\\Factory\\RequestFactoryInterface', 'ThirtyBees\\PostNL\\Factory\\RequestFactoryInterface');
-class_alias('Firstred\\PostNL\\Factory\\ResponseFactoryInterface', 'ThirtyBees\\PostNL\\Factory\\ResponseFactoryInterface');
-class_alias('Firstred\\PostNL\\Factory\\StreamFactoryInterface', 'ThirtyBees\\PostNL\\Factory\\StreamFactoryInterface');
-class_alias('Firstred\\PostNL\\HttpClient\\ClientInterface', 'ThirtyBees\\PostNL\\HttpClient\\ClientInterface');
-class_alias('Firstred\\PostNL\\HttpClient\\CurlClient', 'ThirtyBees\\PostNL\\HttpClient\\CurlClient');
-class_alias('Firstred\\PostNL\\HttpClient\\GuzzleClient', 'ThirtyBees\\PostNL\\HttpClient\\GuzzleClient');
-class_alias('Firstred\\PostNL\\HttpClient\\HTTPlugClient', 'ThirtyBees\\PostNL\\HttpClient\\HTTPlugClient');
-class_alias('Firstred\\PostNL\\HttpClient\\MockClient', 'ThirtyBees\\PostNL\\HttpClient\\MockClient');
-class_alias('Firstred\\PostNL\\PostNL', 'ThirtyBees\\PostNL\\PostNL');
-class_alias('Firstred\\PostNL\\Service\\AbstractService', 'ThirtyBees\\PostNL\\Service\\AbstractService');
-class_alias('Firstred\\PostNL\\Service\\BarcodeService', 'ThirtyBees\\PostNL\\Service\\BarcodeService');
-class_alias('Firstred\\PostNL\\Service\\BarcodeServiceInterface', 'ThirtyBees\\PostNL\\Service\\BarcodeServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\ConfirmingService', 'ThirtyBees\\PostNL\\Service\\ConfirmingService');
-class_alias('Firstred\\PostNL\\Service\\ConfirmingServiceInterface', 'ThirtyBees\\PostNL\\Service\\ConfirmingServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\DeliveryDateService', 'ThirtyBees\\PostNL\\Service\\DeliveryDateService');
-class_alias('Firstred\\PostNL\\Service\\DeliveryDateServiceInterface', 'ThirtyBees\\PostNL\\Service\\DeliveryDateServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\LabellingService', 'ThirtyBees\\PostNL\\Service\\LabellingService');
-class_alias('Firstred\\PostNL\\Service\\LabellingServiceInterface', 'ThirtyBees\\PostNL\\Service\\LabellingServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\LocationService', 'ThirtyBees\\PostNL\\Service\\LocationService');
-class_alias('Firstred\\PostNL\\Service\\LocationServiceInterface', 'ThirtyBees\\PostNL\\Service\\LocationServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\ServiceInterface', 'ThirtyBees\\PostNL\\Service\\ServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\ShippingService', 'ThirtyBees\\PostNL\\Service\\ShippingService');
-class_alias('Firstred\\PostNL\\Service\\ShippingServiceInterface', 'ThirtyBees\\PostNL\\Service\\ShippingServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\ShippingStatusService', 'ThirtyBees\\PostNL\\Service\\ShippingStatusService');
-class_alias('Firstred\\PostNL\\Service\\ShippingStatusServiceInterface', 'ThirtyBees\\PostNL\\Service\\ShippingStatusServiceInterface');
-class_alias('Firstred\\PostNL\\Service\\TimeframeService', 'ThirtyBees\\PostNL\\Service\\TimeframeService');
-class_alias('Firstred\\PostNL\\Service\\TimeframeServiceInterface', 'ThirtyBees\\PostNL\\Service\\TimeframeServiceInterface');
-class_alias('Firstred\\PostNL\\Util\\DummyLogger', 'ThirtyBees\\PostNL\\Util\\DummyLogger');
-class_alias('Firstred\\PostNL\\Util\\EachPromise', 'ThirtyBees\\PostNL\\Util\\EachPromise');
-class_alias('Firstred\\PostNL\\Util\\FlexibleEntityTrait', 'ThirtyBees\\PostNL\\Util\\FlexibleEntityTrait');
-class_alias('Firstred\\PostNL\\Util\\Message', 'ThirtyBees\\PostNL\\Util\\Message');
-class_alias('Firstred\\PostNL\\Util\\PendingPromise', 'ThirtyBees\\PostNL\\Util\\PendingPromise');
-class_alias('Firstred\\PostNL\\Util\\PromiseTool', 'ThirtyBees\\PostNL\\Util\\PromiseTool');
-class_alias('Firstred\\PostNL\\Util\\RFPdi', 'ThirtyBees\\PostNL\\Util\\RFPdi');
-class_alias('Firstred\\PostNL\\Util\\TaskQueue', 'ThirtyBees\\PostNL\\Util\\TaskQueue');
-class_alias('Firstred\\PostNL\\Util\\UUID', 'ThirtyBees\\PostNL\\Util\\UUID');
-class_alias('Firstred\\PostNL\\Util\\Util', 'ThirtyBees\\PostNL\\Util\\Util');
-class_alias('Firstred\\PostNL\\Util\\XmlSerializable', 'ThirtyBees\\PostNL\\Util\\XmlSerializable');
-class_alias('Firstred\\PostNL\\Exception\\PostNLException', 'ThirtyBees\\PostNL\\Exception\\AbstractException');
+use Firstred\PostNL\Entity\AbstractEntity;
+use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Amount;
+use Firstred\PostNL\Entity\Area;
+use Firstred\PostNL\Entity\Barcode;
+use Firstred\PostNL\Entity\Contact;
+use Firstred\PostNL\Entity\Content;
+use Firstred\PostNL\Entity\Coordinates;
+use Firstred\PostNL\Entity\CoordinatesNorthWest;
+use Firstred\PostNL\Entity\CoordinatesSouthEast;
+use Firstred\PostNL\Entity\Customer;
+use Firstred\PostNL\Entity\Customs;
+use Firstred\PostNL\Entity\CutOffTime;
+use Firstred\PostNL\Entity\Dimension;
+use Firstred\PostNL\Entity\Event;
+use Firstred\PostNL\Entity\Expectation;
+use Firstred\PostNL\Entity\Group;
+use Firstred\PostNL\Entity\Label;
+use Firstred\PostNL\Entity\Location;
+use Firstred\PostNL\Entity\Message\LabellingMessage;
+use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\Entity\OldStatus;
+use Firstred\PostNL\Entity\OpeningHours;
+use Firstred\PostNL\Entity\ProductOption;
+use Firstred\PostNL\Entity\ReasonNoTimeframe;
+use Firstred\PostNL\Entity\Request\CompleteStatus;
+use Firstred\PostNL\Entity\Request\CompleteStatusByPhase;
+use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
+use Firstred\PostNL\Entity\Request\CompleteStatusByStatus;
+use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Entity\Request\CurrentStatus;
+use Firstred\PostNL\Entity\Request\CurrentStatusByPhase;
+use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
+use Firstred\PostNL\Entity\Request\CurrentStatusByStatus;
+use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Entity\Request\GenerateLabel;
+use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+use Firstred\PostNL\Entity\Request\GetLocation;
+use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Entity\Request\GetSentDate;
+use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseOldStatus;
+use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
+use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
+use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
+use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
+use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
+use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
+use Firstred\PostNL\Entity\Response\GetLocationsResult;
+use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\MergedLabel;
+use Firstred\PostNL\Entity\Response\ResponseAddress;
+use Firstred\PostNL\Entity\Response\ResponseAmount;
+use Firstred\PostNL\Entity\Response\ResponseGroup;
+use Firstred\PostNL\Entity\Response\ResponseLocation;
+use Firstred\PostNL\Entity\Response\ResponseShipment;
+use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Response\SignatureResponse;
+use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Entity\Signature;
+use Firstred\PostNL\Entity\SOAP\Body;
+use Firstred\PostNL\Entity\SOAP\Envelope;
+use Firstred\PostNL\Entity\SOAP\Header;
+use Firstred\PostNL\Entity\SOAP\Security;
+use Firstred\PostNL\Entity\SOAP\UsernameToken;
+use Firstred\PostNL\Entity\Status;
+use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Entity\Timeframes;
+use Firstred\PostNL\Entity\TimeframeTimeFrame;
+use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\ApiConnectionException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidBarcodeException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\InvalidMethodException;
+use Firstred\PostNL\Exception\NotImplementedException;
+use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\PostNLException;
+use Firstred\PostNL\Exception\Promise\AggregateException;
+use Firstred\PostNL\Exception\Promise\CancellationException;
+use Firstred\PostNL\Exception\Promise\RejectionException;
+use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\Factory\GuzzleRequestFactory;
+use Firstred\PostNL\Factory\GuzzleResponseFactory;
+use Firstred\PostNL\Factory\GuzzleStreamFactory;
+use Firstred\PostNL\Factory\RequestFactoryInterface;
+use Firstred\PostNL\Factory\ResponseFactoryInterface;
+use Firstred\PostNL\Factory\StreamFactoryInterface;
+use Firstred\PostNL\HttpClient\ClientInterface;
+use Firstred\PostNL\HttpClient\CurlClient;
+use Firstred\PostNL\HttpClient\GuzzleClient;
+use Firstred\PostNL\HttpClient\HTTPlugClient;
+use Firstred\PostNL\HttpClient\MockClient;
+use Firstred\PostNL\PostNL;
+use Firstred\PostNL\Service\AbstractService;
+use Firstred\PostNL\Service\BarcodeService;
+use Firstred\PostNL\Service\BarcodeServiceInterface;
+use Firstred\PostNL\Service\ConfirmingService;
+use Firstred\PostNL\Service\ConfirmingServiceInterface;
+use Firstred\PostNL\Service\DeliveryDateService;
+use Firstred\PostNL\Service\DeliveryDateServiceInterface;
+use Firstred\PostNL\Service\LabellingService;
+use Firstred\PostNL\Service\LabellingServiceInterface;
+use Firstred\PostNL\Service\LocationService;
+use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\ServiceInterface;
+use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Service\ShippingStatusService;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
+use Firstred\PostNL\Service\TimeframeService;
+use Firstred\PostNL\Service\TimeframeServiceInterface;
+use Firstred\PostNL\Util\DummyLogger;
+use Firstred\PostNL\Util\EachPromise;
+use Firstred\PostNL\Util\FlexibleEntityTrait;
+use Firstred\PostNL\Util\Message as UtilMessage;
+use Firstred\PostNL\Util\PendingPromise;
+use Firstred\PostNL\Util\PromiseTool;
+use Firstred\PostNL\Util\RFPdi;
+use Firstred\PostNL\Util\TaskQueue;
+use Firstred\PostNL\Util\Util;
+use Firstred\PostNL\Util\UUID;
+use Firstred\PostNL\Util\XmlSerializable;
+
+$aliases = array(
+    AbstractEntity::class                  => 'ThirtyBees\\PostNL\\Entity\\AbstractEntity',
+    Address::class                         => 'ThirtyBees\\PostNL\\Entity\\Address',
+    Amount::class                          => 'ThirtyBees\\PostNL\\Entity\\Amount',
+    Area::class                            => 'ThirtyBees\\PostNL\\Entity\\Area',
+    Barcode::class                         => 'ThirtyBees\\PostNL\\Entity\\Barcode',
+    Contact::class                         => 'ThirtyBees\\PostNL\\Entity\\Contact',
+    Content::class                         => 'ThirtyBees\\PostNL\\Entity\\Content',
+    Coordinates::class                     => 'ThirtyBees\\PostNL\\Entity\\Coordinates',
+    CoordinatesNorthWest::class            => 'ThirtyBees\\PostNL\\Entity\\CoordinatesNorthWest',
+    CoordinatesSouthEast::class            => 'ThirtyBees\\PostNL\\Entity\\CoordinatesSouthEast',
+    Customer::class                        => 'ThirtyBees\\PostNL\\Entity\\Customer',
+    Customs::class                         => 'ThirtyBees\\PostNL\\Entity\\Customs',
+    CutOffTime::class                      => 'ThirtyBees\\PostNL\\Entity\\CutOffTime',
+    Dimension::class                       => 'ThirtyBees\\PostNL\\Entity\\Dimension',
+    Event::class                           => 'ThirtyBees\\PostNL\\Entity\\Event',
+    Expectation::class                     => 'ThirtyBees\\PostNL\\Entity\\Expectation',
+    Group::class                           => 'ThirtyBees\\PostNL\\Entity\\Group',
+    Label::class                           => 'ThirtyBees\\PostNL\\Entity\\Label',
+    Location::class                        => 'ThirtyBees\\PostNL\\Entity\\Location',
+    LabellingMessage::class                => 'ThirtyBees\\PostNL\\Entity\\Message\\LabellingMessage',
+    Message::class                         => 'ThirtyBees\\PostNL\\Entity\\Message\\Message',
+    OldStatus::class                       => 'ThirtyBees\\PostNL\\Entity\\OldStatus',
+    OpeningHours::class                    => 'ThirtyBees\\PostNL\\Entity\\OpeningHours',
+    ProductOption::class                   => 'ThirtyBees\\PostNL\\Entity\\ProductOption',
+    ReasonNoTimeframe::class               => 'ThirtyBees\\PostNL\\Entity\\ReasonNoTimeframe',
+    CompleteStatus::class                  => 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatus',
+    CompleteStatusByPhase::class           => 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByPhase',
+    CompleteStatusByReference::class       => 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByReference',
+    CompleteStatusByStatus::class          => 'ThirtyBees\\PostNL\\Entity\\Request\\CompleteStatusByStatus',
+    Confirming::class                      => 'ThirtyBees\\PostNL\\Entity\\Request\\Confirming',
+    CurrentStatus::class                   => 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatus',
+    CurrentStatusByPhase::class            => 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByPhase',
+    CurrentStatusByReference::class        => 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByReference',
+    CurrentStatusByStatus::class           => 'ThirtyBees\\PostNL\\Entity\\Request\\CurrentStatusByStatus',
+    GenerateBarcode::class                 => 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateBarcode',
+    GenerateLabel::class                   => 'ThirtyBees\\PostNL\\Entity\\Request\\GenerateLabel',
+    GetDeliveryDate::class                 => 'ThirtyBees\\PostNL\\Entity\\Request\\GetDeliveryDate',
+    GetLocation::class                     => 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocation',
+    GetLocationsInArea::class              => 'ThirtyBees\\PostNL\\Entity\\Request\\GetLocationsInArea',
+    GetNearestLocations::class             => 'ThirtyBees\\PostNL\\Entity\\Request\\GetNearestLocations',
+    GetSentDate::class                     => 'ThirtyBees\\PostNL\\Entity\\Request\\GetSentDate',
+    GetSentDateRequest::class              => 'ThirtyBees\\PostNL\\Entity\\Request\\GetSentDateRequest',
+    GetSignature::class                    => 'ThirtyBees\\PostNL\\Entity\\Request\\GetSignature',
+    GetTimeframes::class                   => 'ThirtyBees\\PostNL\\Entity\\Request\\GetTimeframes',
+    CompleteStatusResponse::class          => 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponse',
+    CompleteStatusResponseEvent::class     => 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent',
+    CompleteStatusResponseOldStatus::class => 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseOldStatus',
+    CompleteStatusResponseShipment::class  => 'ThirtyBees\\PostNL\\Entity\\Response\\CompleteStatusResponseShipment',
+    ConfirmingResponseShipment::class      => 'ThirtyBees\\PostNL\\Entity\\Response\\ConfirmingResponseShipment',
+    CurrentStatusResponse::class           => 'ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponse',
+    CurrentStatusResponseShipment::class   => 'ThirtyBees\\PostNL\\Entity\\Response\\CurrentStatusResponseShipment',
+    GenerateBarcodeResponse::class         => 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateBarcodeResponse',
+    GenerateLabelResponse::class           => 'ThirtyBees\\PostNL\\Entity\\Response\\GenerateLabelResponse',
+    GetDeliveryDateResponse::class         => 'ThirtyBees\\PostNL\\Entity\\Response\\GetDeliveryDateResponse',
+    GetLocationsInAreaResponse::class      => 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsInAreaResponse',
+    GetLocationsResult::class              => 'ThirtyBees\\PostNL\\Entity\\Response\\GetLocationsResult',
+    GetNearestLocationsResponse::class     => 'ThirtyBees\\PostNL\\Entity\\Response\\GetNearestLocationsResponse',
+    GetSentDateResponse::class             => 'ThirtyBees\\PostNL\\Entity\\Response\\GetSentDateResponse',
+    GetSignatureResponseSignature::class   => 'ThirtyBees\\PostNL\\Entity\\Response\\GetSignatureResponseSignature',
+    MergedLabel::class                     => 'ThirtyBees\\PostNL\\Entity\\Response\\MergedLabel',
+    ResponseAddress::class                 => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseAddress',
+    ResponseAmount::class                  => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseAmount',
+    ResponseGroup::class                   => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseGroup',
+    ResponseLocation::class                => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseLocation',
+    ResponseShipment::class                => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseShipment',
+    ResponseTimeframes::class              => 'ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes',
+    SignatureResponse::class               => 'ThirtyBees\\PostNL\\Entity\\Response\\SignatureResponse',
+    Body::class                            => 'ThirtyBees\\PostNL\\Entity\\SOAP\\Body',
+    Envelope::class                        => 'ThirtyBees\\PostNL\\Entity\\SOAP\\Envelope',
+    Header::class                          => 'ThirtyBees\\PostNL\\Entity\\SOAP\\Header',
+    Security::class                        => 'ThirtyBees\\PostNL\\Entity\\SOAP\\Security',
+    UsernameToken::class                   => 'ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken',
+    Shipment::class                        => 'ThirtyBees\\PostNL\\Entity\\Shipment',
+    Signature::class                       => 'ThirtyBees\\PostNL\\Entity\\Signature',
+    Status::class                          => 'ThirtyBees\\PostNL\\Entity\\Status',
+    Timeframe::class                       => 'ThirtyBees\\PostNL\\Entity\\Timeframe',
+    TimeframeTimeFrame::class              => 'ThirtyBees\\PostNL\\Entity\\TimeframeTimeFrame',
+    Timeframes::class                      => 'ThirtyBees\\PostNL\\Entity\\Timeframes',
+    Warning::class                         => 'ThirtyBees\\PostNL\\Entity\\Warning',
+    ApiConnectionException::class          => 'ThirtyBees\\PostNL\\Exception\\ApiConnectionException',
+    ApiException::class                    => 'ThirtyBees\\PostNL\\Exception\\ApiException',
+    CifDownException::class                => 'ThirtyBees\\PostNL\\Exception\\CifDownException',
+    CifException::class                    => 'ThirtyBees\\PostNL\\Exception\\CifException',
+    HttpClientException::class             => 'ThirtyBees\\PostNL\\Exception\\HttpClientException',
+    InvalidArgumentException::class        => 'ThirtyBees\\PostNL\\Exception\\InvalidArgumentException',
+    InvalidBarcodeException::class         => 'ThirtyBees\\PostNL\\Exception\\InvalidBarcodeException',
+    InvalidConfigurationException::class   => 'ThirtyBees\\PostNL\\Exception\\InvalidConfigurationException',
+    InvalidMethodException::class          => 'ThirtyBees\\PostNL\\Exception\\InvalidMethodException',
+    NotImplementedException::class         => 'ThirtyBees\\PostNL\\Exception\\NotImplementedException',
+    NotSupportedException::class           => 'ThirtyBees\\PostNL\\Exception\\NotSupportedException',
+    AggregateException::class              => 'ThirtyBees\\PostNL\\Exception\\Promise\\AggregateException',
+    CancellationException::class           => 'ThirtyBees\\PostNL\\Exception\\Promise\\CancellationException',
+    RejectionException::class              => 'ThirtyBees\\PostNL\\Exception\\Promise\\RejectionException',
+    ResponseException::class               => 'ThirtyBees\\PostNL\\Exception\\ResponseException',
+    GuzzleRequestFactory::class            => 'ThirtyBees\\PostNL\\Factory\\GuzzleRequestFactory',
+    GuzzleResponseFactory::class           => 'ThirtyBees\\PostNL\\Factory\\GuzzleResponseFactory',
+    GuzzleStreamFactory::class             => 'ThirtyBees\\PostNL\\Factory\\GuzzleStreamFactory',
+    RequestFactoryInterface::class         => 'ThirtyBees\\PostNL\\Factory\\RequestFactoryInterface',
+    ResponseFactoryInterface::class        => 'ThirtyBees\\PostNL\\Factory\\ResponseFactoryInterface',
+    StreamFactoryInterface::class          => 'ThirtyBees\\PostNL\\Factory\\StreamFactoryInterface',
+    ClientInterface::class                 => 'ThirtyBees\\PostNL\\HttpClient\\ClientInterface',
+    CurlClient::class                      => 'ThirtyBees\\PostNL\\HttpClient\\CurlClient',
+    GuzzleClient::class                    => 'ThirtyBees\\PostNL\\HttpClient\\GuzzleClient',
+    HTTPlugClient::class                   => 'ThirtyBees\\PostNL\\HttpClient\\HTTPlugClient',
+    MockClient::class                      => 'ThirtyBees\\PostNL\\HttpClient\\MockClient',
+    PostNL::class                          => 'ThirtyBees\\PostNL\\PostNL',
+    AbstractService::class                 => 'ThirtyBees\\PostNL\\Service\\AbstractService',
+    BarcodeService::class                  => 'ThirtyBees\\PostNL\\Service\\BarcodeService',
+    BarcodeServiceInterface::class         => 'ThirtyBees\\PostNL\\Service\\BarcodeServiceInterface',
+    ConfirmingService::class               => 'ThirtyBees\\PostNL\\Service\\ConfirmingService',
+    ConfirmingServiceInterface::class      => 'ThirtyBees\\PostNL\\Service\\ConfirmingServiceInterface',
+    DeliveryDateService::class             => 'ThirtyBees\\PostNL\\Service\\DeliveryDateService',
+    DeliveryDateServiceInterface::class    => 'ThirtyBees\\PostNL\\Service\\DeliveryDateServiceInterface',
+    LabellingService::class                => 'ThirtyBees\\PostNL\\Service\\LabellingService',
+    LabellingServiceInterface::class       => 'ThirtyBees\\PostNL\\Service\\LabellingServiceInterface',
+    LocationService::class                 => 'ThirtyBees\\PostNL\\Service\\LocationService',
+    LocationServiceInterface::class        => 'ThirtyBees\\PostNL\\Service\\LocationServiceInterface',
+    ServiceInterface::class                => 'ThirtyBees\\PostNL\\Service\\ServiceInterface',
+    ShippingService::class                 => 'ThirtyBees\\PostNL\\Service\\ShippingService',
+    ShippingServiceInterface::class        => 'ThirtyBees\\PostNL\\Service\\ShippingServiceInterface',
+    ShippingStatusService::class           => 'ThirtyBees\\PostNL\\Service\\ShippingStatusService',
+    ShippingStatusServiceInterface::class  => 'ThirtyBees\\PostNL\\Service\\ShippingStatusServiceInterface',
+    TimeframeService::class                => 'ThirtyBees\\PostNL\\Service\\TimeframeService',
+    TimeframeServiceInterface::class       => 'ThirtyBees\\PostNL\\Service\\TimeframeServiceInterface',
+    DummyLogger::class                     => 'ThirtyBees\\PostNL\\Util\\DummyLogger',
+    EachPromise::class                     => 'ThirtyBees\\PostNL\\Util\\EachPromise',
+    FlexibleEntityTrait::class             => 'ThirtyBees\\PostNL\\Util\\FlexibleEntityTrait',
+    UtilMessage::class                     => 'ThirtyBees\\PostNL\\Util\\Message',
+    PendingPromise::class                  => 'ThirtyBees\\PostNL\\Util\\PendingPromise',
+    PromiseTool::class                     => 'ThirtyBees\\PostNL\\Util\\PromiseTool',
+    RFPdi::class                           => 'ThirtyBees\\PostNL\\Util\\RFPdi',
+    TaskQueue::class                       => 'ThirtyBees\\PostNL\\Util\\TaskQueue',
+    UUID::class                            => 'ThirtyBees\\PostNL\\Util\\UUID',
+    Util::class                            => 'ThirtyBees\\PostNL\\Util\\Util',
+    XmlSerializable::class                 => 'ThirtyBees\\PostNL\\Util\\XmlSerializable',
+    PostNLException::class                 => 'ThirtyBees\\PostNL\\Exception\\AbstractException',
+);
+
+spl_autoload_register(function ($alias) {
+    if (isset($deprecatedClasses[$alias])) {
+        $class = $deprecatedClasses[$alias];
+        postnl_trigger_deprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            "Using class `$alias` is deprecated. Please use the `$class` class instead."
+        );
+        class_alias($class, $alias);
+    }
+});

@@ -67,7 +67,6 @@ use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\InternationalMailAndPacketsException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -152,11 +151,11 @@ use const E_USER_WARNING;
  */
 class PostNL implements LoggerAwareInterface
 {
-    // New REST API
+    /** @deprecated 1.4.0 */
     const MODE_REST = 1;
-    // New SOAP API
+    /** @deprecated 1.4.0 */
     const MODE_SOAP = 2;
-    // Old SOAP API
+    /** @deprecated 1.4.0 */
     const MODE_LEGACY = 2;
 
     /**
@@ -311,13 +310,24 @@ class PostNL implements LoggerAwareInterface
         Customer $customer,
         $apiKey,
         $sandbox,
-        $mode = self::MODE_REST
+        $mode = null
     ) {
         $this->checkEnvironment();
 
         $this->setCustomer($customer);
         $this->setToken($apiKey);
         $this->setSandbox((bool) $sandbox);
+
+        if (null !== $mode) {
+            trigger_deprecation(
+                'firstred/postnl-api-php',
+                '1.4.0',
+                'Setting an API mode is deprecated. Do not set an API mode for a seamless switch to the recommended mode.'
+            );
+        } else {
+            $mode = static::MODE_REST;
+        }
+
         $this->setMode((int) $mode);
     }
 
@@ -475,6 +485,14 @@ class PostNL implements LoggerAwareInterface
             $mode = static::MODE_REST;
         } elseif (static::MODE_LEGACY === $mode) {
             $mode = static::MODE_SOAP;
+        }
+
+        if ($mode === static::MODE_SOAP) {
+            trigger_deprecation(
+                'firstred/postnl-api-php',
+                '2.0.0',
+                'Using the SOAP API is deprecated. Please use the REST API instead.'
+            );
         }
 
         $this->mode = (int) $mode;

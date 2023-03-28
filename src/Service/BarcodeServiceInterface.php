@@ -95,6 +95,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode);
 
@@ -111,6 +112,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateBarcodesSOAP(array $generateBarcodes);
 
@@ -150,6 +152,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode);
 
@@ -166,6 +169,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response);
 }

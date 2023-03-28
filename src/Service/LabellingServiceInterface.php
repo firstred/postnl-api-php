@@ -105,6 +105,7 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true);
 
@@ -122,6 +123,7 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateLabelsSOAP(array $generateLabels);
 
@@ -162,6 +164,7 @@ interface LabellingServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true);
 
@@ -176,6 +179,7 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGenerateLabelResponseSOAP(ResponseInterface $response);
 }

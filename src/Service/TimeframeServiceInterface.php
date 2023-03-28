@@ -86,6 +86,7 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getTimeframesSOAP(GetTimeframes $getTimeframes);
 
@@ -124,6 +125,7 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes);
 
@@ -140,6 +142,7 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetTimeframesResponseSOAP(ResponseInterface $response);
 }

@@ -36,6 +36,7 @@ use Psr\Http\Message\ResponseInterface;
  * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
  *
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
+ * @deprecated 1.4.0
  */
 interface ResponseFactoryInterface
 {

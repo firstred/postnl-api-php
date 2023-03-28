@@ -36,6 +36,8 @@ use RuntimeException;
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  *
  * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
+ *
+ * @deprecated 1.4.0
  */
 interface StreamFactoryInterface
 {

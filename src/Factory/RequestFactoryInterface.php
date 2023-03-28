@@ -37,6 +37,7 @@ use Psr\Http\Message\UriInterface;
  * FOR BACKWARD COMPATIBLE REASONS - NOT COMPATIBLE WITH SYMFONY HTTP CLIENT
  *
  * @since 1.2.0
+ * @deprecated 1.4.0
  */
 interface RequestFactoryInterface
 {

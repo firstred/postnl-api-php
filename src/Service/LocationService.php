@@ -169,6 +169,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
@@ -267,6 +268,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
@@ -366,6 +368,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getLocationSOAP(GetLocation $getLocation)
     {
@@ -503,6 +506,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations)
     {
@@ -554,6 +558,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
@@ -675,6 +680,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations)
     {
@@ -724,6 +730,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
@@ -854,6 +861,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetLocationRequestSOAP(GetLocation $getLocations)
     {
@@ -905,6 +913,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetLocationResponseSOAP(ResponseInterface $response)
     {

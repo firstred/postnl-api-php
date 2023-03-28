@@ -122,6 +122,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
@@ -181,6 +182,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
@@ -240,6 +242,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
     {
@@ -321,6 +324,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {

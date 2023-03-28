@@ -178,6 +178,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function confirmShipmentSOAP(Confirming $confirming)
     {
@@ -199,6 +200,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function confirmShipmentsSOAP(array $confirmings)
     {
@@ -289,6 +291,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildConfirmRequestSOAP(Confirming $confirming)
     {
@@ -340,6 +343,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processConfirmResponseSOAP(ResponseInterface $response)
     {

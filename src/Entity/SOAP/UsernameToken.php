@@ -38,6 +38,7 @@ use Sabre\Xml\Writer;
  * @method UsernameToken setPassword(string|null $Password = null)
  *
  * @since 1.0.0
+ * @deprecated 1.4.0
  */
 class UsernameToken extends AbstractEntity
 {

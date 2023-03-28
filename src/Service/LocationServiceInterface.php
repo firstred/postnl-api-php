@@ -97,6 +97,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations);
 
@@ -136,6 +137,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations);
 
@@ -175,6 +177,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function getLocationSOAP(GetLocation $getLocation);
 
@@ -213,6 +216,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations);
 
@@ -230,6 +234,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response);
 
@@ -268,6 +273,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations);
 
@@ -283,6 +289,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response);
 
@@ -321,6 +328,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildGetLocationRequestSOAP(GetLocation $getLocations);
 
@@ -338,6 +346,7 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processGetLocationResponseSOAP(ResponseInterface $response);
 }

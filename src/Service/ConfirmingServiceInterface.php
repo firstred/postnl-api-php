@@ -101,6 +101,7 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function confirmShipmentSOAP(Confirming $confirming);
 
@@ -117,6 +118,7 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function confirmShipmentsSOAP(array $confirmings);
 
@@ -153,6 +155,7 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function buildConfirmRequestSOAP(Confirming $confirming);
 
@@ -169,6 +172,7 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
     public function processConfirmResponseSOAP(ResponseInterface $response);
 }
