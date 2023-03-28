@@ -50,6 +50,7 @@
         "symfony/http-client": "Another popular HTTP client you can use natively -- supports ^6.0"
     },
     "autoload": {
+        "files": ["src/deprecated.php"],
         "psr-4": {
             "Firstred\\PostNL\\": "src/"
         }
