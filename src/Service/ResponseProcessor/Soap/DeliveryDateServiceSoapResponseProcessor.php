@@ -58,21 +58,18 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @param bool                    $sandbox
      * @param RequestFactoryInterface $requestFactory
      * @param StreamFactoryInterface  $streamFactory
-     * @param string                  $version
      */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface  $streamFactory,
-        string                  $version,
     ) {
         parent::__construct(
             apiKey: $apiKey,
             sandbox: $sandbox,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
         );
 
         $this->namespaces = array_merge($this->namespaces, [

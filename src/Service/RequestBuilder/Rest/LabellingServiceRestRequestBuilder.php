@@ -48,8 +48,8 @@ use const PHP_QUERY_RFC3986;
 class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LabellingServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
 
     /** @var int[] */
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
@@ -63,10 +63,7 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     {
         $this->setService(entity: $generateLabel);
 
-        $endpoint = Util::versionStringToURLString(
-            version: $this->getVersion(),
-            url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-        );
+        $endpoint = $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
         foreach ($generateLabel->getShipments() as $shipment) {
             if (in_array(needle: $shipment->getProductCodeDelivery(), haystack: static::$insuranceProductCodes)) {
                 // Insurance behaves a bit strange w/ v2.2, falling back on v2.1

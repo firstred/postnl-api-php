@@ -44,8 +44,8 @@ use const PHP_QUERY_RFC3986;
 class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder implements TimeframeServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/timeframes';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/timeframes';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
 
     /**
      * Build the GetTimeframes request for the REST API.
@@ -96,10 +96,8 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: (($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint),
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }

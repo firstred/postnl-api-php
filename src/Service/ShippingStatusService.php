@@ -76,7 +76,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -87,7 +86,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = ShippingStatusServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
@@ -98,7 +96,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -445,14 +442,12 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
-            version: $this->getVersion(),
         );
         $this->responseProcessor = new ShippingStatusServiceRestResponseProcessor(
             apiKey: $this->getApiKey(),
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
-            version: $this->getVersion(),
         );
     }
 }

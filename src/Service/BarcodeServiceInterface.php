@@ -39,8 +39,6 @@ use Firstred\PostNL\Exception\ResponseException;
  */
 interface BarcodeServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '1.1';
-
     /**
      * Generate a single barcode.
      *

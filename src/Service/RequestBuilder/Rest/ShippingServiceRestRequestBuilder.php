@@ -46,8 +46,8 @@ use const PHP_QUERY_RFC3986;
 class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/${VERSION}/shipment';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/${VERSION}/shipment';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/v1/shipment';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/v1/shipment';
 
     /**
      * @param SendShipment $sendShipment
@@ -65,7 +65,7 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
 
         return $this->getRequestFactory()->createRequest(
             method: 'POST',
-            uri: Util::versionStringToURLString(version: $this->getVersion(), url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(data: [
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(data: [
                 'confirm' => $confirm,
             ], numeric_prefix: '', arg_separator: '&', encoding_type: PHP_QUERY_RFC3986)
         )

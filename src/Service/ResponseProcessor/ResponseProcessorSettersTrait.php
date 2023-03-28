@@ -60,16 +60,6 @@ trait ResponseProcessorSettersTrait
     /**
      * @since 2.0.0
      */
-    public function setVersion(string $version): static
-    {
-        if (isset($this->responseProcessor)) $this->responseProcessor->setVersion(version: $version);
-
-        return parent::setVersion(version: $version);
-    }
-
-    /**
-     * @since 2.0.0
-     */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
         if (isset($this->responseProcessor)) $this->responseProcessor->setRequestFactory(requestFactory: $requestFactory);

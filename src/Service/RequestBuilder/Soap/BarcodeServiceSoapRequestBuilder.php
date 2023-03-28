@@ -77,8 +77,8 @@ use Sabre\Xml\Service as XmlService;
 class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements BarcodeServiceRequestBuilderInterface
 {
     // Endpoints
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
 
     // SOAP API specific
     private const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
@@ -88,21 +88,18 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      * @param bool                    $sandbox
      * @param RequestFactoryInterface $requestFactory
      * @param StreamFactoryInterface  $streamFactory
-     * @param string                  $version
      */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface  $streamFactory,
-        string                  $version,
     ) {
         parent::__construct(
             apiKey: $apiKey,
             sandbox: $sandbox,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
         );
 
         $this->namespaces = array_merge($this->namespaces, [
@@ -152,10 +149,8 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
 
         return $this->getRequestFactory()->createRequest(
             method: 'POST',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            ))
+            uri: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
+        )
             ->withHeader('SOAPAction', value: "\"$soapAction\"")
             ->withHeader('Accept', value: 'text/xml')
             ->withHeader('Content-Type', value: 'text/xml;charset=UTF-8')

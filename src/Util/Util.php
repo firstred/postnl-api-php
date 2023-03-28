@@ -315,14 +315,4 @@ class Util
 
         return -1;
     }
-
-    /**
-     * @since 2.0.0
-     */
-    public static function versionStringToURLString(string $version, string $url): string
-    {
-        $newVersion = 'v'.str_replace(search: '.', replace: '_', subject: (string) $version);
-
-        return str_replace(search: '${VERSION}', replace: $newVersion, subject: $url);
-    }
 }

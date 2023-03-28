@@ -77,7 +77,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -88,7 +87,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = DeliveryDateServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
@@ -99,7 +97,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -199,14 +196,12 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new DeliveryDateServiceRestResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         } else {
             $this->requestBuilder = new DeliveryDateServiceSoapRequestBuilder(
@@ -214,14 +209,12 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new DeliveryDateServiceSoapResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         }
     }

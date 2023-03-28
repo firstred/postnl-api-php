@@ -45,8 +45,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface LabellingServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2.2';
-
     /**
      * Generate a single barcode via REST.
      *

@@ -46,8 +46,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface LocationServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2.1';
-
     /**
      * Get the nearest locations.
      *

@@ -76,7 +76,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -87,7 +86,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = TimeframeServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
@@ -98,7 +96,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -162,14 +159,12 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new TimeframeServiceRestResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         } else {
             $this->requestBuilder = new TimeframeServiceSoapRequestBuilder(
@@ -177,14 +172,12 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new TimeframeServiceSoapResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         }
     }

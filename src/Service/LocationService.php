@@ -79,7 +79,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -90,7 +89,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = LocationServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
@@ -101,7 +99,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -248,14 +245,12 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new LocationServiceRestResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         } else {
             $this->requestBuilder = new LocationServiceSoapRequestBuilder(
@@ -263,14 +258,12 @@ class LocationService extends AbstractService implements LocationServiceInterfac
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new LocationServiceSoapResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         }
     }

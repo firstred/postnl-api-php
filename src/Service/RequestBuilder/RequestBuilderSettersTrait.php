@@ -60,16 +60,6 @@ trait RequestBuilderSettersTrait
     /**
      * @since 2.0.0
      */
-    public function setVersion(string $version): static
-    {
-        if (isset($this->adapter)) $this->adapter->setVersion(version: $version);
-
-        return parent::setVersion(version: $version);
-    }
-
-    /**
-     * @since 2.0.0
-     */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
         if (isset($this->adapter)) $this->adapter->setRequestFactory(requestFactory: $requestFactory);

@@ -45,8 +45,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface DeliveryDateServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2.2';
-
     /**
      * Get a delivery date via REST.
      *

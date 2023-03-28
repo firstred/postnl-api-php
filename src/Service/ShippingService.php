@@ -70,7 +70,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -83,7 +82,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = ShippingServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
@@ -94,7 +92,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -164,14 +161,12 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
-            version: $this->getVersion(),
         );
         $this->responseProcessor = new ShippingServiceRestResponseProcessor(
             apiKey: $this->getApiKey(),
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
-            version: $this->getVersion(),
         );
     }
 }

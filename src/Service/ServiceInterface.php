@@ -97,14 +97,4 @@ interface ServiceInterface
      * @since 1.2.0
      */
     public function setCache(CacheItemPoolInterface $cache = null): static;
-
-    /**
-     * @since 2.0.0
-     */
-    public function getVersion(): string;
-
-    /**
-     * @since 2.0.0
-     */
-    public function setVersion(string $version): static;
 }

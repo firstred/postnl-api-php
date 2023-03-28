@@ -50,8 +50,8 @@ use const PHP_QUERY_RFC3986;
 class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingStatusServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/status';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/status';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/status';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/status';
 
     /**
      * Build the CurrentStatus request for the REST API.
@@ -106,10 +106,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            ))
+            uri: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }
@@ -204,10 +202,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/signature/{$getSignature->getShipment()->getBarcode()}",
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }
@@ -239,10 +235,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/{$customer->getCustomerNumber()}/updatedshipments$range"
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT)."/{$customer->getCustomerNumber()}/updatedshipments$range"
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }

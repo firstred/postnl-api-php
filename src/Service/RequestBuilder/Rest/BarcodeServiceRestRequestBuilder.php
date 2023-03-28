@@ -69,8 +69,8 @@ use const PHP_QUERY_RFC3986;
 class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implements BarcodeServiceRequestBuilderInterface
 {
     // Endpoints
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/barcode';
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/barcode';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
 
     /**
      * Build the `generateBarcode` HTTP request for the REST API.
@@ -88,10 +88,7 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            ).'?'.http_build_query(data: [
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).'?'.http_build_query(data: [
                 'CustomerCode'   => $generateBarcode->getCustomer()->getCustomerCode(),
                 'CustomerNumber' => $generateBarcode->getCustomer()->getCustomerNumber(),
                 'Type'           => $generateBarcode->getBarcode()->getType(),

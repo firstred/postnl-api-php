@@ -43,8 +43,8 @@ use ReflectionException;
 class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ConfirmingServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/confirm';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/confirm';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/confirm';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
 
     /**
      * @throws InvalidArgumentException
@@ -57,10 +57,8 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
 
         return $this->getRequestFactory()->createRequest(
             method: 'POST',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-            ))
+            uri: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')

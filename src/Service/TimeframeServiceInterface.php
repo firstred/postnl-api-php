@@ -43,8 +43,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface TimeframeServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2.1';
-
     /**
      * Get timeframes via REST.
      *

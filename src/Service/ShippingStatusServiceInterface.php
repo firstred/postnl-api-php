@@ -49,8 +49,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface ShippingStatusServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2';
-
     /**
      * Gets the current status.
      *

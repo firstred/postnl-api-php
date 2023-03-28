@@ -88,7 +88,6 @@ abstract class AbstractService
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
@@ -98,7 +97,6 @@ abstract class AbstractService
         private HttpClientInterface        $httpClient,
         private RequestFactoryInterface    $requestFactory,
         private StreamFactoryInterface     $streamFactory,
-        private string                     $version,
         private int                        $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
@@ -278,28 +276,6 @@ abstract class AbstractService
     public function setSandbox(bool $sandbox): static
     {
         $this->sandbox = $sandbox;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     * @since 2.0.0
-     */
-    public function getVersion(): string
-    {
-        return $this->version;
-    }
-
-    /**
-     * @param string $version
-     *
-     * @return static
-     * @since 2.0.0
-     */
-    public function setVersion(string $version): static
-    {
-        $this->version = $version;
 
         return $this;
     }

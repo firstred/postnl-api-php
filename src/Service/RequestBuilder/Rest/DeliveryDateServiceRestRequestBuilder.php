@@ -48,8 +48,8 @@ use const PHP_QUERY_RFC3986;
 class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder implements DeliveryDateServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/calculate/date';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/calculate/date';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/calculate/date';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date';
 
     /**
      * Build the GetDeliveryDate request for the REST API.
@@ -138,10 +138,8 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }
@@ -185,10 +183,8 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }

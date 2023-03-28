@@ -48,14 +48,12 @@ abstract class AbstractResponseProcessor
      * @param bool                    $sandbox
      * @param RequestFactoryInterface $requestFactory
      * @param StreamFactoryInterface  $streamFactory
-     * @param string                  $version
      */
     public function __construct(
         private HiddenString            $apiKey,
         private bool                    $sandbox,
         private RequestFactoryInterface $requestFactory,
         private StreamFactoryInterface  $streamFactory,
-        private string                  $version,
     ) {
     }
 
@@ -138,24 +136,6 @@ abstract class AbstractResponseProcessor
     public function setSandbox(bool $sandbox): AbstractResponseProcessor
     {
         $this->sandbox = $sandbox;
-
-        return $this;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function getVersion(): string
-    {
-        return $this->version;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setVersion(string $version): static
-    {
-        $this->version = $version;
 
         return $this;
     }

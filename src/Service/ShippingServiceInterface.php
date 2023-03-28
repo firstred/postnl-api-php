@@ -41,8 +41,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
  */
 interface ShippingServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '1';
-
     /**
      * Generate a single Shipping vai REST.
      *

@@ -47,8 +47,8 @@ use const PHP_QUERY_RFC3986;
 class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LocationServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/locations';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/locations';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/locations';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
 
     /**
      * Build the GenerateLabel request for the REST API.
@@ -158,10 +158,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }
@@ -185,10 +183,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: Util::versionStringToURLString(
-                version: $this->getVersion(),
-                url: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
-            ))
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');
     }

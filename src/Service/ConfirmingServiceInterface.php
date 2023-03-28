@@ -42,8 +42,6 @@ use Firstred\PostNL\Exception\ResponseException;
  */
 interface ConfirmingServiceInterface extends ServiceInterface
 {
-    public const DEFAULT_VERSION = '2';
-
     /**
      * Generate a single barcode via REST.
      *

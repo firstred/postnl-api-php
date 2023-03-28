@@ -70,7 +70,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param string                                  $version
      * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
@@ -81,7 +80,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         HttpClientInterface                $httpClient,
         RequestFactoryInterface            $requestFactory,
         StreamFactoryInterface             $streamFactory,
-        string                             $version = ConfirmingServiceInterface::DEFAULT_VERSION,
         int                                $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
@@ -92,7 +90,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
             apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
@@ -174,14 +171,12 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new ConfirmingServiceRestResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         } else {
             $this->requestBuilder = new ConfirmingServiceSoapRequestBuilder(
@@ -189,14 +184,12 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
             $this->responseProcessor = new ConfirmingServiceSoapResponseProcessor(
                 apiKey: $this->getApiKey(),
                 sandbox: $this->isSandbox(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                version: $this->getVersion(),
             );
         }
     }

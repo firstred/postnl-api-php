@@ -56,8 +56,8 @@ use function str_replace;
 class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LabellingServiceRequestBuilderInterface
 {
     // Endpoints
-    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/${VERSION}/label';
-    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/${VERSION}/label';
+    private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
 
     // SOAP API specific
     private const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
@@ -68,21 +68,18 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @param bool                    $sandbox
      * @param RequestFactoryInterface $requestFactory
      * @param StreamFactoryInterface  $streamFactory
-     * @param string                  $version
      */
     public function __construct(
         HiddenString            $apiKey,
         bool                    $sandbox,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface  $streamFactory,
-        string                  $version,
     ) {
         parent::__construct(
             apiKey: $apiKey,
             sandbox: $sandbox,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            version: $version,
         );
 
         $this->namespaces = array_merge($this->namespaces, [
@@ -130,10 +127,7 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
             ]
         );
 
-        $endpoint = Util::versionStringToURLString(
-            version: $this->getVersion(),
-            url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,
-        );
+        $endpoint = $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT;
 
         foreach ($generateLabel->getShipments() as $shipment) {
             if (in_array(needle: $shipment->getProductCodeDelivery(), haystack: self::$insuranceProductCodes)) {
