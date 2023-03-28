@@ -304,11 +304,9 @@ class PostNL implements LoggerAwareInterface
     public function setToken(string|HiddenString|UsernameToken $apiKey): static
     {
         trigger_deprecation(
-            'firstred/postnl-api-php',
-            '2.0.0',
-            'Using "%s" is deprecated, use "%s" instead.',
-            'setToken',
-            'setApiKey',
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `setToken` is deprecated, use `setApiKey` instead.',
         );
 
         if ($apiKey instanceof UsernameToken) {
@@ -329,11 +327,9 @@ class PostNL implements LoggerAwareInterface
     public function getToken(): UsernameToken
     {
         trigger_deprecation(
-            'firstred/postnl-api-php',
-            '2.0.0',
-            'Using "%s" is deprecated, use "%s" instead.',
-            'getToken',
-            'getApiKey',
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `getToken` is deprecated, use `getApiKey` instead.',
         );
 
         return new UsernameToken(Password: $this->getApiKey());
@@ -422,7 +418,7 @@ class PostNL implements LoggerAwareInterface
     /**
      * @param int $mode
      *
-     * @return $this
+     * @return static
      * @throws PostNLInvalidArgumentException
      *
      * @deprecated 2.0.0
