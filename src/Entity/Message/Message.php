@@ -78,7 +78,7 @@ class Message extends AbstractEntity
     /**
      * @param string|null $MessageID
      *
-     * @return $this
+     * @return static
      */
     public function setMessageID(?string $MessageID): static
     {

@@ -66,7 +66,7 @@ class Coordinates extends AbstractEntity
     /**
      * @param string|null $Latitude
      *
-     * @return $this
+     * @return static
      */
     public function setLatitude(?string $Latitude): static
     {
@@ -86,7 +86,7 @@ class Coordinates extends AbstractEntity
     /**
      * @param string|null $Longitude
      *
-     * @return $this
+     * @return static
      */
     public function setLongitude(?string $Longitude): static
     {

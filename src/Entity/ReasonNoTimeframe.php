@@ -109,7 +109,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @param string|null $Code
      *
-     * @return $this
+     * @return static
      */
     public function setCode(?string $Code): ReasonNoTimeframe
     {
@@ -129,7 +129,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(?string $Description): ReasonNoTimeframe
     {
@@ -177,7 +177,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @param string|null $From
      *
-     * @return $this
+     * @return static
      */
     public function setFrom(?string $From): static
     {
@@ -197,7 +197,7 @@ class ReasonNoTimeframe extends AbstractEntity
     /**
      * @param string|null $To
      *
-     * @return $this
+     * @return static
      */
     public function setTo(?string $To): static
     {

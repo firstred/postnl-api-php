@@ -126,7 +126,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(?string $City): static
     {
@@ -146,7 +146,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $CountryCode
      *
-     * @return $this
+     * @return static
      */
     public function setCountryCode(?string $CountryCode): static
     {
@@ -166,7 +166,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(?string $HouseNr): static
     {
@@ -186,7 +186,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
@@ -206,7 +206,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param array|null $Options
      *
-     * @return $this
+     * @return static
      */
     public function setOptions(?array $Options): static
     {
@@ -226,7 +226,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $ShippingDuration
      *
-     * @return $this
+     * @return static
      */
     public function setShippingDuration(?string $ShippingDuration): static
     {
@@ -246,7 +246,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(?string $Street): static
     {
@@ -302,7 +302,7 @@ class GetSentDate extends AbstractEntity
     /**
      * @param string|null $postcode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(?string $postcode = null): static
     {

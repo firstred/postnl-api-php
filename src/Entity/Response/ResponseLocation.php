@@ -180,7 +180,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param Address|null $Address
      *
-     * @return $this
+     * @return static
      */
     public function setAddress(?Address $Address): static
     {
@@ -200,7 +200,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param array|null $DeliveryOptions
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryOptions(?array $DeliveryOptions): static
     {
@@ -220,7 +220,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param int|float|string|null $Distance
      *
-     * @return $this
+     * @return static
      */
     public function setDistance(int|float|string|null $Distance): static
     {
@@ -244,7 +244,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param float|string|null $Latitude
      *
-     * @return $this
+     * @return static
      */
     public function setLatitude(float|string|null $Latitude): static
     {
@@ -268,7 +268,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param float|string|null $Longitude
      *
-     * @return $this
+     * @return static
      */
     public function setLongitude(float|string|null $Longitude): static
     {
@@ -292,7 +292,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(?string $Name): static
     {
@@ -312,7 +312,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param OpeningHours|null $OpeningHours
      *
-     * @return $this
+     * @return static
      */
     public function setOpeningHours(?OpeningHours $OpeningHours): static
     {
@@ -332,7 +332,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $PartnerName
      *
-     * @return $this
+     * @return static
      */
     public function setPartnerName(?string $PartnerName): static
     {
@@ -352,7 +352,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $PhoneNumber
      *
-     * @return $this
+     * @return static
      */
     public function setPhoneNumber(?string $PhoneNumber): static
     {
@@ -372,7 +372,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param int|string|null $LocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setLocationCode(int|string|null $LocationCode): static
     {
@@ -396,7 +396,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(?string $RetailNetworkID): static
     {
@@ -416,7 +416,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $Saleschannel
      *
-     * @return $this
+     * @return static
      */
     public function setSaleschannel(?string $Saleschannel): static
     {
@@ -436,7 +436,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $TerminalType
      *
-     * @return $this
+     * @return static
      */
     public function setTerminalType(?string $TerminalType): static
     {
@@ -476,7 +476,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
@@ -496,7 +496,7 @@ class ResponseLocation extends AbstractEntity
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {

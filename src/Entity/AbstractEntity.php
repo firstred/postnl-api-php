@@ -112,7 +112,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * @param string|int $id
      *
-     * @return $this
+     * @return static
      */
     public function setId(string|int $id): static
     {

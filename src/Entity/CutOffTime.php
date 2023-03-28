@@ -75,7 +75,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @param string|null $Day
      *
-     * @return $this
+     * @return static
      */
     public function setDay(?string $Day): static
     {
@@ -95,7 +95,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @param string|null $Time
      *
-     * @return $this
+     * @return static
      */
     public function setTime(?string $Time): static
     {
@@ -115,7 +115,7 @@ class CutOffTime extends AbstractEntity
     /**
      * @param bool|null $Available
      *
-     * @return $this
+     * @return static
      */
     public function setAvailable(?bool $Available): static
     {

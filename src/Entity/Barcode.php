@@ -75,7 +75,7 @@ class Barcode extends AbstractEntity
     /**
      * @param string|null $Type
      *
-     * @return $this
+     * @return static
      */
     public function setType(?string $Type): static
     {
@@ -95,7 +95,7 @@ class Barcode extends AbstractEntity
     /**
      * @param string|null $Range
      *
-     * @return $this
+     * @return static
      */
     public function setRange(?string $Range): static
     {
@@ -115,7 +115,7 @@ class Barcode extends AbstractEntity
     /**
      * @param string|null $Serie
      *
-     * @return $this
+     * @return static
      */
     public function setSerie(?string $Serie): static
     {

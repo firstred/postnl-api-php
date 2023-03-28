@@ -71,7 +71,7 @@ class GetSentDateRequest extends AbstractEntity
     /**
      * @param GetSentDate|null $GetSentDate
      *
-     * @return $this
+     * @return static
      */
     public function setGetSentDate(?GetSentDate $GetSentDate): static
     {
@@ -91,7 +91,7 @@ class GetSentDateRequest extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?Message $Message): static
     {

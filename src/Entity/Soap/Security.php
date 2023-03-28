@@ -68,7 +68,7 @@ class Security extends AbstractEntity
     /**
      * @param UsernameToken $UsernameToken
      *
-     * @return $this
+     * @return static
      */
     public function setUsernameToken(UsernameToken $UsernameToken): static
     {

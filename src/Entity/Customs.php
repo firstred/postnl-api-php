@@ -153,7 +153,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $Certificate
      *
-     * @return $this
+     * @return static
      */
     public function setCertificate(?string $Certificate): static
     {
@@ -173,7 +173,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $CertificateNr
      *
-     * @return $this
+     * @return static
      */
     public function setCertificateNr(?string $CertificateNr): static
     {
@@ -193,7 +193,7 @@ class Customs extends AbstractEntity
     /**
      * @param Content[]|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(?array $Content): static
     {
@@ -221,7 +221,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $Currency
      *
-     * @return $this
+     * @return static
      */
     public function setCurrency(?string $Currency): static
     {
@@ -241,7 +241,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $HandleAsNonDeliverable
      *
-     * @return $this
+     * @return static
      */
     public function setHandleAsNonDeliverable(?string $HandleAsNonDeliverable): static
     {
@@ -261,7 +261,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $Invoice
      *
-     * @return $this
+     * @return static
      */
     public function setInvoice(?string $Invoice): static
     {
@@ -281,7 +281,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $InvoiceNr
      *
-     * @return $this
+     * @return static
      */
     public function setInvoiceNr(?string $InvoiceNr): static
     {
@@ -301,7 +301,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $License
      *
-     * @return $this
+     * @return static
      */
     public function setLicense(?string $License): static
     {
@@ -321,7 +321,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $LicenseNr
      *
-     * @return $this
+     * @return static
      */
     public function setLicenseNr(?string $LicenseNr): static
     {
@@ -341,7 +341,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $ShipmentType
      *
-     * @return $this
+     * @return static
      */
     public function setShipmentType(?string $ShipmentType): static
     {
@@ -361,7 +361,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $TrustedShipperID
      *
-     * @return $this
+     * @return static
      */
     public function setTrustedShipperID(?string $TrustedShipperID): static
     {
@@ -381,7 +381,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $TransactionCode
      *
-     * @return $this
+     * @return static
      */
     public function setTransactionCode(?string $TransactionCode): static
     {
@@ -401,7 +401,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $TransactionDescription
      *
-     * @return $this
+     * @return static
      */
     public function setTransactionDescription(?string $TransactionDescription): static
     {
@@ -421,7 +421,7 @@ class Customs extends AbstractEntity
     /**
      * @param string|null $ImporterReferenceCode
      *
-     * @return $this
+     * @return static
      */
     public function setImporterReferenceCode(?string $ImporterReferenceCode): static
     {

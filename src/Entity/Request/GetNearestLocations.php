@@ -80,7 +80,7 @@ class GetNearestLocations extends AbstractEntity
     /**
      * @param string|null $Countrycode
      *
-     * @return $this
+     * @return static
      */
     public function setCountrycode(?string $Countrycode): static
     {
@@ -100,7 +100,7 @@ class GetNearestLocations extends AbstractEntity
     /**
      * @param Location|null $Location
      *
-     * @return $this
+     * @return static
      */
     public function setLocation(?Location $Location): static
     {
@@ -120,7 +120,7 @@ class GetNearestLocations extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?Message $Message): static
     {

@@ -197,7 +197,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $Postalcode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalcode(?string $Postalcode = null): static
     {
@@ -264,7 +264,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $OpeningTime
      *
-     * @return $this
+     * @return static
      */
     public function setOpeningTime(?string $OpeningTime): static
     {
@@ -312,7 +312,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(?string $City): static
     {
@@ -332,7 +332,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(?string $HouseNr): static
     {
@@ -352,7 +352,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
@@ -372,7 +372,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(?string $Street): static
     {
@@ -392,7 +392,7 @@ class Location extends AbstractEntity
     /**
      * @param Coordinates|null $Coordinates
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinates(?Coordinates $Coordinates): static
     {
@@ -412,7 +412,7 @@ class Location extends AbstractEntity
     /**
      * @param CoordinatesNorthWest|null $CoordinatesNorthWest
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesNorthWest(?CoordinatesNorthWest $CoordinatesNorthWest): static
     {
@@ -432,7 +432,7 @@ class Location extends AbstractEntity
     /**
      * @param CoordinatesSouthEast|null $CoordinatesSouthEast
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesSouthEast(?CoordinatesSouthEast $CoordinatesSouthEast): static
     {
@@ -452,7 +452,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $LocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setLocationCode(?string $LocationCode): static
     {
@@ -472,7 +472,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $Saleschannel
      *
-     * @return $this
+     * @return static
      */
     public function setSaleschannel(?string $Saleschannel): static
     {
@@ -492,7 +492,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $TerminalType
      *
-     * @return $this
+     * @return static
      */
     public function setTerminalType(?string $TerminalType): static
     {
@@ -512,7 +512,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(?string $RetailNetworkID): static
     {
@@ -532,7 +532,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
@@ -552,7 +552,7 @@ class Location extends AbstractEntity
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {

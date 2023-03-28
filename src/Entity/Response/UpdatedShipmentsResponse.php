@@ -96,7 +96,7 @@ class UpdatedShipmentsResponse extends AbstractEntity
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?string $Barcode): static
     {
@@ -116,7 +116,7 @@ class UpdatedShipmentsResponse extends AbstractEntity
     /**
      * @param string|null $CustomerNumber
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerNumber(?string $CustomerNumber): static
     {
@@ -136,7 +136,7 @@ class UpdatedShipmentsResponse extends AbstractEntity
     /**
      * @param string|null $CustomerCode
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerCode(?string $CustomerCode): static
     {
@@ -156,7 +156,7 @@ class UpdatedShipmentsResponse extends AbstractEntity
     /**
      * @param Status|null $Status
      *
-     * @return $this
+     * @return static
      */
     public function setStatus(?Status $Status): static
     {

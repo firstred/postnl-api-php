@@ -67,7 +67,7 @@ class LabellingMessage extends Message
     /**
      * @param string|null $Printertype
      *
-     * @return $this
+     * @return static
      */
     public function setPrintertype(?string $Printertype): static
     {

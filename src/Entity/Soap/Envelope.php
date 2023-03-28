@@ -75,7 +75,7 @@ class Envelope extends AbstractEntity
     /**
      * @param Header|null $Header
      *
-     * @return $this
+     * @return static
      */
     public function setHeader(?Header $Header): static
     {
@@ -95,7 +95,7 @@ class Envelope extends AbstractEntity
     /**
      * @param Body|null $Body
      *
-     * @return $this
+     * @return static
      */
     public function setBody(?Body $Body): static
     {

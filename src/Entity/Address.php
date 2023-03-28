@@ -219,7 +219,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Zipcode
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode(?string $Zipcode = null): static
     {
@@ -243,7 +243,7 @@ class Address extends AbstractEntity
     /**
      * @param int|string|null $AddressType
      *
-     * @return $this
+     * @return static
      */
     public function setAddressType(int|string|null $AddressType = null): static
     {
@@ -267,7 +267,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Area
      *
-     * @return $this
+     * @return static
      */
     public function setArea(?string $Area): Address
     {
@@ -287,7 +287,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Buildingname
      *
-     * @return $this
+     * @return static
      */
     public function setBuildingname(?string $Buildingname): Address
     {
@@ -307,7 +307,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(?string $City): Address
     {
@@ -327,7 +327,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $CompanyName
      *
-     * @return $this
+     * @return static
      */
     public function setCompanyName(?string $CompanyName): Address
     {
@@ -347,7 +347,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Countrycode
      *
-     * @return $this
+     * @return static
      */
     public function setCountrycode(?string $Countrycode): Address
     {
@@ -367,7 +367,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Department
      *
-     * @return $this
+     * @return static
      */
     public function setDepartment(?string $Department): Address
     {
@@ -387,7 +387,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Doorcode
      *
-     * @return $this
+     * @return static
      */
     public function setDoorcode(?string $Doorcode): Address
     {
@@ -407,7 +407,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $FirstName
      *
-     * @return $this
+     * @return static
      */
     public function setFirstName(?string $FirstName): Address
     {
@@ -427,7 +427,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Floor
      *
-     * @return $this
+     * @return static
      */
     public function setFloor(?string $Floor): Address
     {
@@ -447,7 +447,7 @@ class Address extends AbstractEntity
     /**
      * @param int|string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(int|string|null $HouseNr): Address
     {
@@ -471,7 +471,7 @@ class Address extends AbstractEntity
     /**
      * @param int|string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(int|string|null $HouseNrExt): Address
     {
@@ -495,7 +495,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $StreetHouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setStreetHouseNrExt(?string $StreetHouseNrExt): Address
     {
@@ -515,7 +515,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(?string $Name): Address
     {
@@ -535,7 +535,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Region
      *
-     * @return $this
+     * @return static
      */
     public function setRegion(?string $Region): Address
     {
@@ -555,7 +555,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(?string $Remark): Address
     {
@@ -575,7 +575,7 @@ class Address extends AbstractEntity
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(?string $Street): Address
     {

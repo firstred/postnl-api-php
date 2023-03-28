@@ -210,7 +210,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $AddressType
      *
-     * @return $this
+     * @return static
      */
     public function setAddressType(?string $AddressType): static
     {
@@ -230,7 +230,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Area
      *
-     * @return $this
+     * @return static
      */
     public function setArea(?string $Area): static
     {
@@ -250,7 +250,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Buildingname
      *
-     * @return $this
+     * @return static
      */
     public function setBuildingname(?string $Buildingname): static
     {
@@ -270,7 +270,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $City
      *
-     * @return $this
+     * @return static
      */
     public function setCity(?string $City): static
     {
@@ -290,7 +290,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $CompanyName
      *
-     * @return $this
+     * @return static
      */
     public function setCompanyName(?string $CompanyName): static
     {
@@ -310,7 +310,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Countrycode
      *
-     * @return $this
+     * @return static
      */
     public function setCountrycode(?string $Countrycode): static
     {
@@ -330,7 +330,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Department
      *
-     * @return $this
+     * @return static
      */
     public function setDepartment(?string $Department): static
     {
@@ -350,7 +350,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Doorcode
      *
-     * @return $this
+     * @return static
      */
     public function setDoorcode(?string $Doorcode): static
     {
@@ -370,7 +370,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $FirstName
      *
-     * @return $this
+     * @return static
      */
     public function setFirstName(?string $FirstName): static
     {
@@ -390,7 +390,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Floor
      *
-     * @return $this
+     * @return static
      */
     public function setFloor(?string $Floor): static
     {
@@ -410,7 +410,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $HouseNr
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNr(?string $HouseNr): static
     {
@@ -430,7 +430,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $HouseNrExt
      *
-     * @return $this
+     * @return static
      */
     public function setHouseNrExt(?string $HouseNrExt): static
     {
@@ -450,7 +450,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(?string $Name): static
     {
@@ -470,7 +470,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Region
      *
-     * @return $this
+     * @return static
      */
     public function setRegion(?string $Region): static
     {
@@ -490,7 +490,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(?string $Remark): static
     {
@@ -510,7 +510,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(?string $Street): static
     {
@@ -550,7 +550,7 @@ class ResponseAddress extends AbstractEntity
     /**
      * @param string|null $Zipcode
      *
-     * @return $this
+     * @return static
      */
     public function setZipcode(string $Zipcode = null): static
     {

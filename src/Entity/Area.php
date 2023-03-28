@@ -68,7 +68,7 @@ class Area extends AbstractEntity
     /**
      * @param Coordinates|null $CoordinatesNorthWest
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesNorthWest(?Coordinates $CoordinatesNorthWest): static
     {
@@ -88,7 +88,7 @@ class Area extends AbstractEntity
     /**
      * @param Coordinates|null $CoordinatesSouthEast
      *
-     * @return $this
+     * @return static
      */
     public function setCoordinatesSouthEast(?Coordinates $CoordinatesSouthEast): static
     {

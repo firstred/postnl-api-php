@@ -62,7 +62,7 @@ class GenerateBarcodeResponse extends AbstractEntity
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?string $Barcode): static
     {

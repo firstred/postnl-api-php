@@ -173,7 +173,7 @@ class Customer extends AbstractEntity
     /**
      * @param Address|null $Address
      *
-     * @return $this
+     * @return static
      */
     public function setAddress(?Address $Address): static
     {
@@ -193,7 +193,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $CollectionLocation
      *
-     * @return $this
+     * @return static
      */
     public function setCollectionLocation(?string $CollectionLocation): static
     {
@@ -213,7 +213,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $ContactPerson
      *
-     * @return $this
+     * @return static
      */
     public function setContactPerson(?string $ContactPerson): static
     {
@@ -233,7 +233,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $CustomerCode
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerCode(?string $CustomerCode): static
     {
@@ -253,7 +253,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $CustomerNumber
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerNumber(?string $CustomerNumber): static
     {
@@ -273,7 +273,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $GlobalPackCustomerCode
      *
-     * @return $this
+     * @return static
      */
     public function setGlobalPackCustomerCode(?string $GlobalPackCustomerCode): static
     {
@@ -293,7 +293,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $GlobalPackBarcodeType
      *
-     * @return $this
+     * @return static
      */
     public function setGlobalPackBarcodeType(?string $GlobalPackBarcodeType): static
     {
@@ -313,7 +313,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $Email
      *
-     * @return $this
+     * @return static
      */
     public function setEmail(?string $Email): static
     {
@@ -333,7 +333,7 @@ class Customer extends AbstractEntity
     /**
      * @param string|null $Name
      *
-     * @return $this
+     * @return static
      */
     public function setName(?string $Name): static
     {

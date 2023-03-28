@@ -67,7 +67,7 @@ class ProductOption extends AbstractEntity
     /**
      * @param string|null $Characteristic
      *
-     * @return $this
+     * @return static
      */
     public function setCharacteristic(?string $Characteristic): static
     {
@@ -87,7 +87,7 @@ class ProductOption extends AbstractEntity
     /**
      * @param string|null $Option
      *
-     * @return $this
+     * @return static
      */
     public function setOption(?string $Option): static
     {

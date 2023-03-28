@@ -121,7 +121,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $AccountName
      *
-     * @return $this
+     * @return static
      */
     public function setAccountName(?string $AccountName): static
     {
@@ -141,7 +141,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $BIC
      *
-     * @return $this
+     * @return static
      */
     public function setBIC(?string $BIC): static
     {
@@ -161,7 +161,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $Currency
      *
-     * @return $this
+     * @return static
      */
     public function setCurrency(?string $Currency): static
     {
@@ -181,7 +181,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $IBAN
      *
-     * @return $this
+     * @return static
      */
     public function setIBAN(?string $IBAN): static
     {
@@ -201,7 +201,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $Reference
      *
-     * @return $this
+     * @return static
      */
     public function setReference(?string $Reference): static
     {
@@ -221,7 +221,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $TransactionNumber
      *
-     * @return $this
+     * @return static
      */
     public function setTransactionNumber(?string $TransactionNumber): static
     {
@@ -241,7 +241,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $Value
      *
-     * @return $this
+     * @return static
      */
     public function setValue(?string $Value): static
     {
@@ -261,7 +261,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|null $VerzekerdBedrag
      *
-     * @return $this
+     * @return static
      */
     public function setVerzekerdBedrag(?string $VerzekerdBedrag): static
     {
@@ -281,7 +281,7 @@ class Amount extends AbstractEntity
     /**
      * @param string|int|null $AmountType
      *
-     * @return $this
+     * @return static
      */
     public function setAmountType(string|int|null $AmountType = null): static
     {

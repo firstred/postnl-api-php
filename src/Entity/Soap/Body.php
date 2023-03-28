@@ -56,7 +56,7 @@ class Body extends AbstractEntity
     /**
      * @param GenerateBarcodeResponse|null $GenerateBarcodeResponse
      *
-     * @return $this
+     * @return static
      */
     public function setGenerateBarcodeResponse(?GenerateBarcodeResponse $GenerateBarcodeResponse): static
     {

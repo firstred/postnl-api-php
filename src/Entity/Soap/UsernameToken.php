@@ -75,7 +75,7 @@ class UsernameToken extends AbstractEntity
     /**
      * @param string|null $Username
      *
-     * @return $this
+     * @return static
      */
     public function setUsername(?string $Username): static
     {
@@ -95,7 +95,7 @@ class UsernameToken extends AbstractEntity
     /**
      * @param HiddenString|string|null $Password
      *
-     * @return $this
+     * @return static
      */
     public function setPassword(HiddenString|string|null $Password): static
     {

@@ -91,7 +91,6 @@ class TimeframeServiceSoapResponseProcessor extends AbstractSoapResponseProcesso
      * @throws HttpClientException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws EntityNotFoundException
      * @deprecated 2.0.0
      */
     public function processGetTimeframesResponse(mixed $response): ResponseTimeframes
@@ -124,8 +123,7 @@ class TimeframeServiceSoapResponseProcessor extends AbstractSoapResponseProcesso
         }
         $array = $array[0];
 
-        /** @var ResponseTimeframes $object */
-        $object = AbstractEntity::xmlDeserialize(xml: $array);
+        $object = ResponseTimeframes::xmlDeserialize(xml: $array);
         $this->setService(object: $object);
 
         return $object;

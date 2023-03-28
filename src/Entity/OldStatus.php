@@ -90,7 +90,7 @@ class OldStatus extends AbstractEntity
     /**
      * @param string|null $CurrentPhaseCode
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentPhaseCode(?string $CurrentPhaseCode): static
     {
@@ -110,7 +110,7 @@ class OldStatus extends AbstractEntity
     /**
      * @param string|null $CurrentPhaseDescription
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentPhaseDescription(?string $CurrentPhaseDescription): static
     {
@@ -130,7 +130,7 @@ class OldStatus extends AbstractEntity
     /**
      * @param string|null $CurrentOldStatusCode
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentOldStatusCode(?string $CurrentOldStatusCode): static
     {
@@ -150,7 +150,7 @@ class OldStatus extends AbstractEntity
     /**
      * @param string|null $CurrentOldStatusDescription
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentOldStatusDescription(?string $CurrentOldStatusDescription): static
     {
@@ -170,7 +170,7 @@ class OldStatus extends AbstractEntity
     /**
      * @param string|null $CurrentOldStatusTimeStamp
      *
-     * @return $this
+     * @return static
      */
     public function setCurrentOldStatusTimeStamp(?string $CurrentOldStatusTimeStamp): static
     {

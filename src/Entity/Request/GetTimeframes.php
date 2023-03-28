@@ -127,7 +127,7 @@ class GetTimeframes extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?Message $Message): static
     {

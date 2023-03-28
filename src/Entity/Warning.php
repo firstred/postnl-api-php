@@ -71,7 +71,7 @@ class Warning extends AbstractEntity
     /**
      * @param string|null $Code
      *
-     * @return $this
+     * @return static
      */
     public function setCode(?string $Code): static
     {
@@ -91,7 +91,7 @@ class Warning extends AbstractEntity
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(?string $Description): static
     {

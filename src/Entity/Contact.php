@@ -87,7 +87,7 @@ class Contact extends AbstractEntity
     /**
      * @param string|null $ContactType
      *
-     * @return $this
+     * @return static
      */
     public function setContactType(?string $ContactType): static
     {
@@ -107,7 +107,7 @@ class Contact extends AbstractEntity
     /**
      * @param string|null $Email
      *
-     * @return $this
+     * @return static
      */
     public function setEmail(?string $Email): static
     {

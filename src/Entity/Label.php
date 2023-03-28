@@ -83,7 +83,7 @@ class Label extends AbstractEntity
     /**
      * @param string|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(?string $Content): static
     {
@@ -103,7 +103,7 @@ class Label extends AbstractEntity
     /**
      * @param string|null $Contenttype
      *
-     * @return $this
+     * @return static
      */
     public function setContenttype(?string $Contenttype): static
     {
@@ -123,7 +123,7 @@ class Label extends AbstractEntity
     /**
      * @param string|null $Labeltype
      *
-     * @return $this
+     * @return static
      */
     public function setLabeltype(?string $Labeltype): static
     {

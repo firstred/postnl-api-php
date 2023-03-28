@@ -208,7 +208,7 @@ class Timeframe extends AbstractEntity
     /**
      * @param string|null $PostalCode
      *
-     * @return $this
+     * @return static
      */
     public function setPostalCode(?string $PostalCode = null): static
     {
@@ -332,7 +332,7 @@ class Timeframe extends AbstractEntity
     /**
      * @param string|null $Street
      *
-     * @return $this
+     * @return static
      */
     public function setStreet(?string $Street): static
     {
@@ -352,7 +352,7 @@ class Timeframe extends AbstractEntity
     /**
      * @param string|null $Interval
      *
-     * @return $this
+     * @return static
      */
     public function setInterval(?string $Interval): static
     {
@@ -372,7 +372,7 @@ class Timeframe extends AbstractEntity
     /**
      * @param string|null $TimeframeRange
      *
-     * @return $this
+     * @return static
      */
     public function setTimeframeRange(?string $TimeframeRange): static
     {

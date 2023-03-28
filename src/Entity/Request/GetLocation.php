@@ -79,7 +79,7 @@ class GetLocation extends AbstractEntity
     /**
      * @param string|null $LocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setLocationCode(?string $LocationCode): static
     {
@@ -99,7 +99,7 @@ class GetLocation extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?Message $Message): static
     {
@@ -119,7 +119,7 @@ class GetLocation extends AbstractEntity
     /**
      * @param string|null $RetailNetworkID
      *
-     * @return $this
+     * @return static
      */
     public function setRetailNetworkID(?string $RetailNetworkID): static
     {

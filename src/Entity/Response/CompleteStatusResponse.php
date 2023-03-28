@@ -111,7 +111,7 @@ class CompleteStatusResponse extends AbstractEntity
     /**
      * @param Warning|null $Warnings
      *
-     * @return $this
+     * @return static
      */
     public function setWarnings(?Warning $Warnings): static
     {

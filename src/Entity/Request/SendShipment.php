@@ -83,7 +83,7 @@ class SendShipment extends AbstractEntity
     /**
      * @param Customer|null $Customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(?Customer $Customer): static
     {
@@ -103,7 +103,7 @@ class SendShipment extends AbstractEntity
     /**
      * @param LabellingMessage|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?LabellingMessage $Message): static
     {

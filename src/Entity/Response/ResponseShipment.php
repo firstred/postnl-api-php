@@ -110,7 +110,7 @@ class ResponseShipment extends AbstractEntity
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?string $Barcode): static
     {
@@ -130,7 +130,7 @@ class ResponseShipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerBarcode(?string $DownPartnerBarcode): static
     {
@@ -150,7 +150,7 @@ class ResponseShipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
@@ -170,7 +170,7 @@ class ResponseShipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
@@ -210,7 +210,7 @@ class ResponseShipment extends AbstractEntity
     /**
      * @param string|null $ProductCodeDelivery
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeDelivery(?string $ProductCodeDelivery): static
     {

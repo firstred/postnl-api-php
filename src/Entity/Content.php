@@ -104,7 +104,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $CountryOfOrigin
      *
-     * @return $this
+     * @return static
      */
     public function setCountryOfOrigin(?string $CountryOfOrigin): static
     {
@@ -124,7 +124,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(?string $Description): static
     {
@@ -144,7 +144,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $HSTariffNr
      *
-     * @return $this
+     * @return static
      */
     public function setHSTariffNr(?string $HSTariffNr): static
     {
@@ -164,7 +164,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $Quantity
      *
-     * @return $this
+     * @return static
      */
     public function setQuantity(?string $Quantity): static
     {
@@ -184,7 +184,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $Value
      *
-     * @return $this
+     * @return static
      */
     public function setValue(?string $Value): static
     {
@@ -204,7 +204,7 @@ class Content extends AbstractEntity
     /**
      * @param string|null $Weight
      *
-     * @return $this
+     * @return static
      */
     public function setWeight(?string $Weight): static
     {
@@ -224,7 +224,7 @@ class Content extends AbstractEntity
     /**
      * @param array|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(?array $Content): static
     {

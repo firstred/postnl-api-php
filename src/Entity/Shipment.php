@@ -321,7 +321,7 @@ class Shipment extends AbstractEntity
     /**
      * @param Amount[]|null $Amounts
      *
-     * @return $this
+     * @return static
      */
     public function setAmounts(?array $Amounts): static
     {
@@ -341,7 +341,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?string $Barcode): static
     {
@@ -361,7 +361,7 @@ class Shipment extends AbstractEntity
     /**
      * @param array|null $Contacts
      *
-     * @return $this
+     * @return static
      */
     public function setContacts(?array $Contacts): static
     {
@@ -381,7 +381,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $Content
      *
-     * @return $this
+     * @return static
      */
     public function setContent(?string $Content): static
     {
@@ -401,7 +401,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $CostCenter
      *
-     * @return $this
+     * @return static
      */
     public function setCostCenter(?string $CostCenter): static
     {
@@ -421,7 +421,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $CustomerOrderNumber
      *
-     * @return $this
+     * @return static
      */
     public function setCustomerOrderNumber(?string $CustomerOrderNumber): static
     {
@@ -441,7 +441,7 @@ class Shipment extends AbstractEntity
     /**
      * @param Customer|null $Customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(?Customer $Customer): static
     {
@@ -461,7 +461,7 @@ class Shipment extends AbstractEntity
     /**
      * @param Customs|null $Customs
      *
-     * @return $this
+     * @return static
      */
     public function setCustoms(?Customs $Customs): static
     {
@@ -481,7 +481,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $StatusCode
      *
-     * @return $this
+     * @return static
      */
     public function setStatusCode(?string $StatusCode): static
     {
@@ -501,7 +501,7 @@ class Shipment extends AbstractEntity
     /**
      * @param int|null $PhaseCode
      *
-     * @return $this
+     * @return static
      */
     public function setPhaseCode(?int $PhaseCode): static
     {
@@ -521,7 +521,7 @@ class Shipment extends AbstractEntity
     /**
      * @param DateTimeInterface|null $DateFrom
      *
-     * @return $this
+     * @return static
      */
     public function setDateFrom(?DateTimeInterface $DateFrom): static
     {
@@ -541,7 +541,7 @@ class Shipment extends AbstractEntity
     /**
      * @param DateTimeInterface|null $DateTo
      *
-     * @return $this
+     * @return static
      */
     public function setDateTo(?DateTimeInterface $DateTo): static
     {
@@ -561,7 +561,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $DeliveryAddress
      *
-     * @return $this
+     * @return static
      */
     public function setDeliveryAddress(?string $DeliveryAddress): static
     {
@@ -581,7 +581,7 @@ class Shipment extends AbstractEntity
     /**
      * @param Dimension|null $Dimension
      *
-     * @return $this
+     * @return static
      */
     public function setDimension(?Dimension $Dimension): static
     {
@@ -601,7 +601,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerBarcode(?string $DownPartnerBarcode): static
     {
@@ -621,7 +621,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerID
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerID(?string $DownPartnerID): static
     {
@@ -641,7 +641,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $DownPartnerLocation
      *
-     * @return $this
+     * @return static
      */
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
@@ -701,7 +701,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $IDExpiration
      *
-     * @return $this
+     * @return static
      */
     public function setIDExpiration(?string $IDExpiration): static
     {
@@ -721,7 +721,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $IDNumber
      *
-     * @return $this
+     * @return static
      */
     public function setIDNumber(?string $IDNumber): static
     {
@@ -741,7 +741,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $IDType
      *
-     * @return $this
+     * @return static
      */
     public function setIDType(?string $IDType): static
     {
@@ -761,7 +761,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $OldStatuses
      *
-     * @return $this
+     * @return static
      */
     public function setOldStatuses(?string $OldStatuses): static
     {
@@ -781,7 +781,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ProductCodeCollect
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeCollect(?string $ProductCodeCollect): static
     {
@@ -801,7 +801,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ProductCodeDelivery
      *
-     * @return $this
+     * @return static
      */
     public function setProductCodeDelivery(?string $ProductCodeDelivery): static
     {
@@ -841,7 +841,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ReceiverDateOfBirth
      *
-     * @return $this
+     * @return static
      */
     public function setReceiverDateOfBirth(?string $ReceiverDateOfBirth): static
     {
@@ -861,7 +861,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $Reference
      *
-     * @return $this
+     * @return static
      */
     public function setReference(?string $Reference): static
     {
@@ -881,7 +881,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ReferenceCollect
      *
-     * @return $this
+     * @return static
      */
     public function setReferenceCollect(?string $ReferenceCollect): static
     {
@@ -901,7 +901,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $Remark
      *
-     * @return $this
+     * @return static
      */
     public function setRemark(?string $Remark): static
     {
@@ -921,7 +921,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ReturnBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setReturnBarcode(?string $ReturnBarcode): static
     {
@@ -941,7 +941,7 @@ class Shipment extends AbstractEntity
     /**
      * @param string|null $ReturnReference
      *
-     * @return $this
+     * @return static
      */
     public function setReturnReference(?string $ReturnReference): static
     {

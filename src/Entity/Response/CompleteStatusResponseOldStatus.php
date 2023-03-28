@@ -94,7 +94,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     /**
      * @param string|null $StatusCode
      *
-     * @return $this
+     * @return static
      */
     public function setStatusCode(?string $StatusCode): static
     {
@@ -114,7 +114,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     /**
      * @param string|null $StatusDescription
      *
-     * @return $this
+     * @return static
      */
     public function setStatusDescription(?string $StatusDescription): static
     {
@@ -134,7 +134,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     /**
      * @param string|null $PhaseCode
      *
-     * @return $this
+     * @return static
      */
     public function setPhaseCode(?string $PhaseCode): static
     {
@@ -154,7 +154,7 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
     /**
      * @param string|null $PhaseDescription
      *
-     * @return $this
+     * @return static
      */
     public function setPhaseDescription(?string $PhaseDescription): static
     {

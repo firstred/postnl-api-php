@@ -104,7 +104,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $Code
      *
-     * @return $this
+     * @return static
      */
     public function setCode(?string $Code): static
     {
@@ -124,7 +124,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $Description
      *
-     * @return $this
+     * @return static
      */
     public function setDescription(?string $Description): static
     {
@@ -144,7 +144,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $DestinationLocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setDestinationLocationCode(?string $DestinationLocationCode): static
     {
@@ -164,7 +164,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $LocationCode
      *
-     * @return $this
+     * @return static
      */
     public function setLocationCode(?string $LocationCode): static
     {
@@ -184,7 +184,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $RouteCode
      *
-     * @return $this
+     * @return static
      */
     public function setRouteCode(?string $RouteCode): static
     {
@@ -204,7 +204,7 @@ class CompleteStatusResponseEvent extends AbstractEntity
     /**
      * @param string|null $RouteName
      *
-     * @return $this
+     * @return static
      */
     public function setRouteName(?string $RouteName): static
     {

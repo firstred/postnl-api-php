@@ -72,7 +72,7 @@ class Signature extends AbstractEntity
     /**
      * @param GetSignatureResponseSignature|null $GetSignatureResponseSignature
      *
-     * @return $this
+     * @return static
      */
     public function setGetSignatureResponseSignature(?GetSignatureResponseSignature $GetSignatureResponseSignature): static
     {

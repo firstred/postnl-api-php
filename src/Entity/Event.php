@@ -62,7 +62,7 @@ class Event extends AbstractEntity
     /**
      * @param CompleteStatusResponseEvent|null $CompleteStatusResponseEvent
      *
-     * @return $this
+     * @return static
      */
     public function setCompleteStatusResponseEvent(?CompleteStatusResponseEvent $CompleteStatusResponseEvent): static
     {

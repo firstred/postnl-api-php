@@ -79,7 +79,7 @@ class CurrentStatus extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
      */
     public function setMessage(?Message $Message): static
     {
@@ -99,7 +99,7 @@ class CurrentStatus extends AbstractEntity
     /**
      * @param Customer|null $Customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(?Customer $Customer): static
     {
@@ -119,7 +119,7 @@ class CurrentStatus extends AbstractEntity
     /**
      * @param Shipment|null $Shipment
      *
-     * @return $this
+     * @return static
      */
     public function setShipment(?Shipment $Shipment): static
     {

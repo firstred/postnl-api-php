@@ -122,7 +122,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @param string|null $From
      *
-     * @return $this
+     * @return static
      */
     public function setFrom(?string $From): static
     {
@@ -142,7 +142,7 @@ class TimeframeTimeFrame extends AbstractEntity
     /**
      * @param string|null $To
      *
-     * @return $this
+     * @return static
      */
     public function setTo(?string $To): TimeframeTimeFrame
     {

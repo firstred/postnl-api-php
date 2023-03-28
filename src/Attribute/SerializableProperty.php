@@ -45,7 +45,7 @@ abstract class SerializableProperty
      */
     public function __construct(
         public SoapNamespace $namespace,
-        public array         $aliases,
+        public array         $aliases = [],
         public array         $supportedServices = [],
     ) {
         foreach ($this->supportedServices as $supportedService) {

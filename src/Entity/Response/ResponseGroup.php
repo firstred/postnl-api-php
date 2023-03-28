@@ -106,7 +106,7 @@ class ResponseGroup extends AbstractEntity
     /**
      * @param string|null $GroupCount
      *
-     * @return $this
+     * @return static
      */
     public function setGroupCount(?string $GroupCount): static
     {
@@ -126,7 +126,7 @@ class ResponseGroup extends AbstractEntity
     /**
      * @param string|null $GroupSequence
      *
-     * @return $this
+     * @return static
      */
     public function setGroupSequence(?string $GroupSequence): static
     {
@@ -146,7 +146,7 @@ class ResponseGroup extends AbstractEntity
     /**
      * @param string|null $GroupType
      *
-     * @return $this
+     * @return static
      */
     public function setGroupType(?string $GroupType): static
     {
@@ -166,7 +166,7 @@ class ResponseGroup extends AbstractEntity
     /**
      * @param string|null $MainBarcode
      *
-     * @return $this
+     * @return static
      */
     public function setMainBarcode(?string $MainBarcode): static
     {

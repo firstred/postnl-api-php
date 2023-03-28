@@ -65,7 +65,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
     /**
      * @param GetLocationsResult|null $GetLocationsResult
      *
-     * @return $this
+     * @return static
      */
     public function setGetLocationsResult(?GetLocationsResult $GetLocationsResult): static
     {

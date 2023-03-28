@@ -81,7 +81,7 @@ class GetSignatureResponseSignature extends AbstractEntity
     /**
      * @param string|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?string $Barcode): static
     {
@@ -101,7 +101,7 @@ class GetSignatureResponseSignature extends AbstractEntity
     /**
      * @param string|null $SignatureImage
      *
-     * @return $this
+     * @return static
      */
     public function setSignatureImage(?string $SignatureImage): static
     {

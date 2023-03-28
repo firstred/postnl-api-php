@@ -92,7 +92,7 @@ class Dimension extends AbstractEntity
     /**
      * @param string|null $Height
      *
-     * @return $this
+     * @return static
      */
     public function setHeight(?string $Height): static
     {
@@ -112,7 +112,7 @@ class Dimension extends AbstractEntity
     /**
      * @param string|null $Length
      *
-     * @return $this
+     * @return static
      */
     public function setLength(?string $Length): static
     {
@@ -132,7 +132,7 @@ class Dimension extends AbstractEntity
     /**
      * @param string|null $Volume
      *
-     * @return $this
+     * @return static
      */
     public function setVolume(?string $Volume): static
     {
@@ -152,7 +152,7 @@ class Dimension extends AbstractEntity
     /**
      * @param string|null $Weight
      *
-     * @return $this
+     * @return static
      */
     public function setWeight(?string $Weight): static
     {
@@ -172,7 +172,7 @@ class Dimension extends AbstractEntity
     /**
      * @param string|null $Width
      *
-     * @return $this
+     * @return static
      */
     public function setWidth(?string $Width): static
     {

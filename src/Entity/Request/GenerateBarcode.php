@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
@@ -68,6 +67,7 @@ class GenerateBarcode extends AbstractEntity
 
     /**
      * @return Message|null
+     * @deprecated 2.0.0
      */
     public function getMessage(): ?Message
     {
@@ -77,7 +77,8 @@ class GenerateBarcode extends AbstractEntity
     /**
      * @param Message|null $Message
      *
-     * @return $this
+     * @return static
+     * @deprecated 2.0.0
      */
     public function setMessage(?Message $Message): static
     {
@@ -97,7 +98,7 @@ class GenerateBarcode extends AbstractEntity
     /**
      * @param Customer|null $Customer
      *
-     * @return $this
+     * @return static
      */
     public function setCustomer(?Customer $Customer): static
     {
@@ -117,7 +118,7 @@ class GenerateBarcode extends AbstractEntity
     /**
      * @param Barcode|null $Barcode
      *
-     * @return $this
+     * @return static
      */
     public function setBarcode(?Barcode $Barcode): static
     {
