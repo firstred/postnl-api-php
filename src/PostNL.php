@@ -285,8 +285,19 @@ class PostNL implements LoggerAwareInterface
         #[Deprecated(
             reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
         )]
-        int                  $mode = self::MODE_REST,
+        int                  $mode = 3,
     ) {
+        /** @noinspection PhpConditionAlreadyCheckedInspection */
+        if (3 !== $mode) {
+            trigger_deprecation(
+                package: 'firstred/postnl-api-php',
+                version: '1.4.0',
+                message: 'Setting an API mode is deprecated. Do not set an API mode for a seamless switch to the recommended mode.'
+            );
+        } else {
+            $mode = static::MODE_REST;
+        }
+
         $this->setCustomer(customer: $customer);
         $this->setApiKey(apiKey: $apiKey instanceof UsernameToken ? $apiKey->getPassword() : $apiKey);
         $this->setSandbox(sandbox: $sandbox);
