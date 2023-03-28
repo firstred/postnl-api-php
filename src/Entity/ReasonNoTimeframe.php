@@ -236,7 +236,7 @@ class ReasonNoTimeframe extends AbstractEntity
     public static function jsonDeserialize(stdClass $json): static
     {
         if (isset($json->ReasonNoTimeframe->Options)) {
-            /** @psalm-var list<string> $deliveryOptions */
+            /** @var list<string> $deliveryOptions */
             $deliveryOptions = [];
             if (!is_array(value: $json->ReasonNoTimeframe->Options)) {
                 $json->ReasonNoTimeframe->Options = [$json->ReasonNoTimeframe->Options];

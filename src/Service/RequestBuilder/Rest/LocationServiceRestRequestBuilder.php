@@ -57,6 +57,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      */
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
     {
+        $this->setService(entity: $getNearestLocations);
+
         $endpoint = '/nearest';
         $location = $getNearestLocations->getLocation();
         $query = [
@@ -123,6 +125,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface
     {
+        $this->setService(entity: $getLocations);
+
         $location = $getLocations->getLocation();
         $query = [
             'LatitudeNorth' => $location->getCoordinatesNorthWest()->getLatitude(),
@@ -169,6 +173,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      */
     public function buildGetLocationRequest(GetLocation $getLocation): RequestInterface
     {
+        $this->setService(entity: $getLocation);
+
         $query = [
             'LocationCode' => $getLocation->getLocationCode(),
         ];

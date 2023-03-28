@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Attribute;
 
-use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use ReflectionClass;
@@ -37,6 +36,7 @@ abstract class SerializableProperty
 {
     /**
      * @param SoapNamespace  $namespace
+     * @param string[]       $aliases           Property shortname aliases such as `Address`
      * @param class-string[] $supportedServices Supported services, empty array = all
      *
      * @throws InvalidArgumentException
@@ -45,6 +45,7 @@ abstract class SerializableProperty
      */
     public function __construct(
         public SoapNamespace $namespace,
+        public array         $aliases,
         public array         $supportedServices = [],
     ) {
         foreach ($this->supportedServices as $supportedService) {

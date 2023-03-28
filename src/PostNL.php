@@ -1743,8 +1743,7 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $barcodes Pass multiple barcodes
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
-     * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
-     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -1787,7 +1786,6 @@ class PostNL implements LoggerAwareInterface
      * @param bool   $complete  Return the complete status (incl. shipment history)
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -1831,15 +1829,12 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $references Pass multiple references
      * @param bool     $complete   Return the complete status (incl. shipment history)
      *
-     * @return CurrentStatusResponseShipment[]|CompleteStatusResponseShipment[]
-     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
-     *
+     * @return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function getShippingStatusesByReferences(array $references, bool $complete = false): array

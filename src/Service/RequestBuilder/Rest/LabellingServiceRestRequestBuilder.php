@@ -61,6 +61,8 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
      */
     public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
     {
+        $this->setService(entity: $generateLabel);
+
         $endpoint = Util::versionStringToURLString(
             version: $this->getVersion(),
             url: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT,

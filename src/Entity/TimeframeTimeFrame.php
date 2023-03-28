@@ -183,7 +183,7 @@ class TimeframeTimeFrame extends AbstractEntity
     public static function jsonDeserialize(stdClass $json): static
     {
         if (isset($json->TimeframeTimeFrame->Options)) {
-            /** @psalm-var list<string> $deliveryOptions */
+            /** @var list<string> $deliveryOptions */
             $deliveryOptions = [];
             if (!is_array(value: $json->TimeframeTimeFrame->Options)) {
                 $json->TimeframeTimeFrame->Options = [$json->TimeframeTimeFrame->Options];

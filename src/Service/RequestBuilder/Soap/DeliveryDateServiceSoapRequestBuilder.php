@@ -98,6 +98,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @deprecated 2.0.0
      */
     public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface

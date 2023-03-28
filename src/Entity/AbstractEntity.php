@@ -29,6 +29,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
@@ -37,6 +38,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use Firstred\PostNL\Util\UUID;
+use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
@@ -393,86 +395,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array $xml
      *
      * @return static
-     * @throws EntityNotFoundException
-     * @throws DeserializationException
      */
     public static function xmlDeserialize(array $xml): static
     {
-        if (!isset($xml['name']) && isset($xml[0]['name'])) {
-            $xml = $xml[0];
-        }
-
-        $shortClassName = preg_replace(pattern: '/({.*})([A-Za-z]+)/', replacement: '$2', subject: $xml['name']);
-        $fqcn = static::getFullyQualifiedEntityClassName(shortName: $shortClassName);
-
-        // The only key in this associate array should be the object's name
-        // The value should be the object itself
-
-        if (!$fqcn || !class_exists(class: $fqcn) || !is_array(value: $xml['value'])) {
-            // If it's not a known object, just return the property
-            return $xml['value'];
-        }
-
-        $object = call_user_func(callback: [$fqcn, 'create']);
-        foreach ($xml['value'] as $value) {
-            $shortClassName = preg_replace(pattern: '/({.*})([A-Za-z]+)/', replacement: '$2', subject: $value['name']);
-            try {
-                $fqcn = static::getFullyQualifiedEntityClassName(shortName: $shortClassName);
-            } catch (EntityNotFoundException) {
-                $fqcn = null;
-            }
-
-            // If key is plural, try the singular version, because this might be an array
-            if (in_array(needle: $shortClassName, haystack: ['OldStatuses', 'Statuses', 'Addresses'])) {
-                try {
-                    $fqcn = static::getFullyQualifiedEntityClassName(shortName: substr(string: $shortClassName, offset: 0, length: strlen(string: $shortClassName) - 2));
-                } catch (EntityNotFoundException) {
-                }
-            } elseif (!$fqcn && str_ends_with(haystack: $shortClassName, needle: 's')) {
-                try {
-                    $fqcn = static::getFullyQualifiedEntityClassName(shortName: substr(string: $shortClassName, offset: 0, length: strlen(string: $shortClassName) - 1));
-                } catch (EntityNotFoundException) {
-                }
-            }
-
-            if (is_array(value: $value['value'])
-                && count(value: $value['value']) >= 1
-                && !in_array(needle: $shortClassName, haystack: ['Customer', 'OpeningHours', 'Customs'])
-                && is_subclass_of(object_or_class: $fqcn, class: AbstractEntity::class)
-            ) {
-                $entities = [];
-                if (isset($value['value'][0]['value']) && !is_array(value: $value['value'][0]['value'])) {
-                    $object->{'set'.$shortClassName}(static::xmlDeserialize(xml: [$value]));
-                } else {
-                    foreach ($value['value'] as $item) {
-                        if (!is_array(value: $item['value'])) {
-                            $entities[$item['name']] = $item['value'];
-                        } else {
-                            $entities[] = static::xmlDeserialize(xml: [$item]);
-                        }
-                    }
-
-                    $object->{'set'.$shortClassName}($entities);
-                }
-            } else {
-                try {
-                    $object->{'set'.$shortClassName}(static::xmlDeserialize(xml: [$value]));
-                } catch (\Throwable) {
-                    try {
-                        if (isset($value['value'])) {
-                            $object->{'set'.$shortClassName}($value['value']);
-                        } else {
-                            $object->{'set'.$shortClassName}($value);
-                        }
-                    } catch (\Throwable $e) {
-                        throw new DeserializationException(
-                            message: 'Could not deserialize object',
-                            previous: $e,
-                            value: $value,
-                        );
-                    }
-                }
-            }
+        $object = new static();
+        $reflectionObject = new ReflectionObject(object: $object);
+        foreach ($reflectionObject->getAttributes(name: SerializableEntityProperty::class) as $reflectionAttribute) {
         }
 
         return $object;
@@ -486,9 +414,18 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @return string|false
      * @since 1.2.0
+     * @deprecated 2.0.0
+     * @internal
      */
+    #[Deprecated]
     public static function shouldBeAnArray(string $fqcn, string $propertyName): string|false
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `AbstractEntity::shouldBeAnArray` is deprecated. It is an internal function about to be removed.',
+        );
+
         try {
             $reflection = new ReflectionClass(objectOrClass: $fqcn);
             $property = $reflection->getProperty(name: $propertyName);
@@ -525,9 +462,18 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @throws EntityNotFoundException
      * @since 1.2.0
+     * @deprecated 2.0.0
+     * @internal
      */
+    #[Deprecated]
     public static function getFullyQualifiedEntityClassName(string $shortName): string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `AbstractEntity::getFullQualifiedEntityClassName` is deprecated. Use property attributes instead.',
+        );
+
         foreach ([
                      '\\Firstred\\PostNL\\Entity',
                      '\\Firstred\\PostNL\\Entity\\Message',

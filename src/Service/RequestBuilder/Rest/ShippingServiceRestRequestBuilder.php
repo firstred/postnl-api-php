@@ -55,6 +55,8 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      *
      * @return RequestInterface
      *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm = true): RequestInterface

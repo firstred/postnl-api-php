@@ -33,8 +33,8 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Firstred\PostNL\Util\Util;
-use PHPUnit\Runner\ReflectionException;
 use Psr\Http\Message\RequestInterface;
+use ReflectionException;
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -50,10 +50,17 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     /**
      * Build the GetTimeframes request for the REST API.
      *
+     * @param GetTimeframes $getTimeframes
+     *
+     * @return RequestInterface
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface
     {
+        $this->setService(entity: $getTimeframes);
+
         $timeframe = $getTimeframes->getTimeframe()[0];
         $query = [
             'AllowSundaySorting' => in_array(needle: $timeframe->getSundaySorting(), haystack: [true, 'true', 1], strict: true) ? 'true' : 'false',

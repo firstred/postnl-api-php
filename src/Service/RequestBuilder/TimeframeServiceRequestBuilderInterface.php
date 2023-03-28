@@ -53,6 +53,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -67,7 +68,7 @@ interface TimeframeServiceRequestBuilderInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
-     *
+     * @throws InvalidArgumentException
      * @since 2.0.0
      */
     public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface;

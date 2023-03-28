@@ -516,7 +516,7 @@ class ResponseLocation extends AbstractEntity
     public static function jsonDeserialize(stdClass $json): static
     {
         if (isset($json->ResponseLocation->DeliveryOptions)) {
-            /** @psalm-var list<string> $deliveryOptions */
+            /** @var list<string> $deliveryOptions */
             $deliveryOptions = [];
             if (!is_array(value: $json->ResponseLocation->DeliveryOptions)) {
                 $json->ResponseLocation->DeliveryOptions = [$json->ResponseLocation->DeliveryOptions];

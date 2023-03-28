@@ -64,6 +64,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      */
     public function buildCurrentStatusRequest(CurrentStatusByReference|CurrentStatus $currentStatus): RequestInterface
     {
+        $this->setService(entity: $currentStatus);
+
         if ($currentStatus->getShipment()->getReference()) {
             $query = [
                 'customerCode'   => $currentStatus->getCustomer()->getCustomerCode(),
@@ -125,10 +127,14 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      *
      * @return RequestInterface
      *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildCompleteStatusRequest(CompleteStatus $completeStatus): RequestInterface
     {
+        $this->setService(entity: $completeStatus);
+
         if ($completeStatus->getShipment()->getReference()) {
             $query = [
                 'customerCode'   => $completeStatus->getCustomer()->getCustomerCode(),
@@ -188,10 +194,14 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      *
      * @return RequestInterface
      *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGetSignatureRequest(GetSignature $getSignature): RequestInterface
     {
+        $this->setService(entity: $getSignature);
+
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
             uri: Util::versionStringToURLString(
@@ -211,6 +221,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      *
      * @return RequestInterface
      *
+     * @throws InvalidArgumentException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function buildGetUpdatedShipmentsRequest(
@@ -222,6 +234,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
         if ($dateTimeFrom) {
             $range = "?period={$dateTimeFrom->format(format:'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format:'Y-m-d\TH:i:s')}";
         }
+
+        $this->setService(entity: $customer);
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
