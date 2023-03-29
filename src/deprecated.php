@@ -24,6 +24,8 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+require_once __DIR__.'/PostNL.php';
+
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
@@ -302,7 +304,7 @@ $aliases = array(
 spl_autoload_register(function ($alias) {
     if (isset($deprecatedClasses[$alias])) {
         $class = $deprecatedClasses[$alias];
-        postnl_trigger_deprecation(
+        PostNL::triggerDeprecation(
             'firstred/postnl-api-php',
             '1.4.0',
             "Using class `$alias` is deprecated. Please use the `$class` class instead."
