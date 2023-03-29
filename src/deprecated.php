@@ -24,8 +24,6 @@
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
-require_once __DIR__.'/PostNL.php';
-
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;

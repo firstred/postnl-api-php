@@ -52,7 +52,7 @@
         "psr-4": {
             "Firstred\\PostNL\\": "src/"
         },
-        "files": ["src/deprecated.php"]
+        "files": ["src/PostNL.php", "src/deprecated.php"]
     },
     "autoload-dev": {
         "psr-4": {
