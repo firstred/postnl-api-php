@@ -29,8 +29,11 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
 use Exception;
+use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
+use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
@@ -395,12 +398,18 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array $xml
      *
      * @return static
+     * @throws InvalidArgumentException
      */
     public static function xmlDeserialize(array $xml): static
     {
+        if (static::class === self::class) {
+            throw new InvalidArgumentException(message: 'Calling `AbstractEntity::xmlDeserialize` is not supported.');
+        }
+
         $object = new static();
         $reflectionObject = new ReflectionObject(object: $object);
         foreach ($reflectionObject->getAttributes(name: SerializableEntityProperty::class) as $reflectionAttribute) {
+
         }
 
         return $object;
@@ -427,31 +436,18 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         );
 
         try {
-            $reflection = new ReflectionClass(objectOrClass: $fqcn);
-            $property = $reflection->getProperty(name: $propertyName);
-            $comment = $property->getDocComment();
-        } catch (ReflectionException) {
-            return false;
-        }
-
-        // TODO: convert to PHP 8.1+
-
-        // Quick 'n dirty annotation reader
-        //
-        // A property comment could look like /** @var string|null */
-        // or
-        // /**
-        //  * @var string|null
-        //  */
-        $matches = ['types' => ''];
-        if (preg_match(pattern: '/@var\s(?P<types>[a-zA-Z0-9|\[\]]+)/', subject: (string) $comment, matches: $matches)) {
-            foreach (explode(separator: '|', string: $matches['types']) as $type) {
-                if ('array' === $type) {
-                    return $propertyName;
-                } elseif (str_contains(haystack: $type, needle: '[]')) {
-                    return substr(string: $type, offset: 0, length: -2);
+            $reflection = new \ReflectionClass(objectOrClass: $fqcn);
+            $reflectionProperty = $reflection->getProperty(name: $propertyName);
+            foreach ($reflectionProperty->getAttributes() as $attribute) {
+                if (in_array(
+                    needle: $attribute->getName(),
+                    haystack: [SerializableEntityArrayProperty::class, SerializableStringArrayProperty::class, SerializableCustomArrayProperty::class],
+                )) {
+                    return true;
                 }
             }
+        } catch (Exception) {
+            return false;
         }
 
         return false;
