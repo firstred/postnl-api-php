@@ -27,16 +27,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Soap;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Soap\Security;
 use Firstred\PostNL\Enum\SoapNamespace;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\AbstractService;
 use Firstred\PostNL\Service\RequestBuilder\AbstractRequestBuilder;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use SimpleXMLElement;
 
 /**
  * @deprecated 2.0.0

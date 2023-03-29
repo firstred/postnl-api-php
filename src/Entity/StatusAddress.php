@@ -31,7 +31,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;

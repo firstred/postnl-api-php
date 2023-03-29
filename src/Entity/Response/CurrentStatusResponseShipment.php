@@ -33,7 +33,6 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Amount;

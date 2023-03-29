@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 use const PHP_QUERY_RFC3986;

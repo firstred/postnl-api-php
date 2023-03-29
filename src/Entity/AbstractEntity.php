@@ -45,8 +45,11 @@ use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
 use ReflectionObject;
 use ReflectionProperty;
+use ReflectionUnionType;
 use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
 use stdClass;
@@ -408,11 +411,57 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
         $object = new static();
         $reflectionObject = new ReflectionObject(object: $object);
-        foreach ($reflectionObject->getAttributes(name: SerializableEntityProperty::class) as $reflectionAttribute) {
-
+        foreach ($reflectionObject->getProperties() as $reflectionProperty) {
+            $reflectionAttributes = $reflectionProperty->getAttributes();
+            foreach ($reflectionAttributes as $reflectionAttribute) {
+                $reflectionNamedTypes = static::getPropertyTypes(reflectionProperty: $reflectionProperty);
+                switch($reflectionAttribute->getName()) {
+                    case SerializableEntityProperty::class:
+                        $object[$reflectionProperty->getName()] = $reflectionAttribute->getArguments()['']
+                        break;
+                    case SerializableCustomArrayProperty::class:
+                        break;
+                }
+            }
         }
 
         return $object;
+    }
+
+    /**
+     * @return non-empty-array<ReflectionNamedType>
+     * @since 2.0.0
+     * @internal
+     */
+    protected static function getPropertyTypes(
+        ReflectionProperty $reflectionProperty,
+        bool $serializableEntitiesOnly = false,
+    ): array {
+        $reflectionNamedTypes = [];
+        $rawReflectionType = $reflectionProperty->getType();
+        if ($rawReflectionType instanceof ReflectionIntersectionType) {
+            $reflectionNamedTypes = $rawReflectionType->getTypes();
+        } elseif ($rawReflectionType instanceof ReflectionUnionType) {
+            foreach ($rawReflectionType->getTypes() as $reflectionIntersectionOrNamedType) {
+                $reflectionNamedTypes[] = $reflectionIntersectionOrNamedType instanceof ReflectionIntersectionType ? $reflectionIntersectionOrNamedType->getTypes() : $reflectionIntersectionOrNamedType;
+            }
+        } elseif ($rawReflectionType instanceof ReflectionNamedType) {
+            $reflectionNamedTypes = [$rawReflectionType];
+        }
+        if ($serializableEntitiesOnly) {
+            foreach ($reflectionNamedTypes as $reflectionNamedType) {
+                if (is_a(object_or_class: AbstractEntity::class, class: $reflectionNamedType->getName())) {
+                    return [$reflectionNamedType];
+                }
+            }
+        }
+
+        return $reflectionNamedTypes;
+    }
+
+    private static function getFullyQualifiedEntityClassNameByProperty(self $abstractEntity, string $propertyName): string
+    {
+
     }
 
     /**
@@ -436,12 +485,16 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         );
 
         try {
-            $reflection = new \ReflectionClass(objectOrClass: $fqcn);
+            $reflection = new ReflectionClass(objectOrClass: $fqcn);
             $reflectionProperty = $reflection->getProperty(name: $propertyName);
             foreach ($reflectionProperty->getAttributes() as $attribute) {
                 if (in_array(
                     needle: $attribute->getName(),
-                    haystack: [SerializableEntityArrayProperty::class, SerializableStringArrayProperty::class, SerializableCustomArrayProperty::class],
+                    haystack: [
+                        SerializableEntityArrayProperty::class,
+                        SerializableStringArrayProperty::class,
+                        SerializableCustomArrayProperty::class,
+                    ],
                 )) {
                     return true;
                 }
@@ -456,6 +509,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     /**
      * Get the fully qualified class name for the given entity name.
      *
+     * @param string $shortName
+     *
+     * @return class-string
      * @throws EntityNotFoundException
      * @since 1.2.0
      * @deprecated 2.0.0

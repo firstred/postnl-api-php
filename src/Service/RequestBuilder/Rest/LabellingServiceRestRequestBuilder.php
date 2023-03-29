@@ -32,7 +32,6 @@ use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 use function http_build_query;

@@ -32,7 +32,6 @@ use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 

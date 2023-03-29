@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;

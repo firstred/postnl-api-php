@@ -27,12 +27,10 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor\Soap;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;

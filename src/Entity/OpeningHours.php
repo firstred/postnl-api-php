@@ -28,8 +28,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
-use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;

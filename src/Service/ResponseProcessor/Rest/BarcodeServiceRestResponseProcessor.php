@@ -52,13 +52,13 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 
-use JsonException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 
 /**

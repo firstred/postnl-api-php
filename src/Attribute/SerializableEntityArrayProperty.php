@@ -30,7 +30,6 @@ namespace Firstred\PostNL\Attribute;
 use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use ReflectionClass;
 use ReflectionException;
 
 #[Attribute(flags: Attribute::TARGET_PROPERTY)]

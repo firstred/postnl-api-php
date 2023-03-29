@@ -29,7 +29,6 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableScalarProperty;
 use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Entity\AbstractEntity;

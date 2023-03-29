@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor\Soap;
 
-use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -108,8 +107,7 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
         }
         $array = $array[0];
 
-        /** @var GetDeliveryDateResponse $object */
-        $object = AbstractEntity::xmlDeserialize(xml: $array);
+        $object = GetDeliveryDateResponse::xmlDeserialize(xml: $array);
         $this->setService(object: $object);
 
         return $object;
@@ -146,8 +144,7 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
         }
         $array = $array[0];
 
-        /** @var GetSentDateResponse $object */
-        $object = AbstractEntity::xmlDeserialize(xml: $array);
+        $object = GetSentDateResponse::xmlDeserialize(xml: $array);
         $this->setService(object: $object);
 
         return $object;

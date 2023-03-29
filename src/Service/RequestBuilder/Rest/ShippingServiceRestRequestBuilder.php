@@ -32,7 +32,6 @@ use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingServiceInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 use function http_build_query;

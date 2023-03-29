@@ -28,7 +28,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Enum\SoapNamespace;

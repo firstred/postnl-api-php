@@ -32,7 +32,6 @@ use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 use const PHP_QUERY_RFC3986;
