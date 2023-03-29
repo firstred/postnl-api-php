@@ -319,7 +319,7 @@ class PostNL implements LoggerAwareInterface
         $this->setSandbox((bool) $sandbox);
 
         if (null !== $mode) {
-            trigger_deprecation(
+            postnl_trigger_deprecation(
                 'firstred/postnl-api-php',
                 '1.4.0',
                 'Setting an API mode is deprecated. Do not set an API mode for a seamless switch to the recommended mode.'
@@ -488,7 +488,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if ($mode === static::MODE_SOAP) {
-            trigger_deprecation(
+            postnl_trigger_deprecation(
                 'firstred/postnl-api-php',
                 '2.0.0',
                 'Using the SOAP API is deprecated. Please use the REST API instead.'
