@@ -289,7 +289,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @param stdClass $json
+     * @param stdClass $json {"EntityName": object}
      *
      * @return AbstractEntity|array|bool|int|string|float|null
      * @throws DeserializationException
@@ -297,7 +297,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @throws NotSupportedException
      * @since 1.0.0
      */
-    public static function jsonDeserialize(stdClass $json /* `{"EntityName": object}` */): static|array|bool|int|string|float|null
+    public static function jsonDeserialize(stdClass $json): static|array|bool|int|string|float|null
     {
         // Find the entity name
         $reflection = new ReflectionObject(object: $json);
