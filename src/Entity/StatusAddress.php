@@ -31,7 +31,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use function is_string;
@@ -73,71 +73,71 @@ class StatusAddress extends AbstractEntity
      *
      * @var string|null $AddressType
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $AddressType = null;
 
     /** @var string|null $Building */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Building = null;
 
     /** @var string|null $City */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $City = null;
 
     /** @var string|null $CompanyName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $CompanyName = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $CountryCode = null;
 
     /** @var string|null $DepartmentName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $DepartmentName = null;
 
     /** @var string|null $District */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $District = null;
 
     /** @var string|null $FirstName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $FirstName = null;
 
     /** @var string|null $Floor */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Floor = null;
 
     /** @var string|null $HouseNumber */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNumber = null;
 
     /** @var string|null $HouseNumberSuffix */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNumberSuffix = null;
 
     /** @var string|null $LastName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $LastName = null;
 
     /** @var string|null $Region */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Region = null;
 
     /** @var string|null $RegistrationDate */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $RegistrationDate = null;
 
     /** @var string|null $Remark */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Remark = null;
 
     /** @var string|null $Street */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Street = null;
 
     /** @var string|null $Zipcode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Zipcode = null;
 
     /**

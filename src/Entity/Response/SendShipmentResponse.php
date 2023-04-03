@@ -37,11 +37,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class SendShipmentResponse extends AbstractEntity
 {
     /** @var MergedLabel[]|null $MergedLabels */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: MergedLabel::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: MergedLabel::class)]
     protected ?array $MergedLabels = null;
 
     /** @var ResponseShipment[]|null $ResponseShipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ResponseShipment::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ResponseShipment::class)]
     protected ?array $ResponseShipments = null;
 
     /**

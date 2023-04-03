@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
@@ -36,11 +36,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class ProductOption extends AbstractEntity
 {
     /** @var string|null $Characteristic */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Characteristic = null;
 
     /** @var string|null $Option */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Option = null;
 
     /**

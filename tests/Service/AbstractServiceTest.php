@@ -144,7 +144,6 @@ XML
             sandbox: true,
             requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
             streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
-            version: '1',
         );
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);

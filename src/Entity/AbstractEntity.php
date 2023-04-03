@@ -29,11 +29,7 @@ namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
@@ -416,10 +412,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             foreach ($reflectionAttributes as $reflectionAttribute) {
                 $reflectionNamedTypes = static::getPropertyTypes(reflectionProperty: $reflectionProperty);
                 switch($reflectionAttribute->getName()) {
-                    case SerializableEntityProperty::class:
-                        $object[$reflectionProperty->getName()] = $reflectionAttribute->getArguments()['']
-                        break;
-                    case SerializableCustomArrayProperty::class:
+                    case SerializableProperty::class:
                         break;
                 }
             }
@@ -461,7 +454,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
     private static function getFullyQualifiedEntityClassNameByProperty(self $abstractEntity, string $propertyName): string
     {
-
+        return '';
     }
 
     /**
@@ -488,15 +481,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             $reflection = new ReflectionClass(objectOrClass: $fqcn);
             $reflectionProperty = $reflection->getProperty(name: $propertyName);
             foreach ($reflectionProperty->getAttributes() as $attribute) {
-                if (in_array(
-                    needle: $attribute->getName(),
-                    haystack: [
-                        SerializableEntityArrayProperty::class,
-                        SerializableStringArrayProperty::class,
-                        SerializableCustomArrayProperty::class,
-                    ],
-                )) {
-                    return true;
+                if (SerializableProperty::class === $attribute->getName()) {
+                    return $attribute->getArguments()['isArray'] ?? false;
                 }
             }
         } catch (Exception) {

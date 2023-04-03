@@ -197,7 +197,6 @@ class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, Lo
         // Initialize Guzzle, include the default options
         $guzzle = $this->getClient();
         try {
-            /** @noinspection PhpUnnecessaryLocalVariableInspection */
             $response = $guzzle->send(request: $request);
 
             return $response;

@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
@@ -43,15 +43,15 @@ class Label extends AbstractEntity
      *
      * @var string|null $Content
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Content = null;
 
     /** @var string|null $Contenttype */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Contenttype = null;
 
     /** @var string|null $Labeltype */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Labeltype = null;
 
     /**

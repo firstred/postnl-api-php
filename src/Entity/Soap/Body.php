@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Soap;
 
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -41,7 +41,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Body extends AbstractEntity
 {
     /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Envelope)]
+    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
     protected ?GenerateBarcodeResponse $GenerateBarcodeResponse = null;
 
     /**

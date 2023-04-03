@@ -28,6 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
@@ -51,31 +52,31 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     private int $currentDay = 0;
 
     /** @var string[]|null $Monday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Monday = null;
 
     /** @var string[]|null $Tuesday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Tuesday = null;
 
     /** @var string[]|null $Wednesday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Wednesday = null;
 
     /** @var string[]|null $Thursday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Thursday = null;
 
     /** @var string[]|null $Friday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Friday = null;
 
     /** @var string[]|null $Saturday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Saturday = null;
 
     /** @var string[]|null $Sunday */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected array|null $Sunday = null;
 
     /**

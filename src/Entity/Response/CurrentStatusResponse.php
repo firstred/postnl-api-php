@@ -40,11 +40,11 @@ use Sabre\Xml\Writer;
 class CurrentStatusResponse extends AbstractEntity
 {
     /** @var CurrentStatusResponseShipment[]|null $Shipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: CurrentStatusResponseShipment::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CurrentStatusResponseShipment::class)]
     protected ?array $Shipments = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Warning::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?array $Warnings = null;
 
     /**

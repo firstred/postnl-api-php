@@ -49,7 +49,7 @@ class GetSentDateResponse extends AbstractEntity
     protected ?DateTimeInterface $SentDate = null;
 
     /** @var string[]|null $Options */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /**

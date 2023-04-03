@@ -27,17 +27,25 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Attribute;
 
+use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 
-abstract class SerializableProperty
+#[Attribute(flags: Attribute::TARGET_PROPERTY)]
+class SerializableProperty
 {
     /**
-     * @param SoapNamespace  $namespace
-     * @param string[]       $aliases           Property shortname aliases such as `Address`
-     * @param class-string[] $supportedServices Supported services, empty array = all
+     * This indicates that the given property is serializable. All serialization details should
+     * be passed to the attribute, making it completely serializable without relying on reflection
+     * of the property itself.
+     *
+     * @param SoapNamespace                       $namespace         SOAP namespace
+     * @param class-string|'int'|'string'|'float' $type              Property type
+     * @param bool                                $isArray           Should the property be an array
+     * @param string[]                            $aliases           Property shortname aliases such as `Address`
+     * @param class-string[]                      $supportedServices Supported services, empty array = all
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
@@ -45,6 +53,8 @@ abstract class SerializableProperty
      */
     public function __construct(
         public SoapNamespace $namespace,
+        public string        $type,
+        public bool          $isArray = false,
         public array         $aliases = [],
         public array         $supportedServices = [],
     ) {

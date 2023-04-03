@@ -28,7 +28,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Warning;
@@ -40,31 +40,31 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class ResponseShipment extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Barcode = null;
 
     /** @var string|null $DownPartnerBarcode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerBarcode = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
     /** @var Label[]|null $Labels */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Label::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Label::class)]
     protected ?array $Labels = null;
 
     /** @var string|null $ProductCodeDelivery */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCodeDelivery = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Warning::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?array $Warnings = null;
 
     /**

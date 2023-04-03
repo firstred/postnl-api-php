@@ -128,7 +128,6 @@ class MockHttpClient extends BaseHttpClient implements HttpClientInterface, Logg
         ));
 
         try {
-            /** @noinspection PhpUnnecessaryLocalVariableInspection */
             $response = $guzzle->send(request: $request);
 
             return $response;

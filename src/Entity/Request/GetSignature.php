@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
@@ -42,15 +42,15 @@ use Sabre\Xml\Writer;
 class GetSignature extends AbstractEntity
 {
     /** @var Message|null $Message */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Message $Message = null;
 
     /** @var Customer|null $Customer */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
     /** @var Shipment|null $Shipment */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Shipment $Shipment = null;
 
     /**

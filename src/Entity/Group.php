@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
@@ -40,7 +40,7 @@ class Group extends AbstractEntity
      *
      * @var string|null $GroupCount
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupCount = null;
 
     /**
@@ -48,7 +48,7 @@ class Group extends AbstractEntity
      *
      * @var string|null $GroupSequence
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupSequence = null;
 
     /**
@@ -62,7 +62,7 @@ class Group extends AbstractEntity
      *
      * @var string|null $GroupType
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupType;
 
     /**
@@ -70,7 +70,7 @@ class Group extends AbstractEntity
      *
      * @var string|null $MainBarcode
      */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $MainBarcode;
 
     /**

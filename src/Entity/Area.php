@@ -35,21 +35,21 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Area extends AbstractEntity
 {
-    /** @var Coordinates|null $CoordinatesNorthWest */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected ?Coordinates $CoordinatesNorthWest = null;
+    /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CoordinatesNorthWest::class)]
+    protected ?CoordinatesNorthWest $CoordinatesNorthWest = null;
 
-    /** @var Coordinates|null $CoordinatesSouthEast */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
-    protected ?Coordinates $CoordinatesSouthEast = null;
+    /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CoordinatesSouthEast::class)]
+    protected ?CoordinatesSouthEast $CoordinatesSouthEast = null;
 
     /**
-     * @param Coordinates|null $CoordinatesNorthWest
-     * @param Coordinates|null $CoordinatesSouthEast
+     * @param CoordinatesNorthWest|null $CoordinatesNorthWest
+     * @param CoordinatesSouthEast|null $CoordinatesSouthEast
      */
     public function __construct(
-        ?Coordinates $CoordinatesNorthWest = null,
-        ?Coordinates $CoordinatesSouthEast = null,
+        ?CoordinatesNorthWest $CoordinatesNorthWest = null,
+        ?CoordinatesSouthEast $CoordinatesSouthEast = null,
     ) {
         parent::__construct();
 
@@ -58,19 +58,19 @@ class Area extends AbstractEntity
     }
 
     /**
-     * @return Coordinates|null
+     * @return CoordinatesNorthWest|null
      */
-    public function getCoordinatesNorthWest(): ?Coordinates
+    public function getCoordinatesNorthWest(): ?CoordinatesNorthWest
     {
         return $this->CoordinatesNorthWest;
     }
 
     /**
-     * @param Coordinates|null $CoordinatesNorthWest
+     * @param CoordinatesNorthWest|null $CoordinatesNorthWest
      *
      * @return static
      */
-    public function setCoordinatesNorthWest(?Coordinates $CoordinatesNorthWest): static
+    public function setCoordinatesNorthWest(?CoordinatesNorthWest $CoordinatesNorthWest): static
     {
         $this->CoordinatesNorthWest = $CoordinatesNorthWest;
 
@@ -78,19 +78,19 @@ class Area extends AbstractEntity
     }
 
     /**
-     * @return Coordinates|null
+     * @return CoordinatesSouthEast|null
      */
-    public function getCoordinatesSouthEast(): ?Coordinates
+    public function getCoordinatesSouthEast(): ?CoordinatesSouthEast
     {
         return $this->CoordinatesSouthEast;
     }
 
     /**
-     * @param Coordinates|null $CoordinatesSouthEast
+     * @param CoordinatesSouthEast|null $CoordinatesSouthEast
      *
      * @return static
      */
-    public function setCoordinatesSouthEast(?Coordinates $CoordinatesSouthEast): static
+    public function setCoordinatesSouthEast(?CoordinatesSouthEast $CoordinatesSouthEast): static
     {
         $this->CoordinatesSouthEast = $CoordinatesSouthEast;
 

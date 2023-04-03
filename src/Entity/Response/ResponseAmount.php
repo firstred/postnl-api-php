@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Service\LabellingServiceRestAdapter;
@@ -41,39 +41,39 @@ use Firstred\PostNL\Service\TimeframeServiceRestAdapter;
 class ResponseAmount extends AbstractEntity
 {
     /** @var string|null $AccountName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $AccountName = null;
 
     /** @var string|null $ResponseAmountType */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ResponseAmountType = null;
 
     /** @var string|null $BIC */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $BIC = null;
 
     /** @var string|null $Currency */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Currency = null;
 
     /** @var string|null $IBAN */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $IBAN = null;
 
     /** @var string|null $Reference */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
     /** @var string|null $TransactionNumber */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TransactionNumber = null;
 
     /** @var string|null $Value */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Value = null;
 
     /** @var string|null $VerzekerdBedrag */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $VerzekerdBedrag = null;
 
     /**

@@ -40,19 +40,19 @@ use function is_null;
 class Contact extends AbstractEntity
 {
     /** @var string|null $ContactType */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ContactType = null;
 
     /** @var string|null $Email */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Email = null;
 
     /** @var string|null $SMSNr */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $SMSNr = null;
 
     /** @var string|null $TelNr */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TelNr = null;
 
     /**

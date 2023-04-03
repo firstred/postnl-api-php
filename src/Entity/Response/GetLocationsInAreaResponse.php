@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
@@ -38,7 +38,7 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class GetLocationsInAreaResponse extends AbstractEntity
 {
     /** @var GetLocationsResult|null $GetLocationsResult */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
     /**

@@ -27,10 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
-use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
@@ -47,55 +44,55 @@ use stdClass;
 class ResponseLocation extends AbstractEntity
 {
     /** @var Address|null $Address */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Address $Address = null;
 
     /** @var string[]|null $DeliveryOptions */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
     protected ?array $DeliveryOptions = null;
 
     /** @var string|null $Distance */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Distance = null;
 
     /** @var string|null $Latitude */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Latitude = null;
 
     /** @var string|null $Longitude */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Longitude = null;
 
     /** @var string|null $Name */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Name = null;
 
     /** @var OpeningHours|null $OpeningHours */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?OpeningHours $OpeningHours = null;
 
     /** @var string|null $PartnerName */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PartnerName = null;
 
     /** @var string|null $PhoneNumber */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $PhoneNumber = null;
 
     /** @var string|null $LocationCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $LocationCode = null;
 
     /** @var string|null $RetailNetworkID */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $RetailNetworkID = null;
 
     /** @var string|null $Saleschannel */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Saleschannel = null;
 
     /** @var string|null $TerminalType */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $TerminalType = null;
 
     /** @var Warning[]|null $Warnings */
@@ -103,11 +100,11 @@ class ResponseLocation extends AbstractEntity
     protected ?array $Warnings = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DownPartnerLocation = null;
 
     /**

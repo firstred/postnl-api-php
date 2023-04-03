@@ -40,11 +40,11 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class ResponseTimeframes extends AbstractEntity
 {
     /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ReasonNoTimeframe::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ReasonNoTimeframe::class)]
     protected ?array $ReasonNoTimeframes = null;
 
     /** @var Timeframe[]|null $Timeframes */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Timeframe::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Timeframe::class)]
     protected ?array $Timeframes = null;
 
     /**

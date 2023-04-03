@@ -31,11 +31,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableCustomArrayProperty;
-use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
-use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
@@ -50,59 +46,59 @@ use function is_string;
 class Timeframe extends AbstractEntity
 {
     /** @var string|null $City */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $Date */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $Date = null;
 
     /** @var DateTimeInterface|null $EndDate */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $EndDate = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $PostalCode = null;
 
     /** @var DateTimeInterface|null $StartDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?DateTimeInterface $StartDate = null;
 
     /** @var string|null $Street */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Street = null;
 
     /** @var bool|null $SundaySorting */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'bool')]
     protected ?bool $SundaySorting = null;
 
     /** @var string|null $Interval */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Interval = null;
 
     /** @var string|null $TimeframeRange */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $TimeframeRange = null;
 
     /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
-    #[SerializableCustomArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: TimeframeTimeFrame::class, isArray: true)]
     protected ?array $Timeframes = null;
 
     /**

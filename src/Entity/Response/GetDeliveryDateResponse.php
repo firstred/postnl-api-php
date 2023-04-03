@@ -53,7 +53,7 @@ class GetDeliveryDateResponse extends AbstractEntity
     protected DateTimeInterface|null $DeliveryDate = null;
 
     /** @var string[]|null $Options */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
     protected ?array $Options = null;
 
     /**

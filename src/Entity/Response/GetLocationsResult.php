@@ -39,7 +39,7 @@ use Sabre\Xml\Writer;
 class GetLocationsResult extends AbstractEntity
 {
     /** @var ResponseLocation[]|null $ResponseLocation */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ResponseLocation::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ResponseLocation::class)]
     protected ?array $ResponseLocation = null;
 
     /**

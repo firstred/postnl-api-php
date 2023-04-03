@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Soap;
 
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 
@@ -41,7 +41,7 @@ class Security extends AbstractEntity
     public const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
     /** @var UsernameToken $UsernameToken */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Security)]
+    #[SerializableProperty(namespace: SoapNamespace::Security)]
     protected UsernameToken $UsernameToken;
 
     /**

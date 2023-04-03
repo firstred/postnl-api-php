@@ -48,11 +48,11 @@ use function count;
 class CompleteStatusResponse extends AbstractEntity
 {
     /** @var CompleteStatusResponseShipment[]|null $Shipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: CompleteStatusResponseShipment::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseShipment::class)]
     protected ?array $Shipments = null;
 
     /** @var Warning|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Warning::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?Warning $Warnings = null;
 
     /**

@@ -31,10 +31,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
@@ -62,19 +59,19 @@ use stdClass;
 class CompleteStatusResponseShipment extends AbstractEntity
 {
     /** @var StatusAddress[]|null $Addresses */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: StatusAddress::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class)]
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Amount::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Amount::class)]
     protected ?array $Amounts = null;
 
     /** @var Barcode|null $Barcode */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Barcode $Barcode = null;
 
     /** @var Customer|null $Customer */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Customer $Customer = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
@@ -82,59 +79,59 @@ class CompleteStatusResponseShipment extends AbstractEntity
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
     /** @var CompleteStatusResponseEvent[]|null $Events */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: CompleteStatusResponseEvent::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseEvent::class)]
     protected ?array $Events = null;
 
     /** @var Expectation|null $Expectation */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Expectation $Expectation = null;
 
     /** @var Group[]|null $Groups */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Group::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Group::class)]
     protected ?array $Groups = null;
 
     /** @var string|null $MainBarcode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode = null;
 
     /** @var CompleteStatusResponseOldStatus[]|null $OldStatuses */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: CompleteStatusResponseOldStatus::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseOldStatus::class)]
     protected ?array $OldStatuses = null;
 
     /** @var string|null $ProductCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCode = null;
 
     /** @var string|null $ProductDescription */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductDescription = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ProductOption::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ProductOption::class)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $Reference */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
     /** @var string|null $ShipmentAmount */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentAmount = null;
 
     /** @var string|null $ShipmentCounter */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentCounter = null;
 
     /** @var Status|null $Status */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Status $Status = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Warning::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?array $Warnings = null;
 
     /**

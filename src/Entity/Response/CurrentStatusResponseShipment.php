@@ -31,9 +31,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableEntityProperty;
-use Firstred\PostNL\Attribute\SerializableScalarProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Amount;
 use Firstred\PostNL\Entity\Barcode;
@@ -62,28 +60,28 @@ use function is_string;
 class CurrentStatusResponseShipment extends AbstractEntity
 {
     /** @var StatusAddress[]|null $Addresses */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: StatusAddress::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class)]
     protected ?array $Addresses = null;
 
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Amount::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Amount::class)]
     protected ?array $Amounts = null;
 
     /** @var Barcode|null $Barcode */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Barcode $Barcode = null;
 
     /** @var string|null $DeliveryDate */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Dimension $Dimension = null;
 
     /** @var Expectation|null $Expectation */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Expectation $Expectation = null;
 
     /** @var Group[]|null $Groups */
@@ -91,39 +89,39 @@ class CurrentStatusResponseShipment extends AbstractEntity
     protected ?array $Groups = null;
 
     /** @var string|null $MainBarcode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $MainBarcode = null;
 
     /** @var string|null $ProductCode */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductCode = null;
 
     /** @var string|null $ProductDescription */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ProductDescription = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: ProductOption::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ProductOption::class)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $Reference */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Reference = null;
 
     /** @var string|null $ShipmentAmount */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentAmount = null;
 
     /** @var string|null $ShipmentCounter */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $ShipmentCounter = null;
 
     /** @var Status|null $Status */
-    #[SerializableEntityProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?Status $Status = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, entityFqcn: Warning::class)]
+    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?array $Warnings = null;
 
     /**

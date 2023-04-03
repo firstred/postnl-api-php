@@ -35,15 +35,15 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Barcode extends AbstractEntity
 {
     /** @var string|null $Type */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Type = null;
 
     /** @var string|null $Range */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Range = null;
 
     /** @var string|null $Serie */
-    #[SerializableScalarProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain)]
     protected ?string $Serie = null;
 
     /**

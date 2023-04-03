@@ -39,7 +39,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class MergedLabel extends AbstractEntity
 {
     /** @var string[]|null $Barcodes */
-    #[SerializableStringArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
     protected ?array $Barcodes = null;
 
     /** @var Label[]|null $Labels */
