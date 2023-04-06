@@ -36,7 +36,6 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Amount;
-use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Expectation;
 use Firstred\PostNL\Entity\Group;
@@ -74,9 +73,9 @@ class CurrentStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Barcode = null;
 
-    /** @var string|null $DeliveryDate */
+    /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
-    protected ?string $DeliveryDate = null;
+    protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Dimension::class)]
@@ -130,27 +129,27 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        /** @param StatusAddress[]|null $Addresses */
-        ?array                        $Addresses = null,
-        /** @param Amount[]|null $Amounts */
-        ?array                        $Amounts = null,
-        ?string                       $Barcode = null,
+        /* @param StatusAddress[]|null $Addresses */
+        ?array $Addresses = null,
+        /* @param Amount[]|null $Amounts */
+        ?array $Amounts = null,
+        ?string $Barcode = null,
         DateTimeInterface|string|null $DeliveryDate = null,
-        ?Dimension                    $Dimension = null,
-        ?Expectation                  $Expectation = null,
-        /** @param Group[]|null $Groups */
-        ?array                        $Groups = null,
-        ?string                       $ProductCode = null,
-        /** @param ProductOption[]|null $ProductOptions */
-        ?array                        $ProductOptions = null,
-        ?string                       $Reference = null,
-        ?Status                       $Status = null,
-        /** @param Warning[]|null $Warnings */
-        ?array                        $Warnings = null,
-        ?string                       $MainBarcode = null,
-        ?string                       $ShipmentAmount = null,
-        ?string                       $ShipmentCounter = null,
-        ?string                       $ProductDescription = null
+        ?Dimension $Dimension = null,
+        ?Expectation $Expectation = null,
+        /* @param Group[]|null $Groups */
+        ?array $Groups = null,
+        ?string $ProductCode = null,
+        /* @param ProductOption[]|null $ProductOptions */
+        ?array $ProductOptions = null,
+        ?string $Reference = null,
+        ?Status $Status = null,
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null,
+        ?string $MainBarcode = null,
+        ?string $ShipmentAmount = null,
+        ?string $ShipmentCounter = null,
+        ?string $ProductDescription = null
     ) {
         parent::__construct();
 
@@ -170,6 +169,14 @@ class CurrentStatusResponseShipment extends AbstractEntity
         $this->setShipmentAmount(ShipmentAmount: $ShipmentAmount);
         $this->setShipmentCounter(ShipmentCounter: $ShipmentCounter);
         $this->setProductDescription(ProductDescription: $ProductDescription);
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDeliveryDate(): ?DateTimeInterface
+    {
+        return $this->DeliveryDate;
     }
 
     /**
@@ -525,21 +532,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * @return string|null
-     */
-    public function getDeliveryDate(): ?string
-    {
-        return $this->DeliveryDate;
-    }
-
-    /**
      * @param stdClass $json
      *
      * @return CurrentStatusResponseShipment
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
      * @throws \ReflectionException
+     *
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -560,6 +561,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
