@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,10 +25,12 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Exception;
 
 /**
- * Class NotSupportedException
+ * Class NotSupportedException.
  *
  * @since 1.0.0
  */

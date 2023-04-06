@@ -30,6 +30,7 @@
     },
     "require-dev": {
         "cache/void-adapter": "^1.2",
+        "friendsofphp/php-cs-fixer": "^3.16",
         "guzzlehttp/guzzle": "^7.2",
         "monolog/monolog": "^3.0",
         "php-http/mock-client": "^1.3",

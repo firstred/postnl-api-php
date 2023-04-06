@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
@@ -35,6 +37,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+
 use function is_string;
 
 /**

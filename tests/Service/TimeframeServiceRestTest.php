@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -50,7 +52,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
+
 use function file_get_contents;
+
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The TimeframeService (REST)')]

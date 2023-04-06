@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use ParagonIE\HiddenString\HiddenString;
@@ -42,7 +44,9 @@ trait RequestBuilderSettersTrait
      */
     public function setApiKey(HiddenString $apiKey): static
     {
-        if (isset($this->adapter)) $this->adapter->setApiKey(apiKey: $apiKey);
+        if (isset($this->adapter)) {
+            $this->adapter->setApiKey(apiKey: $apiKey);
+        }
 
         return parent::setApiKey(apiKey: $apiKey);
     }
@@ -52,7 +56,9 @@ trait RequestBuilderSettersTrait
      */
     public function setSandbox(bool $sandbox): static
     {
-        if (isset($this->adapter)) $this->adapter->setSandbox(sandbox: $sandbox);
+        if (isset($this->adapter)) {
+            $this->adapter->setSandbox(sandbox: $sandbox);
+        }
 
         return parent::setSandbox(sandbox: $sandbox);
     }
@@ -62,7 +68,9 @@ trait RequestBuilderSettersTrait
      */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
-        if (isset($this->adapter)) $this->adapter->setRequestFactory(requestFactory: $requestFactory);
+        if (isset($this->adapter)) {
+            $this->adapter->setRequestFactory(requestFactory: $requestFactory);
+        }
 
         return parent::setRequestFactory(requestFactory: $requestFactory);
     }
@@ -72,7 +80,9 @@ trait RequestBuilderSettersTrait
      */
     public function setStreamFactory(StreamFactoryInterface $streamFactory): static
     {
-        if (isset($this->adapter)) $this->adapter->setStreamFactory(streamFactory: $streamFactory);
+        if (isset($this->adapter)) {
+            $this->adapter->setStreamFactory(streamFactory: $streamFactory);
+        }
 
         return parent::setStreamFactory(streamFactory: $streamFactory);
     }

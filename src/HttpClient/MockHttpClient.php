@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Firstred\PostNL\Exception\HttpClientException;
@@ -40,8 +42,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
+
 use function is_array;
 use function user_error;
+
 use const E_USER_DEPRECATED;
 
 /**
@@ -52,8 +56,8 @@ use const E_USER_DEPRECATED;
  */
 class MockHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
-    const DEFAULT_TIMEOUT = 60;
-    const DEFAULT_CONNECT_TIMEOUT = 20;
+    public const DEFAULT_TIMEOUT = 60;
+    public const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /** @var array */
     protected array $defaultOptions = [];

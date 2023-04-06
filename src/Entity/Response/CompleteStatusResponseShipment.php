@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
@@ -35,7 +37,6 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Amount;
-use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Expectation;
@@ -138,32 +139,32 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        /** @param StatusAddress[]|null $Addresses */
-        array                         $Addresses = null,
-        /** @param Amount[]|null $Amounts */
-        array                         $Amounts = null,
-        ?string                       $Barcode = null,
-        ?Customer                     $Customer = null,
+        /* @param StatusAddress[]|null $Addresses */
+        array $Addresses = null,
+        /* @param Amount[]|null $Amounts */
+        array $Amounts = null,
+        ?string $Barcode = null,
+        ?Customer $Customer = null,
         DateTimeInterface|string|null $DeliveryDate = null,
-        ?Dimension                    $Dimension = null,
-        /** @param CompleteStatusResponseEvent[]|null $Events */
-        ?array                        $Events = null,
-        ?Expectation                  $Expectation = null,
-        /** @param Group[]|null $Groups */
-        ?array                        $Groups = null,
-        /** @param CompleteStatusResponseOldStatus[]|null $OldStatuses */
-        ?array                        $OldStatuses = null,
-        ?string                       $ProductCode = null,
-        /** @param ProductOption[]|null $ProductOptions */
-        ?array                        $ProductOptions = null,
-        ?string                       $Reference = null,
-        ?Status                       $Status = null,
-        /** @param Warning[]|null $Warnings */
-        ?array                        $Warnings = null,
-        ?string                       $MainBarcode = null,
-        ?string                       $ShipmentAmount = null,
-        ?string                       $ShipmentCounter = null,
-        ?string                       $ProductDescription = null
+        ?Dimension $Dimension = null,
+        /* @param CompleteStatusResponseEvent[]|null $Events */
+        ?array $Events = null,
+        ?Expectation $Expectation = null,
+        /* @param Group[]|null $Groups */
+        ?array $Groups = null,
+        /* @param CompleteStatusResponseOldStatus[]|null $OldStatuses */
+        ?array $OldStatuses = null,
+        ?string $ProductCode = null,
+        /* @param ProductOption[]|null $ProductOptions */
+        ?array $ProductOptions = null,
+        ?string $Reference = null,
+        ?Status $Status = null,
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null,
+        ?string $MainBarcode = null,
+        ?string $ShipmentAmount = null,
+        ?string $ShipmentCounter = null,
+        ?string $ProductDescription = null
     ) {
         parent::__construct();
 
@@ -580,10 +581,12 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param stdClass $json
      *
      * @return CompleteStatusResponseShipment
+     *
      * @throws DeserializationException
      * @throws PostNLNotSupportedExceptionAlias
      * @throws EntityNotFoundException
      * @throws \ReflectionException
+     *
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -604,6 +607,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

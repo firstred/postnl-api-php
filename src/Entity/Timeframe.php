@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
@@ -37,6 +39,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use InvalidArgumentException;
 use Sabre\Xml\Writer;
+
 use function in_array;
 use function is_string;
 
@@ -117,7 +120,7 @@ class Timeframe extends AbstractEntity
         ?string                       $Street = null,
         ?string                       $SundaySorting = 'false',
         ?string                       $Interval = null,
-                                      $Range = null,
+        $Range = null,
         /** @param TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
         ?array                        $Timeframes = null,
         string|DateTimeInterface|null $StartDate = null

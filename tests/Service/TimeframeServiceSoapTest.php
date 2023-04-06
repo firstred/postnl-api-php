@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -80,7 +82,8 @@ class TimeframeServiceSoapTest extends ServiceTestCase
                     Countrycode: 'NL',
                 ))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
             mode: PostNL::MODE_SOAP
         );

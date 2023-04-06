@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service;
 
 use DateInterval;
@@ -35,7 +37,6 @@ use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -59,15 +60,15 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
+    use ResponseProcessorSettersTrait;
     // SOAP API specific
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
-
-    use ResponseProcessorSettersTrait;
 
     protected LabellingServiceRequestBuilderInterface $requestBuilder;
     protected LabellingServiceResponseProcessorInterface $responseProcessor;
@@ -85,13 +86,13 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -114,6 +115,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
@@ -152,11 +154,13 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param array<int|string, array<GenerateBarcode, bool>> $generateLabels
      *
      * @return array<int|string, GenerateBarcodeResponse>
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function generateLabels(array $generateLabels): array

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
@@ -55,11 +57,10 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
+    use ResponseProcessorSettersTrait;
     // SOAP API specific
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ConfirmingWebService/';
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
-
-    use ResponseProcessorSettersTrait;
 
     protected ConfirmingServiceRequestBuilderInterface $requestBuilder;
     protected ConfirmingServiceResponseProcessorInterface $responseProcessor;

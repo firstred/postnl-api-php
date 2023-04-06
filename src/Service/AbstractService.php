@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
@@ -118,7 +120,8 @@ abstract class AbstractService
     public function retrieveCachedItem(string $uuid): ?CacheItemInterface
     {
         $reflection = new ReflectionClass(objectOrClass: $this);
-        $uuid .= (PostNL::MODE_REST == $this->getAPIMode()
+        $uuid .= (
+            PostNL::MODE_REST == $this->getAPIMode()
             || $this instanceof ShippingServiceInterface
             || $this instanceof ShippingStatusServiceInterface
         ) ? 'rest' : 'soap';

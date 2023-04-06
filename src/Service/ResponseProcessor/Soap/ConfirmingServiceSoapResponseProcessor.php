@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\ResponseProcessor\Soap;
 
 use Firstred\PostNL\Entity\AbstractEntity;
@@ -48,6 +50,7 @@ use SimpleXMLElement;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements ConfirmingServiceResponseProcessorInterface
@@ -59,10 +62,10 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -83,12 +86,14 @@ class ConfirmingServiceSoapResponseProcessor extends AbstractSoapResponseProcess
      * @param ResponseInterface $response
      *
      * @return ConfirmingResponseShipment[]
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws EntityNotFoundException
      * @throws InvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): array

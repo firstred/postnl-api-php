@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use DateTimeImmutable;
@@ -40,6 +42,7 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
+
 use function is_array;
 
 /**

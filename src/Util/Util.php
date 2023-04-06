@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Util;
 
 use DateInterVal;
@@ -42,7 +44,7 @@ use setasign\Fpdi\PdfParser\StreamReader;
  */
 class Util
 {
-    const ERROR_MARGIN = 2;
+    public const ERROR_MARGIN = 2;
 
     /**
      * @param array $arr a map of param keys to values

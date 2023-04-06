@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
@@ -42,10 +44,7 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
-use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
-use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\DeliveryDateServiceSoapRequestBuilder;
-use Firstred\PostNL\Service\ResponseProcessor\Soap\DeliveryDateServiceSoapResponseProcessor;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -86,7 +85,8 @@ class DeliveryDateServiceSoapTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: false,
             mode: PostNL::MODE_SOAP
         );
@@ -213,7 +213,8 @@ XML
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getDeliveryDate(getDeliveryDate: (new GetDeliveryDate())
+        $response = $this->postnl->getDeliveryDate(
+            getDeliveryDate: (new GetDeliveryDate())
             ->setGetDeliveryDate(
                 GetDeliveryDate: (new GetDeliveryDate())
                     ->setAllowSundaySorting(AllowSundaySorting: 'false')
@@ -248,7 +249,8 @@ XML
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->service->buildGetSentDateRequestSoap(getSentDate: (new GetSentDateRequest())
+        $this->lastRequest = $request = $this->service->buildGetSentDateRequestSoap(
+            getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
                 GetSentDate: (new GetSentDate())
                     ->setAllowSundaySorting(AllowSundaySorting: true)
@@ -344,7 +346,8 @@ XML
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getSentDate(getSentDate: (new GetSentDateRequest())
+        $response = $this->postnl->getSentDate(
+            getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
                 GetSentDate: (new GetSentDate())
                     ->setAllowSundaySorting(AllowSundaySorting: true)
@@ -376,7 +379,7 @@ XML
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var DeliveryDateServiceSoapRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

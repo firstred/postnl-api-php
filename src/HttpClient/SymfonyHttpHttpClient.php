@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
@@ -46,9 +48,11 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpClientResponseInterface;
+
 use function array_merge;
 use function is_array;
 use function user_error;
+
 use const E_USER_DEPRECATED;
 
 /**
@@ -59,8 +63,8 @@ use const E_USER_DEPRECATED;
  */
 class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
-    const DEFAULT_TIMEOUT = 60;
-    const DEFAULT_CONNECT_TIMEOUT = 20;
+    public const DEFAULT_TIMEOUT = 60;
+    public const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /** @var array */
     protected array $defaultOptions = [];

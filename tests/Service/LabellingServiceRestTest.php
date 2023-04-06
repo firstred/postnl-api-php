@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -55,8 +57,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
 use setasign\Fpdi\PdfReader\PdfReaderException;
+
 use function file_get_contents;
 use function json_decode;
+
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The LabellingService (REST)')]
@@ -149,7 +153,8 @@ class LabellingServiceRestTest extends ServiceTestCase
             confirm: false
         );
 
-        $this->assertEqualsCanonicalizing(expected: [
+        $this->assertEqualsCanonicalizing(
+            expected: [
             'Customer'  => [
                 'Address'            => [
                     'AddressType' => '02',
@@ -201,7 +206,8 @@ class LabellingServiceRestTest extends ServiceTestCase
                 'ProductCodeDelivery' => '3085',
             ],
         ],
-            actual: json_decode(json: (string) $request->getBody(), associative: true));
+            actual: json_decode(json: (string) $request->getBody(), associative: true)
+        );
         $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
         $this->assertStringContainsString(needle: 'v2_2', haystack: $request->getUri()->getPath());
         $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
@@ -250,7 +256,8 @@ class LabellingServiceRestTest extends ServiceTestCase
             confirm: false
         );
 
-        $this->assertEqualsCanonicalizing(expected: [
+        $this->assertEqualsCanonicalizing(
+            expected: [
             'Customer'  => [
                 'Address'            => [
                     'AddressType' => '02',
@@ -302,7 +309,8 @@ class LabellingServiceRestTest extends ServiceTestCase
                 'ProductCodeDelivery' => '3094',
             ],
         ],
-            actual: json_decode(json: (string) $request->getBody(), associative: true));
+            actual: json_decode(json: (string) $request->getBody(), associative: true)
+        );
         $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
         $this->assertStringContainsString(needle: 'v2_1', haystack: $request->getUri()->getPath());
         $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
@@ -373,7 +381,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels(shipments: [
+        $label = $this->postnl->generateLabels(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(
@@ -460,7 +469,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels(shipments: [
+        $label = $this->postnl->generateLabels(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(
@@ -547,7 +557,8 @@ class LabellingServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels(shipments: [
+        $label = $this->postnl->generateLabels(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(

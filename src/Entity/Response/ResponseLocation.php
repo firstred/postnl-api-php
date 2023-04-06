@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
@@ -36,8 +38,8 @@ use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use stdClass;
 use ReflectionException;
+use stdClass;
 
 /**
  * @since 1.0.0
@@ -127,24 +129,24 @@ class ResponseLocation extends AbstractEntity
      * @param string|null       $DownPartnerLocation
      */
     public function __construct(
-        Address       $Address = null,
-        /** @param string[]|null $DeliveryOptions */
-        array         $DeliveryOptions = null,
-        ?string       $Distance = null,
-        ?string       $Latitude = null,
-        ?string       $Longitude = null,
-        ?string       $Name = null,
+        Address $Address = null,
+        /* @param string[]|null $DeliveryOptions */
+        array $DeliveryOptions = null,
+        ?string $Distance = null,
+        ?string $Latitude = null,
+        ?string $Longitude = null,
+        ?string $Name = null,
         ?OpeningHours $OpeningHours = null,
-        ?string       $PartnerName = null,
-        ?string       $PhoneNumber = null,
-        ?string       $LocationCode = null,
-        ?string       $RetailNetworkID = null,
-        ?string       $Saleschannel = null,
-        ?string       $TerminalType = null,
-        /** @param Warning[]|null $Warnings */
-        ?array        $Warnings = null,
-        ?string       $DownPartnerID = null,
-        ?string       $DownPartnerLocation = null
+        ?string $PartnerName = null,
+        ?string $PhoneNumber = null,
+        ?string $LocationCode = null,
+        ?string $RetailNetworkID = null,
+        ?string $Saleschannel = null,
+        ?string $TerminalType = null,
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null,
+        ?string $DownPartnerID = null,
+        ?string $DownPartnerLocation = null
     ) {
         parent::__construct();
 
@@ -506,6 +508,7 @@ class ResponseLocation extends AbstractEntity
      * @param stdClass $json
      *
      * @return static
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
@@ -37,9 +39,11 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
+
 use function define;
 use function defined;
 use function is_array;
+
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HTTPHEADER;
 use const CURLOPT_PROTOCOLS;

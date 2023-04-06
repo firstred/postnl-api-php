@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 
 use Firstred\PostNL\Entity\Customer;
@@ -45,6 +47,7 @@ use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
+
 use function json_decode;
 
 /**

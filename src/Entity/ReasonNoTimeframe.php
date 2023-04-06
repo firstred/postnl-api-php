@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,13 +25,14 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
@@ -42,6 +43,7 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
+
 use function array_merge;
 use function is_array;
 use function is_string;

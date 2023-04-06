@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\RequestBuilder\Soap;
 
 use DateTimeImmutable;
@@ -44,6 +46,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use ReflectionException;
 use Sabre\Xml\Service as XmlService;
+
 use function in_array;
 use function str_replace;
 

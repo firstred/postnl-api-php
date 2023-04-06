@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -86,7 +88,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
             mode: PostNL::MODE_SOAP
         );
@@ -147,7 +150,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
             false
         );
 
-        $this->assertEqualsCanonicalizing(expected: [
+        $this->assertEqualsCanonicalizing(
+            expected: [
             'Customer'  => [
                 'Address'            => [
                     'AddressType' => '02',
@@ -200,7 +204,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
                 ],
             ],
         ],
-            actual: json_decode(json: (string) $request->getBody(), associative: true));
+            actual: json_decode(json: (string) $request->getBody(), associative: true)
+        );
         $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
         $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
@@ -354,7 +359,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $sentShipments = $this->postnl->sendShipments(shipments: [
+        $sentShipments = $this->postnl->sendShipments(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     Address::create(properties: [
@@ -468,7 +474,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $sentShipments = $this->postnl->sendShipments(shipments: [
+        $sentShipments = $this->postnl->sendShipments(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     Address::create(properties: [
@@ -582,7 +589,8 @@ class ShippingServiceSoapTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $shipments = $this->postnl->sendShipments(shipments: [
+        $shipments = $this->postnl->sendShipments(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     Address::create(properties: [

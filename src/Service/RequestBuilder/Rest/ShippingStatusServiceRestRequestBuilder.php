@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
 use DateTimeInterface;
@@ -40,6 +42,7 @@ use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
+
 use const PHP_QUERY_RFC3986;
 
 /**

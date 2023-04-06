@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,12 +25,13 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Attribute;
 
 use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use ReflectionClass;
 use ReflectionException;
 
 #[Attribute(flags: Attribute::TARGET_PROPERTY)]
@@ -49,17 +50,18 @@ class SerializableProperty
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function __construct(
         public SoapNamespace $namespace,
-        public string        $type,
-        public bool          $isArray = false,
-        public array         $aliases = [],
-        public array         $supportedServices = [],
+        public string $type,
+        public bool $isArray = false,
+        public array $aliases = [],
+        public array $supportedServices = [],
     ) {
         foreach ($this->supportedServices as $supportedService) {
-            $reflectionSupportedService = new ReflectionClass(objectOrClass: $supportedService);
+            $reflectionSupportedService = new \ReflectionClass(objectOrClass: $supportedService);
             if (!$reflectionSupportedService->isInterface()) {
                 throw new InvalidArgumentException(message: 'Only interfaces of services can be passed');
             }

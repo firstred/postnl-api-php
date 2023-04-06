@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
@@ -64,11 +66,10 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class LocationService extends AbstractService implements LocationServiceInterface
 {
+    use ResponseProcessorSettersTrait;
     // SOAP API specific
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
-
-    use ResponseProcessorSettersTrait;
 
     protected LocationServiceRequestBuilderInterface $requestBuilder;
     protected LocationServiceResponseProcessorInterface $responseProcessor;

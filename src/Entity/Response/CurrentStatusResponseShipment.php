@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
@@ -51,6 +53,7 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
+
 use function is_array;
 use function is_string;
 

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
@@ -41,7 +43,6 @@ use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
@@ -79,7 +80,8 @@ class BarcodeServiceSoapTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
             mode: PostNL::MODE_SOAP,
         );
@@ -212,7 +214,8 @@ XML
 
         $barcodes = $this->postnl->generateBarcodesByCountryCodes(isos: ['NL' => 4]);
 
-        $this->assertEquals(expected: [
+        $this->assertEquals(
+            expected: [
             'NL' => [
                 '3SDEVC816223392',
                 '3SDEVC816223393',
@@ -257,7 +260,7 @@ XML;
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var BarcodeServiceSoapRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

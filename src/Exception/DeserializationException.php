@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Exception;
 
 use Throwable;
@@ -45,4 +47,3 @@ class DeserializationException extends PostNLException
         parent::__construct(message: $message, code: $code, previous: $previous);
     }
 }
-

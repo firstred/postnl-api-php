@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL;
 
@@ -129,6 +131,7 @@ use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
+
 use function array_map;
 use function base64_decode;
 use function class_exists;
@@ -153,7 +156,7 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated(
         reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
-    const MODE_REST = 1;
+    public const MODE_REST = 1;
     /**
      * SOAP API
      *
@@ -162,7 +165,7 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated(
         reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
-    const MODE_SOAP = 2;
+    public const MODE_SOAP = 2;
     /**
      * Legacy SOAP API
      *
@@ -171,7 +174,7 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated(
         reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
     )]
-    const MODE_LEGACY = 2;
+    public const MODE_LEGACY = 2;
 
     /**
      * 3S (or EU Pack Special) countries.
@@ -525,9 +528,9 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->httpClient)) {
             if (interface_exists(interface: GuzzleClientInterface::class)
                 && ((defined(constant_name: GuzzleClientInterface::class.'::MAJOR_VERSION') && Util::compareGuzzleVersion(
-                        a: constant(name: GuzzleClientInterface::class.'::MAJOR_VERSION'),
-                        b: '7.0.0'
-                    ) >= 0))
+                    a: constant(name: GuzzleClientInterface::class.'::MAJOR_VERSION'),
+                    b: '7.0.0'
+                ) >= 0))
             ) {
                 $this->setHttpClient(httpClient: new GuzzleHttpClient());
             }

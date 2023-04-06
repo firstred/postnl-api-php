@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
@@ -42,7 +44,6 @@ use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LabellingServiceRestAdapter;
-use Firstred\PostNL\Service\RequestBuilder\Soap\DeliveryDateServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
 use Firstred\PostNL\Util\Util;
 use GuzzleHttp\Handler\MockHandler;
@@ -88,7 +89,8 @@ class LabellingServiceSoapTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
             mode: PostNL::MODE_SOAP
         );
@@ -150,7 +152,8 @@ class LabellingServiceSoapTest extends ServiceTestCase
             confirm: false
         );
 
-        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
+        $this->assertXmlStringEqualsXmlString(
+            expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope
   xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -227,7 +230,8 @@ class LabellingServiceSoapTest extends ServiceTestCase
 </soap:Envelope>
 XML
             ,
-            actualXml: (string) $request->getBody());
+            actualXml: (string) $request->getBody()
+        );
         $this->assertEquals(expected: '', actual: $request->getHeaderLine('apikey'));
         $this->assertEquals(expected: 'text/xml;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
@@ -384,7 +388,8 @@ XML
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $label = $this->postnl->generateLabels(shipments: [
+        $label = $this->postnl->generateLabels(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(

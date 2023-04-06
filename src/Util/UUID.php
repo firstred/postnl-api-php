@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Util;
 
@@ -52,9 +54,11 @@ class UUID
             return RamseyUuid::uuid4()->toString();
         }
 
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        return sprintf(
+            '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
-            mt_rand(min: 0, max: 0xffff), mt_rand(min: 0, max: 0xffff),
+            mt_rand(min: 0, max: 0xffff),
+            mt_rand(min: 0, max: 0xffff),
             // 16 bits for "time_mid"
             mt_rand(min: 0, max: 0xffff),
             // 16 bits for "time_hi_and_version",
@@ -65,7 +69,9 @@ class UUID
             // two most significant bits holds zero and one for variant DCE1.1
             mt_rand(min: 0, max: 0x3fff) | 0x8000,
             // 48 bits for "node"
-            mt_rand(min: 0, max: 0xffff), mt_rand(min: 0, max: 0xffff), mt_rand(min: 0, max: 0xffff)
+            mt_rand(min: 0, max: 0xffff),
+            mt_rand(min: 0, max: 0xffff),
+            mt_rand(min: 0, max: 0xffff)
         );
     }
 }

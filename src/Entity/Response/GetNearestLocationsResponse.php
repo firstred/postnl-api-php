@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
@@ -35,8 +37,9 @@ use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
-use function is_array;
 use ReflectionException;
+
+use function is_array;
 
 /**
  * @since 1.0.0

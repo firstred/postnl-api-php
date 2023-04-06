@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity;
 
 use DateTimeImmutable;
@@ -38,6 +40,7 @@ use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
+
 use function array_merge;
 use function is_array;
 use function is_string;

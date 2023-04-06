@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -120,7 +122,9 @@ class AbstractServiceTest extends ServiceTestCase
     {
         $this->expectException(exception: CifDownException::class);
 
-        $response = new Response(status: 500, body: <<<XML
+        $response = new Response(
+            status: 500,
+            body: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
@@ -158,7 +162,9 @@ XML
     {
         $this->expectException(exception: CifException::class);
 
-        $response = new Response(status: 500, body: <<<XML
+        $response = new Response(
+            status: 500,
+            body: <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <Envelope xmlns:common="http://postnl.nl/cif/services/common/">
   <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -53,7 +55,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
+
 use function file_get_contents;
+
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The ConfirmingService (REST)')]
@@ -145,7 +149,8 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $this->assertEquals(expected: [
+        $this->assertEquals(
+            expected: [
             'Customer'  => [
                 'Address'            => [
                     'AddressType' => '02',
@@ -197,7 +202,8 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 'ProductCodeDelivery' => '3085',
             ],
         ],
-            actual: json_decode(json: (string) $request->getBody(), associative: true));
+            actual: json_decode(json: (string) $request->getBody(), associative: true)
+        );
         $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
         $this->assertEquals(expected: 'application/json;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));

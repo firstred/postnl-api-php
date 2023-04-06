@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
@@ -61,11 +63,10 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
+    use ResponseProcessorSettersTrait;
     // SOAP API specific
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
-
-    use ResponseProcessorSettersTrait;
 
     protected TimeframeServiceRequestBuilderInterface $requestBuilder;
     protected TimeframeServiceResponseProcessorInterface $responseProcessor;

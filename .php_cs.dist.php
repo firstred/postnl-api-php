@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The MIT License (MIT).
  *
@@ -23,21 +24,30 @@
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
-    ->exclude(['vendor', 'docs']);
 
-return PhpCsFixer\Config::create()
-    ->setRules([
-        '@Symfony'                   => true,
-        'array_syntax'               => ['syntax' => 'short'],
-        'no_superfluous_phpdoc_tags' => false,
-        'binary_operator_spaces'     => [
+declare(strict_types=1);
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(dirs: __DIR__)
+    ->exclude(dirs: ['builddir', 'docs', 'vendor']);
+
+$config = new PhpCsFixer\Config();
+$config->setRiskyAllowed(isRiskyAllowed: true);
+
+return $config
+    ->setRules(rules: [
+        '@Symfony'                             => true,
+        'array_syntax'                         => ['syntax' => 'short'],
+        'binary_operator_spaces'               => [
             'default'   => 'align',
             'operators' => [
                 '=>' => 'align',
                 '='  => 'single_space',
             ],
         ],
+        'blank_line_after_opening_tag'         => true,
+        'declare_strict_types'                 => true,
+        'global_namespace_import'              => false,
+        'no_superfluous_phpdoc_tags'           => false,
     ])
-    ->setFinder($finder);
+    ->setFinder(finder: $finder);

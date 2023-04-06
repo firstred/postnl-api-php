@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
@@ -47,9 +49,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+
 use function is_array;
 use function method_exists;
 use function user_error;
+
 use const E_USER_DEPRECATED;
 
 /**
@@ -60,8 +64,8 @@ use const E_USER_DEPRECATED;
  */
 class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
-    const DEFAULT_TIMEOUT = 60;
-    const DEFAULT_CONNECT_TIMEOUT = 20;
+    public const DEFAULT_TIMEOUT = 60;
+    public const DEFAULT_CONNECT_TIMEOUT = 20;
 
     /**
      * @var array<string, mixed>

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
@@ -35,8 +37,8 @@ use Firstred\PostNL\Enum\SoapNamespace;
  */
 class Label extends AbstractEntity
 {
-    const FORMAT_A4 = 1;
-    const FORMAT_A6 = 2;
+    public const FORMAT_A4 = 1;
+    public const FORMAT_A6 = 2;
 
     /**
      * Base 64 encoded content

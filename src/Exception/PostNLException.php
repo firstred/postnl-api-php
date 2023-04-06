@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,12 +25,14 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Exception;
 
 use Exception;
 
 /**
- * Class AbstractException
+ * Class AbstractException.
  *
  * @since 1.0.0
  */

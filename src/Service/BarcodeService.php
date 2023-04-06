@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
@@ -55,13 +57,12 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
+    use ResponseProcessorSettersTrait;
     // SOAP API specific
     /** @deprecated */
     public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
     /** @deprecated */
     public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
-
-    use ResponseProcessorSettersTrait;
 
     protected BarcodeServiceRequestBuilderInterface $requestBuilder;
     protected BarcodeServiceResponseProcessorInterface $responseProcessor;

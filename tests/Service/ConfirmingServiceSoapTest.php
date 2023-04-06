@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -24,6 +24,8 @@ declare(strict_types=1);
  * @copyright 2017-2023 Michael Dekker
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
+
+declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
@@ -83,7 +85,8 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
                     'Zipcode'     => '2132WT',
                 ]))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            apiKey: new UsernameToken(Username: null, Password: 'test'),
             sandbox: true,
             mode: PostNL::MODE_SOAP,
         );
@@ -144,7 +147,8 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
                 ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
-        $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
+        $this->assertXmlStringEqualsXmlString(
+            expectedXml: <<<XML
 <?xml version="1.0"?>
 <soap:Envelope 
   xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -221,7 +225,8 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
 </soap:Envelope>
 XML
             ,
-            actualXml: (string) $request->getBody());
+            actualXml: (string) $request->getBody()
+        );
         $this->assertEquals(expected: '', actual: $request->getHeaderLine('apikey'));
         $this->assertEquals(expected: 'text/xml;charset=UTF-8', actual: $request->getHeaderLine('Content-Type'));
         $this->assertEquals(expected: 'text/xml', actual: $request->getHeaderLine('Accept'));
@@ -323,7 +328,8 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $confirmShipments = $this->postnl->confirmShipments(shipments: [
+        $confirmShipments = $this->postnl->confirmShipments(
+            shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(

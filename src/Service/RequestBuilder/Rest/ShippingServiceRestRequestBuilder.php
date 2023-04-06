@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
 use Firstred\PostNL\Entity\AbstractEntity;
@@ -34,8 +36,10 @@ use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterfac
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
+
 use function http_build_query;
 use function json_encode;
+
 use const PHP_QUERY_RFC3986;
 
 /**

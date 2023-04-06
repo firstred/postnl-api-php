@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Tests\Service;
 
 use Cache\Adapter\Void\VoidCachePool;
@@ -38,7 +40,6 @@ use Firstred\PostNL\Entity\Request\GetSentDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
@@ -55,7 +56,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
+
 use function file_get_contents;
+
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The DeliveryDateService (REST)')]
@@ -159,7 +162,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getDeliveryDate(getDeliveryDate: (new GetDeliveryDate())
+        $response = $this->postnl->getDeliveryDate(
+            getDeliveryDate: (new GetDeliveryDate())
             ->setGetDeliveryDate(
                 GetDeliveryDate: (new GetDeliveryDate())
                     ->setAllowSundaySorting(AllowSundaySorting: 'false')
@@ -196,7 +200,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
     {
         $message = new Message();
 
-        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetSentDateRequest(getSentDate: (new GetSentDateRequest())
+        $this->lastRequest = $request = $this->getRequestBuilder()->buildGetSentDateRequest(
+            getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
                 GetSentDate: (new GetSentDate())
                     ->setAllowSundaySorting(AllowSundaySorting: true)
@@ -234,7 +239,8 @@ class DeliveryDateServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $response = $this->postnl->getSentDate(getSentDate: (new GetSentDateRequest())
+        $response = $this->postnl->getSentDate(
+            getSentDate: (new GetSentDateRequest())
             ->setGetSentDate(
                 GetSentDate: (new GetSentDate())
                     ->setAllowSundaySorting(AllowSundaySorting: true)

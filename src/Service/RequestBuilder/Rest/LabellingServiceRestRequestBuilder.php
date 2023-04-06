@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
 use Firstred\PostNL\Entity\AbstractEntity;
@@ -34,10 +36,12 @@ use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
+
 use function http_build_query;
 use function in_array;
 use function json_encode;
 use function str_replace;
+
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -74,7 +78,8 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
             method: 'POST',
             uri: $endpoint.'?'.http_build_query(data: [
                 'confirm' => ($confirm ? 'true' : 'false'),
-            ], numeric_prefix: '', arg_separator: '&', encoding_type: PHP_QUERY_RFC3986))
+            ], numeric_prefix: '', arg_separator: '&', encoding_type: PHP_QUERY_RFC3986)
+        )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')

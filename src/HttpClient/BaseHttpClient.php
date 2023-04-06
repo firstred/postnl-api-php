@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Firstred\PostNL\Exception\HttpClientException;
@@ -36,12 +38,13 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerInterface;
+
 use function max;
 
 abstract class BaseHttpClient
 {
-    const DEFAULT_TIMEOUT = 80;
-    const DEFAULT_CONNECT_TIMEOUT = 30;
+    public const DEFAULT_TIMEOUT = 80;
+    public const DEFAULT_CONNECT_TIMEOUT = 30;
 
     protected int $timeout = self::DEFAULT_TIMEOUT;
     protected int $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity;
 
 use DateTimeInterface;
@@ -40,7 +42,6 @@ use Firstred\PostNL\Util\Util;
 use Firstred\PostNL\Util\UUID;
 use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
-use PHPUnit\Framework\Attributes\BackupStaticProperties;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionIntersectionType;
@@ -52,21 +53,19 @@ use Sabre\Xml\Writer;
 use Sabre\Xml\XmlSerializable;
 use stdClass;
 use TypeError;
+
 use function array_keys;
 use function is_array;
 
-/**
- *
- */
 abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 {
-    /** @var string $id */
+    /** @var string */
     protected string $id;
 
-    /** @var class-string $currentService */
+    /** @var class-string */
     protected string $currentService;
 
-    /** @var array<string, string> $namespaces */
+    /** @var array<string, string> */
     protected array $namespaces = [];
 
     public function __construct()
@@ -81,6 +80,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array $properties
      *
      * @return AbstractEntity
+     *
      * @since 1.0.0
      */
     public static function create(array $properties = []): static
@@ -92,7 +92,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         try {
             $reflectionClass = new ReflectionClass(objectOrClass: get_called_class());
             $instance = $reflectionClass->newInstanceWithoutConstructor();
-            /** @var static $instance */
+            /* @var static $instance */
         } catch (Exception) {
             throw new TypeError(message: 'Invalid class given');
         }
@@ -134,6 +134,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array<string, string> $namespaces
      *
      * @return static
+     *
      * @throws InvalidArgumentException
      * @throws ReflectionException
      */
@@ -146,7 +147,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                 throw new InvalidArgumentException(message: 'Namespace value should be a string');
             }
             try {
-                /** @noinspection PhpExpressionResultUnusedInspection */
+                /* @noinspection PhpExpressionResultUnusedInspection */
                 SoapNamespace::from(value: $namespacePrefix);
             } catch (TypeError) {
                 throw new InvalidArgumentException(message: 'Namespace prefix is not supported');
@@ -182,6 +183,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
     /**
      * @return array<string, string>
+     *
      * @since 2.0.0
      */
     public function getSerializableProperties(): array
@@ -207,6 +209,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * Return a serializable array for `json_encode`.
      *
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
@@ -235,6 +238,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param Writer $writer
      *
      * @throws ServiceNotSetException
+     *
      * @since 1.0.0
      */
     public function xmlSerialize(Writer $writer): void
@@ -257,9 +261,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param stdClass $json {"EntityName": object}
      *
      * @return static
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     *
      * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -322,7 +328,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                     $entity->{"set$propertyName"}($propertyFqcn::jsonDeserialize(json: (object) [$propertyName => $value]));
                 }
             } else {
-                $entity->{"set$propertyName"}($isArray ? (Util::isAssociativeArray(array: (array) $value) ? [$value] : (array) $value): $value);
+                $entity->{"set$propertyName"}($isArray ? (Util::isAssociativeArray(array: (array) $value) ? [$value] : (array) $value) : $value);
             }
         }
 
@@ -333,11 +339,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param array $xml
      *
      * @return static
+     *
      * @throws InvalidArgumentException
      */
     public static function xmlDeserialize(array $xml): static
     {
-        if (static::class === self::class) {
+        if (self::class === static::class) {
             throw new InvalidArgumentException(message: 'Calling `AbstractEntity::xmlDeserialize` is not supported.');
         }
 
@@ -347,7 +354,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             $reflectionAttributes = $reflectionProperty->getAttributes();
             foreach ($reflectionAttributes as $reflectionAttribute) {
                 $reflectionNamedTypes = static::getPropertyTypes(reflectionProperty: $reflectionProperty);
-                switch($reflectionAttribute->getName()) {
+                switch ($reflectionAttribute->getName()) {
                     case SerializableProperty::class:
                         break;
                 }
@@ -359,7 +366,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
     /**
      * @return non-empty-array<ReflectionNamedType>
+     *
      * @since 2.0.0
+     *
      * @internal
      */
     protected static function getPropertyTypes(
@@ -389,14 +398,16 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * Whether the given property should be an array
+     * Whether the given property should be an array.
      *
      * @param string $fqcn         Fully-qualified class name
      * @param string $propertyName Property name
      *
-     * @return string|false        If found, singular name of property, else false
+     * @return string|false If found, singular name of property, else false
+     *
      * @since 1.2.0
      * @deprecated 2.0.0
+     *
      * @internal
      */
     #[Deprecated]
@@ -431,9 +442,12 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param string $shortName
      *
      * @return class-string
+     *
      * @throws EntityNotFoundException
+     *
      * @since 1.2.0
      * @deprecated 2.0.0
+     *
      * @internal
      */
     #[Deprecated]

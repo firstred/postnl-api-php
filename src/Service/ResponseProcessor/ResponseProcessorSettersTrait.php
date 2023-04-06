@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use ParagonIE\HiddenString\HiddenString;
@@ -42,7 +44,9 @@ trait ResponseProcessorSettersTrait
      */
     public function setApiKey(HiddenString $apiKey): static
     {
-        if (isset($this->responseProcessor)) $this->responseProcessor->setApiKey(apiKey: $apiKey);
+        if (isset($this->responseProcessor)) {
+            $this->responseProcessor->setApiKey(apiKey: $apiKey);
+        }
 
         return parent::setApiKey(apiKey: $apiKey);
     }
@@ -52,7 +56,9 @@ trait ResponseProcessorSettersTrait
      */
     public function setSandbox(bool $sandbox): static
     {
-        if (isset($this->responseProcessor)) $this->responseProcessor->setSandbox(sandbox: $sandbox);
+        if (isset($this->responseProcessor)) {
+            $this->responseProcessor->setSandbox(sandbox: $sandbox);
+        }
 
         return parent::setSandbox(sandbox: $sandbox);
     }
@@ -62,7 +68,9 @@ trait ResponseProcessorSettersTrait
      */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
-        if (isset($this->responseProcessor)) $this->responseProcessor->setRequestFactory(requestFactory: $requestFactory);
+        if (isset($this->responseProcessor)) {
+            $this->responseProcessor->setRequestFactory(requestFactory: $requestFactory);
+        }
 
         return parent::setRequestFactory(requestFactory: $requestFactory);
     }
@@ -72,7 +80,9 @@ trait ResponseProcessorSettersTrait
      */
     public function setStreamFactory(StreamFactoryInterface $streamFactory): static
     {
-        if (isset($this->responseProcessor)) $this->responseProcessor->setStreamFactory(streamFactory: $streamFactory);
+        if (isset($this->responseProcessor)) {
+            $this->responseProcessor->setStreamFactory(streamFactory: $streamFactory);
+        }
 
         return parent::setStreamFactory(streamFactory: $streamFactory);
     }

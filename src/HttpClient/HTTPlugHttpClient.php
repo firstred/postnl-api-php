@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * The MIT License (MIT).
  *
@@ -25,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\HttpClient;
 
 use Exception;
@@ -48,8 +50,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+
 use function is_array;
 use function user_error;
+
 use const E_USER_DEPRECATED;
 
 /**
@@ -84,7 +88,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
         HttpAsyncClient|HttpClient $client = null,
         LoggerInterface            $logger = null,
         int                        $concurrency = 5,
-                                   $maxRetries = 5
+        $maxRetries = 5
     ) {
         $this->logger = $logger;
         $this->concurrency = $concurrency;
