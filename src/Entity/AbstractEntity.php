@@ -193,11 +193,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         $reflectionClass = new ReflectionClass(objectOrClass: static::class);
         foreach ($reflectionClass->getProperties() as $property) {
             foreach ($property->getAttributes(name: SerializableProperty::class) as $attribute) {
-                $supportedServices = $attribute->getArguments()['supportedServices'];
+                $supportedServices = $attribute->getArguments()['supportedServices'] ?? [];
                 if (empty($supportedServices)
                     || isset($this->currentService) && in_array(needle: $this->currentService, haystack: $supportedServices)
                 ) {
-                    $namespacePrefix = $attribute->getArguments()['namespace']->value;
+                    $namespacePrefix = $attribute->getArguments()['namespace']->value                   ?? '';
                     $serializableProperties[$property->getName()] = $this->namespaces[$namespacePrefix] ?? '';
                 }
             }
