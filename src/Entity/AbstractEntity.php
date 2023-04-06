@@ -197,7 +197,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                 if (empty($supportedServices)
                     || isset($this->currentService) && in_array(needle: $this->currentService, haystack: $supportedServices)
                 ) {
-                    $serializableProperties[$property->getName()] = $this->namespaces[$attribute->getArguments()['namespace']->value];
+                    $namespacePrefix = $attribute->getArguments()['namespace']->value;
+                    $serializableProperties[$property->getName()] = $this->namespaces[$namespacePrefix] ?? '';
                 }
             }
         }
