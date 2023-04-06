@@ -27,6 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Entity;
 
+use Error;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\ServiceNotSetException;
@@ -110,6 +111,8 @@ class EntityTest extends TestCase
     #[TestDox(text: 'should return `null` when the property does not exist')]
     public function testNegativeReturnNullWhenPropertyDoesNotExist(): void
     {
+        $this->expectException(exception: Error::class);
+
         /** @noinspection PhpUndefinedMethodInspection */
         $this->assertNull(actual: (new Address())->getNothing());
     }
@@ -118,7 +121,7 @@ class EntityTest extends TestCase
     #[TestDox(text: 'should throw a `TypeError` when the method does not exist')]
     public function testNegativeThrowExceptionWhenMethodDoesNotExist(): void
     {
-        $this->expectException(exception: TypeError::class);
+        $this->expectException(exception: Error::class);
 
         (new Address())->blab();
     }

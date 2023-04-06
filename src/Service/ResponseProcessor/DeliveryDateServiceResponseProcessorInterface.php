@@ -46,7 +46,6 @@ interface DeliveryDateServiceResponseProcessorInterface
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     *
      * @since 2.0.0
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse;
@@ -56,7 +55,6 @@ interface DeliveryDateServiceResponseProcessorInterface
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     *
      * @since 2.0.0
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse;

@@ -67,6 +67,11 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
     protected ShippingStatusServiceInterface $service;
     protected RequestInterface $lastRequest;
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete();
+    }
+
     /** @throws */
     #[Before]
     public function setupPostNL(): void

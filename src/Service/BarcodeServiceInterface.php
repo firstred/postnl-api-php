@@ -47,7 +47,6 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     *
      * @since 1.0.0
      */
     public function generateBarcode(GenerateBarcode $generateBarcode): string;
@@ -58,13 +57,11 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[] Barcodes
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     *
      * @since 1.0.0
      */
     public function generateBarcodes(array $generateBarcodes): array;

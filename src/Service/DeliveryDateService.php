@@ -109,7 +109,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -150,7 +149,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -166,7 +164,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
             }
         }
         if (!$response instanceof ResponseInterface) {

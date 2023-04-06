@@ -106,6 +106,7 @@ class Warning extends AbstractEntity
      * @throws NotSupportedException
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     * @throws \ReflectionException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

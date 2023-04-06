@@ -176,6 +176,7 @@ class TimeframeTimeFrame extends AbstractEntity
      * @throws NotSupportedException
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     * @throws \ReflectionException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static

@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
+use ReflectionException;
 
 /**
  * @since 1.0.0
@@ -48,7 +49,7 @@ class ResponseLocation extends AbstractEntity
     protected ?Address $Address = null;
 
     /** @var string[]|null $DeliveryOptions */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected ?array $DeliveryOptions = null;
 
     /** @var string|null $Distance */
@@ -508,6 +509,7 @@ class ResponseLocation extends AbstractEntity
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws ReflectionException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

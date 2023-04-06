@@ -57,7 +57,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse;
@@ -73,7 +72,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse;
@@ -89,7 +87,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse;

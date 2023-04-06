@@ -51,7 +51,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -59,7 +58,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
-     *
      * @since 2.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse;
@@ -70,7 +68,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -79,7 +76,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
-     *
      * @since 2.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse;

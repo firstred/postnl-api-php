@@ -63,14 +63,13 @@ class CurrentStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class, isArray: true)]
     protected ?array $Addresses = null;
 
-
     /** @var Amount[]|null $Amounts */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Amount::class, isArray: true)]
     protected ?array $Amounts = null;
 
-    /** @var Barcode|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Barcode::class)]
-    protected ?Barcode $Barcode = null;
+    /** @var string|null $Barcode */
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    protected ?string $Barcode = null;
 
     /** @var string|null $DeliveryDate */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
@@ -132,7 +131,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
         ?array                        $Addresses = null,
         /** @param Amount[]|null $Amounts */
         ?array                        $Amounts = null,
-        ?Barcode                      $Barcode = null,
+        ?string                       $Barcode = null,
         DateTimeInterface|string|null $DeliveryDate = null,
         ?Dimension                    $Dimension = null,
         ?Expectation                  $Expectation = null,
@@ -247,19 +246,19 @@ class CurrentStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * @return Barcode|null
+     * @return string|null
      */
-    public function getBarcode(): ?Barcode
+    public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
     /**
-     * @param Barcode|null $Barcode
+     * @param string|null $Barcode
      *
      * @return static
      */
-    public function setBarcode(?Barcode $Barcode): static
+    public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
 
@@ -537,6 +536,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws \ReflectionException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static

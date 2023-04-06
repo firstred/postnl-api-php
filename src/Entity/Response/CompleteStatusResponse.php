@@ -35,12 +35,10 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use ReflectionObject;
-use ReflectionProperty;
+use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
-use function count;
 
 /**
  * @since 1.0.0
@@ -159,17 +157,10 @@ class CompleteStatusResponse extends AbstractEntity
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws ReflectionException
      */
     public static function jsonDeserialize(stdClass $json): static
     {
-        // Find the entity name
-        $reflection = new ReflectionObject(object: $json);
-        $properties = $reflection->getProperties(filter: ReflectionProperty::IS_PUBLIC);
-
-        if (!count(value: $properties)) {
-            throw new DeserializationException(message: 'Cannot deserialize empty object');
-        }
-
         if (isset($json->CompleteStatusResponse->Shipments) && !is_array(value: $json->CompleteStatusResponse->Shipments)) {
             $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
         }

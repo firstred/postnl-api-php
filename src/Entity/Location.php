@@ -124,11 +124,12 @@ class Location extends AbstractEntity
      */
     public function __construct(
         ?string                       $Postalcode = null,
-        ?string                       $AllowSundaySorting = null,
+        string|bool|int|null          $AllowSundaySorting = null,
         /** @param string|DateTimeInterface|null $DeliveryDate */
         string|DateTimeInterface|null $DeliveryDate = null,
         /** @param string[]|null $DeliveryOptions */
         array                         $DeliveryOptions = null,
+        ?string                       $OpeningTime = null,
         /** @param string[]|null $Options */
         array                         $Options = null,
         Coordinates                   $Coordinates = null,
@@ -154,6 +155,7 @@ class Location extends AbstractEntity
             throw new InvalidArgumentException(message: $e->getMessage(), code: 0, previous: $e);
         }
         $this->setDeliveryOptions(DeliveryOptions: $DeliveryOptions);
+        $this->setOpeningTime(OpeningTime: $OpeningTime);
         $this->setOptions(Options: $Options);
         $this->setPostalcode(Postalcode: $Postalcode);
         $this->setCoordinates(Coordinates: $Coordinates);

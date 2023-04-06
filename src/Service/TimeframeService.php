@@ -108,7 +108,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
-     *
      * @throws HttpClientException
      * @throws NotFoundException
      * @throws NotSupportedException
@@ -133,19 +132,15 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         }
 
         $object = $this->responseProcessor->processGetTimeframesResponse(response: $response);
-        if ($object instanceof ResponseTimeframes) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve timeframes');
+        return $object;
     }
 
     /**

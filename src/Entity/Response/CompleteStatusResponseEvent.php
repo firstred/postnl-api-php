@@ -65,9 +65,9 @@ class CompleteStatusResponseEvent extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $RouteName = null;
 
-    /** @var string|null $TimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
-    protected ?string $TimeStamp = null;
+    /** @var DateTimeInterface|null $TimeStamp */
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    protected ?DateTimeInterface $TimeStamp = null;
 
     /**
      * @throws InvalidArgumentException
@@ -210,6 +210,14 @@ class CompleteStatusResponseEvent extends AbstractEntity
         $this->RouteName = $RouteName;
 
         return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getTimeStamp(): ?DateTimeInterface
+    {
+        return $this->TimeStamp;
     }
 
     /**

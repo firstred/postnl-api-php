@@ -37,6 +37,7 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
+use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
 use ReflectionException;
 use const PHP_QUERY_RFC3986;
@@ -104,7 +105,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT.$endpoint,
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
         )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');

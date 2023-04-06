@@ -59,6 +59,7 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     * @throws \ReflectionException
      * @since 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): array

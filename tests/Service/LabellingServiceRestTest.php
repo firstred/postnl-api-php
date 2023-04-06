@@ -71,24 +71,23 @@ class LabellingServiceRestTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
-                ->setCollectionLocation(CollectionLocation: '123456')
-                ->setCustomerCode(CustomerCode: 'DEVC')
-                ->setCustomerNumber(CustomerNumber: '11223344')
-                ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(
-                    Address: new Address(
-                        AddressType: '02',
-                        CompanyName: 'PostNL',
-                        Street: 'Siriusdreef',
-                        HouseNr: '42',
-                        Zipcode: '2132WT',
-                        City: 'Hoofddorp',
-                        Countrycode: 'NL',
-                    ),
-                )
-                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+            customer: new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Test',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+                GlobalPackCustomerCode: '1234',
+                GlobalPackBarcodeType: 'AB'
+            ),
             apiKey: 'test',
             sandbox: true,
         );
@@ -698,7 +697,7 @@ class LabellingServiceRestTest extends ServiceTestCase
         ];
     }
 
-    public function invalidResponseProvider(): array
+    public static function invalidResponseProvider(): array
     {
         return [
             [

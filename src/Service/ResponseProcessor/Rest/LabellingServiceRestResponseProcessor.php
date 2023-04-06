@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 
 /**
  * @since 2.0.0
@@ -57,6 +58,7 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
      * @throws EntityNotFoundException
      * @throws ApiException
      * @throws InvalidConfigurationException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse

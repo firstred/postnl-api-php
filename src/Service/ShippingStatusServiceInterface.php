@@ -27,6 +27,8 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use DateTimeInterface;
+use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
@@ -35,6 +37,7 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -61,7 +64,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -70,7 +72,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse;
@@ -81,13 +82,11 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CurrentStatus[]|CurrentStatusByReference[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function currentStatuses(array $currentStatuses): array;
@@ -104,7 +103,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CompleteStatus|CompleteStatusByReference $completeStatus
      *
      * @return CompleteStatusResponse
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -122,13 +120,11 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
      *
      * @return CompleteStatusResponse[]
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function completeStatuses(array $completeStatuses): array;
@@ -145,7 +141,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param GetSignature $getSignature
      *
      * @return GetSignatureResponseSignature
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -154,7 +149,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature;
@@ -165,14 +159,36 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param GetSignature[] $getSignatures
      *
      * @return GetSignatureResponseSignature[]
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function getSignatures(array $getSignatures): array;
+
+    /**
+     * Get updated shipments for customer REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return UpdatedShipmentsResponse[]
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws NotFoundException
+     * @since 1.2.0
+     */
+    public function getUpdatedShipments(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null,
+    ): array;
 }

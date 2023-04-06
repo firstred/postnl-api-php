@@ -44,6 +44,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use function json_decode;
 
 /**
@@ -72,9 +73,9 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
         /** @var CurrentStatusResponse $object */
         return CurrentStatusResponse::jsonDeserialize(json: (object) [
             'CurrentStatusResponse' => (object) [
-                'Shipments' => isset($body->CurrentStatus->Shipment) ? $body->CurrentStatus->Shipment : null,
-                'Warnings'  => isset($body->Warnings) ? $body->Warnings : null,
-            ]
+                'Shipments' => $body->CurrentStatus->Shipment ?? null,
+                'Warnings'  => $body->Warnings ?? null,
+            ],
         ]);
     }
 
@@ -93,6 +94,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidConfigurationException
+     * @throws ReflectionException
      * @since 2.0.0
      */
     public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse

@@ -114,8 +114,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
@@ -137,36 +135,23 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         }
 
         $object = $this->responseProcessor->processGenerateLabelResponse(response: $response);
-        if ($object instanceof GenerateLabelResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        if (200 === $response->getStatusCode()) {
-            throw new ResponseException(
-                message: 'Invalid API response',
-                code: $response->getStatusCode(),
-                previous: null,
-                response: $response,
-            );
-        }
-
-        throw new NotFoundException(message: 'Unable to generate label');
+        return $object;
     }
 
     /**
      * Generate multiple labels at once.
      *
-     * @param array<string, array<GenerateBarcode, bool>> $generateLabels
+     * @param array<int|string, array<GenerateBarcode, bool>> $generateLabels
      *
-     * @return array<string, GenerateBarcodeResponse>
+     * @return array<int|string, GenerateBarcodeResponse>
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -180,6 +165,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
 
         $responses = [];
         foreach ($generateLabels as $uuid => $generateLabel) {
+            $uuid = (string) $uuid;
             $item = $this->retrieveCachedItem(uuid: $uuid);
             $response = null;
             if ($item instanceof CacheItemInterface && $item->isHit()) {
@@ -195,6 +181,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         }
         $newResponses = $httpClient->doRequests();
         foreach ($newResponses as $uuid => $newResponse) {
+            $uuid = (string) $uuid;
             if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {

@@ -103,7 +103,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     *
      * @since 1.0.0
      */
     public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment

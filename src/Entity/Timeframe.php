@@ -54,11 +54,11 @@ class Timeframe extends AbstractEntity
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $Date */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $Date = null;
 
     /** @var DateTimeInterface|null $EndDate */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $EndDate = null;
 
     /** @var string|null $HouseNr */

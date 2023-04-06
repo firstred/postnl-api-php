@@ -29,6 +29,7 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
@@ -37,9 +38,14 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -58,6 +64,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionException;
 
 /**
  * @since 2.0.0
@@ -119,10 +126,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
-     *
      * @throws DeserializationException
      * @throws HttpClientException
-     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
@@ -137,7 +142,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             $response = $item->get();
             try {
                 $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException $e) {
+            } catch (InvalidArgumentException) {
             }
         }
         if (!$response instanceof ResponseInterface) {
@@ -145,19 +150,15 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $object = $this->responseProcessor->processCurrentStatusResponse(response: $response);
-        if ($object instanceof CurrentStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve current status');
+        return $object;
     }
 
     /**
@@ -166,7 +167,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CurrentStatus[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
@@ -228,12 +228,19 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
      *
+     * @param CompleteStatusByReference|CompleteStatus $completeStatus
+     *
+     * @return CompleteStatusResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
+     * @throws ReflectionException
      * @throws ResponseException
-     * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse
@@ -256,19 +263,15 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $object = $this->responseProcessor->processCompleteStatusResponse(response: $response);
-        if ($object instanceof CompleteStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve complete status');
+        return $object;
     }
 
     /**
@@ -277,13 +280,17 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
      *
      * @return CompleteStatusResponse[]
-     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
+     * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
      * @throws ResponseException
-     *
      * @since 1.2.0
      */
     public function completeStatuses(array $completeStatuses): array
@@ -333,13 +340,15 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     /**
      * Gets the signature.
      *
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @param GetSignature $getSignature
+     *
+     * @return GetSignatureResponseSignature
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws NotFoundException
-     *
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ReflectionException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature
@@ -358,19 +367,15 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $object = $this->responseProcessor->processGetSignatureResponse(response: $response);
-        if ($object instanceof GetSignatureResponseSignature) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to get signature');
+        return $object;
     }
 
     /**
@@ -379,13 +384,12 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param GetSignature[] $getSignatures
      *
      * @return GetSignatureResponseSignature[]
-     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws ReflectionException
      * @since 1.2.0
      */
     public function getSignatures(array $getSignatures): array
@@ -430,6 +434,72 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         return $signatureResponses;
+    }
+
+    /**
+     * Get updated shipments for customer REST.
+     *
+     * @param Customer               $customer
+     * @param DateTimeInterface|null $dateTimeFrom
+     * @param DateTimeInterface|null $dateTimeTo
+     *
+     * @return UpdatedShipmentsResponse[]
+     * @throws DeserializationException
+     * @throws HttpClientException
+     * @throws NotFoundException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws EntityNotFoundException
+     * @throws ReflectionException
+     * @since 1.2.0
+     */
+    public function getUpdatedShipments(
+        Customer $customer,
+        DateTimeInterface $dateTimeFrom = null,
+        DateTimeInterface $dateTimeTo = null,
+    ): array {
+        if ((!$dateTimeFrom && $dateTimeTo) || ($dateTimeFrom && !$dateTimeTo)) {
+            throw new NotSupportedException(message: 'Either pass both dates or none. A single date is not supported.');
+        }
+
+        $dateTimeFromString = $dateTimeFrom ? $dateTimeFrom->format(format: 'YmdHis') : '';
+        $dateTimeToString = $dateTimeTo ? $dateTimeTo->format(format: 'YmdHis') : '';
+
+        $item = $this->retrieveCachedItem(uuid: "{$customer->getCustomerNumber()}-$dateTimeFromString-$dateTimeToString");
+        $response = null;
+        if ($item instanceof CacheItemInterface && $item->isHit()) {
+            $response = $item->get();
+            try {
+                $response = PsrMessage::parseResponse(message: $response);
+            } catch (InvalidArgumentException) {
+            }
+        }
+        if (!$response instanceof ResponseInterface) {
+            $response = $this->getHttpClient()->doRequest(
+                request: $this->requestBuilder->buildGetUpdatedShipmentsRequest(
+                    customer: $customer,
+                    dateTimeFrom: $dateTimeFrom,
+                    dateTimeTo: $dateTimeTo,
+                ),
+            );
+        }
+
+        $object = $this->responseProcessor->processGetUpdatedShipmentsResponse(response: $response);
+        if (!empty($object) && $object[0] instanceof UpdatedShipmentsResponse) {
+            if ($item instanceof CacheItemInterface
+                && $response instanceof ResponseInterface
+                && 200 === $response->getStatusCode()
+            ) {
+                $item->set(value: PsrMessage::toString(message: $response));
+                $this->cacheItem(item: $item);
+            }
+
+            return $object;
+        }
+
+        throw new NotFoundException(message: 'Unable to retrieve updated shipments');
     }
 
     /**

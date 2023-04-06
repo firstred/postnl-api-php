@@ -31,7 +31,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -73,11 +72,99 @@ class Status extends AbstractEntity
     ) {
         parent::__construct();
 
-        $this->setPhaseCode($PhaseCode);
-        $this->setPhaseDescription($PhaseDescription);
-        $this->setStatusCode($StatusCode);
-        $this->setStatusDescription($StatusDescription);
+        $this->setPhaseCode(PhaseCode: $PhaseCode);
+        $this->setPhaseDescription(PhaseDescription: $PhaseDescription);
+        $this->setStatusCode(StatusCode: $StatusCode);
+        $this->setStatusDescription(StatusDescription: $StatusDescription);
         $this->setTimeStamp(TimeStamp: $TimeStamp);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhaseCode(): ?string
+    {
+        return $this->PhaseCode;
+    }
+
+    /**
+     * @param string|null $PhaseCode
+     *
+     * @return Status
+     */
+    public function setPhaseCode(?string $PhaseCode): Status
+    {
+        $this->PhaseCode = $PhaseCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhaseDescription(): ?string
+    {
+        return $this->PhaseDescription;
+    }
+
+    /**
+     * @param string|null $PhaseDescription
+     *
+     * @return Status
+     */
+    public function setPhaseDescription(?string $PhaseDescription): Status
+    {
+        $this->PhaseDescription = $PhaseDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatusCode(): ?string
+    {
+        return $this->StatusCode;
+    }
+
+    /**
+     * @param string|null $StatusCode
+     *
+     * @return Status
+     */
+    public function setStatusCode(?string $StatusCode): Status
+    {
+        $this->StatusCode = $StatusCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatusDescription(): ?string
+    {
+        return $this->StatusDescription;
+    }
+
+    /**
+     * @param string|null $StatusDescription
+     *
+     * @return Status
+     */
+    public function setStatusDescription(?string $StatusDescription): Status
+    {
+        $this->StatusDescription = $StatusDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getTimeStamp(): ?DateTimeInterface
+    {
+        return $this->TimeStamp;
     }
 
     /**
@@ -104,9 +191,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCurrentStatusPhaseCode(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseCode` instead',
+        );
+
         return $this->PhaseCode;
     }
 
@@ -114,9 +208,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCurrentStatusPhaseDescription(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -124,9 +225,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCurrentStatusStatusCode(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -134,9 +242,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCurrentStatusStatusDescription(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -144,9 +259,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCurrentStatusTimeStamp(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -154,9 +276,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCompleteStatusPhaseCode(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseCode` instead',
+        );
+
         return $this->PhaseCode;
     }
 
@@ -164,9 +293,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCompleteStatusPhaseDescription(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -174,9 +310,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCompleteStatusStatusCode(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -184,9 +327,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCompleteStatusStatusDescription(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -194,9 +344,16 @@ class Status extends AbstractEntity
      * Backwards compatible with SOAP API
      *
      * @since 1.2.0
+     * @deprecated 2.0.0
      */
     public function getCompleteStatusTimeStamp(): ?string
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
+        );
+
         return $this->PhaseDescription;
     }
 }

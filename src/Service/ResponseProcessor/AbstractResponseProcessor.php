@@ -62,7 +62,6 @@ abstract class AbstractResponseProcessor
      *
      * @throws ResponseException
      * @throws HttpClientException
-     *
      * @since 2.0.0
      */
     protected static function getResponseText(array|ResponseInterface|HttpClientException $response): string

@@ -315,4 +315,21 @@ class Util
 
         return -1;
     }
+
+    /**
+     * Check if the given array is associative.
+     *
+     * @param array $array
+     *
+     * @return bool
+     * @since 2.0.0
+     */
+    public static function isAssociativeArray(array $array): bool
+    {
+        if (empty($array)) {
+            return false;
+        }
+
+        return array_keys(array: array_merge($array)) !== range(start: 0, end: count(value: $array) - 1);
+    }
 }

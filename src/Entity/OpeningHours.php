@@ -261,6 +261,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws \ReflectionException
      * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json): static

@@ -80,7 +80,6 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws DeserializationException
-     *
      * @since 2.0.0
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse;
@@ -91,7 +90,6 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @param ResponseInterface $response
      *
      * @return CompleteStatusResponse
-     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException

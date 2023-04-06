@@ -106,7 +106,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     *
      * @since 1.0.0
      */
     public function generateBarcode(GenerateBarcode $generateBarcode): string
@@ -124,13 +123,11 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[] Barcodes
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     *
      * @since 1.0.0
      */
     public function generateBarcodes(array $generateBarcodes): array

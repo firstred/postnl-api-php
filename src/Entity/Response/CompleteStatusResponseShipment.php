@@ -66,9 +66,9 @@ class CompleteStatusResponseShipment extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Amount::class, isArray: true)]
     protected ?array $Amounts = null;
 
-    /** @var Barcode|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Barcode::class)]
-    protected ?Barcode $Barcode = null;
+    /** @var string|null $Barcode */
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    protected ?string $Barcode = null;
 
     /** @var Customer|null $Customer */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
@@ -229,19 +229,19 @@ class CompleteStatusResponseShipment extends AbstractEntity
     }
 
     /**
-     * @return Barcode|null
+     * @return string|null
      */
-    public function getBarcode(): ?Barcode
+    public function getBarcode(): ?string
     {
         return $this->Barcode;
     }
 
     /**
-     * @param Barcode|null $Barcode
+     * @param string|null $Barcode
      *
      * @return static
      */
-    public function setBarcode(?Barcode $Barcode): static
+    public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
 
@@ -583,6 +583,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @throws DeserializationException
      * @throws PostNLNotSupportedExceptionAlias
      * @throws EntityNotFoundException
+     * @throws \ReflectionException
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static

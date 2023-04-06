@@ -862,11 +862,11 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->shippingStatusService)) {
             $this->setShippingStatusService(service: new ShippingStatusService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
+                apiMode: $this->getApiMode(),
             ));
         }
 
@@ -1523,7 +1523,7 @@ class PostNL implements LoggerAwareInterface
         foreach ($shipments as $uuid => $shipment) {
             $generateLabels[$uuid] = [(new GenerateLabel(Shipments: [$shipment], Message: new LabellingMessage(Printertype: $printertype), Customer: $this->customer))->setId(id: $uuid), $confirm];
         }
-        $responseShipments = $this->getLabellingService()->generateLabels($generateLabels, $confirm);
+        $responseShipments = $this->getLabellingService()->generateLabels(generateLabels: $generateLabels);
 
         if (!$merge) {
             return $responseShipments;
@@ -1877,6 +1877,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return UpdatedShipmentsResponse[]
      *
+     * @throws PostNLInvalidArgumentException
      * @since 1.2.0
      */
     public function getUpdatedShipments(DateTimeInterface $dateTimeFrom = null, DateTimeInterface $dateTimeTo = null): array
@@ -1926,7 +1927,9 @@ class PostNL implements LoggerAwareInterface
         return $this->getShippingStatusService()->getSignatures(getSignatures: array_map(
             callback: function ($barcode) use ($customer) {
                 return new GetSignature(
-                    Shipment: (new Shipment())->setBarcode(Barcode: $barcode),
+                    Shipment: (new Shipment())
+                        ->setCustomer(Customer: $customer)
+                        ->setBarcode(Barcode: $barcode),
                     Customer: $customer,
                     Message: new Message()
                 );
@@ -1941,7 +1944,13 @@ class PostNL implements LoggerAwareInterface
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
-     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
@@ -1956,6 +1965,14 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetSentDateResponse
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
@@ -1970,6 +1987,14 @@ class PostNL implements LoggerAwareInterface
      *
      * @return ResponseTimeframes
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes
@@ -1984,6 +2009,14 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GetNearestLocationsResponse
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws PostNLInvalidArgumentException
+     * @throws PostNLNotFoundException
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
@@ -2007,15 +2040,10 @@ class PostNL implements LoggerAwareInterface
      *                   delivery_date => GetDeliveryDateResponse,
      *               ]
      *
-     * @throws CifDownException
-     * @throws CifException
      * @throws HttpClientException
-     * @throws InvalidArgumentException
-     * @throws InvalidConfigurationException
+     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ResponseException
      * @throws \ReflectionException
-     *
      * @since 1.0.0
      */
     public function getTimeframesAndNearestLocations(

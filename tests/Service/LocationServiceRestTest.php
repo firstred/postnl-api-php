@@ -73,23 +73,25 @@ class LocationServiceRestTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
-                ->setCollectionLocation(CollectionLocation: '123456')
-                ->setCustomerCode(CustomerCode: 'DEVC')
-                ->setCustomerNumber(CustomerNumber: '11223344')
-                ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
-            sandbox: false,
+            customer: new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Test',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+                GlobalPackCustomerCode: '1234',
+                GlobalPackBarcodeType: 'AB'
+            ),
+            apiKey: 'test',
+            sandbox: true,
         );
 
         global $logger;
@@ -210,30 +212,31 @@ class LocationServiceRestTest extends ServiceTestCase
             getLocations: (new GetLocationsInArea())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
-                ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
+                ->setLocation(Location: new Location(
+                    AllowSundaySorting   : true,
+                    DeliveryDate         : '29-06-2016',
+                    DeliveryOptions      : [
                         'PG',
                     ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
+                    OpeningTime          : '09:00:00',
+                    Options              : [
                         'Daytime',
                     ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
+                    CoordinatesNorthWest: CoordinatesNorthWest::create(properties: [
                         'Latitude'  => '52.156439',
                         'Longitude' => '5.015643',
                     ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
+                    CoordinatesSouthEast: CoordinatesSouthEast::create(properties: [
                         'Latitude'  => '52.017473',
                         'Longitude' => '5.065254',
                     ]),
-                ]))
+                ))
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
 
         $this->assertEqualsCanonicalizing(expected: [
+            'CountryCode'     => 'NL',
             'DeliveryOptions' => 'PG',
             'LatitudeNorth'   => '52.156439',
             'LongitudeWest'   => '5.015643',
@@ -296,7 +299,7 @@ class LocationServiceRestTest extends ServiceTestCase
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGetLocationRequest(
-            (new GetLocation())
+            getLocation: (new GetLocation())
                 ->setLocationCode(LocationCode: '161503')
                 ->setMessage(Message: $message)
                 ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
@@ -340,7 +343,7 @@ class LocationServiceRestTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function nearestLocationsByPostcodeProvider(): array
+    public static function nearestLocationsByPostcodeProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode.http'))],

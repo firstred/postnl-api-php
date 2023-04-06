@@ -49,7 +49,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -58,7 +57,6 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes;

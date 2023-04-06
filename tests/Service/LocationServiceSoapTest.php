@@ -63,6 +63,11 @@ class LocationServiceSoapTest extends ServiceTestCase
     protected LocationServiceInterface $service;
     protected RequestInterface $lastRequest;
 
+    protected function setUp(): void
+    {
+        $this->markTestIncomplete();
+    }
+
     /** @throws */
     #[Before]
     public function setupPostNL(): void

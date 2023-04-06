@@ -72,7 +72,6 @@ interface LabellingServiceResponseProcessorInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     *
      * @since 2.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse;

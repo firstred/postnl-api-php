@@ -63,6 +63,14 @@ class Expectation extends AbstractEntity
     }
 
     /**
+     * @return DateTimeInterface|null
+     */
+    public function getETAFrom(): ?DateTimeInterface
+    {
+        return $this->ETAFrom;
+    }
+
+    /**
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
@@ -80,6 +88,14 @@ class Expectation extends AbstractEntity
         $this->ETAFrom = $ETAFrom;
 
         return $this;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getETATo(): ?DateTimeInterface
+    {
+        return $this->ETATo;
     }
 
     /**

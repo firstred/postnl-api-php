@@ -114,7 +114,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
@@ -157,7 +156,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse
@@ -176,19 +174,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         }
 
         $object = $this->responseProcessor->processGetLocationsInAreaResponse(response: $response);
-        if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve the nearest locations');
+        return $object;
     }
 
     /**
@@ -200,7 +194,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
-     *
      * @since 1.0.0
      */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
@@ -219,19 +212,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         }
 
         $object = $this->responseProcessor->processGetLocationResponse(response: $response);
-        if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve the nearest locations');
+        return $object;
     }
 
     /**

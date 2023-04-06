@@ -71,12 +71,10 @@ interface ShippingServiceResponseProcessorInterface
      * @param ResponseInterface $response
      *
      * @return SendShipmentResponse|null
-     *
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
      * @since 2.0.0
      */
     public function processSendShipmentResponse(ResponseInterface $response): ?SendShipmentResponse;

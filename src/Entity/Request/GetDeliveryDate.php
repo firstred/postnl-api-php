@@ -360,6 +360,14 @@ class GetDeliveryDate extends AbstractEntity
     }
 
     /**
+     * @return DateTimeInterface|null
+     */
+    public function getShippingDate(): ?DateTimeInterface
+    {
+        return $this->ShippingDate;
+    }
+
+    /**
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
@@ -380,6 +388,14 @@ class GetDeliveryDate extends AbstractEntity
     }
 
     /**
+     * @return string|null
+     */
+    public function getPostalCode(): ?string
+    {
+        return $this->PostalCode;
+    }
+
+    /**
      * @param string|null $PostalCode
      *
      * @return static
@@ -393,6 +409,14 @@ class GetDeliveryDate extends AbstractEntity
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getAllowSundaySorting(): ?bool
+    {
+        return $this->AllowSundaySorting;
     }
 
     /**

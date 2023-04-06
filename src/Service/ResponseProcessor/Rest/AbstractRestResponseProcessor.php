@@ -80,7 +80,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error->Description) ? (string) $error->Description : null,
+                        'description' => isset($error->Description) ? (string) $error->Description : '',
                         'message'     => null,
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
@@ -92,14 +92,14 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
             foreach ($body->Errors as $error) {
                 if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => $error->ErrorMsg,
-                        'message'     => $error->ErrorMsg,
+                        'description' => $error->ErrorMsg ?? '',
+                        'message'     => $error->ErrorMsg ?? '',
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error->Description) ? (string) $error->Description : null,
-                        'message'     => isset($error->Error) ? (string) $error->Error : null,
+                        'description' => isset($error->Description) ? (string) $error->Description : '',
+                        'message'     => isset($error->Error) ? (string) $error->Error : '',
                         'code'        => isset($error->Code) ? (int) $error->Code : 0,
                     ];
                 }
@@ -109,8 +109,8 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
             // {"Array":{"Item":{"ErrorMsg":"Unknown option GetDeliveryDate.Options='DayTime' specified","ErrorNumber":26}}}
             $exceptionData = [
                 [
-                    'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
-                    'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : null,
+                    'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : '',
+                    'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : '',
                     'code'        => 0,
                 ]
             ];
@@ -125,8 +125,8 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
 
             $exceptionData = [
                 [
-                    'message'     => isset($error->message) ? (string) $error->message : null,
-                    'description' => isset($error->description) ? (string) $error->description : null,
+                    'message'     => isset($error->message) ? (string) $error->message : '',
+                    'description' => isset($error->description) ? (string) $error->description : '',
                     'code'        => isset($error->code) ? (int) $error->code : 0,
                 ]
             ];

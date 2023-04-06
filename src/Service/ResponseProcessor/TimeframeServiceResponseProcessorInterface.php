@@ -71,12 +71,10 @@ interface TimeframeServiceResponseProcessorInterface
      * @param ResponseInterface $response
      *
      * @return ResponseTimeframes
-     *
      * @throws HttpClientException
      * @throws ResponseException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
      * @since 2.0.0
      */
     public function processGetTimeframesResponse(ResponseInterface $response): ResponseTimeframes;

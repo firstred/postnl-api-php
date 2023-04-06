@@ -42,7 +42,7 @@ class ConfirmingResponseShipment extends AbstractEntity
     protected ?string $Barcode = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**

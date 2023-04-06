@@ -45,9 +45,9 @@ use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
+use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
@@ -80,22 +80,24 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
-                ->setCollectionLocation(CollectionLocation: '123456')
-                ->setCustomerCode(CustomerCode: 'DEVC')
-                ->setCustomerNumber(CustomerNumber: '11223344')
-                ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'), apiKey: new UsernameToken(Username: null, Password: 'test'),
+            customer: new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Test',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+                GlobalPackCustomerCode: '1234',
+                GlobalPackBarcodeType: 'AB'
+            ),
+            apiKey: 'test',
             sandbox: true,
         );
 
@@ -116,11 +118,13 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildCurrentStatusRequest(
             currentStatus: (new CurrentStatus())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
+                ->setMessage(Message: $message)
                 ->setShipment(
                     Shipment: (new Shipment())
                         ->setBarcode(Barcode: $barcode)
+                        ->setCustomer(Customer: $this->postnl->getCustomer())
                 )
-                ->setMessage(Message: $message)
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
@@ -168,11 +172,13 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildCurrentStatusRequest(
             currentStatus: (new CurrentStatus())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
+                ->setMessage(Message: $message)
                 ->setShipment(
                     Shipment: (new Shipment())
                         ->setReference(Reference: $reference)
+                        ->setCustomer(Customer: $this->postnl->getCustomer())
                 )
-                ->setMessage(Message: $message)
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
@@ -195,11 +201,13 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildCompleteStatusRequest(
             completeStatus: (new CompleteStatus())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
+                ->setMessage(Message: $message)
                 ->setShipment(
                     Shipment: (new Shipment())
                         ->setBarcode(Barcode: $barcode)
+                        ->setCustomer(Customer: $this->postnl->getCustomer())
                 )
-                ->setMessage(Message: $message)
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
@@ -227,7 +235,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $completeStatusResponse = $this->postnl->getShippingStatusByBarcode(barcode: '3SABCD6659149');
+        $completeStatusResponse = $this->postnl->getShippingStatusByBarcode(barcode: '3SABCD6659149', complete: true);
 
         $this->assertInstanceOf(expected: CompleteStatusResponseShipment::class, actual: $completeStatusResponse);
         $this->assertInstanceOf(expected: StatusAddress::class, actual: $completeStatusResponse->getAddresses()[0]);
@@ -241,7 +249,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getEvents()[0]->getTimeStamp());
         $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getExpectation()->getETAFrom());
         $this->assertInstanceOf(expected: DateTimeInterface::class, actual: $completeStatusResponse->getExpectation()->getETATo());
-        $this->assertEquals(expected: '01B', actual: $completeStatusResponse->getShipments()[0]->getEvents()[0]->getCode());
+        $this->assertEquals(expected: '01B', actual: $completeStatusResponse->getEvents()[0]->getCode());
 
         $this->assertIsString(actual: $completeStatusResponse->getMainBarcode());
         $this->assertIsString(actual: $completeStatusResponse->getBarcode());
@@ -264,11 +272,13 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildCompleteStatusRequest(
             completeStatus: (new CompleteStatus())
+                ->setCustomer(Customer: $this->postnl->getCustomer())
+                ->setMessage(Message: $message)
                 ->setShipment(
                     Shipment: (new Shipment())
+                        ->setCustomer(Customer: $this->postnl->getCustomer())
                         ->setReference(Reference: $reference)
                 )
-                ->setMessage(Message: $message)
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
@@ -296,6 +306,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
                 ->setMessage(Message: $message)
                 ->setShipment(Shipment: (new Shipment())
                     ->setBarcode(Barcode: $barcode)
+                    ->setCustomer(Customer: $this->postnl->getCustomer())
                 )
         );
 
@@ -317,7 +328,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGetUpdatedShipmentsRequest(
             customer: $this->postnl->getCustomer(),
             dateTimeFrom: $dateTimeFrom,
-            dateTimeTo: $dateTimeTo
+            dateTimeTo: $dateTimeTo,
         );
 
         $this->assertEquals(expected: "period={$dateTimeFrom->format(format:'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format:'Y-m-d\TH:i:s')}", actual: $request->getUri()->getQuery());
@@ -384,20 +395,15 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $currentStatus = $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
+        $this->expectException(exception: ShipmentNotFoundException::class);
 
-        $this->assertInstanceOf(expected: CurrentStatusResponse::class, actual: $currentStatus);
-        $this->assertNull(actual: $currentStatus->getShipments());
-        $this->assertIsArray(actual: $currentStatus->getWarnings());
-        $this->assertInstanceOf(expected: Warning::class, actual: $currentStatus->getWarnings()[0]);
-        $this->assertEquals(expected: 'No shipment found', actual: $currentStatus->getWarnings()[0]->getDescription());
-        $this->assertEquals(expected: '2', actual: $currentStatus->getWarnings()[0]->getCode());
+        $currentStatus = $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
     }
 
     /**
      * @return array[]
      */
-    public function getCurrentStatusByBarcodeProvider(): array
+    public static function getCurrentStatusByBarcodeProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/currentstatus.http'))],
@@ -409,7 +415,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function getCompleteStatusByBarcodeProvider(): array
+    public static function getCompleteStatusByBarcodeProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/completestatus.http'))],
@@ -421,7 +427,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function getUpdatedShipmentsProvider(): array
+    public static function getUpdatedShipmentsProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/updatedshipments.http'))],
@@ -431,7 +437,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function getNoCurrentShipmentsProvider(): array
+    public static function getNoCurrentShipmentsProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/shippingstatus/nocurrentshipments.http'))],

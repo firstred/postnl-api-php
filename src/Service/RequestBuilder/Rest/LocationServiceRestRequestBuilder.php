@@ -157,7 +157,7 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
 
         return $this->getRequestFactory()->createRequest(
             method: 'GET',
-            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
+            uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
         )
             ->withHeader('apikey', value: $this->getApiKey()->getString())
             ->withHeader('Accept', value: 'application/json');

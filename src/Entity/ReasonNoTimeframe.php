@@ -79,7 +79,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string            $Code = null,
+        int|string|null    $Code = null,
         ?DateTimeInterface $Date = null,
         ?string            $Description = null,
         /** @param string[]|null $Options */
@@ -106,12 +106,16 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * @param string|null $Code
+     * @param string|int|null $Code
      *
      * @return static
      */
-    public function setCode(?string $Code): ReasonNoTimeframe
+    public function setCode(string|int|null $Code): ReasonNoTimeframe
     {
+        if (is_int(value: $Code)) {
+            $Code = (string) $Code;
+        }
+
         $this->Code = $Code;
 
         return $this;
@@ -229,6 +233,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @throws NotSupportedException
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     * @throws \ReflectionException
      *
      * @since 1.2.0
      */

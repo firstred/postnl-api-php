@@ -67,14 +67,12 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @param Confirming[] $confirms ['uuid' => Confirming, ...]
      *
      * @return ConfirmingResponseShipment[]
-     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws NotSupportedException
      * @throws ResponseException
-     *
      * @since 1.0.0
      */
     public function confirmShipments(array $confirms): array;

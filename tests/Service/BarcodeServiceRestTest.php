@@ -62,12 +62,12 @@ class BarcodeServiceRestTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
-                ->setCollectionLocation(CollectionLocation: '123456')
-                ->setCustomerCode(CustomerCode: 'DEVC')
-                ->setCustomerNumber(CustomerNumber: '11223344')
-                ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: new Address(
+            customer: new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Test',
+                Address: new Address(
                     AddressType: '02',
                     CompanyName: 'PostNL',
                     Street: 'Siriusdreef',
@@ -75,9 +75,10 @@ class BarcodeServiceRestTest extends ServiceTestCase
                     Zipcode: '2132WT',
                     City: 'Hoofddorp',
                     Countrycode: 'NL',
-                ))
-                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
+                ),
+                GlobalPackCustomerCode: '1234',
+                GlobalPackBarcodeType: 'AB'
+            ),
             apiKey: 'test',
             sandbox: true,
         );
