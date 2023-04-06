@@ -41,7 +41,7 @@ class Security extends AbstractEntity
     public const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
 
     /** @var UsernameToken $UsernameToken */
-    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    #[SerializableProperty(namespace: SoapNamespace::Security, type: UsernameToken::class)]
     protected UsernameToken $UsernameToken;
 
     /**

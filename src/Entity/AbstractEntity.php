@@ -346,9 +346,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         // Iterate over all the possible properties
-        $propertyNames = isset($entityFqcn::$defaultProperties['Barcode'])
-            ? array_keys(array: $entityFqcn::$defaultProperties['Barcode'])
-            : [];
+        $propertyNames = (new $entityFqcn())->getSerializableProperties();
         foreach ($propertyNames as $propertyName) {
             if (!isset($json->$entityName->$propertyName)) {
                 continue;
@@ -452,18 +450,13 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         return $reflectionNamedTypes;
     }
 
-    private static function getFullyQualifiedEntityClassNameByProperty(self $abstractEntity, string $propertyName): string
-    {
-        return '';
-    }
-
     /**
      * Whether the given property should be an array
      *
-     * @param string $fqcn
-     * @param string $propertyName
+     * @param string $fqcn         Fully-qualified class name
+     * @param string $propertyName Property name
      *
-     * @return string|false
+     * @return string|false        If found, singular name of property, else false
      * @since 1.2.0
      * @deprecated 2.0.0
      * @internal
@@ -482,7 +475,9 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             $reflectionProperty = $reflection->getProperty(name: $propertyName);
             foreach ($reflectionProperty->getAttributes() as $attribute) {
                 if (SerializableProperty::class === $attribute->getName()) {
-                    return $attribute->getArguments()['isArray'] ?? false;
+                    if ($attribute->getArguments()['isArray'] ?? false) {
+                        return $reflectionProperty->getName();
+                    }
                 }
             }
         } catch (Exception) {
@@ -509,7 +504,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         trigger_deprecation(
             package: 'firstred/postnl-api-php',
             version: '2.0.0',
-            message: 'Using `AbstractEntity::getFullQualifiedEntityClassName` is deprecated. Use property attributes instead.',
+            message: 'Using `AbstractEntity::getFullQualifiedEntityClassName` is deprecated. Use the corresponding property attributes instead.',
         );
 
         foreach ([

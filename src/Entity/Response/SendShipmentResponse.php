@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 
@@ -37,11 +37,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class SendShipmentResponse extends AbstractEntity
 {
     /** @var MergedLabel[]|null $MergedLabels */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: MergedLabel::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: MergedLabel::class, isArray: true)]
     protected ?array $MergedLabels = null;
 
     /** @var ResponseShipment[]|null $ResponseShipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ResponseShipment::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ResponseShipment::class, isArray: true)]
     protected ?array $ResponseShipments = null;
 
     /**

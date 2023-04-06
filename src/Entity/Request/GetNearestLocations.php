@@ -39,15 +39,15 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GetNearestLocations extends AbstractEntity
 {
     /** @var string|null $Countrycode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Countrycode = null;
 
     /** @var Location|null $Location */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Location::class)]
     protected ?Location $Location = null;
 
     /** @var Message|null $Messages */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
     protected ?Message $Message = null;
 
     /**

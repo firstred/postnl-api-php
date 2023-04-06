@@ -27,8 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
-use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -39,11 +38,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class MergedLabel extends AbstractEntity
 {
     /** @var string[]|null $Barcodes */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected ?array $Barcodes = null;
 
     /** @var Label[]|null $Labels */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Label::class, isArray: true)]
     protected ?array $Labels = null;
 
     /**

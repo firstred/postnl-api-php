@@ -41,39 +41,39 @@ use Firstred\PostNL\Service\TimeframeServiceRestAdapter;
 class ResponseAmount extends AbstractEntity
 {
     /** @var string|null $AccountName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $AccountName = null;
 
     /** @var string|null $ResponseAmountType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ResponseAmountType = null;
 
     /** @var string|null $BIC */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $BIC = null;
 
     /** @var string|null $Currency */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Currency = null;
 
     /** @var string|null $IBAN */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $IBAN = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Reference = null;
 
     /** @var string|null $TransactionNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $TransactionNumber = null;
 
     /** @var string|null $Value */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Value = null;
 
     /** @var string|null $VerzekerdBedrag */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $VerzekerdBedrag = null;
 
     /**

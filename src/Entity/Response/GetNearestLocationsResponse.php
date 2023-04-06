@@ -43,7 +43,7 @@ use function is_array;
 class GetNearestLocationsResponse extends AbstractEntity
 {
     /** @var GetLocationsResult|null $GetLocationsResult */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: GetLocationsResult::class)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
     /**

@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
@@ -40,11 +40,11 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class ResponseTimeframes extends AbstractEntity
 {
     /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ReasonNoTimeframe::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ReasonNoTimeframe::class, isArray: true)]
     protected ?array $ReasonNoTimeframes = null;
 
     /** @var Timeframe[]|null $Timeframes */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Timeframe::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Timeframe::class, isArray: true)]
     protected ?array $Timeframes = null;
 
     /**

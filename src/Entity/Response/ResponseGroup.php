@@ -41,7 +41,7 @@ class ResponseGroup extends AbstractEntity
      *
      * @var string|null $GroupCount
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupCount = null;
 
     /**
@@ -49,7 +49,7 @@ class ResponseGroup extends AbstractEntity
      *
      * @var string|null $GroupSequence
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupSequence = null;
 
     /**
@@ -63,7 +63,7 @@ class ResponseGroup extends AbstractEntity
      *
      * @var string|null $GroupType
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $GroupType = null;
 
     /**
@@ -71,7 +71,7 @@ class ResponseGroup extends AbstractEntity
      *
      * @var string|null $MainBarcode
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $MainBarcode = null;
 
     /**

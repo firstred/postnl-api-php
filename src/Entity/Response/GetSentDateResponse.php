@@ -31,8 +31,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Attribute\SerializableDateTimeProperty;
-use Firstred\PostNL\Attribute\SerializableStringArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
@@ -45,11 +44,11 @@ use Sabre\Xml\Writer;
 class GetSentDateResponse extends AbstractEntity
 {
     /** @var DateTimeInterface|null $SentDate */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $SentDate = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, isArray: true, type: 'string')]
     protected ?array $Options = null;
 
     /**

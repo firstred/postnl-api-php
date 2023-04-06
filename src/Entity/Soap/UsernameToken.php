@@ -42,11 +42,11 @@ use Sabre\Xml\Writer;
 class UsernameToken extends AbstractEntity
 {
     /** @var string|null $Username */
-    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    #[SerializableProperty(namespace: SoapNamespace::Security, type: 'string')]
     protected ?string $Username = null;
 
     /** @var HiddenString|null $Password */
-    #[SerializableProperty(namespace: SoapNamespace::Security)]
+    #[SerializableProperty(namespace: SoapNamespace::Security, type: HiddenString::class)]
     protected ?HiddenString $Password = null;
 
     /**

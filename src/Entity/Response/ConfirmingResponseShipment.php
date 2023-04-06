@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
@@ -39,11 +38,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class ConfirmingResponseShipment extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
     protected ?array $Warnings = null;
 
     /**

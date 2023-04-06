@@ -373,7 +373,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     /**
      * @return non-empty-list<non-empty-list<ResponseInterface>>
      */
-    public function singleLabelConfirmationsProvider(): array
+    public static function singleLabelConfirmationsProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http'))],
@@ -385,7 +385,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     /**
      * @return non-empty-list<non-empty-list<non-empty-list<ResponseInterface>>>
      */
-    public function multipleLabelsConfirmationsProvider(): array
+    public static function multipleLabelsConfirmationsProvider(): array
     {
         return [
             [

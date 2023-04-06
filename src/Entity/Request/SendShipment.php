@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
@@ -43,15 +42,15 @@ use TypeError;
 class SendShipment extends AbstractEntity
 {
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var LabellingMessage|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: LabellingMessage::class)]
     protected ?LabellingMessage $Message = null;
 
     /** @var Shipment[]|null $Shipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Shipment::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Shipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /**

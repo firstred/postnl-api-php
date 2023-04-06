@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Request;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
@@ -43,11 +42,11 @@ use Sabre\Xml\Writer;
 class GetTimeframes extends AbstractEntity
 {
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
     protected ?Message $Message = null;
 
     /** @var Timeframe[]|null $Timeframe */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Timeframe::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Timeframe::class, isArray: true)]
     protected ?array $Timeframe = null;
 
     /**

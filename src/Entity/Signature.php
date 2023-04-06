@@ -27,7 +27,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Enum\SoapNamespace;

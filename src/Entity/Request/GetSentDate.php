@@ -45,43 +45,43 @@ use function in_array;
 class GetSentDate extends AbstractEntity
 {
     /** @var bool|null $AllowSundaySorting */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'bool')]
     protected ?bool $AllowSundaySorting = null;
 
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $PostalCode = null;
 
     /** @var string|null $ShippingDuration */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ShippingDuration = null;
 
     /** @var string|null $Street */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Street = null;
 
     /**

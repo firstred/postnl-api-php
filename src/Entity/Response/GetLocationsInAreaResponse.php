@@ -38,7 +38,7 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class GetLocationsInAreaResponse extends AbstractEntity
 {
     /** @var GetLocationsResult|null $GetLocationsResult */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: GetLocationsResult::class)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
     /**

@@ -41,11 +41,11 @@ class SerializableProperty
      * be passed to the attribute, making it completely serializable without relying on reflection
      * of the property itself.
      *
-     * @param SoapNamespace                       $namespace         SOAP namespace
-     * @param class-string|'int'|'string'|'float' $type              Property type
-     * @param bool                                $isArray           Should the property be an array
-     * @param string[]                            $aliases           Property shortname aliases such as `Address`
-     * @param class-string[]                      $supportedServices Supported services, empty array = all
+     * @param SoapNamespace                              $namespace         SOAP namespace
+     * @param class-string|'bool'|'int'|'float'|'string' $type              Property type
+     * @param bool                                       $isArray           Should the property be an array
+     * @param string[]                                   $aliases           Property shortname aliases such as `Address`
+     * @param class-string[]                             $supportedServices Supported services, empty array = all
      *
      * @throws InvalidArgumentException
      * @throws ReflectionException

@@ -40,11 +40,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Envelope extends AbstractEntity
 {
     /** @var Header|null $Header */
-    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    #[SerializableProperty(namespace: SoapNamespace::Envelope, type: Header::class)]
     protected ?Header $Header = null;
 
     /** @var Body|null $Body */
-    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    #[SerializableProperty(namespace: SoapNamespace::Envelope, type: Body::class)]
     protected ?Body $Body = null;
 
     /**

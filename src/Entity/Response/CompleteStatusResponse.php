@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -48,11 +48,11 @@ use function count;
 class CompleteStatusResponse extends AbstractEntity
 {
     /** @var CompleteStatusResponseShipment[]|null $Shipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseShipment::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseShipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /** @var Warning|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
     protected ?Warning $Warnings = null;
 
     /**

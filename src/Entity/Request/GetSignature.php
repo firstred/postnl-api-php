@@ -42,15 +42,15 @@ use Sabre\Xml\Writer;
 class GetSignature extends AbstractEntity
 {
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
     protected ?Message $Message = null;
 
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var Shipment|null $Shipment */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Shipment::class)]
     protected ?Shipment $Shipment = null;
 
     /**

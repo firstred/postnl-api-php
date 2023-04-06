@@ -27,7 +27,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Entity\Response;
 
-use Firstred\PostNL\Attribute\SerializableEntityArrayProperty;
+use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Enum\SoapNamespace;
@@ -40,11 +40,11 @@ use Sabre\Xml\Writer;
 class CurrentStatusResponse extends AbstractEntity
 {
     /** @var CurrentStatusResponseShipment[]|null $Shipments */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: CurrentStatusResponseShipment::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CurrentStatusResponseShipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**

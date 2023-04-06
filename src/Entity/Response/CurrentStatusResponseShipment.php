@@ -60,68 +60,68 @@ use function is_string;
 class CurrentStatusResponseShipment extends AbstractEntity
 {
     /** @var StatusAddress[]|null $Addresses */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class, isArray: true)]
     protected ?array $Addresses = null;
 
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Amount::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Amount::class, isArray: true)]
     protected ?array $Amounts = null;
 
     /** @var Barcode|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Barcode::class)]
     protected ?Barcode $Barcode = null;
 
     /** @var string|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Dimension::class)]
     protected ?Dimension $Dimension = null;
 
     /** @var Expectation|null $Expectation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Expectation::class)]
     protected ?Expectation $Expectation = null;
 
     /** @var Group[]|null $Groups */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Group::class, isArray: true)]
     protected ?array $Groups = null;
 
     /** @var string|null $MainBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $MainBarcode = null;
 
     /** @var string|null $ProductCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ProductCode = null;
 
     /** @var string|null $ProductDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ProductDescription = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: ProductOption::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ProductOption::class, isArray: true)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Reference = null;
 
     /** @var string|null $ShipmentAmount */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ShipmentAmount = null;
 
     /** @var string|null $ShipmentCounter */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $ShipmentCounter = null;
 
     /** @var Status|null $Status */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Status::class)]
     protected ?Status $Status = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableEntityArrayProperty(namespace: SoapNamespace::Domain, type: Warning::class)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**

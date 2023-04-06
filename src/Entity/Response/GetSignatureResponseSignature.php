@@ -43,15 +43,15 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class GetSignatureResponseSignature extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var DateTimeInterface|null $SignatureDate */
-    #[SerializableDateTimeProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
     protected ?DateTimeInterface $SignatureDate = null;
 
     /** @var string|null $SignatureImage */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $SignatureImage = null;
 
     /**

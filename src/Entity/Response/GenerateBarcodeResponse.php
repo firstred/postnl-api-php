@@ -37,7 +37,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GenerateBarcodeResponse extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Barcode = null;
 
     /**
