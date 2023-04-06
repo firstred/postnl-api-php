@@ -157,7 +157,7 @@ class Address extends AbstractEntity
      * @param string|null $City
      * @param string|null $Countrycode
      * @param string|null $Area
-     * @param string|null $BuildingName
+     * @param string|null $Buildingname
      * @param string|null $Department
      * @param string|null $Doorcode
      * @param string|null $Floor
@@ -177,7 +177,7 @@ class Address extends AbstractEntity
         ?string $City = null,
         ?string $Countrycode = null,
         ?string $Area = null,
-        ?string $BuildingName = null,
+        ?string $Buildingname = null,
         ?string $Department = null,
         ?string $Doorcode = null,
         ?string $Floor = null,
@@ -200,7 +200,7 @@ class Address extends AbstractEntity
 
         // Optional parameters.
         $this->setArea(Area: $Area);
-        $this->setBuildingname(Buildingname: $BuildingName);
+        $this->setBuildingname(Buildingname: $Buildingname);
         $this->setDepartment(Department: $Department);
         $this->setDoorcode(Doorcode: $Doorcode);
         $this->setFloor(Floor: $Floor);
