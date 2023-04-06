@@ -516,7 +516,7 @@ class StatusAddress extends AbstractEntity
         if (is_null(value: $AddressType)) {
             $this->AddressType = null;
         } else {
-            $this->AddressType = str_pad(string: $AddressType, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT);
+            $this->AddressType = str_pad(string: (string) $AddressType, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT);
         }
 
         return $this;

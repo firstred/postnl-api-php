@@ -45,6 +45,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder implements DeliveryDateServiceRequestBuilderInterface
@@ -59,8 +60,10 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface
@@ -96,7 +99,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
         if (count(value: $times) > 1) {
             foreach (range(start: 1, end: 7) as $day) {
                 $dayName = date(format: 'l', timestamp: strtotime(datetime: "Sunday +{$day} days"));
-                $key = array_search(needle: str_pad(string: $day, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT), haystack: array_map(callback: function ($time) {
+                $key = array_search(needle: str_pad(string: (string) $day, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT), haystack: array_map(callback: function ($time) {
                     /* @var CutOffTime $time */
                     return $time->getDay();
                 }, array: $times));
@@ -128,7 +131,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
         }
         if (is_array(value: $deliveryDate->getOptions())) {
             foreach ($deliveryDate->getOptions() as $option) {
-                if (strcasecmp(string1: 'Daytime', string2: $option) === 0) {
+                if (0 === strcasecmp(string1: 'Daytime', string2: $option)) {
                     continue;
                 }
 
@@ -152,8 +155,10 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @param GetSentDateRequest $getSentDate
      *
      * @return RequestInterface
+     *
      * @throws InvalidArgumentException
      * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildGetSentDateRequest(GetSentDateRequest $getSentDate): RequestInterface
@@ -195,8 +200,10 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
      * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

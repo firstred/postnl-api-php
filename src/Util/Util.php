@@ -47,19 +47,18 @@ class Util
     public const ERROR_MARGIN = 2;
 
     /**
-     * @param array $arr a map of param keys to values
+     * @param array       $arr    a map of param keys to values
      * @param string|null $prefix
      *
      * @return string a querystring, essentially
+     *
      * @since 1.0.0
+     * @deprecated 2.0.0
+     *
      * @codeCoverageIgnore
      */
     public static function urlEncode(array $arr, string $prefix = null): string
     {
-        if (!is_array(value: $arr)) {
-            return (string) $arr;
-        }
-
         $r = [];
         foreach ($arr as $k => $v) {
             if (is_null(value: $v)) {
@@ -93,6 +92,7 @@ class Util
      * @return array|false|string Returns an array with the dimensions or ISO size and orientation
      *                            The orientation is in FPDF format, so L for Landscape and P for Portrait
      *                            Sizes are in mm
+     *
      * @since 1.0.0
      */
     public static function getPdfSizeAndOrientation(string $pdf): bool|array|string
@@ -136,13 +136,14 @@ class Util
     /**
      * Offline delivery date calculation.
      *
-     * @param string $deliveryDate Delivery date in any format accepted by DateTime
-     * @param bool $mondayDelivery Sunday sorting/Monday delivery enabled
-     * @param bool $sundayDelivery Sunday delivery enabled
+     * @param string $deliveryDate   Delivery date in any format accepted by DateTime
+     * @param bool   $mondayDelivery Sunday sorting/Monday delivery enabled
+     * @param bool   $sundayDelivery Sunday delivery enabled
      *
      * @return string (format: `Y-m-d H:i:s`)
      *
      * @throws Exception
+     *
      * @since 1.0.0
      */
     public static function getDeliveryDate(string $deliveryDate, bool $mondayDelivery = false, bool $sundayDelivery = false): string
@@ -165,16 +166,17 @@ class Util
      * Offline shipping date calculation.
      *
      * @param string $deliveryDate
-     * @param array $days
+     * @param array  $days
      *
      * @return string
      *
      * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public static function getShippingDate(
         string $deliveryDate,
-        array  $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
+        array $days = [0 => false, 1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => true]
     ): string {
         if (array_sum(array: $days) < 1) {
             throw new InvalidArgumentException(message: 'There should be at least one shipping day');
@@ -207,11 +209,13 @@ class Util
      * < 0 means: should've shipped in the past
      * anything higher means: you've got some more time
      *
-     * @param string $shippingDate Shipping date (format: `Y-m-d H:i:s`)
+     * @param string $shippingDate          Shipping date (format: `Y-m-d H:i:s`)
      * @param string $preferredDeliveryDate Customer preference
      *
      * @return int
+     *
      * @throws Exception
+     *
      * @since 1.0.0
      */
     public static function getShippingDaysRemaining(string $shippingDate, string $preferredDeliveryDate): int
@@ -254,6 +258,8 @@ class Util
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      *
      * @since 1.0.0
+     *
+     * @throws Exception
      * @throws Exception
      */
     protected static function getHolidaysForYear(string $year): array
@@ -304,7 +310,7 @@ class Util
         $a = str_replace(search: '.', replace: '', subject: (string) $a);
         $b = str_replace(search: '.', replace: '', subject: (string) $b);
 
-        $len = max(value: array(strlen(string: $a), strlen(string: $b)));
+        $len = max(value: [strlen(string: $a), strlen(string: $b)]);
 
         $a = (int) str_pad(string: $a, length: $len, pad_string: '0', pad_type: STR_PAD_RIGHT);
         $b = (int) str_pad(string: $b, length: $len, pad_string: '0', pad_type: STR_PAD_RIGHT);
@@ -324,6 +330,7 @@ class Util
      * @param array $array
      *
      * @return bool
+     *
      * @since 2.0.0
      */
     public static function isAssociativeArray(array $array): bool

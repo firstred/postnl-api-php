@@ -289,7 +289,7 @@ class Amount extends AbstractEntity
         if (is_null(value: $AmountType)) {
             $this->AmountType = null;
         } else {
-            $this->AmountType = str_pad(string: $AmountType, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT);
+            $this->AmountType = str_pad(string: (string) $AmountType, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT);
         }
 
         return $this;
