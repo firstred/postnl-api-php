@@ -183,34 +183,11 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @param mixed  $value
      *
      * @return mixed
+     * @throws NotSupportedException
      */
     public function __call(string $name, mixed $value): mixed
     {
-        $methodName = substr(string: $name, offset: 0, length: 3);
-        $propertyName = substr(string: $name, offset: 3, length: strlen(string: $name));
-        if ('ReasonNotimeframes' === $propertyName) {
-            $propertyName = 'ReasonNoTimeframes';
-        }
-
-        if ('get' === $methodName) {
-            if (property_exists(object_or_class: $this, property: $propertyName)) {
-                return $this->$propertyName;
-            } else {
-                return null;
-            }
-        } elseif ('set' === $methodName) {
-            if (!is_array(value: $value) || count(value: $value) < 1) {
-                throw new TypeError(message: 'Value is missing');
-            }
-
-            if (property_exists(object_or_class: $this, property: $propertyName)) {
-                $this->$propertyName = $value[0];
-            }
-
-            return $this;
-        }
-
-        throw new TypeError(message: 'Not a valid `get` or `set` method');
+        throw new NotSupportedException(message: 'Magic __call is about to be removed');
     }
 
     /**
