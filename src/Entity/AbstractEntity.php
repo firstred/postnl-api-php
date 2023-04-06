@@ -297,8 +297,8 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             } catch (ReflectionException $e) {
                 throw new DeserializationException(previous: $e);
             }
-            $propertyFqcn = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['type'];
-            $isArray = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['isArray'];
+            $propertyFqcn = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['type'] ?? '';
+            $isArray = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['isArray']   ?? false;
 
             if (!$isArray) {
                 if (($value instanceof stdClass || is_array(value: $value)) && empty((array) $value)) {
