@@ -363,11 +363,11 @@ Example code:
                     ->setHouseNrExt('a bis')
                     ->setName('de Ruijter')
                     ->setStreet('Bilderdijkstraat')
-                    ->setZipcode('3521VA)
+                    ->setZipcode('3521VA')
             ])
             ->setBarcode($barcodes['NL'][1])
             ->setDimension(new Dimension('1000'))
-            ->setProductCodeDelivery('3085)
+            ->setProductCodeDelivery('3085')
     ];
 
     $label = $postnl->generateLabels(
