@@ -66,10 +66,10 @@ class Status extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $PhaseCode = null,
-        ?string                       $PhaseDescription = null,
-        ?string                       $StatusCode = null,
-        ?string                       $StatusDescription = null,
+        ?string $PhaseCode = null,
+        ?string $PhaseDescription = null,
+        ?string $StatusCode = null,
+        ?string $StatusDescription = null,
         string|DateTimeInterface|null $TimeStamp = null
     ) {
         parent::__construct();
@@ -190,7 +190,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -207,7 +207,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -224,7 +224,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -241,7 +241,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -258,7 +258,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -275,7 +275,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -292,7 +292,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -309,7 +309,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -326,7 +326,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -343,7 +343,7 @@ class Status extends AbstractEntity
     }
 
     /**
-     * Backwards compatible with SOAP API
+     * Backwards compatible with SOAP API.
      *
      * @since 1.2.0
      * @deprecated 2.0.0

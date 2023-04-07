@@ -81,7 +81,7 @@ class Content extends AbstractEntity
         ?string $Quantity = null,
         ?string $Value = null,
         ?string $Weight = null,
-        ?array  $Content = null
+        ?array $Content = null
     ) {
         parent::__construct();
 

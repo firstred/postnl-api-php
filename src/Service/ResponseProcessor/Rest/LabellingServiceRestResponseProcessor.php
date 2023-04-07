@@ -39,10 +39,10 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements LabellingServiceResponseProcessorInterface
@@ -53,6 +53,7 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
      * @param ResponseInterface $response
      *
      * @return GenerateLabelResponse
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
@@ -60,7 +61,7 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
      * @throws EntityNotFoundException
      * @throws ApiException
      * @throws InvalidConfigurationException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse
@@ -72,6 +73,6 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
             return GenerateLabelResponse::jsonDeserialize(json: (object) ['GenerateLabelResponse' => $body]);
         }
 
-        throw new ApiException(message: "`GenerateLabelResponse` does not contain `ResponseShipments`");
+        throw new ApiException(message: '`GenerateLabelResponse` does not contain `ResponseShipments`');
     }
 }

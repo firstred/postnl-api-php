@@ -38,6 +38,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface ConfirmingServiceResponseProcessorInterface
@@ -46,10 +47,12 @@ interface ConfirmingServiceResponseProcessorInterface
      * @param ResponseInterface $response
      *
      * @return non-empty-list<ConfirmingResponseShipment>
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
+     *
      * @since 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): array;

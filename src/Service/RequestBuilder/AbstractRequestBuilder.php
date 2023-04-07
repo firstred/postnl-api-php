@@ -39,6 +39,7 @@ use Sabre\Xml\Writer;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 abstract class AbstractRequestBuilder
@@ -50,15 +51,15 @@ abstract class AbstractRequestBuilder
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        private HiddenString            $apiKey,
-        private bool                    $sandbox,
+        private HiddenString $apiKey,
+        private bool $sandbox,
         private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface  $streamFactory,
+        private StreamFactoryInterface $streamFactory,
     ) {
     }
 
     /**
-     * Write default date format in XML
+     * Write default date format in XML.
      *
      * @since 2.0.0
      */
@@ -145,6 +146,7 @@ abstract class AbstractRequestBuilder
      * This lets the object know for which service it should serialize
      *
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

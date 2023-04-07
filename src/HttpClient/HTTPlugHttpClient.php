@@ -60,6 +60,7 @@ use const E_USER_DEPRECATED;
  * Class HTTPlugClient.
  *
  * @since 1.2.0
+ *
  * @internal
  */
 class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
@@ -76,8 +77,8 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
      * HTTPlugClient constructor.
      *
      * @param HttpAsyncClient|HttpClient|null $client
-     * @param LoggerInterface|null $logger
-     * @param int $concurrency
+     * @param LoggerInterface|null            $logger
+     * @param int                             $concurrency
      *
      * @throws HttpClientException
      *
@@ -86,8 +87,8 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
      */
     public function __construct(
         HttpAsyncClient|HttpClient $client = null,
-        LoggerInterface            $logger = null,
-        int                        $concurrency = 5,
+        LoggerInterface $logger = null,
+        int $concurrency = 5,
         $maxRetries = 5
     ) {
         $this->logger = $logger;

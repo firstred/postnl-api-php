@@ -32,15 +32,16 @@ namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implements BarcodeServiceRequestBuilderInterface
@@ -55,8 +56,10 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
      * @param GenerateBarcode $generateBarcode
      *
      * @return RequestInterface
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
@@ -81,8 +84,10 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function setService(AbstractEntity $entity): void

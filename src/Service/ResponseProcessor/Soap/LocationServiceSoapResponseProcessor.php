@@ -51,6 +51,7 @@ use SimpleXMLElement;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements LocationServiceResponseProcessorInterface
@@ -62,10 +63,10 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -86,6 +87,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @param mixed $response
      *
      * @return GetNearestLocationsResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws EntityNotFoundException
@@ -93,6 +95,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws LibXMLException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
+     *
      * @deprecated 2.0.0
      */
     public function processGetNearestLocationsResponse(mixed $response): GetNearestLocationsResponse
@@ -135,6 +138,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws EntityNotFoundException
@@ -142,6 +146,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws LibXMLException
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
+     *
      * @deprecated 2.0.0
      */
     public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse
@@ -194,6 +199,7 @@ class LocationServiceSoapResponseProcessor extends AbstractSoapResponseProcessor
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     *
      * @deprecated 2.0.0
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse

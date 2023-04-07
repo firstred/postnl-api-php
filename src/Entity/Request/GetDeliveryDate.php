@@ -101,7 +101,7 @@ class GetDeliveryDate extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: self::class)]
     protected ?self $GetDeliveryDate = null;
 
-    /** @var Message|null $Message  */
+    /** @var Message|null $Message */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
     protected ?Message $Message = null;
 
@@ -109,20 +109,20 @@ class GetDeliveryDate extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?bool                         $AllowSundaySorting = null,
-        ?string                       $City = null,
-        ?string                       $CountryCode = null,
-        ?array                        $CutOffTimes = null,
-        ?string                       $HouseNr = null,
-        ?string                       $HouseNrExt = null,
-        ?array                        $Options = null,
-        ?string                       $OriginCountryCode = null,
-        ?string                       $PostalCode = null,
+        ?bool $AllowSundaySorting = null,
+        ?string $City = null,
+        ?string $CountryCode = null,
+        ?array $CutOffTimes = null,
+        ?string $HouseNr = null,
+        ?string $HouseNrExt = null,
+        ?array $Options = null,
+        ?string $OriginCountryCode = null,
+        ?string $PostalCode = null,
         DateTimeInterface|string|null $ShippingDate = null,
-        ?string                       $ShippingDuration = null,
-        ?string                       $Street = null,
-        ?GetDeliveryDate              $GetDeliveryDate = null,
-        ?Message                      $Message = null
+        ?string $ShippingDuration = null,
+        ?string $Street = null,
+        ?GetDeliveryDate $GetDeliveryDate = null,
+        ?Message $Message = null
     ) {
         parent::__construct();
 
@@ -441,6 +441,7 @@ class GetDeliveryDate extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

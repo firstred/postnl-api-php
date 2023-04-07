@@ -37,6 +37,7 @@ use setasign\Fpdi\Fpdi;
  * @credits to haakym on Stack Overflow: https://stackoverflow.com/a/40526456
  *
  * @codeCoverageIgnore
+ *
  * @internal
  */
 class RFPdi extends Fpdi
@@ -63,7 +64,7 @@ class RFPdi extends Fpdi
             $angle *= M_PI / 180;
             $c = cos(num: $angle);
             $s = sin(num: $angle);
-            $cx = $x * $this->k;
+            $cx = $x              * $this->k;
             $cy = ($this->h - $y) * $this->k;
             $this->_out(
                 s: sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy)

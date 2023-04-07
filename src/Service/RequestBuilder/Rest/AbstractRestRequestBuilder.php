@@ -33,6 +33,7 @@ use Firstred\PostNL\Service\RequestBuilder\AbstractRequestBuilder;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 abstract class AbstractRestRequestBuilder extends AbstractRequestBuilder

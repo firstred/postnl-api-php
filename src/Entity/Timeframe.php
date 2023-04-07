@@ -108,21 +108,21 @@ class Timeframe extends AbstractEntity
      * @throws PostNLInvalidArgumentException
      */
     public function __construct(
-        ?string                       $City = null,
-        ?string                       $CountryCode = null,
+        ?string $City = null,
+        ?string $CountryCode = null,
         string|DateTimeInterface|null $Date = null,
         string|DateTimeInterface|null $EndDate = null,
-        ?string                       $HouseNr = null,
-        ?string                       $HouseNrExt = null,
-        /** @param string[]|null $Options */
-        ?array                        $Options = [],
-        ?string                       $PostalCode = null,
-        ?string                       $Street = null,
-        ?string                       $SundaySorting = 'false',
-        ?string                       $Interval = null,
+        ?string $HouseNr = null,
+        ?string $HouseNrExt = null,
+        /* @param string[]|null $Options */
+        ?array $Options = [],
+        ?string $PostalCode = null,
+        ?string $Street = null,
+        ?string $SundaySorting = 'false',
+        ?string $Interval = null,
         $Range = null,
-        /** @param TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
-        ?array                        $Timeframes = null,
+        /* @param TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
+        ?array $Timeframes = null,
         string|DateTimeInterface|null $StartDate = null
     ) {
         parent::__construct();
@@ -164,7 +164,6 @@ class Timeframe extends AbstractEntity
     }
 
     /**
-     *
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
@@ -457,6 +456,7 @@ class Timeframe extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array

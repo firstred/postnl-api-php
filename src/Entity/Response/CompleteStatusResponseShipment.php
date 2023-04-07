@@ -49,7 +49,8 @@ use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotSupportedException as PostNLNotSupportedExceptionAlias;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException as PostNLNotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use Sabre\Xml\Writer;
 use stdClass;
@@ -583,9 +584,9 @@ class CompleteStatusResponseShipment extends AbstractEntity
      * @return CompleteStatusResponseShipment
      *
      * @throws DeserializationException
-     * @throws PostNLNotSupportedExceptionAlias
+     * @throws PostNLNotSupportedException
      * @throws EntityNotFoundException
-     * @throws \ReflectionException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */

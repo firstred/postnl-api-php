@@ -38,12 +38,12 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LocationServiceRequestBuilderInterface
@@ -93,7 +93,7 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
         }
         if ($deliveryOptions = $location->getDeliveryOptions()) {
             foreach ($deliveryOptions as $option) {
-                if ($option === 'PGE') {
+                if ('PGE' === $option) {
                     continue; // No longer supported
                 }
 
@@ -195,8 +195,9 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

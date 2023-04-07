@@ -35,6 +35,7 @@ use Psr\Http\Message\RequestInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface TimeframeServiceRequestBuilderInterface
@@ -45,7 +46,9 @@ interface TimeframeServiceRequestBuilderInterface
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
+     *
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function buildGetTimeframesRequest(GetTimeframes $getTimeframes): RequestInterface;

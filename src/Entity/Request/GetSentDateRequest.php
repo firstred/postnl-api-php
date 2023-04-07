@@ -53,7 +53,7 @@ class GetSentDateRequest extends AbstractEntity
      */
     public function __construct(
         ?GetSentDate $GetSentDate = null,
-        ?Message     $Message = null
+        ?Message $Message = null
     ) {
         parent::__construct();
 

@@ -96,10 +96,10 @@ class Customer extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $CustomerNumber = null;
 
-    /** @var string|null $GlobalPackCustomerCode */
+    /** @var string|null */
     protected ?string $GlobalPackCustomerCode = null;
 
-    /** @var string|null $GlobalPackBarcodeType */
+    /** @var string|null */
     protected ?string $GlobalPackBarcodeType = null;
 
     /** @var string|null $Email */
@@ -144,15 +144,15 @@ class Customer extends AbstractEntity
      * @param string|null  $GlobalPackBarcodeType
      */
     public function __construct(
-        ?string  $CustomerNumber = null,
-        ?string  $CustomerCode = null,
-        ?string  $CollectionLocation = null,
-        ?string  $ContactPerson = null,
-        ?string  $Email = null,
-        ?string  $Name = null,
+        ?string $CustomerNumber = null,
+        ?string $CustomerCode = null,
+        ?string $CollectionLocation = null,
+        ?string $ContactPerson = null,
+        ?string $Email = null,
+        ?string $Name = null,
         ?Address $Address = null,
-        ?string  $GlobalPackCustomerCode = null,
-        ?string  $GlobalPackBarcodeType = null
+        ?string $GlobalPackCustomerCode = null,
+        ?string $GlobalPackBarcodeType = null
     ) {
         parent::__construct();
 

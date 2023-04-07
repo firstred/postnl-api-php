@@ -42,14 +42,14 @@ class CifException extends ApiException
     /**
      * CifException constructor.
      *
-     * @param string|string[] $message In case of multiple errors, the format looks like:
+     * @param string|string[] $message  In case of multiple errors, the format looks like:
      *                                  [
      *                                  'description' => string <The description>,
      *                                  'message'     => string <The error message>,
      *                                  'code'        => int <The error code>
      *                                  ]
      *                                  The code param will be discarded if `$message` is an array
-     * @param int $code
+     * @param int             $code
      * @param \Throwable|null $previous
      */
     public function __construct($message = '', int $code = 0, \Throwable $previous = null)

@@ -52,9 +52,9 @@ class MergedLabel extends AbstractEntity
      * @param array|null $Labels
      */
     public function __construct(
-        /** @param string[]|null $Barcodes */
+        /* @param string[]|null $Barcodes */
         ?array $Barcodes = null,
-        /** @param Label[]|null $Labels */
+        /* @param Label[]|null $Labels */
         ?array $Labels = null,
     ) {
         parent::__construct();

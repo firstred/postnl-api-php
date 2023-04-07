@@ -91,19 +91,19 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @param array|null $Sunday
      */
     public function __construct(
-        /** @param string[]|null $Monday */
+        /* @param string[]|null $Monday */
         array|null $Monday = null,
-        /** @param string[]|null $Tuesday */
+        /* @param string[]|null $Tuesday */
         array|null $Tuesday = null,
-        /** @param string[]|null $Wednesday */
+        /* @param string[]|null $Wednesday */
         array|null $Wednesday = null,
-        /** @param string[]|null $Thursday */
+        /* @param string[]|null $Thursday */
         array|null $Thursday = null,
-        /** @param string[]|null $Friday */
+        /* @param string[]|null $Friday */
         array|null $Friday = null,
-        /** @param string[]|null $Saturday */
+        /* @param string[]|null $Saturday */
         array|null $Saturday = null,
-        /** @param string[]|null $Sunday */
+        /* @param string[]|null $Sunday */
         array|null $Sunday = null,
     ) {
         parent::__construct();
@@ -261,10 +261,12 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @param stdClass $json
      *
      * @return OpeningHours
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
      * @throws \ReflectionException
+     *
      * @since 1.0.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -383,7 +385,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             throw new InvalidArgumentException(message: "Given offset $offset does not exist");
         }
 
-        throw new InvalidArgumentException(message: "Given offset does not exist");
+        throw new InvalidArgumentException(message: 'Given offset does not exist');
     }
 
     /**
@@ -420,7 +422,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             throw new InvalidArgumentException(message: 'Offset does not exist');
         }
 
-        return $this->{"get".static::findCurrentDayString(currentDay: $this->currentDay)}();
+        return $this->{'get'.static::findCurrentDayString(currentDay: $this->currentDay)}();
     }
 
     /**
@@ -477,7 +479,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     private static function findCurrentDayString(string|int $currentDay): string
     {
         if (!is_numeric(value: $currentDay)) {
-            throw new NotSupportedException(message: "Given current day is not a number");
+            throw new NotSupportedException(message: 'Given current day is not a number');
         }
 
         $days = array_keys(array: static::$defaultProperties['Barcode']);

@@ -46,11 +46,11 @@ class ApiConnectionException extends ApiException
     /**
      * ApiConnectionException constructor.
      *
-     * @param string $message
-     * @param int $code
+     * @param string      $message
+     * @param int         $code
      * @param string|null $body
      * @param object|null $jsonBody
-     * @param array|null $headers
+     * @param array|null  $headers
      */
     public function __construct(string $message = '', int $code = 0, $body = null, object $jsonBody = null, array $headers = null)
     {

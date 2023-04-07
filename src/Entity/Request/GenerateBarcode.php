@@ -69,6 +69,7 @@ class GenerateBarcode extends AbstractEntity
 
     /**
      * @return Message|null
+     *
      * @deprecated 2.0.0
      */
     public function getMessage(): ?Message
@@ -80,6 +81,7 @@ class GenerateBarcode extends AbstractEntity
      * @param Message|null $Message
      *
      * @return static
+     *
      * @deprecated 2.0.0
      */
     public function setMessage(?Message $Message): static

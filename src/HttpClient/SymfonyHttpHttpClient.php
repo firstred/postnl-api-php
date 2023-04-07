@@ -59,6 +59,7 @@ use const E_USER_DEPRECATED;
  * Class SymfonyHttpClientInterface.
  *
  * @since 1.0.0
+ *
  * @internal
  */
 class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
@@ -76,17 +77,17 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
      * SymfonyHttpClient constructor.
      *
      * @param HttpClientInterface|null $client
-     * @param LoggerInterface|null $logger
-     * @param int $concurrency
-     * @param int $maxRetries
+     * @param LoggerInterface|null     $logger
+     * @param int                      $concurrency
+     * @param int                      $maxRetries
      *
      * @since 1.3.0 Custom constructor
      */
     public function __construct(
         HttpClientInterface $client = null,
-        LoggerInterface     $logger = null,
-        int                 $concurrency = 5,
-        int                 $maxRetries = 5
+        LoggerInterface $logger = null,
+        int $concurrency = 5,
+        int $maxRetries = 5
     ) {
         $this->client = $client;
         $this->logger = $logger;
@@ -131,7 +132,7 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
      * Set Symfony HTTP Client option.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return static
      */

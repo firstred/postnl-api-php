@@ -52,8 +52,8 @@ class Signature extends AbstractEntity
      */
     public function __construct(
         ?GetSignatureResponseSignature $GetSignatureResponseSignature = null,
-        /** @param Warning[]|null $Warnings */
-        ?array                         $Warnings = null
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null
     ) {
         parent::__construct();
 

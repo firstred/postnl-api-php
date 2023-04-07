@@ -54,9 +54,9 @@ class ResponseTimeframes extends AbstractEntity
      * @param array|null $Timeframes
      */
     public function __construct(
-        /** @param ReasonNoTimeframe[]|null $ReasonNoTimeframes */
+        /* @param ReasonNoTimeframe[]|null $ReasonNoTimeframes */
         array $ReasonNoTimeframes = null,
-        /** @param Timeframe[]|null $Timeframes */
+        /* @param Timeframe[]|null $Timeframes */
         array $Timeframes = null,
     ) {
         parent::__construct();
@@ -107,6 +107,7 @@ class ResponseTimeframes extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array

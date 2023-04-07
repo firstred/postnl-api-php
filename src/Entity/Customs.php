@@ -53,7 +53,7 @@ class Customs extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $Currency = null;
 
-    /** @var string|null $HandleAsNonDeliverable*/
+    /** @var string|null $HandleAsNonDeliverable */
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
     protected ?string $HandleAsNonDeliverable = null;
 
@@ -112,7 +112,7 @@ class Customs extends AbstractEntity
     public function __construct(
         ?string $Certificate = null,
         ?string $CertificateNr = null,
-        ?array  $Content = null,
+        ?array $Content = null,
         ?string $Currency = null,
         ?string $HandleAsNonDeliverable = null,
         ?string $Invoice = null,

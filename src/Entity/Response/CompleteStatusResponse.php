@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * The MIT License (MIT).
  *
@@ -26,6 +25,8 @@ declare(strict_types=1);
  * @license   https://opensource.org/licenses/MIT The MIT License
  */
 
+declare(strict_types=1);
+
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
@@ -36,7 +37,6 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
@@ -91,7 +91,6 @@ class CompleteStatusResponse extends AbstractEntity
             }
         }
 
-
         $this->Shipments = $Shipments;
 
         return $this;
@@ -121,6 +120,7 @@ class CompleteStatusResponse extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
@@ -155,10 +155,10 @@ class CompleteStatusResponse extends AbstractEntity
      * @param stdClass $json
      *
      * @return static
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
-     * @throws ReflectionException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

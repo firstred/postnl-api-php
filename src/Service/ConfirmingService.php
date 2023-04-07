@@ -53,6 +53,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
@@ -76,13 +77,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
         parent::__construct(
@@ -104,6 +105,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
+     *
      * @since 1.0.0
      */
     public function confirmShipment(Confirming $confirming): ConfirmingResponseShipment
@@ -111,6 +113,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         $response = $this->getHttpClient()->doRequest(
             request: $this->requestBuilder->buildConfirmRequest(confirming: $confirming),
         );
+
         return $this->responseProcessor->processConfirmResponse(response: $response)[0];
     }
 
@@ -120,10 +123,12 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param array<string, Confirming> $confirms ['uuid' => Confirming, ...]
      *
      * @return array<string, ConfirmingResponseShipment>
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function confirmShipments(array $confirms): array
@@ -143,12 +148,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             $objects = $this->responseProcessor->processConfirmResponse(response: $response);
             foreach ($objects as $object) {
                 if (!$object instanceof ConfirmingResponseShipment) {
-                    throw new ResponseException(
-                        message: 'Invalid API Response',
-                        code: $response->getStatusCode(),
-                        previous: null,
-                        response: $response,
-                    );
+                    throw new ResponseException(message: 'Invalid API Response', code: $response->getStatusCode(), previous: null, response: $response);
                 }
 
                 $confirmingResponse = $object;

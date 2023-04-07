@@ -61,9 +61,9 @@ class Confirming extends AbstractEntity
      * @param Message|null    $Message
      */
     public function __construct(
-        ?array    $Shipments = null,
+        ?array $Shipments = null,
         ?Customer $Customer = null,
-        ?Message  $Message = null,
+        ?Message $Message = null,
     ) {
         parent::__construct();
 
@@ -144,6 +144,8 @@ class Confirming extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
     {

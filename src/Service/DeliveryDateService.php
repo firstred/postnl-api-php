@@ -60,6 +60,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
@@ -83,13 +84,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -110,11 +111,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetDeliveryDate $getDeliveryDate
      *
      * @return GetDeliveryDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
@@ -150,11 +153,13 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @param GetSentDateRequest $getSentDate
      *
      * @return GetSentDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse

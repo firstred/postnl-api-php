@@ -41,7 +41,7 @@ class Label extends AbstractEntity
     public const FORMAT_A6 = 2;
 
     /**
-     * Base 64 encoded content
+     * Base 64 encoded content.
      *
      * @var string|null $Content
      */

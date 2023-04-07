@@ -73,8 +73,8 @@ class TimeframeTimeFrame extends AbstractEntity
         ?string $GetSentDate = null,
         ?string $From = null,
         ?string $To = null,
-        /** @param string[]|null $Options */
-        ?array  $Options = null,
+        /* @param string[]|null $Options */
+        ?array $Options = null,
     ) {
         parent::__construct();
 
@@ -176,10 +176,12 @@ class TimeframeTimeFrame extends AbstractEntity
      * @param stdClass $json
      *
      * @return TimeframeTimeFrame
+     *
      * @throws NotSupportedException
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws \ReflectionException
+     *
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static

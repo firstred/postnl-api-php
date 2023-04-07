@@ -59,7 +59,7 @@ interface HttpClientInterface
      * Adds a request to the list of pending requests
      * Using the ID you can replace a request.
      *
-     * @param string $id Request ID
+     * @param string           $id      Request ID
      * @param RequestInterface $request PSR-7 request
      *
      * @return int|string

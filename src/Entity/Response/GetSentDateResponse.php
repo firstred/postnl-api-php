@@ -58,8 +58,8 @@ class GetSentDateResponse extends AbstractEntity
      */
     public function __construct(
         ?DateTimeInterface $GetSentDate = null,
-        /**  @param string[]|null $Options */
-        array              $Options = null,
+        /*  @param string[]|null $Options */
+        array $Options = null,
     ) {
         parent::__construct();
 
@@ -119,6 +119,7 @@ class GetSentDateResponse extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

@@ -59,6 +59,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
@@ -82,13 +83,13 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -109,12 +110,14 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @param GetTimeframes $getTimeframes
      *
      * @return ResponseTimeframes
+     *
      * @throws HttpClientException
      * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes

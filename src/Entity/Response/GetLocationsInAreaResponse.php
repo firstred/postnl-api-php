@@ -47,7 +47,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
      * @param GetLocationsResult|null $GetLocationsResult
      */
     public function __construct(
-        /** @param GetLocationsResult|null $GetLocationsResult */
+        /* @param GetLocationsResult|null $GetLocationsResult */
         GetLocationsResult $GetLocationsResult = null,
     ) {
         parent::__construct();
@@ -77,6 +77,7 @@ class GetLocationsInAreaResponse extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array

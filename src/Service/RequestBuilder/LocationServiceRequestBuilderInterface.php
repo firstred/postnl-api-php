@@ -36,6 +36,7 @@ use Psr\Http\Message\RequestInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface LocationServiceRequestBuilderInterface
@@ -49,7 +50,6 @@ interface LocationServiceRequestBuilderInterface
      * @since 2.0.0
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface;
-
 
     /**
      * @since 2.0.0

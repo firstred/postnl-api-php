@@ -46,6 +46,7 @@ use SimpleXMLElement;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
@@ -59,10 +60,10 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -80,7 +81,6 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
             SoapNamespace::ArraySerialization->value => AbstractService::ARRAY_SERIALIZATION_NAMESPACE,
         ]);
     }
-
 
     /**
      * Register namespaces.
@@ -102,6 +102,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      * This lets the object know for which service it should serialize
      *
      * @throws InvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function setService(AbstractEntity $object): void
@@ -125,6 +126,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
+     *
      * @deprecated 2.0.0
      */
     protected function validateResponse(ResponseInterface $response): bool
@@ -133,11 +135,7 @@ abstract class AbstractSoapResponseProcessor extends AbstractResponseProcessor
             $xml = new SimpleXMLElement(data: (string) $response->getBody());
             $this->registerNamespaces(element: $xml);
         } catch (\Throwable $e) {
-            throw new ResponseException(
-                message: "Invalid response from server",
-                previous: $e,
-                response: $response,
-            );
+            throw new ResponseException(message: 'Invalid response from server', previous: $e, response: $response);
         }
 
         $errorText = $xml->xpath(expression: '//env:Fault/env:Reason/env:Text');

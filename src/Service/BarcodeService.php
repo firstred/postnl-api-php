@@ -53,6 +53,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
@@ -78,13 +79,13 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -107,6 +108,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     *
      * @since 1.0.0
      */
     public function generateBarcode(GenerateBarcode $generateBarcode): string
@@ -124,11 +126,13 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param GenerateBarcode[] $generateBarcodes
      *
      * @return string[] Barcodes
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     *
      * @since 1.0.0
      */
     public function generateBarcodes(array $generateBarcodes): array

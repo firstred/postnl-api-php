@@ -147,22 +147,22 @@ class StatusAddress extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $AddressType = null,
-        ?string                       $FirstName = null,
-        ?string                       $LastName = null,
-        ?string                       $CompanyName = null,
-        ?string                       $DepartmentName = null,
-        ?string                       $Street = null,
-        ?string                       $HouseNumber = null,
-        ?string                       $HouseNumberSuffix = null,
-        ?string                       $Zipcode = null,
-        ?string                       $City = null,
-        ?string                       $CountryCode = null,
-        ?string                       $Region = null,
-        ?string                       $District = null,
-        ?string                       $Building = null,
-        ?string                       $Floor = null,
-        ?string                       $Remark = null,
+        ?string $AddressType = null,
+        ?string $FirstName = null,
+        ?string $LastName = null,
+        ?string $CompanyName = null,
+        ?string $DepartmentName = null,
+        ?string $Street = null,
+        ?string $HouseNumber = null,
+        ?string $HouseNumberSuffix = null,
+        ?string $Zipcode = null,
+        ?string $City = null,
+        ?string $CountryCode = null,
+        ?string $Region = null,
+        ?string $District = null,
+        ?string $Building = null,
+        ?string $Floor = null,
+        ?string $Remark = null,
         DateTimeInterface|string|null $RegistrationDate = null
     ) {
         parent::__construct();

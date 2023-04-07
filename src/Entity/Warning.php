@@ -105,6 +105,7 @@ class Warning extends AbstractEntity
      * @param stdClass $json
      *
      * @return Warning
+     *
      * @throws NotSupportedException
      * @throws DeserializationException
      * @throws EntityNotFoundException

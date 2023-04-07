@@ -66,6 +66,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -74,6 +75,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse;
@@ -84,11 +86,13 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CurrentStatus[]|CurrentStatusByReference[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function currentStatuses(array $currentStatuses): array;
@@ -105,6 +109,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CompleteStatus|CompleteStatusByReference $completeStatus
      *
      * @return CompleteStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -112,6 +117,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse;
@@ -122,11 +128,13 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
      *
      * @return CompleteStatusResponse[]
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function completeStatuses(array $completeStatuses): array;
@@ -143,6 +151,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param GetSignature $getSignature
      *
      * @return GetSignatureResponseSignature
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
@@ -151,6 +160,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature;
@@ -161,11 +171,13 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param GetSignature[] $getSignatures
      *
      * @return GetSignatureResponseSignature[]
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function getSignatures(array $getSignatures): array;
@@ -178,6 +190,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param DateTimeInterface|null $dateTimeTo
      *
      * @return UpdatedShipmentsResponse[]
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
@@ -186,6 +199,7 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     *
      * @since 1.2.0
      */
     public function getUpdatedShipments(

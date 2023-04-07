@@ -35,7 +35,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use function http_build_query;
 use function json_encode;
@@ -44,6 +43,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingServiceRequestBuilderInterface
@@ -59,7 +59,7 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildSendShipmentRequest(SendShipment $sendShipment, bool $confirm = true): RequestInterface
@@ -82,8 +82,9 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

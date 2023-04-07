@@ -37,7 +37,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use function strcasecmp;
 
@@ -62,7 +61,6 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -157,7 +155,6 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */
@@ -202,7 +199,6 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return void
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
      *
      * @since 2.0.0
      */

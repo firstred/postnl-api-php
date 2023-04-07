@@ -38,6 +38,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface LabellingServiceResponseProcessorInterface
@@ -49,6 +50,7 @@ interface LabellingServiceResponseProcessorInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function processGenerateLabelResponse(ResponseInterface $response): GenerateLabelResponse;

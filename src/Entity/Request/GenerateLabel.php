@@ -66,11 +66,11 @@ class GenerateLabel extends AbstractEntity
      * @param string|null           $LabelSignature
      */
     public function __construct(
-        /** @param $Shipments Shipment[]|null */
-        ?array            $Shipments = null,
+        /* @param $Shipments Shipment[]|null */
+        ?array $Shipments = null,
         ?LabellingMessage $Message = null,
-        ?Customer         $Customer = null,
-        ?string           $LabelSignature = null
+        ?Customer $Customer = null,
+        ?string $LabelSignature = null
     ) {
         parent::__construct();
 
@@ -164,6 +164,7 @@ class GenerateLabel extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array
@@ -191,6 +192,7 @@ class GenerateLabel extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

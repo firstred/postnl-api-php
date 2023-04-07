@@ -35,10 +35,10 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ConfirmingServiceRequestBuilderInterface
@@ -49,7 +49,7 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
 
     /**
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildConfirmRequest(Confirming $confirming): RequestInterface
@@ -70,8 +70,9 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

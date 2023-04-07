@@ -45,6 +45,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface ShippingStatusServiceResponseProcessorInterface
@@ -57,6 +58,7 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws DeserializationException
+     *
      * @since 2.0.0
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse;
@@ -67,6 +69,7 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @param ResponseInterface $response
      *
      * @return CompleteStatusResponse
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
@@ -75,6 +78,7 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse;
@@ -107,6 +111,7 @@ interface ShippingStatusServiceResponseProcessorInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     *
      * @since 2.0.0
      */
     public function processGetUpdatedShipmentsResponse(ResponseInterface $response): array;

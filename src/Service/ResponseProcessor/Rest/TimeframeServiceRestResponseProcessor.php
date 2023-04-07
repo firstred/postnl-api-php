@@ -46,6 +46,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class TimeframeServiceRestResponseProcessor extends AbstractRestResponseProcessor implements TimeframeServiceResponseProcessorInterface
@@ -56,14 +57,17 @@ class TimeframeServiceRestResponseProcessor extends AbstractRestResponseProcesso
      * @param mixed $response
      *
      * @return ResponseTimeframes
+     *
+     * @throws CifDownException
+     * @throws CifException
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws InvalidConfigurationException
+     * @throws \ReflectionException
+     *
      * @since 2.0.0
      */
     public function processGetTimeframesResponse(ResponseInterface $response): ResponseTimeframes

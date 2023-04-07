@@ -200,49 +200,49 @@ class Shipment extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        /** @param Address[]|null $Addresses */
-        array                         $Addresses = null,
-        /** @param Amount[]|null $Amounts */
-        array                         $Amounts = null,
-        ?string                       $Barcode = null,
-        /** @param Contact[]|null $Contacts */
-        array                         $Contacts = null,
-        ?string                       $Content = null,
+        /* @param Address[]|null $Addresses */
+        array $Addresses = null,
+        /* @param Amount[]|null $Amounts */
+        array $Amounts = null,
+        ?string $Barcode = null,
+        /* @param Contact[]|null $Contacts */
+        array $Contacts = null,
+        ?string $Content = null,
         string|DateTimeInterface|null $CollectionTimeStampEnd = null,
         string|DateTimeInterface|null $CollectionTimeStampStart = null,
-        ?string                       $CostCenter = null,
-        ?Customer                     $Customer = null,
-        ?string                       $CustomerOrderNumber = null,
-        ?Customs                      $Customs = null,
-        ?string                       $DeliveryAddress = null,
+        ?string $CostCenter = null,
+        ?Customer $Customer = null,
+        ?string $CustomerOrderNumber = null,
+        ?Customs $Customs = null,
+        ?string $DeliveryAddress = null,
         string|DateTimeInterface|null $DeliveryDate = null,
-        ?Dimension                    $Dimension = null,
-        ?string                       $DownPartnerBarcode = null,
-        ?string                       $DownPartnerID = null,
-        ?string                       $DownPartnerLocation = null,
-        /** @param Event[]|null $Events */
-        array                         $Events = null,
-        /** @param Group[]|null $Groups */
-        array                         $Groups = null,
-        ?string                       $IDExpiration = null,
-        ?string                       $IDNumber = null,
-        ?string                       $IDType = null,
-        /** @param OldStatus[]|null $OldStatuses */
-        array                         $OldStatuses = null,
-        ?string                       $ProductCodeCollect = null,
-        ?string                       $ProductCodeDelivery = null,
-        /** @param ProductOption[]|null $ProductOptions */
-        array                         $ProductOptions = null,
-        ?string                       $ReceiverDateOfBirth = null,
-        ?string                       $Reference = null,
-        ?string                       $ReferenceCollect = null,
-        ?string                       $Remark = null,
-        ?string                       $ReturnBarcode = null,
-        ?string                       $ReturnReference = null,
-        ?string                       $StatusCode = null,
-        ?int                          $PhaseCode = null,
-        ?string                       $DateFrom = null,
-        ?string                       $DateTo = null,
+        ?Dimension $Dimension = null,
+        ?string $DownPartnerBarcode = null,
+        ?string $DownPartnerID = null,
+        ?string $DownPartnerLocation = null,
+        /* @param Event[]|null $Events */
+        array $Events = null,
+        /* @param Group[]|null $Groups */
+        array $Groups = null,
+        ?string $IDExpiration = null,
+        ?string $IDNumber = null,
+        ?string $IDType = null,
+        /* @param OldStatus[]|null $OldStatuses */
+        array $OldStatuses = null,
+        ?string $ProductCodeCollect = null,
+        ?string $ProductCodeDelivery = null,
+        /* @param ProductOption[]|null $ProductOptions */
+        array $ProductOptions = null,
+        ?string $ReceiverDateOfBirth = null,
+        ?string $Reference = null,
+        ?string $ReferenceCollect = null,
+        ?string $Remark = null,
+        ?string $ReturnBarcode = null,
+        ?string $ReturnReference = null,
+        ?string $StatusCode = null,
+        ?int $PhaseCode = null,
+        ?string $DateFrom = null,
+        ?string $DateTo = null,
         string|DateTimeInterface|null $DeliveryTimeStampStart = null,
         string|DateTimeInterface|null $DeliveryTimeStampEnd = null
     ) {
@@ -1092,6 +1092,7 @@ class Shipment extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

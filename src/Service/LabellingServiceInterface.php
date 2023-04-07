@@ -58,6 +58,7 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse;
@@ -68,11 +69,13 @@ interface LabellingServiceInterface extends ServiceInterface
      * @param array<int|string, array<GenerateBarcode, bool>> $generateLabels
      *
      * @return array<int|string, GenerateBarcodeResponse>
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function generateLabels(array $generateLabels): array;

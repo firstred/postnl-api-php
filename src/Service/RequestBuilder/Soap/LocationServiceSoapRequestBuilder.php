@@ -46,11 +46,11 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LocationServiceRequestBuilderInterface
@@ -70,10 +70,10 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -91,7 +91,12 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     /**
      * Build the GenerateLabel request for the SOAP API.
      *
+     * @param GetNearestLocations $getNearestLocations
+     *
+     * @return RequestInterface
+     *
      * @throws PostNLInvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
@@ -133,7 +138,12 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     /**
      * Build the GetLocationsInArea request for the SOAP API.
      *
+     * @param GetLocationsInArea $getLocations
+     *
+     * @return RequestInterface
+     *
      * @throws PostNLInvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface
@@ -175,7 +185,12 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
     /**
      * Build the GetLocation request for the SOAP API.
      *
+     * @param GetLocation $getLocations
+     *
+     * @return RequestInterface
+     *
      * @throws PostNLInvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function buildGetLocationRequest(GetLocation $getLocations): RequestInterface
@@ -218,8 +233,9 @@ class LocationServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imple
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @deprecated 2.0.0
      */
     public function setService(AbstractEntity $entity): void

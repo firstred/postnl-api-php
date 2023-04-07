@@ -126,28 +126,28 @@ class Location extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $Postalcode = null,
-        string|bool|int|null          $AllowSundaySorting = null,
-        /** @param string|DateTimeInterface|null $DeliveryDate */
+        ?string $Postalcode = null,
+        string|bool|int|null $AllowSundaySorting = null,
+        /* @param string|DateTimeInterface|null $DeliveryDate */
         string|DateTimeInterface|null $DeliveryDate = null,
-        /** @param string[]|null $DeliveryOptions */
-        array                         $DeliveryOptions = null,
-        ?string                       $OpeningTime = null,
-        /** @param string[]|null $Options */
-        array                         $Options = null,
-        Coordinates                   $Coordinates = null,
-        CoordinatesNorthWest          $CoordinatesNorthWest = null,
-        CoordinatesSouthEast          $CoordinatesSouthEast = null,
-        ?string                       $City = null,
-        ?string                       $Street = null,
-        ?string                       $HouseNr = null,
-        ?string                       $HouseNrExt = null,
-        ?string                       $LocationCode = null,
-        ?string                       $Saleschannel = null,
-        ?string                       $TerminalType = null,
-        ?string                       $RetailNetworkID = null,
-        ?string                       $DownPartnerID = null,
-        ?string                       $DownPartnerLocation = null
+        /* @param string[]|null $DeliveryOptions */
+        array $DeliveryOptions = null,
+        ?string $OpeningTime = null,
+        /* @param string[]|null $Options */
+        array $Options = null,
+        Coordinates $Coordinates = null,
+        CoordinatesNorthWest $CoordinatesNorthWest = null,
+        CoordinatesSouthEast $CoordinatesSouthEast = null,
+        ?string $City = null,
+        ?string $Street = null,
+        ?string $HouseNr = null,
+        ?string $HouseNrExt = null,
+        ?string $LocationCode = null,
+        ?string $Saleschannel = null,
+        ?string $TerminalType = null,
+        ?string $RetailNetworkID = null,
+        ?string $DownPartnerID = null,
+        ?string $DownPartnerLocation = null
     ) {
         parent::__construct();
 
@@ -591,6 +591,7 @@ class Location extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

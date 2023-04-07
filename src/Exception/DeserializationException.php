@@ -42,7 +42,7 @@ class DeserializationException extends PostNLException
      * @param Throwable|null $previous
      * @param mixed|null     $value
      */
-    public function __construct(string $message = "", int $code = 0, ?Throwable $previous = null, public mixed $value = null)
+    public function __construct(string $message = '', int $code = 0, ?Throwable $previous = null, public mixed $value = null)
     {
         parent::__construct(message: $message, code: $code, previous: $previous);
     }

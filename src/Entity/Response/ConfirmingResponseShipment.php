@@ -53,8 +53,8 @@ class ConfirmingResponseShipment extends AbstractEntity
      */
     public function __construct(
         ?string $Barcode = null,
-        /** @param Warning[]|null $Warnings */
-        ?array  $Warnings = null
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null
     ) {
         parent::__construct();
 

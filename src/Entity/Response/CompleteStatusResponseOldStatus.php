@@ -69,10 +69,10 @@ class CompleteStatusResponseOldStatus extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $StatusCode = null,
-        ?string                       $StatusDescription = null,
-        ?string                       $PhaseCode = null,
-        ?string                       $PhaseDescription = null,
+        ?string $StatusCode = null,
+        ?string $StatusDescription = null,
+        ?string $PhaseCode = null,
+        ?string $PhaseDescription = null,
         DateTimeInterface|string|null $TimeStamp = null
     ) {
         parent::__construct();

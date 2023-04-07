@@ -46,12 +46,12 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 
 use function json_decode;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ShippingStatusServiceResponseProcessorInterface
@@ -62,22 +62,24 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @param ResponseInterface $response
      *
      * @return CurrentStatusResponse
+     *
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     *
      * @since 2.0.0
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse
     {
         $body = json_decode(json: static::getResponseText(response: $response));
 
-        /** @var CurrentStatusResponse $object */
+        /* @var CurrentStatusResponse $object */
         return CurrentStatusResponse::jsonDeserialize(json: (object) [
             'CurrentStatusResponse' => (object) [
                 'Shipments' => $body->CurrentStatus->Shipment ?? null,
-                'Warnings'  => $body->Warnings ?? null,
+                'Warnings'  => $body->Warnings                ?? null,
             ],
         ]);
     }
@@ -97,7 +99,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidConfigurationException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse
@@ -165,12 +167,11 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
             }
         }
 
-        /** @var CompleteStatusResponse $object */
         return CompleteStatusResponse::jsonDeserialize(json: (object) [
             'CompleteStatusResponse' => (object) [
                 'Shipments' => isset($body->CompleteStatus->Shipments) ? $body->CompleteStatus->Shipments : null,
                 'Warnings'  => isset($body->Warnings) ? $body->Warnings : null,
-            ]
+            ],
         ]);
     }
 
@@ -186,13 +187,14 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     *
      * @since 2.0.0
      */
     public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature
     {
         $body = json_decode(json: static::getResponseText(response: $response));
 
-        /** @var GetSignatureResponseSignature $object */
+        /* @var GetSignatureResponseSignature $object */
         return GetSignatureResponseSignature::jsonDeserialize(json: (object) ['GetSignatureResponseSignature' => $body->Signature]);
     }
 
@@ -208,6 +210,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     *
      * @since 2.0.0
      */
     public function processGetUpdatedShipmentsResponse(ResponseInterface $response): array

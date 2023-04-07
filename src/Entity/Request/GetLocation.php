@@ -57,9 +57,9 @@ class GetLocation extends AbstractEntity
      * @param string|null  $RetailNetworkID
      */
     public function __construct(
-        ?string  $LocationCode = null,
+        ?string $LocationCode = null,
         ?Message $Message = null,
-        ?string  $RetailNetworkID = null
+        ?string $RetailNetworkID = null
     ) {
         parent::__construct();
 

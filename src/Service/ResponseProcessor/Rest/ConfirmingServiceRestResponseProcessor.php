@@ -43,6 +43,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ConfirmingServiceResponseProcessorInterface
@@ -53,6 +54,7 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      * @param ResponseInterface $response
      *
      * @return ConfirmingResponseShipment[]
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -62,6 +64,7 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      * @throws ResponseException
      * @throws InvalidConfigurationException
      * @throws \ReflectionException
+     *
      * @since 2.0.0
      */
     public function processConfirmResponse(ResponseInterface $response): array

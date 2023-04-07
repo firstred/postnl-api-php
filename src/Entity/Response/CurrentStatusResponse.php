@@ -54,9 +54,9 @@ class CurrentStatusResponse extends AbstractEntity
      * @param array|null $Warnings
      */
     public function __construct(
-        /** @param CurrentStatusResponseShipment[]|null $Shipments */
+        /* @param CurrentStatusResponseShipment[]|null $Shipments */
         ?array $Shipments = null,
-        /** @param Warning[]|null $Warnings */
+        /* @param Warning[]|null $Warnings */
         ?array $Warnings = null
     ) {
         parent::__construct();
@@ -125,6 +125,7 @@ class CurrentStatusResponse extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

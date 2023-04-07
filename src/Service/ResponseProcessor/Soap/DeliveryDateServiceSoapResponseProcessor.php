@@ -50,6 +50,7 @@ use SimpleXMLElement;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProcessor implements DeliveryDateServiceResponseProcessorInterface
@@ -61,10 +62,10 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -90,6 +91,7 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws ResponseException
+     *
      * @deprecated 2.0.0
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
@@ -121,12 +123,14 @@ class DeliveryDateServiceSoapResponseProcessor extends AbstractSoapResponseProce
      * @param ResponseInterface $response
      *
      * @return GetSentDateResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     *
      * @deprecated 2.0.0
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse

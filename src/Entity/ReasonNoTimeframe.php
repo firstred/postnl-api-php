@@ -81,13 +81,13 @@ class ReasonNoTimeframe extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        int|string|null    $Code = null,
+        int|string|null $Code = null,
         ?DateTimeInterface $Date = null,
-        ?string            $Description = null,
-        /** @param string[]|null $Options */
-        ?array             $Options = null,
-        ?string            $From = null,
-        ?string            $To = null
+        ?string $Description = null,
+        /* @param string[]|null $Options */
+        ?array $Options = null,
+        ?string $From = null,
+        ?string $To = null
     ) {
         parent::__construct();
 
@@ -273,6 +273,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

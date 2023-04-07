@@ -39,7 +39,6 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -48,6 +47,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor implements LocationServiceResponseProcessorInterface
@@ -58,14 +58,17 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @param ResponseInterface $response
      *
      * @return GetNearestLocationsResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws InvalidConfigurationException
+     * @throws \ReflectionException
+     *
      * @since 2.0.0
      */
     public function processGetNearestLocationsResponse(ResponseInterface $response): GetNearestLocationsResponse
@@ -82,6 +85,7 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @param mixed $response
      *
      * @return GetLocationsInAreaResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -90,6 +94,7 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
+     *
      * @since 2.0.0
      */
     public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse
@@ -111,6 +116,7 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -118,8 +124,9 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws HttpClientException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
+     * @throws \ReflectionException
+     *
      * @since 2.0.0
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse

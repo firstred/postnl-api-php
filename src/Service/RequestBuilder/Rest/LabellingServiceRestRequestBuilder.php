@@ -35,7 +35,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use function http_build_query;
 use function in_array;
@@ -46,6 +45,7 @@ use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder implements LabellingServiceRequestBuilderInterface
@@ -90,8 +90,9 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

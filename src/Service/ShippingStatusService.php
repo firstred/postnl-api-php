@@ -66,10 +66,10 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionException;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
@@ -90,13 +90,13 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -128,12 +128,14 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
      * @return CurrentStatusResponse
+     *
      * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse
@@ -169,12 +171,14 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CurrentStatus[] $currentStatuses
      *
      * @return CurrentStatusResponse[]
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws DeserializationException
+     *
      * @since 1.2.0
      */
     public function currentStatuses(array $currentStatuses): array
@@ -233,6 +237,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CompleteStatusByReference|CompleteStatus $completeStatus
      *
      * @return CompleteStatusResponse
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -241,8 +246,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws ReflectionException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse
@@ -282,6 +287,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param CompleteStatus[]|CompleteStatusByReference[] $completeStatuses
      *
      * @return CompleteStatusResponse[]
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
@@ -291,8 +297,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function completeStatuses(array $completeStatuses): array
@@ -345,12 +351,13 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param GetSignature $getSignature
      *
      * @return GetSignatureResponseSignature
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
-     * @throws ReflectionException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature
@@ -386,12 +393,13 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param GetSignature[] $getSignatures
      *
      * @return GetSignatureResponseSignature[]
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     * @throws ReflectionException
+     *
      * @since 1.2.0
      */
     public function getSignatures(array $getSignatures): array
@@ -446,6 +454,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param DateTimeInterface|null $dateTimeTo
      *
      * @return UpdatedShipmentsResponse[]
+     *
      * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotFoundException
@@ -454,7 +463,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
-     * @throws ReflectionException
+     *
      * @since 1.2.0
      */
     public function getUpdatedShipments(

@@ -58,9 +58,9 @@ class GetNearestLocations extends AbstractEntity
      * @param Message|null  $Message
      */
     public function __construct(
-        ?string   $Countrycode = null,
+        ?string $Countrycode = null,
         ?Location $Location = null,
-        ?Message  $Message = null
+        ?Message $Message = null
     ) {
         parent::__construct();
 

@@ -40,6 +40,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ShippingServiceResponseProcessorInterface
@@ -56,6 +57,7 @@ class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws ResponseException
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     *
      * @since 2.0.0
      */
     public function processSendShipmentResponse(ResponseInterface $response): ?SendShipmentResponse

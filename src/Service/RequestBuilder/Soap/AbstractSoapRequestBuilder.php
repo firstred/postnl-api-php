@@ -39,6 +39,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder
@@ -52,10 +53,10 @@ abstract class AbstractSoapRequestBuilder extends AbstractRequestBuilder
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,

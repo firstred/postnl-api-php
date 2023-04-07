@@ -44,7 +44,6 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 use function in_array;
@@ -52,6 +51,7 @@ use function str_replace;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements LabellingServiceRequestBuilderInterface
@@ -71,10 +71,10 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -100,6 +100,7 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @return RequestInterface
      *
      * @throws PostNLInvalidArgumentException
+     *
      * @deprecated 2.0.0
      */
     public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
@@ -148,8 +149,9 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

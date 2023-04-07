@@ -62,6 +62,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class LocationService extends AbstractService implements LocationServiceInterface
@@ -85,13 +86,13 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -115,6 +116,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
@@ -157,6 +159,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse
@@ -195,6 +198,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
+     *
      * @since 1.0.0
      */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse

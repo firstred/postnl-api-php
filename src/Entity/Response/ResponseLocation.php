@@ -38,7 +38,6 @@ use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use ReflectionException;
 use stdClass;
 
 /**
@@ -512,7 +511,6 @@ class ResponseLocation extends AbstractEntity
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
-     * @throws ReflectionException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

@@ -48,7 +48,7 @@ class GetLocationsResult extends AbstractEntity
      * @param array|null $ResponseLocation
      */
     public function __construct(
-        /** @param ResponseLocation[]|null $ResponseLocation */
+        /* @param ResponseLocation[]|null $ResponseLocation */
         ?array $ResponseLocation = null,
     ) {
         parent::__construct();
@@ -88,6 +88,8 @@ class GetLocationsResult extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
+     * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void
     {

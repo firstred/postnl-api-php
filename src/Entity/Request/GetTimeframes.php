@@ -57,8 +57,8 @@ class GetTimeframes extends AbstractEntity
      */
     public function __construct(
         ?Message $Message = null,
-        /** @param $Timeframes Timeframe[]|null */
-        ?array   $Timeframes = null,
+        /* @param $Timeframes Timeframe[]|null */
+        ?array $Timeframes = null,
     ) {
         parent::__construct();
 
@@ -141,6 +141,7 @@ class GetTimeframes extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

@@ -60,6 +60,7 @@ use const E_USER_DEPRECATED;
  * Class GuzzleClient.
  *
  * @since 1.0.0
+ *
  * @internal
  */
 class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
@@ -80,10 +81,10 @@ class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, Lo
      * @since 1.3.0 Custom constructor
      */
     public function __construct(
-        Client          $client = null,
+        Client $client = null,
         LoggerInterface $logger = null,
-        int             $concurrency = 5,
-        int             $maxRetries = 5
+        int $concurrency = 5,
+        int $maxRetries = 5
     ) {
         $this->client = $client;
         $this->logger = $logger;
@@ -156,7 +157,7 @@ class GuzzleHttpClient extends BaseHttpClient implements HttpClientInterface, Lo
      * Set Guzzle option.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return GuzzleHttpClient
      */

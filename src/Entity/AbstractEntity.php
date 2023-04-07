@@ -36,6 +36,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use Firstred\PostNL\Util\Util;
@@ -136,7 +137,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @return static
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @throws InvalidConfigurationException
      */
     public function setCurrentService(string $currentService, array $namespaces = []): static
     {
@@ -154,15 +155,19 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             }
         }
 
-        $reflectionCurrentService = new ReflectionClass(objectOrClass: $currentService);
-        if (!$reflectionCurrentService->isInterface()) {
-            throw new InvalidArgumentException(message: '`$currentService` must be an interface');
+        try {
+            $reflectionCurrentService = new ReflectionClass(objectOrClass: $currentService);
+            if (!$reflectionCurrentService->isInterface()) {
+                throw new InvalidArgumentException(message: '`$currentService` must be an interface');
+            }
+
+            $this->currentService = $currentService;
+            $this->namespaces = $namespaces;
+
+            return $this;
+        } catch (ReflectionException $e) {
+            throw new InvalidConfigurationException(message: 'Reflection is not working', previous: $e);
         }
-
-        $this->currentService = $currentService;
-        $this->namespaces = $namespaces;
-
-        return $this;
     }
 
     /**
@@ -266,6 +271,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -295,7 +301,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             try {
                 $reflectionProperty = (new ReflectionClass(objectOrClass: $entity))->getProperty(name: $propertyName);
             } catch (ReflectionException $e) {
-                throw new DeserializationException(previous: $e);
+                throw new InvalidConfigurationException(message: 'Reflection is not working', previous: $e);
             }
             $propertyFqcn = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['type'] ?? '';
             $isArray = $reflectionProperty->getAttributes(name: SerializableProperty::class)[0]->getArguments()['isArray']   ?? false;

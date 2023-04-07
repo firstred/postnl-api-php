@@ -43,6 +43,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProcessor implements DeliveryDateServiceResponseProcessorInterface
@@ -55,6 +56,7 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
      * @throws PostNLInvalidArgumentException
      * @throws ResponseException
      * @throws DeserializationException
+     *
      * @since 2.0.0
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
@@ -78,6 +80,7 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     *
      * @since 2.0.0
      */
     public function processGetSentDateResponse(mixed $response): GetSentDateResponse

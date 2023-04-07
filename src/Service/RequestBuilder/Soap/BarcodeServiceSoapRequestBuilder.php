@@ -42,11 +42,11 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionException;
 use Sabre\Xml\Service as XmlService;
 
 /**
  * @deprecated 2.0.0
+ *
  * @internal
  */
 class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implements BarcodeServiceRequestBuilderInterface
@@ -65,10 +65,10 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        HiddenString            $apiKey,
-        bool                    $sandbox,
+        HiddenString $apiKey,
+        bool $sandbox,
         RequestFactoryInterface $requestFactory,
-        StreamFactoryInterface  $streamFactory,
+        StreamFactoryInterface $streamFactory,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -91,7 +91,7 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @deprecated 2.0.0
      */
     public function buildGenerateBarcodeRequest(GenerateBarcode $generateBarcode): RequestInterface
@@ -136,8 +136,9 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @deprecated 2.0.0
      */
     protected function setService(AbstractEntity $entity): void

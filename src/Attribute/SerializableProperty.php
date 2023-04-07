@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Attribute;
 use Attribute;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use ReflectionClass;
 use ReflectionException;
 
 #[Attribute(flags: Attribute::TARGET_PROPERTY)]
@@ -49,7 +51,7 @@ class SerializableProperty
      * @param class-string[]                             $supportedServices Supported services, empty array = all
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -60,11 +62,15 @@ class SerializableProperty
         public array $aliases = [],
         public array $supportedServices = [],
     ) {
-        foreach ($this->supportedServices as $supportedService) {
-            $reflectionSupportedService = new \ReflectionClass(objectOrClass: $supportedService);
-            if (!$reflectionSupportedService->isInterface()) {
-                throw new InvalidArgumentException(message: 'Only interfaces of services can be passed');
+        try {
+            foreach ($this->supportedServices as $supportedService) {
+                $reflectionSupportedService = new ReflectionClass(objectOrClass: $supportedService);
+                if (!$reflectionSupportedService->isInterface()) {
+                    throw new InvalidArgumentException(message: 'Only interfaces of services can be passed');
+                }
             }
+        } catch (ReflectionException $e) {
+            throw new InvalidConfigurationException(message: 'Reflection is not working', previous: $e);
         }
     }
 }

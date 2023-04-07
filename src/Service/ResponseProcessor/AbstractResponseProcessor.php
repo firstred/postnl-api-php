@@ -41,6 +41,7 @@ use Sabre\Xml\Writer;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 abstract class AbstractResponseProcessor
@@ -52,10 +53,10 @@ abstract class AbstractResponseProcessor
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        private HiddenString            $apiKey,
-        private bool                    $sandbox,
+        private HiddenString $apiKey,
+        private bool $sandbox,
         private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface  $streamFactory,
+        private StreamFactoryInterface $streamFactory,
     ) {
     }
 
@@ -64,6 +65,7 @@ abstract class AbstractResponseProcessor
      *
      * @throws ResponseException
      * @throws HttpClientException
+     *
      * @since 2.0.0
      */
     protected static function getResponseText(array|ResponseInterface|HttpClientException $response): string
@@ -96,7 +98,7 @@ abstract class AbstractResponseProcessor
     }
 
     /**
-     * Write default date format in XML
+     * Write default date format in XML.
      *
      * @since 2.0.0
      */

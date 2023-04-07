@@ -40,6 +40,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class BarcodeServiceRestResponseProcessor extends AbstractRestResponseProcessor implements BarcodeServiceResponseProcessorInterface

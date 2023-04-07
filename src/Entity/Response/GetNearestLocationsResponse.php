@@ -37,7 +37,6 @@ use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
-use ReflectionException;
 
 use function is_array;
 
@@ -84,10 +83,11 @@ class GetNearestLocationsResponse extends AbstractEntity
      * @param stdClass $json
      *
      * @return GetNearestLocationsResponse
+     *
      * @throws DeserializationException
      * @throws NotSupportedException
      * @throws EntityNotFoundException
-     * @throws ReflectionException
+     *
      * @since 1.2.0
      */
     public static function jsonDeserialize(stdClass $json): static
@@ -103,6 +103,7 @@ class GetNearestLocationsResponse extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array

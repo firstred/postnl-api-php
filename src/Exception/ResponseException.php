@@ -33,7 +33,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class ResponseException
+ * Class ResponseException.
  *
  * @since 1.0.0
  */
@@ -45,9 +45,9 @@ class ResponseException extends ApiException
     /**
      * ResponseException constructor.
      *
-     * @param string $message
-     * @param int $code
-     * @param Exception|null $previous
+     * @param string                 $message
+     * @param int                    $code
+     * @param Exception|null         $previous
      * @param ResponseInterface|null $response
      */
     public function __construct(string $message = '', int $code = 0, $previous = null, ResponseInterface $response = null)

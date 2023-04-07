@@ -57,6 +57,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingService extends AbstractService implements ShippingServiceInterface
@@ -79,13 +80,13 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @since 2.0.0
      */
     public function __construct(
-        HiddenString                       $apiKey,
-        bool                               $sandbox,
-        HttpClientInterface                $httpClient,
-        RequestFactoryInterface            $requestFactory,
-        StreamFactoryInterface             $streamFactory,
-        int                                $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        HiddenString $apiKey,
+        bool $sandbox,
+        HttpClientInterface $httpClient,
+        RequestFactoryInterface $requestFactory,
+        StreamFactoryInterface $streamFactory,
+        int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
@@ -107,12 +108,14 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @param bool         $confirm
      *
      * @return SendShipmentResponse|null
+     *
      * @throws HttpClientException
      * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function sendShipment(SendShipment $sendShipment, bool $confirm = true): ?SendShipmentResponse

@@ -35,6 +35,7 @@ use Stringable;
 
 /**
  * Class DummyLogger.
+ *
  * @internal
  */
 class DummyLogger implements LoggerInterface
@@ -43,7 +44,7 @@ class DummyLogger implements LoggerInterface
      * System is unusable.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -58,7 +59,7 @@ class DummyLogger implements LoggerInterface
      * trigger the SMS alerts and wake you up.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -72,7 +73,7 @@ class DummyLogger implements LoggerInterface
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -85,7 +86,7 @@ class DummyLogger implements LoggerInterface
      * be logged and monitored.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -100,7 +101,7 @@ class DummyLogger implements LoggerInterface
      * that are not necessarily wrong.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -112,7 +113,7 @@ class DummyLogger implements LoggerInterface
      * Normal but significant events.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -126,7 +127,7 @@ class DummyLogger implements LoggerInterface
      * Example: User logs in, SQL logs.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -138,7 +139,7 @@ class DummyLogger implements LoggerInterface
      * Detailed debug information.
      *
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      */
@@ -149,9 +150,9 @@ class DummyLogger implements LoggerInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed   $level
+     * @param mixed              $level
      * @param string|\Stringable $message
-     * @param mixed[] $context
+     * @param mixed[]            $context
      *
      * @return void
      *

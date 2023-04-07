@@ -56,7 +56,7 @@ class UsernameToken extends AbstractEntity
      * @param HiddenString|string|null $Password
      */
     public function __construct(
-        ?string                  $Username = null,
+        ?string $Username = null,
         HiddenString|string|null $Password = null /* Plaintext password */,
     ) {
         parent::__construct();
@@ -112,7 +112,10 @@ class UsernameToken extends AbstractEntity
     /**
      * Return a serializable array for the XMLWriter.
      *
+     * @param Writer $writer
+     *
      * @throws InvalidArgumentException
+     * @throws ServiceNotSetException
      *
      * @since 1.0.0
      */

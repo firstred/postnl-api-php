@@ -52,6 +52,7 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.2.0
      */
     public function sendShipment(SendShipment $sendShipment, bool $confirm = true): ?SendShipmentResponse;

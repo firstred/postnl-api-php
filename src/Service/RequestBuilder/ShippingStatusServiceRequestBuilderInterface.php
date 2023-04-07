@@ -39,6 +39,7 @@ use Psr\Http\Message\RequestInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface ShippingStatusServiceRequestBuilderInterface
@@ -94,7 +95,7 @@ interface ShippingStatusServiceRequestBuilderInterface
      * @since 2.0.0
      */
     public function buildGetUpdatedShipmentsRequest(
-        Customer          $customer,
+        Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
         DateTimeInterface $dateTimeTo = null
     ): RequestInterface;

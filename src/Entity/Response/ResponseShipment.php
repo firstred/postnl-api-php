@@ -80,13 +80,13 @@ class ResponseShipment extends AbstractEntity
     public function __construct(
         ?string $Barcode = null,
         ?string $ProductCodeDelivery = null,
-        /** @param Label[]|null $Labels */
-        ?array  $Labels = null,
+        /* @param Label[]|null $Labels */
+        ?array $Labels = null,
         ?string $DownPartnerBarcode = null,
         ?string $DownPartnerID = null,
         ?string $DownPartnerLocation = null,
-        /** @param Warning[]|null $Warnings */
-        ?array  $Warnings = null
+        /* @param Warning[]|null $Warnings */
+        ?array $Warnings = null
     ) {
         parent::__construct();
 

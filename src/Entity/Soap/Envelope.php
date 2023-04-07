@@ -34,7 +34,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
- * NOTE: this class has been introduced for deserializing
+ * NOTE: this class has been introduced for deserializing.
  *
  * @since 1.0.0
  * @deprecated 2.0.0

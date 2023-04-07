@@ -52,6 +52,7 @@ use const E_USER_DEPRECATED;
  * Class MockClient.
  *
  * @since 1.0.0
+ *
  * @internal
  */
 class MockHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
@@ -69,7 +70,7 @@ class MockHttpClient extends BaseHttpClient implements HttpClientInterface, Logg
      * Set Guzzle option.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return MockHttpClient
      */

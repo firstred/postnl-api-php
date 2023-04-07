@@ -39,6 +39,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 interface LocationServiceResponseProcessorInterface
@@ -48,6 +49,7 @@ interface LocationServiceResponseProcessorInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function processGetNearestLocationsResponse(ResponseInterface $response): GetNearestLocationsResponse;
@@ -57,16 +59,17 @@ interface LocationServiceResponseProcessorInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse;
-
 
     /**
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function processGetLocationResponse(ResponseInterface $response): GetLocationsInAreaResponse;

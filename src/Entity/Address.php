@@ -587,6 +587,7 @@ class Address extends AbstractEntity
 
     /**
      * @return array|null
+     *
      * @deprecated 2.0.0
      */
     #[Deprecated(reason: 'Using `other` on `Address` is deprecated')]
@@ -605,6 +606,7 @@ class Address extends AbstractEntity
      * @param array|null $other
      *
      * @return static
+     *
      * @deprecated 2.0.0
      */
     #[Deprecated(reason: 'Using `other` on `Address` is deprecated')]

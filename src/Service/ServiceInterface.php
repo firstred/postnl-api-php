@@ -38,7 +38,7 @@ use Psr\Cache\InvalidArgumentException;
 interface ServiceInterface
 {
     /**
-     * Cache an item
+     * Cache an item.
      *
      * @param CacheItemInterface $item
      *
@@ -52,13 +52,15 @@ interface ServiceInterface
      * @param string $uuid
      *
      * @return CacheItemInterface|null
+     *
      * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function retrieveCachedItem(string $uuid): ?CacheItemInterface;
 
     /**
-     * Delete an item from cache
+     * Delete an item from cache.
      *
      * @param CacheItemInterface $item
      *
@@ -68,6 +70,7 @@ interface ServiceInterface
 
     /**
      * @return DateInterval|DateTimeInterface|int|null
+     *
      * @since 1.2.0
      */
     public function getTtl(): DateInterval|DateTimeInterface|int|null;
@@ -76,12 +79,14 @@ interface ServiceInterface
      * @param DateInterval|DateTimeInterface|int|null $ttl
      *
      * @return static
+     *
      * @since 1.2.0
      */
     public function setTtl(DateInterval|DateTimeInterface|int $ttl = null): static;
 
     /**
      * @return CacheItemPoolInterface|null
+     *
      * @since 1.2.0
      */
     public function getCache(): ?CacheItemPoolInterface;
@@ -90,6 +95,7 @@ interface ServiceInterface
      * @param CacheItemPoolInterface|null $cache
      *
      * @return static
+     *
      * @since 1.2.0
      */
     public function setCache(CacheItemPoolInterface $cache = null): static;

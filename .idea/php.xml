@@ -2,7 +2,7 @@
 <project version="4">
   <component name="PHPCSFixerOptionsConfiguration">
     <option name="codingStandard" value="Custom" />
-    <option name="rulesetPath" value="$PROJECT_DIR$/.php_cs.dist.php" />
+    <option name="rulesetPath" value="$PROJECT_DIR$/.php-cs-fixer.php" />
   </component>
   <component name="PhpCSFixer">
     <phpcsfixer_settings>

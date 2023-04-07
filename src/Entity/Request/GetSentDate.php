@@ -91,16 +91,16 @@ class GetSentDate extends AbstractEntity
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?bool                         $AllowSundaySorting = false,
-        ?string                       $City = null,
-        ?string                       $CountryCode = null,
-        ?string                       $HouseNr = null,
-        ?string                       $HouseNrExt = null,
-        ?array                        $Options = null,
-        ?string                       $PostalCode = null,
+        ?bool $AllowSundaySorting = false,
+        ?string $City = null,
+        ?string $CountryCode = null,
+        ?string $HouseNr = null,
+        ?string $HouseNrExt = null,
+        ?array $Options = null,
+        ?string $PostalCode = null,
         DateTimeInterface|string|null $DeliveryDate = null,
-        ?string                       $Street = null,
-        ?string                       $ShippingDuration = null
+        ?string $Street = null,
+        ?string $ShippingDuration = null
     ) {
         parent::__construct();
 
@@ -335,6 +335,7 @@ class GetSentDate extends AbstractEntity
      * @param Writer $writer
      *
      * @return void
+     *
      * @throws ServiceNotSetException
      */
     public function xmlSerialize(Writer $writer): void

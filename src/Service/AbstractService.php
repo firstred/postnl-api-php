@@ -45,6 +45,7 @@ use ReflectionClass;
  * Class AbstractService.
  *
  * @since 1.0.0
+ *
  * @internal
  */
 abstract class AbstractService
@@ -69,7 +70,7 @@ abstract class AbstractService
      * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
      * A `DateInterval` can be used as well to set the TTL
      *
-     * @var int|DateTimeInterface|DateInterval|null $ttl
+     * @var int|DateTimeInterface|DateInterval|null
      */
     private int|DateTimeInterface|DateInterval|null $ttl;
 
@@ -79,7 +80,7 @@ abstract class AbstractService
      * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
      * `null` disables the cache
      *
-     * @var CacheItemPoolInterface|null $cache
+     * @var CacheItemPoolInterface|null
      */
     private ?CacheItemPoolInterface $cache;
 
@@ -94,13 +95,13 @@ abstract class AbstractService
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        private HiddenString               $apiKey,
-        private bool                       $sandbox,
-        private HttpClientInterface        $httpClient,
-        private RequestFactoryInterface    $requestFactory,
-        private StreamFactoryInterface     $streamFactory,
-        private int                        $apiMode = PostNL::MODE_REST,
-        CacheItemPoolInterface             $cache = null,
+        private HiddenString $apiKey,
+        private bool $sandbox,
+        private HttpClientInterface $httpClient,
+        private RequestFactoryInterface $requestFactory,
+        private StreamFactoryInterface $streamFactory,
+        private int $apiMode = PostNL::MODE_REST,
+        CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
         $this->cache = $cache;
@@ -114,7 +115,9 @@ abstract class AbstractService
      * @param string $uuid
      *
      * @return CacheItemInterface|null
+     *
      * @throws PsrCacheInvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function retrieveCachedItem(string $uuid): ?CacheItemInterface
@@ -135,7 +138,7 @@ abstract class AbstractService
     }
 
     /**
-     * Cache an item
+     * Cache an item.
      *
      * @param CacheItemInterface $item
      *
@@ -159,7 +162,7 @@ abstract class AbstractService
     }
 
     /**
-     * Delete an item from cache
+     * Delete an item from cache.
      *
      * @param CacheItemInterface $item
      *
@@ -210,6 +213,7 @@ abstract class AbstractService
      * @param CacheItemPoolInterface|null $cache
      *
      * @return static
+     *
      * @since 1.2.0
      */
     public function setCache(?CacheItemPoolInterface $cache = null): static
@@ -233,6 +237,7 @@ abstract class AbstractService
      * @param HiddenString $apiKey
      *
      * @return static
+     *
      * @since 2.0.0
      */
     public function setApiKey(HiddenString $apiKey): static
@@ -254,6 +259,7 @@ abstract class AbstractService
 
     /**
      * @return int
+     *
      * @since 2.0.0
      */
     public function getAPIMode(): int
@@ -263,6 +269,7 @@ abstract class AbstractService
 
     /**
      * @return bool
+     *
      * @since 2.0.0
      */
     public function isSandbox(): bool
@@ -274,6 +281,7 @@ abstract class AbstractService
      * @param bool $sandbox
      *
      * @return static
+     *
      * @since 2.0.0
      */
     public function setSandbox(bool $sandbox): static
@@ -317,6 +325,7 @@ abstract class AbstractService
      * @param RequestFactoryInterface $requestFactory
      *
      * @return static
+     *
      * @since 2.0.0
      */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
@@ -328,6 +337,7 @@ abstract class AbstractService
 
     /**
      * @return StreamFactoryInterface
+     *
      * @since 2.0.0
      */
     public function getStreamFactory(): StreamFactoryInterface
@@ -339,6 +349,7 @@ abstract class AbstractService
      * @param StreamFactoryInterface $streamFactory
      *
      * @return static
+     *
      * @since 2.0.0
      */
     public function setStreamFactory(StreamFactoryInterface $streamFactory): static

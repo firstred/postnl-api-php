@@ -258,43 +258,42 @@ class Util
      * Credits to @tvlooy (https://gist.github.com/tvlooy/1894247)
      *
      * @since 1.0.0
-     *
-     * @throws Exception
-     * @throws Exception
      */
     protected static function getHolidaysForYear(string $year): array
     {
-        // Avoid holidays
-        // Fixed
-        $nieuwjaar = new DateTime(datetime: $year.'-01-01', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
-        $eersteKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
-        $tweedeKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
-        $koningsdag = new DateTime(datetime: $year.'-04-27', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
-        // Dynamic
-        $pasen = new DateTime(datetime: 'NOW', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
-        $pasen->setTimestamp(timestamp: easter_date(year: (int) $year)); // thanks PHP!
-        $paasMaandag = clone $pasen;
-        $paasMaandag->add(interval: new DateInterVal(duration: 'P1D'));
-        $hemelvaart = clone $pasen;
-        $hemelvaart->add(interval: new DateInterVal(duration: 'P39D'));
-        $pinksteren = clone $hemelvaart;
-        $pinksteren->add(interval: new DateInterVal(duration: 'P10D'));
-        $pinksterMaandag = clone $pinksteren;
-        $pinksterMaandag->add(interval: new DateInterVal(duration: 'P1D'));
+        try {
+            // Avoid holidays
+            // Fixed
+            $nieuwjaar = new DateTime(datetime: $year.'-01-01', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+            $eersteKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+            $tweedeKerstDag = new DateTime(datetime: $year.'-12-25', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+            $koningsdag = new DateTime(datetime: $year.'-04-27', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+            // Dynamic
+            $pasen = new DateTime(datetime: 'NOW', timezone: new DateTimeZone(timezone: 'Europe/Amsterdam'));
+            $pasen->setTimestamp(timestamp: easter_date(year: (int) $year)); // thanks PHP!
+            $paasMaandag = clone $pasen;
+            $paasMaandag->add(interval: new DateInterVal(duration: 'P1D'));
+            $hemelvaart = clone $pasen;
+            $hemelvaart->add(interval: new DateInterVal(duration: 'P39D'));
+            $pinksteren = clone $hemelvaart;
+            $pinksteren->add(interval: new DateInterVal(duration: 'P10D'));
+            $pinksterMaandag = clone $pinksteren;
+            $pinksterMaandag->add(interval: new DateInterVal(duration: 'P1D'));
 
-        $holidays = [
-            $nieuwjaar->format(format: 'Y-m-d'),
-            $pasen->format(format: 'Y-m-d'),
-            $koningsdag->format(format: 'Y-m-d'),
-            $paasMaandag->format(format: 'Y-m-d'),
-            $hemelvaart->format(format: 'Y-m-d'),
-            $pinksteren->format(format: 'Y-m-d'),
-            $pinksterMaandag->format(format: 'Y-m-d'),
-            $eersteKerstDag->format(format: 'Y-m-d'),
-            $tweedeKerstDag->format(format: 'Y-m-d'),
-        ];
-
-        return $holidays;
+            return [
+                $nieuwjaar->format(format: 'Y-m-d'),
+                $pasen->format(format: 'Y-m-d'),
+                $koningsdag->format(format: 'Y-m-d'),
+                $paasMaandag->format(format: 'Y-m-d'),
+                $hemelvaart->format(format: 'Y-m-d'),
+                $pinksteren->format(format: 'Y-m-d'),
+                $pinksterMaandag->format(format: 'Y-m-d'),
+                $eersteKerstDag->format(format: 'Y-m-d'),
+                $tweedeKerstDag->format(format: 'Y-m-d'),
+            ];
+        } catch (Exception) {
+            return [];
+        }
     }
 
     /**

@@ -61,9 +61,9 @@ class SendShipment extends AbstractEntity
      * @param Customer|null         $Customer
      */
     public function __construct(
-        ?array            $Shipments = null,
+        ?array $Shipments = null,
         ?LabellingMessage $Message = null,
-        ?Customer         $Customer = null
+        ?Customer $Customer = null
     ) {
         parent::__construct();
 
@@ -142,6 +142,7 @@ class SendShipment extends AbstractEntity
 
     /**
      * @return array
+     *
      * @throws ServiceNotSetException
      */
     public function jsonSerialize(): array

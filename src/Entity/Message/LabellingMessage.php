@@ -48,8 +48,8 @@ class LabellingMessage extends Message
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $Printertype = 'GraphicFile|PDF',
-        ?string                       $MessageID = null,
+        ?string $Printertype = 'GraphicFile|PDF',
+        ?string $MessageID = null,
         string|DateTimeInterface|null $MessageTimeStamp = null
     ) {
         parent::__construct(MessageID: $MessageID, MessageTimeStamp: $MessageTimeStamp);

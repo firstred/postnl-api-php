@@ -64,16 +64,15 @@ class UpdatedShipmentsResponse extends AbstractEntity
     #[SerializableProperty(namespace: SoapNamespace::Domain, type: Status::class)]
     protected ?Status $Status = null;
 
-
     /**
      * @throws InvalidArgumentException
      */
     public function __construct(
-        ?string                       $Barcode = null,
+        ?string $Barcode = null,
         string|DateTimeInterface|null $CreationDate = null,
-        ?string                       $CustomerNumber = null,
-        ?string                       $CustomerCode = null,
-        ?string                       $Status = null
+        ?string $CustomerNumber = null,
+        ?string $CustomerCode = null,
+        ?string $Status = null
     ) {
         parent::__construct();
 

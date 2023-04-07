@@ -39,6 +39,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
@@ -56,11 +57,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
         try {
             $body = json_decode(json: (string) $response->getBody(), flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new ResponseException(
-                message: "Invalid response from server",
-                previous: $e,
-                response: $response,
-            );
+            throw new ResponseException(message: 'Invalid response from server', previous: $e, response: $response);
         }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
@@ -114,7 +111,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
                     'description' => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : '',
                     'message'     => isset($body->Array->Item->ErrorMsg) ? (string) $body->Array->Item->ErrorMsg : '',
                     'code'        => 0,
-                ]
+                ],
             ];
             throw new CifException(message: $exceptionData);
         } elseif (isset($body->ResponseShipments)
@@ -130,7 +127,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
                     'message'     => isset($error->message) ? (string) $error->message : '',
                     'description' => isset($error->description) ? (string) $error->description : '',
                     'code'        => isset($error->code) ? (int) $error->code : 0,
-                ]
+                ],
             ];
             throw new CifException(message: $exceptionData);
         }

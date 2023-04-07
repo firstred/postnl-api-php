@@ -39,14 +39,13 @@ use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
-use Firstred\PostNL\Util\Util;
 use Psr\Http\Message\RequestInterface;
-use ReflectionException;
 
 use const PHP_QUERY_RFC3986;
 
 /**
  * @since 2.0.0
+ *
  * @internal
  */
 class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder implements ShippingStatusServiceRequestBuilderInterface
@@ -128,7 +127,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildCompleteStatusRequest(CompleteStatus $completeStatus): RequestInterface
@@ -195,7 +194,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildGetSignatureRequest(GetSignature $getSignature): RequestInterface
@@ -220,17 +219,17 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     public function buildGetUpdatedShipmentsRequest(
-        Customer          $customer,
+        Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
         DateTimeInterface $dateTimeTo = null,
     ): RequestInterface {
         $range = '';
         if ($dateTimeFrom) {
-            $range = "?period={$dateTimeFrom->format(format:'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format:'Y-m-d\TH:i:s')}";
+            $range = "?period={$dateTimeFrom->format(format: 'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format: 'Y-m-d\TH:i:s')}";
         }
 
         $this->setService(entity: $customer);
@@ -247,8 +246,9 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @param AbstractEntity $entity
      *
      * @return void
+     *
      * @throws InvalidArgumentException
-     * @throws ReflectionException
+     *
      * @since 2.0.0
      */
     protected function setService(AbstractEntity $entity): void
