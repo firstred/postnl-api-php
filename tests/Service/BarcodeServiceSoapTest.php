@@ -55,11 +55,6 @@ class BarcodeServiceSoapTest extends ServiceTestCase
     protected BarcodeServiceInterface $service;
     protected RequestInterface $lastRequest;
 
-    protected function setUp(): void
-    {
-        $this->markTestIncomplete();
-    }
-
     /** @throws */
     #[Before]
     public function setupPostNL(): void
