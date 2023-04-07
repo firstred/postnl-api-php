@@ -231,7 +231,7 @@ class PendingPromise implements Promise
 
         // If the value was not a settled promise or a thenable, then resolve
         // it in the task queue using the correct ID.
-        if (!method_exists($value, 'then')) {
+        if (!is_object($value) || !method_exists($value, 'then')) {
             $id = self::FULFILLED === $state ? 1 : 2;
             // It's a success, so resolve the handlers in the queue.
             PromiseTool::queue()->add(
