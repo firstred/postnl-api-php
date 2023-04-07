@@ -43,7 +43,7 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Body extends AbstractEntity
 {
     /** @var GenerateBarcodeResponse|null $GenerateBarcodeResponse */
-    #[SerializableProperty(namespace: SoapNamespace::Envelope)]
+    #[SerializableProperty(namespace: SoapNamespace::Envelope, type: GenerateBarcodeResponse::class)]
     protected ?GenerateBarcodeResponse $GenerateBarcodeResponse = null;
 
     /**

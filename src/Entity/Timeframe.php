@@ -73,7 +73,7 @@ class Timeframe extends AbstractEntity
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */

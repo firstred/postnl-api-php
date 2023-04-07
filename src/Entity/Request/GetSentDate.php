@@ -72,7 +72,7 @@ class GetSentDate extends AbstractEntity
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, isArray: true)]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */

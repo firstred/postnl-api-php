@@ -54,31 +54,31 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     private int $currentDay = 0;
 
     /** @var string[]|null $Monday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Monday = null;
 
     /** @var string[]|null $Tuesday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Tuesday = null;
 
     /** @var string[]|null $Wednesday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Wednesday = null;
 
     /** @var string[]|null $Thursday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Thursday = null;
 
     /** @var string[]|null $Friday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Friday = null;
 
     /** @var string[]|null $Saturday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Saturday = null;
 
     /** @var string[]|null $Sunday */
-    #[SerializableProperty(isArray: true, namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
     protected array|null $Sunday = null;
 
     /**
