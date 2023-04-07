@@ -30,15 +30,15 @@ These PHP API bindings aim to make it easier to connect to PostNL's CIF API, use
    $postnl = new PostNL(...);
    $timeframes = $postnl->getTimeframes(
        (new GetTimeframes())
-           ->setTimeframe([Timeframe::create([
-               'CountryCode'   => 'NL',
-               'StartDate'     => date('d-m-Y', strtotime('+1 day')),
-               'EndDate'       => date('d-m-Y', strtotime('+14 days')),
-               'HouseNr'       => 42,
-               'PostalCode'    => '2132WT',
-               'SundaySorting' => true,
-               'Options'       => ['Daytime', 'Evening'],
-           ])])
+           ->setTimeframe([(new Timeframe())
+               ->setCountryCode('NL')
+               ->setStartDate(date('d-m-Y', strtotime('+1 day')))
+               ->setEndDate(date('d-m-Y', strtotime('+14 days')))
+               ->setHouseNr(42)
+               ->setPostalCode('2132WT')
+               ->setSundaySorting(true)
+               ->setOptions(['Daytime', 'Evening'])
+           ])
    );
    var_dump($timeframes);
 

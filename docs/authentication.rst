@@ -110,21 +110,21 @@ When you have all the required information, you are ready to configure the libra
 
         $apiKey = 'qjsdjufhjasudhfaSDFasdifh324';
         $customer = (new Customer())
-                ->setCollectionLocation('123456')
-                ->setCustomerCode('DEVC')
-                ->setCustomerNumber('11223344')
-                ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType('AB')
-                ->setGlobalPackCustomerCode('1234');
+            ->setCollectionLocation('123456')
+            ->setCustomerCode('DEVC')
+            ->setCustomerNumber('11223344')
+            ->setContactPerson('Test')
+            ->setAddress((new Address())
+                ->setAddressType('02')
+                ->setCity('Hoofddorp')
+                ->setCompanyName('PostNL')
+                ->setCountrycode('NL')
+                ->setHouseNr('42')
+                ->setStreet('Siriusdreef')
+                ->setZipcode('2132WT')
+            )
+            ->setGlobalPackBarcodeType('AB')
+            ->setGlobalPackCustomerCode('1234');
 
         $postnl = new PostNL(
             $customer,        // The filled Customer object
@@ -146,25 +146,24 @@ The PostNL client constructor accepts a few options:
     .. code-block:: php
 
         // Create a new customer
-        $client = new Customer::create([
-          'CollectionLocation' => '123456',                    // Your collection location
-          'CustomerCode'       => 'DEVC',                      // Your Customer Code
-          'CustomerNumber'     => '11223344',                  // Your Customer Number
-          'GlobalPackBarcodeType('CX'),                        // Add your GlobalPack information if you need
-          'GlobalPackCustomerCode('1234'),                     // to create international shipment labels
-          'ContactPerson'      => 'Sander',
-          'Address'            => Address::create([
-              'AddressType' => '02',                           // This address will be shown on the labels
-              'City'        => 'Hoofddorp',
-              'CompanyName' => 'PostNL',
-              'Countrycode' => 'NL',
-              'HouseNr'     => '42',
-              'Street'      => 'Siriusdreef',
-              'Zipcode'     => '2132WT',
-          ]),
-          'Email'              => 'test@voorbeeld.nl',
-          'Name'               => 'Michael',
-      ]);
+        $client = (new Customer())
+            ->setCollectionLocation('123456')              // Your collection location
+            ->setCustomerCode('DEVC')                      // Your Customer Code
+            ->setCustomerNumber('11223344')                // Your Customer Number
+            ->setGlobalPackBarcodeType('CX')               // Add your GlobalPack information if you nee
+            ->setGlobalPackCustomerCode('1234')            // to create international shipment labels
+            ->setContactPerson('Sander')
+            ->setAddress((new Address())
+                ->setAddressType('02')                     // This address will be shown on the label
+                ->setCity('Hoofddorp')
+                ->setCompanyName('PostNL')
+                ->setCountrycode('NL')
+                ->setHouseNr('42')
+                ->setStreet('Siriusdreef')
+                ->setZipcode('2132WT')
+            )
+            ->setEmail('test@voorbeeld.nl')
+            ->setName('Michael');
 
 .. confval:: apiKey
 
@@ -193,8 +192,8 @@ The PostNL client constructor accepts a few options:
     This library provides three ways to connect to the API:
 
     - :php:const:`Firstred\\PostNL\\PostNL::MODE_REST`: REST mode
-    - :php:const:`Firstred\\PostNL\\PostNL::MODE_SOAP`: SOAP mode
-    - :php:const:`Firstred\\PostNL\\PostNL::MODE_LEGACY`: Legacy mode -- This is the previous SOAP API, which, at the moment of writing, has been disabled.
+    - :php:const:`Firstred\\PostNL\\PostNL::MODE_SOAP`: SOAP mode (deprecated since v1.4.0)
+    - :php:const:`Firstred\\PostNL\\PostNL::MODE_LEGACY`: Legacy mode -- This is the legacy SOAP API, which is now disabled and replaced with SOAP mode (deprecated since v1.4.0).
 
 -------------
 Authorization

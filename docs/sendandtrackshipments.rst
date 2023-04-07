@@ -150,28 +150,26 @@ The following example generates a single shipment label for a domestic shipment:
 
     $postnl = new PostNL(...);
     $postnl->generateLabel(
-        Shipment::create()
+        (new Shipment())
             ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA'),
+                (new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT'),
             ])
             ->setBarcode($barcode)
             ->setDeliveryAddress('01')
@@ -214,42 +212,38 @@ The following example shows how a label can be merged:
 .. code-block:: php
 
     $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA')
+            ])
+            ->setBarcode($barcodes['NL'][0])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085'),
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA)
+            ])
+            ->setBarcode($barcodes['NL'][1])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085)
     ];
 
     $label = $postnl->generateLabels(
@@ -335,28 +329,26 @@ The following example sends a single domestic shipment:
 
     $postnl = new PostNL(...);
     $postnl->sendShipment(
-        Shipment::create()
+        (new Shipment())
             ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA'),
+                (new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT'),
             ])
             ->setDeliveryAddress('01')
             ->setDimension(new Dimension('2000'))
@@ -400,41 +392,39 @@ The following example shows how labels of multiple shipment labels can be merged
 
 .. code-block:: php
 
-    $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+   $shipments = [
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA')
+            ])
+            ->setBarcode($barcodes['NL'][0])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085'),
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA)
+            ])
+            ->setBarcode($barcodes['NL'][1])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085)
     ];
 
     $label = $postnl->generateShippings(
@@ -518,26 +508,24 @@ Example code:
     $confirmedShipment = $postnl->confirmShipment(
         (new Shipment())
             ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA'),
+                (new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT'),
             ])
             ->setBarcode('3SDEVC201611210')
             ->setDeliveryAddress('01')

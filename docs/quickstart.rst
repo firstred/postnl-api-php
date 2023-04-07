@@ -53,23 +53,22 @@ Here's how it is done from scratch:
             require_once __DIR__.'/vendor/autoload.php';
 
             // Your PostNL credentials
-            $customer = Customer::create([
-                'CollectionLocation' => '123456',
-                'CustomerCode'       => 'DEVC',
-                'CustomerNumber'     => '11223344',
-                'ContactPerson'      => 'Sander',
-                'Address'            => Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
-                'Email'              => 'test@voorbeeld.nl',
-                'Name'               => 'Michael',
-            ]);
+            $customer = (new Customer())
+                ->setCollectionLocation('123456')
+                ->setCustomerCode('DEVC')
+                ->setCustomerNumber('11223344')
+                ->setContactPerson('Sander')
+                ->setAddress((new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT')
+                )
+                ->SetEmail('test@voorbeeld.nl')
+                ->setName('Michael');
 
             $apikey = 'YOUR_API_KEY_HERE';
             $sandbox = true;
@@ -310,23 +309,24 @@ Example code:
     require_once __DIR__.'/vendor/autoload.php';
 
     // Your PostNL credentials
-    $customer = Customer::create([
-        'CollectionLocation' => '123456',
-        'CustomerCode'       => 'DEVC',
-        'CustomerNumber'     => '11223344',
-        'ContactPerson'      => 'Sander',
-        'Address'            => Address::create([
-            'AddressType' => '02',
-            'City'        => 'Hoofddorp',
-            'CompanyName' => 'PostNL',
-            'Countrycode' => 'NL',
-            'HouseNr'     => '42',
-            'Street'      => 'Siriusdreef',
-            'Zipcode'     => '2132WT',
-        ]),
-        'Email'              => 'test@voorbeeld.nl',
-        'Name'               => 'Michael',
-    ]);
+    $customer = (new Customer())
+            ->setCollectionLocation('123456')
+            ->setCustomerCode('DEVC')
+            ->setCustomerNumber('11223344')
+            ->setGlobalPackBarcodeType('CX')
+            ->setGlobalPackCustomerCode('1234')
+            ->setContactPerson('Sander')
+            ->setAddress((new Address())
+                ->setAddressType('02')
+                ->setCity('Hoofddorp')
+                ->setCompanyName('PostNL')
+                ->setCountrycode('NL')
+                ->setHouseNr('42')
+                ->setStreet('Siriusdreef')
+                ->setZipcode('2132WT')
+            )
+            ->setEmail('test@voorbeeld.nl')
+            ->setName('Michael');
 
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
@@ -336,42 +336,38 @@ Example code:
     $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
 
     $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-            ],
-            'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA')
+            ])
+            ->setBarcode($barcodes['NL'][0])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085'),
+        (new Shipment())
+            ->setAddresses([
+                (new Address())
+                    ->setAddressType('01')
+                    ->setCity('Utrecht')
+                    ->setCountrycode('NL')
+                    ->setFirstName('Peter')
+                    ->setHouseNr('9')
+                    ->setHouseNrExt('a bis')
+                    ->setName('de Ruijter')
+                    ->setStreet('Bilderdijkstraat')
+                    ->setZipcode('3521VA)
+            ])
+            ->setBarcode($barcodes['NL'][1])
+            ->setDimension(new Dimension('1000'))
+            ->setProductCodeDelivery('3085)
     ];
 
     $label = $postnl->generateLabels(
