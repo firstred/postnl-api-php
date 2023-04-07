@@ -42,13 +42,11 @@ use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
-use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\StatusAddress;
-use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
@@ -336,7 +334,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
             dateTimeTo: $dateTimeTo,
         );
 
-        $this->assertEquals(expected: "period={$dateTimeFrom->format(format:'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format:'Y-m-d\TH:i:s')}", actual: $request->getUri()->getQuery());
+        $this->assertEquals(expected: "period={$dateTimeFrom->format(format: 'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format: 'Y-m-d\TH:i:s')}", actual: $request->getUri()->getQuery());
         $this->assertEquals(expected: 'test', actual: $request->getHeaderLine('apikey'));
         $this->assertEquals(expected: 'application/json', actual: $request->getHeaderLine('Accept'));
         $this->assertEquals(expected: "/shipment/v2/status/{$this->postnl->getCustomer()->getCustomerNumber()}/updatedshipments", actual: $request->getUri()->getPath());
@@ -454,7 +452,7 @@ class ShippingStatusServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var ShippingStatusServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

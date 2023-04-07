@@ -37,7 +37,6 @@ use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
@@ -115,9 +114,9 @@ class ConfirmingServiceRestTest extends ServiceTestCase
         $message = new LabellingMessage();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildConfirmRequest(
-            confirming: Confirming::create()
+            confirming: (new Confirming())
                 ->setShipments(Shipments: [
-                    Shipment::create()
+                    (new Shipment())
                         ->setAddresses(Addresses: [
                             new Address(
                                 AddressType: '01',
@@ -400,19 +399,19 @@ class ConfirmingServiceRestTest extends ServiceTestCase
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel.http')),
-                ]
+                ],
             ],
             [
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel2.http')),
-                ]
+                ],
             ],
             [
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/confirming/confirmsinglelabel3.http')),
-                ]
+                ],
             ],
         ];
     }
@@ -422,7 +421,7 @@ class ConfirmingServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var ConfirmingServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

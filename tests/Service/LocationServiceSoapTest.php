@@ -45,7 +45,6 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationServiceInterface;
-use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\LocationServiceSoapRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -75,25 +74,25 @@ class LocationServiceSoapTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
+            customer: (new Customer())
                 ->setCollectionLocation(CollectionLocation: '123456')
                 ->setCustomerCode(CustomerCode: 'DEVC')
                 ->setCustomerNumber(CustomerNumber: '11223344')
                 ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
             apiKey: new UsernameToken(Username: null, Password: 'test'),
-            sandbox: false,
-            mode: PostNL::MODE_SOAP
+            sandbox: true,
+            mode: PostNL::MODE_SOAP,
         );
 
         global $logger;
@@ -115,22 +114,18 @@ class LocationServiceSoapTest extends ServiceTestCase
             getNearestLocations: (new GetNearestLocations())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
-                ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'            => [
-                        'Daytime',
-                    ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
-                ]))
+                ->setLocation(Location: new Location(
+                    Postalcode: '2132WT',
+                    AllowSundaySorting: true,
+                    DeliveryDate: '29-06-2016',
+                    DeliveryOptions: ['PGE'],
+                    OpeningTime: '09:00:00',
+                    Options: ['Daytime'],
+                    City: 'Hoofddorp',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    HouseNrExt: 'A',
+                ))
         );
 
         $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
@@ -198,23 +193,18 @@ XML
 
         $response = $this->postnl->getNearestLocations(getNearestLocations: (new GetNearestLocations())
             ->setCountrycode(Countrycode: 'NL')
-            ->setLocation(Location: Location::create(properties: [
-                'AllowSundaySorting' => true,
-                'DeliveryDate'       => '29-06-2016',
-                'DeliveryOptions'    => [
-                    'PG',
-                    'PGE',
-                ],
-                'OpeningTime'        => '09:00:00',
-                'Options'            => [
-                    'Daytime',
-                ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
-            ])));
+            ->setLocation(Location: new Location(
+                Postalcode: '2132WT',
+                AllowSundaySorting: true,
+                DeliveryDate: '29-06-2016',
+                DeliveryOptions: ['PG', 'PGE'],
+                OpeningTime: '09:00:00',
+                Options: ['Daytime'],
+                City: 'Hoofddorp',
+                Street: 'Siriusdreef',
+                HouseNr: '42',
+                HouseNrExt: 'A',
+            )));
 
         $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $response);
         $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
@@ -228,28 +218,24 @@ XML
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGetLocationsInAreaRequest(
-            (new GetLocationsInArea())
+            getLocations: (new GetLocationsInArea())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
-                ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting'   => true,
-                    'DeliveryDate'         => '29-06-2016',
-                    'DeliveryOptions'      => [
-                        'PG',
-                    ],
-                    'OpeningTime'          => '09:00:00',
-                    'Options'              => [
-                        'Daytime',
-                    ],
-                    'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
-                        'Latitude'  => '52.156439',
-                        'Longitude' => '5.015643',
-                    ]),
-                    'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
-                        'Latitude'  => '52.017473',
-                        'Longitude' => '5.065254',
-                    ]),
-                ]))
+                ->setLocation(Location: new Location(
+                    AllowSundaySorting: true,
+                    DeliveryDate: '29-06-2016',
+                    DeliveryOptions: ['PG'],
+                    OpeningTime: '09:00:00',
+                    Options: ['Daytime'],
+                    CoordinatesNorthWest: new CoordinatesNorthWest(
+                        Latitude: '52.156439',
+                        Longitude: '5.015643',
+                    ),
+                    CoordinatesSouthEast: new CoordinatesSouthEast(
+                        Latitude: '52.017473',
+                        Longitude: '5.065254',
+                    ),
+                ))
         );
 
         $this->assertXmlStringEqualsXmlString(expectedXml: <<<XML
@@ -311,25 +297,21 @@ XML
 
         $response = $this->postnl->getLocationsInArea(getLocationsInArea: (new GetLocationsInArea())
             ->setCountrycode(Countrycode: 'NL')
-            ->setLocation(Location: Location::create(properties: [
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
-                    'PG',
-                ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
-                    'Daytime',
-                ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
-                    'Latitude'  => '52.156439',
-                    'Longitude' => '5.015643',
-                ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
-                    'Latitude'  => '52.017473',
-                    'Longitude' => '5.065254',
-                ]),
-            ])));
+            ->setLocation(Location: new Location(
+                AllowSundaySorting: true,
+                DeliveryDate: '29-06-2016',
+                DeliveryOptions: ['PG'],
+                OpeningTime: '09:00:00',
+                Options: ['Daytime'],
+                CoordinatesNorthWest: new CoordinatesNorthWest(
+                    Latitude: '52.156439',
+                    Longitude: '5.015643',
+                ),
+                CoordinatesSouthEast: new CoordinatesSouthEast(
+                    Latitude: '52.017473',
+                    Longitude: '5.065254',
+                ),
+            )));
 
         $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
         $this->assertEquals(expected: 1, actual: count(value: $response->getGetLocationsResult()));
@@ -343,7 +325,7 @@ XML
 
         /* @var Request $request */
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGetLocationRequest(
-            (new GetLocation())
+            getLocations: (new GetLocation())
                 ->setLocationCode(LocationCode: '161503')
                 ->setMessage(Message: $message)
                 ->setRetailNetworkID(RetailNetworkID: 'PNPNL-01')
@@ -596,7 +578,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var LocationServiceSoapRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

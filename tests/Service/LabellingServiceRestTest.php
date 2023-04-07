@@ -118,9 +118,9 @@ class LabellingServiceRestTest extends ServiceTestCase
         $message = new LabellingMessage();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateLabelRequest(
-            generateLabel: GenerateLabel::create()
+            generateLabel: (new GenerateLabel())
                 ->setShipments(Shipments: [
-                    Shipment::create()
+                    (new Shipment())
                         ->setAddresses(Addresses: [
                             new Address(
                                 AddressType: '01',
@@ -221,9 +221,9 @@ class LabellingServiceRestTest extends ServiceTestCase
         $message = new LabellingMessage();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateLabelRequest(
-            generateLabel: GenerateLabel::create()
+            generateLabel: (new GenerateLabel())
                 ->setShipments(Shipments: [
-                    Shipment::create()
+                    (new Shipment())
                         ->setAddresses(Addresses: [
                             new Address(
                                 AddressType: '01',
@@ -641,26 +641,26 @@ class LabellingServiceRestTest extends ServiceTestCase
         $this->postnl->generateLabel(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setBarcode(Barcode: '3S1234567890123')
                 ->setDeliveryAddress(DeliveryAddress: '01')
@@ -690,20 +690,20 @@ class LabellingServiceRestTest extends ServiceTestCase
             [
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http'))
-                ]
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
+                ],
             ],
             [
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel2.http')),
-                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
-                ]
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http')),
+                ],
             ],
             [
                 [
                     PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel.http')),
-                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http'))
-                ]
+                    PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/singlelabel3.http')),
+                ],
             ],
         ];
     }
@@ -713,11 +713,11 @@ class LabellingServiceRestTest extends ServiceTestCase
         return [
             [
                 PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/invalid.http')),
-                ResponseException::class
+                ResponseException::class,
             ],
             [
                 PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/labelling/error.http')),
-                CifException::class
+                CifException::class,
             ],
         ];
     }
@@ -727,7 +727,7 @@ class LabellingServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var LabellingServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

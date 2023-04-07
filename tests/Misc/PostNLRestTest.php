@@ -64,23 +64,24 @@ class PostNLRestTest extends TestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
-                ->setCollectionLocation(CollectionLocation: '123456')
-                ->setCustomerCode(CustomerCode: 'DEVC')
-                ->setCustomerNumber(CustomerNumber: '11223344')
-                ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
-                ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
-                ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
-            apiKey: new UsernameToken(Username: null, Password: 'test'),
+            customer: new Customer(
+                CustomerNumber: '11223344',
+                CustomerCode: 'DEVC',
+                CollectionLocation: '123456',
+                ContactPerson: 'Test',
+                Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+                GlobalPackCustomerCode: 'AB',
+                GlobalPackBarcodeType: '1234',
+            ),
+            apiKey: 'test',
             sandbox: true,
         );
     }
@@ -324,9 +325,7 @@ class PostNLRestTest extends TestCase
                         ->setEndDate(EndDate: '02-07-2016')
                         ->setHouseNr(HouseNr: '42')
                         ->setHouseNrExt(HouseNrExt: 'A')
-                        ->setOptions(Options: [
-                            'Evening',
-                        ])
+                        ->setOptions(Options: ['Evening'])
                         ->setPostalCode(PostalCode: '2132WT')
                         ->setStartDate(StartDate: '30-06-2016')
                         ->setStreet(Street: 'Siriusdreef')
@@ -334,22 +333,18 @@ class PostNLRestTest extends TestCase
                 ]),
             getNearestLocations: (new GetNearestLocations())
                 ->setCountrycode(Countrycode: 'NL')
-                ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime' => '09:00:00',
-                    'Options'     => [
-                        'Daytime',
-                    ],
-                    'City'       => 'Hoofddorp',
-                    'HouseNr'    => '42',
-                    'HouseNrExt' => 'A',
-                    'Postalcode' => '2132WT',
-                    'Street'     => 'Siriusdreef',
-                ])),
+                ->setLocation(Location: new Location(
+                    Postalcode: '2132WT',
+                    AllowSundaySorting: true,
+                    DeliveryDate: '29-06-2016',
+                    DeliveryOptions: ['PGE'],
+                    OpeningTime: '09:00:00',
+                    Options: ['Daytime'],
+                    City: 'Hoofddorp',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    HouseNrExt: 'A',
+                )),
             getDeliveryDate: (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     GetDeliveryDate: (new GetDeliveryDate())
@@ -371,7 +366,6 @@ class PostNLRestTest extends TestCase
                 )
         );
 
-        $this->assertTrue(condition: is_array(value: $results));
         $this->assertInstanceOf(expected: ResponseTimeframes::class, actual: $results['timeframes']);
         $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $results['locations']);
         $this->assertInstanceOf(expected: GetDeliveryDateResponse::class, actual: $results['delivery_date']);
@@ -382,7 +376,7 @@ class PostNLRestTest extends TestCase
     public function testNegativeInvalidToken(): void
     {
         $this->expectException(exception: \TypeError::class);
-        /** @noinspection PhpParamsInspection */
+        /* @noinspection PhpParamsInspection */
         $this->postnl->setToken(apiKey: new Address());
     }
 
@@ -405,7 +399,7 @@ class PostNLRestTest extends TestCase
     {
         $this->expectException(exception: \TypeError::class);
 
-        /** @noinspection PhpStrictTypeCheckingInspection */
+        /* @noinspection PhpStrictTypeCheckingInspection */
         $this->postnl->setApiMode(mode: 'invalid');
     }
 

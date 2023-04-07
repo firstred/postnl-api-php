@@ -104,7 +104,7 @@ class BarcodeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder implem
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
         $security = new Security(
-            UserNameToken: new UsernameToken(Username: null, Password: $this->getApiKey()->getString()),
+            UsernameToken: new UsernameToken(Username: null, Password: $this->getApiKey()->getString()),
         );
 
         $this->setService(entity: $security);

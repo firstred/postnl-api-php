@@ -108,7 +108,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
         $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 
         $security = new Security(
-            UserNameToken: new UsernameToken(Password: $this->getApiKey()),
+            UsernameToken: new UsernameToken(Password: $this->getApiKey()),
         );
 
         $this->setService(entity: $security);
@@ -157,7 +157,7 @@ class DeliveryDateServiceSoapRequestBuilder extends AbstractSoapRequestBuilder i
         $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 
         $security = new Security(
-            UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()),
+            UsernameToken: new UsernameToken(Password: $this->getApiKey()->getString()),
         );
 
         $this->setService(entity: $security);

@@ -83,9 +83,16 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @return AbstractEntity
      *
      * @since 1.0.0
+     * @deprecated 2.0.0 Use the constructor instead with named arguments
      */
     public static function create(array $properties = []): static
     {
+        trigger_deprecation(
+            package: 'firstred/postnl-api-php',
+            version: '2.0.0',
+            message: 'Using `AbstractEntity::create` is now deprecated. Call the constructor with named arguments instead.',
+        );
+
         if (__CLASS__ === get_called_class()) {
             throw new TypeError(message: 'Invalid class given');
         }
@@ -287,7 +294,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
 
         $entityName = $properties[0]->getName();
         // Instantiate a new entity
-        $entity = static::create();
+        $entity = new static();
 
         // Iterate over all the possible properties
         $propertyNames = array_keys(array: $entity->getSerializableProperties());

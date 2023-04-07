@@ -49,13 +49,13 @@ class Security extends AbstractEntity
     /**
      * Security constructor.
      *
-     * @param UsernameToken $UserNameToken
+     * @param UsernameToken $UsernameToken
      */
-    public function __construct(UsernameToken $UserNameToken)
+    public function __construct(UsernameToken $UsernameToken)
     {
         parent::__construct();
 
-        $this->setUsernameToken(UsernameToken: $UserNameToken);
+        $this->setUsernameToken(UsernameToken: $UsernameToken);
     }
 
     /**

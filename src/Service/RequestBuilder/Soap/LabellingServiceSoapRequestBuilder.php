@@ -112,7 +112,7 @@ class LabellingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
-        $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
+        $security = new Security(UsernameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
         $this->setService(entity: $security);
         $this->setService(entity: $generateLabel);

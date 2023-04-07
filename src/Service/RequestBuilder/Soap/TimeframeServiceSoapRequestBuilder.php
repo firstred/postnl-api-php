@@ -105,7 +105,7 @@ class TimeframeServiceSoapRequestBuilder extends AbstractSoapRequestBuilder impl
         }
         $xmlService->classMap[DateTimeImmutable::class] = [__CLASS__, 'defaultDateFormat'];
 
-        $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
+        $security = new Security(UsernameToken: new UsernameToken(Password: $this->getApiKey()->getString()));
 
         $this->setService(entity: $security);
         $this->setService(entity: $getTimeframes);

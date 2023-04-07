@@ -96,7 +96,7 @@ class ConfirmingServiceSoapRequestBuilder extends AbstractSoapRequestBuilder imp
         }
         $xmlService->classMap[DateTimeImmutable::class] = [static::class, 'defaultDateFormat'];
 
-        $security = new Security(UserNameToken: new UsernameToken(Password: $this->getApiKey()));
+        $security = new Security(UsernameToken: new UsernameToken(Password: $this->getApiKey()));
 
         $this->setService(entity: $security);
         $this->setService(entity: $confirming);

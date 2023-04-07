@@ -44,21 +44,20 @@ class EnvelopeTest extends TestCase
     #[TestDox(text: 'can return the header')]
     public function testHeader(): void
     {
-        $envelope = Envelope::create()
-            ->setHeader(Header: Header::create())
-        ;
+        $envelope = new Envelope(
+            Header: new Header(),
+        );
 
         $this->assertInstanceOf(expected: Header::class, actual: $envelope->getHeader());
     }
-
 
     /** @throws */
     #[TestDox(text: 'can return the body')]
     public function testBody(): void
     {
-        $envelope = Envelope::create()
-            ->setBody(Body: Body::create())
-        ;
+        $envelope = new Envelope(
+            Body: new Body(),
+        );
 
         $this->assertInstanceOf(expected: Body::class, actual: $envelope->getBody());
     }

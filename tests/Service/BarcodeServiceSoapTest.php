@@ -65,20 +65,20 @@ class BarcodeServiceSoapTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
+            customer: (new Customer())
                 ->setCollectionLocation(CollectionLocation: '123456')
                 ->setCustomerCode(CustomerCode: 'DEVC')
                 ->setCustomerNumber(CustomerNumber: '11223344')
                 ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
             apiKey: new UsernameToken(Username: null, Password: 'test'),
@@ -105,9 +105,9 @@ class BarcodeServiceSoapTest extends ServiceTestCase
         $message = new Message();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
-            generateBarcode: GenerateBarcode::create()
+            generateBarcode: (new GenerateBarcode())
                 ->setBarcode(
-                    Barcode: Barcode::create()
+                    Barcode: (new Barcode())
                         ->setRange(Range: $range)
                         ->setSerie(Serie: $serie)
                         ->setType(Type: $type)

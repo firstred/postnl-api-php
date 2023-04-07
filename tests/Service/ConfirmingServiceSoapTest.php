@@ -43,7 +43,6 @@ use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
-use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -70,20 +69,20 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
+            customer: (new Customer())
                 ->setCollectionLocation(CollectionLocation: '123456')
                 ->setCustomerCode(CustomerCode: 'DEVC')
                 ->setCustomerNumber(CustomerNumber: '11223344')
                 ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
             apiKey: new UsernameToken(Username: null, Password: 'test'),
@@ -113,9 +112,9 @@ class ConfirmingServiceSoapTest extends ServiceTestCase
         $message = new LabellingMessage();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildConfirmRequest(
-            confirming: Confirming::create()
+            confirming: (new Confirming())
                 ->setShipments(Shipments: [
-                    Shipment::create()
+                    (new Shipment())
                         ->setAddresses(Addresses: [
                             new Address(
                                 AddressType: '01',
@@ -442,7 +441,7 @@ xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var ConfirmingServiceSoapRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

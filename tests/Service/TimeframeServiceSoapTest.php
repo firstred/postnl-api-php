@@ -39,7 +39,6 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Soap\TimeframeServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use GuzzleHttp\Handler\MockHandler;
@@ -67,7 +66,7 @@ class TimeframeServiceSoapTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
+            customer: (new Customer())
                 ->setCollectionLocation(CollectionLocation: '123456')
                 ->setCustomerCode(CustomerCode: 'DEVC')
                 ->setCustomerNumber(CustomerNumber: '11223344')
@@ -84,8 +83,8 @@ class TimeframeServiceSoapTest extends ServiceTestCase
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
             apiKey: new UsernameToken(Username: null, Password: 'test'),
-            sandbox: false,
-            mode: PostNL::MODE_SOAP
+            sandbox: true,
+            mode: PostNL::MODE_SOAP,
         );
 
         global $logger;
@@ -267,7 +266,7 @@ XML
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var TimeframeServiceSoapRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

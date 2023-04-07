@@ -36,7 +36,6 @@ use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
@@ -199,7 +198,7 @@ class TimeframeServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var TimeframeServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

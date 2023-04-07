@@ -45,8 +45,8 @@ class EntityTest extends TestCase
     #[TestDox(text: 'have a working constructor')]
     public function testConstructors(): void
     {
-        foreach (scandir(directory: __DIR__ . '/../../src/Entity') as $entityName) {
-            if (in_array(needle: $entityName, haystack: ['.', '..', 'AbstractEntity.php']) || is_dir(filename: __DIR__ . "/../../src/Entity/$entityName")) {
+        foreach (scandir(directory: __DIR__.'/../../src/Entity') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..', 'AbstractEntity.php']) || is_dir(filename: __DIR__."/../../src/Entity/$entityName")) {
                 continue;
             }
 
@@ -56,8 +56,8 @@ class EntityTest extends TestCase
             $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Message') as $entityName) {
-            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Message/$entityName")) {
+        foreach (scandir(directory: __DIR__.'/../../src/Entity/Message') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__."/../../src/Entity/Message/$entityName")) {
                 continue;
             }
 
@@ -67,8 +67,8 @@ class EntityTest extends TestCase
             $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Request') as $entityName) {
-            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Request/$entityName")) {
+        foreach (scandir(directory: __DIR__.'/../../src/Entity/Request') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__."/../../src/Entity/Request/$entityName")) {
                 continue;
             }
 
@@ -78,8 +78,8 @@ class EntityTest extends TestCase
             $this->assertInstanceOf(expected: AbstractEntity::class, actual: $entity);
         }
 
-        foreach (scandir(directory: __DIR__ . '/../../src/Entity/Response') as $entityName) {
-            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__ . "/../../src/Entity/Response/$entityName")) {
+        foreach (scandir(directory: __DIR__.'/../../src/Entity/Response') as $entityName) {
+            if (in_array(needle: $entityName, haystack: ['.', '..']) || is_dir(filename: __DIR__."/../../src/Entity/Response/$entityName")) {
                 continue;
             }
 
@@ -96,7 +96,7 @@ class EntityTest extends TestCase
     {
         $this->expectException(exception: TypeError::class);
 
-        /** @noinspection PhpParamsInspection */
+        /* @noinspection PhpParamsInspection */
         (new Address())->setArea();
     }
 
@@ -115,7 +115,7 @@ class EntityTest extends TestCase
     {
         $this->expectException(exception: Error::class);
 
-        /** @noinspection PhpUndefinedMethodInspection */
+        /* @noinspection PhpUndefinedMethodInspection */
         $this->assertNull(actual: (new Address())->getNothing());
     }
 

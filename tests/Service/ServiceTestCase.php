@@ -64,7 +64,7 @@ abstract class ServiceTestCase extends TestCase
                     continue;
                 }
 
-                /** @noinspection PhpExpressionResultUnusedInspection */
+                /* @noinspection PhpExpressionResultUnusedInspection */
                 $property->setAccessible(accessible: true);
                 if (static::containsStdClass(value: $property->getValue(object: $value))) {
                     return true;

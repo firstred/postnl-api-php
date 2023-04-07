@@ -116,23 +116,18 @@ class LocationServiceRestTest extends ServiceTestCase
             getNearestLocations: (new GetNearestLocations())
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
-                ->setLocation(Location: Location::create(properties: [
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PG',
-                        'PGE',
-                    ],
-                    'OpeningTime'        => '09:00:00',
-                    'Options'            => [
-                        'Daytime',
-                    ],
-                    'City'               => 'Hoofddorp',
-                    'HouseNr'            => '42',
-                    'HouseNrExt'         => 'A',
-                    'Postalcode'         => '2132WT',
-                    'Street'             => 'Siriusdreef',
-                ]))
+                ->setLocation(Location: new Location(
+                    Postalcode: '2132WT',
+                    AllowSundaySorting: true,
+                    DeliveryDate: '29-06-2016',
+                    DeliveryOptions: ['PG', 'PGE'],
+                    OpeningTime: '09:00:00',
+                    Options: ['Daytime'],
+                    City: 'Hoofddorp',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    HouseNrExt: 'A',
+                ))
         );
 
         $query = Query::parse(str: $request->getUri()->getQuery());
@@ -168,23 +163,18 @@ class LocationServiceRestTest extends ServiceTestCase
 
         $response = $this->postnl->getNearestLocations(getNearestLocations: (new GetNearestLocations())
             ->setCountrycode(Countrycode: 'NL')
-            ->setLocation(Location: Location::create(properties: [
-                'AllowSundaySorting' => true,
-                'DeliveryDate'       => '29-06-2016',
-                'DeliveryOptions'    => [
-                    'PG',
-                    'PGE',
-                ],
-                'OpeningTime'        => '09:00:00',
-                'Options'            => [
-                    'Daytime',
-                ],
-                'City'               => 'Hoofddorp',
-                'HouseNr'            => '42',
-                'HouseNrExt'         => 'A',
-                'Postalcode'         => '2132WT',
-                'Street'             => 'Siriusdreef',
-            ])));
+            ->setLocation(Location: new Location(
+                Postalcode: '2132WT',
+                AllowSundaySorting: true,
+                DeliveryDate: '29-06-2016',
+                DeliveryOptions: ['PG', 'PGE'],
+                OpeningTime: '09:00:00',
+                Options: ['Daytime'],
+                City: 'Hoofddorp',
+                Street: 'Siriusdreef',
+                HouseNr: '42',
+                HouseNrExt: 'A',
+            )));
 
         $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $response);
         $this->assertInstanceOf(expected: ResponseLocation::class, actual: $response->getGetLocationsResult()->getResponseLocation()[0]);
@@ -216,23 +206,19 @@ class LocationServiceRestTest extends ServiceTestCase
                 ->setMessage(Message: $message)
                 ->setCountrycode(Countrycode: 'NL')
                 ->setLocation(Location: new Location(
-                    AllowSundaySorting   : true,
-                    DeliveryDate         : '29-06-2016',
-                    DeliveryOptions      : [
-                        'PG',
-                    ],
-                    OpeningTime          : '09:00:00',
-                    Options              : [
-                        'Daytime',
-                    ],
-                    CoordinatesNorthWest: CoordinatesNorthWest::create(properties: [
-                        'Latitude'  => '52.156439',
-                        'Longitude' => '5.015643',
-                    ]),
-                    CoordinatesSouthEast: CoordinatesSouthEast::create(properties: [
-                        'Latitude'  => '52.017473',
-                        'Longitude' => '5.065254',
-                    ]),
+                    AllowSundaySorting: true,
+                    DeliveryDate: '29-06-2016',
+                    DeliveryOptions: ['PG'],
+                    OpeningTime: '09:00:00',
+                    Options: ['Daytime'],
+                    CoordinatesNorthWest: new CoordinatesNorthWest(
+                        Latitude: '52.156439',
+                        Longitude: '5.015643',
+                    ),
+                    CoordinatesSouthEast: new CoordinatesSouthEast(
+                        Latitude: '52.017473',
+                        Longitude: '5.065254',
+                    ),
                 ))
         );
 
@@ -269,25 +255,21 @@ class LocationServiceRestTest extends ServiceTestCase
 
         $response = $this->postnl->getLocationsInArea(getLocationsInArea: (new GetLocationsInArea())
             ->setCountrycode(Countrycode: 'NL')
-            ->setLocation(Location: Location::create(properties: [
-                'AllowSundaySorting'   => true,
-                'DeliveryDate'         => '29-06-2016',
-                'DeliveryOptions'      => [
-                    'PG',
-                ],
-                'OpeningTime'          => '09:00:00',
-                'Options'              => [
-                    'Daytime',
-                ],
-                'CoordinatesNorthWest' => CoordinatesNorthWest::create(properties: [
-                    'Latitude'  => '52.156439',
-                    'Longitude' => '5.015643',
-                ]),
-                'CoordinatesSouthEast' => CoordinatesSouthEast::create(properties: [
-                    'Latitude'  => '52.017473',
-                    'Longitude' => '5.065254',
-                ]),
-            ])));
+            ->setLocation(Location: new Location(
+                AllowSundaySorting: true,
+                DeliveryDate: '29-06-2016',
+                DeliveryOptions: ['PG'],
+                OpeningTime: '09:00:00',
+                Options: ['Daytime'],
+                CoordinatesNorthWest: new CoordinatesNorthWest(
+                    Latitude: '52.156439',
+                    Longitude: '5.015643',
+                ),
+                CoordinatesSouthEast: new CoordinatesSouthEast(
+                    Latitude: '52.017473',
+                    Longitude: '5.065254',
+                ),
+            )));
 
         $this->assertInstanceOf(expected: GetLocationsInAreaResponse::class, actual: $response);
         $this->assertEquals(expected: 20, actual: count(value: (array) $response->getGetLocationsResult()->getResponseLocation()));
@@ -369,7 +351,6 @@ class LocationServiceRestTest extends ServiceTestCase
     /**
      * @return array[]
      */
-
     public function singleLocationProvider(): array
     {
         return [
@@ -382,7 +363,7 @@ class LocationServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var LocationServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

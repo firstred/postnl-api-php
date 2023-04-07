@@ -109,30 +109,30 @@ class ShippingServiceRestTest extends ServiceTestCase
         $message = new LabellingMessage();
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildSendShipmentRequest(
-            sendShipment: SendShipment::create()
+            sendShipment: (new SendShipment())
                 ->setShipments(Shipments: [
-                    Shipment::create()
+                    (new Shipment())
                         ->setAddresses(Addresses: [
-                            Address::create(properties: [
-                                'AddressType' => '01',
-                                'City'        => 'Utrecht',
-                                'Countrycode' => 'NL',
-                                'FirstName'   => 'Peter',
-                                'HouseNr'     => '9',
-                                'HouseNrExt'  => 'a bis',
-                                'Name'        => 'de Ruijter',
-                                'Street'      => 'Bilderdijkstraat',
-                                'Zipcode'     => '3521VA',
-                            ]),
-                            Address::create(properties: [
-                                'AddressType' => '02',
-                                'City'        => 'Hoofddorp',
-                                'CompanyName' => 'PostNL',
-                                'Countrycode' => 'NL',
-                                'HouseNr'     => '42',
-                                'Street'      => 'Siriusdreef',
-                                'Zipcode'     => '2132WT',
-                            ]),
+                            new Address(
+                                AddressType: '01',
+                                FirstName: 'Peter',
+                                Name: 'de Ruijter',
+                                Street: 'Bilderdijkstraat',
+                                HouseNr: '9',
+                                HouseNrExt: 'a bis',
+                                Zipcode: '3521VA',
+                                City: 'Utrecht',
+                                Countrycode: 'NL',
+                            ),
+                            new Address(
+                                AddressType: '02',
+                                CompanyName: 'PostNL',
+                                Street: 'Siriusdreef',
+                                HouseNr: '42',
+                                Zipcode: '2132WT',
+                                City: 'Hoofddorp',
+                                Countrycode: 'NL',
+                            ),
                         ])
                         ->setDeliveryAddress(DeliveryAddress: '01')
                         ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -234,26 +234,26 @@ class ShippingServiceRestTest extends ServiceTestCase
         $sentShipment = $this->postnl->sendShipment(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -281,26 +281,26 @@ class ShippingServiceRestTest extends ServiceTestCase
         $this->postnl->sendShipment(
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -357,52 +357,52 @@ class ShippingServiceRestTest extends ServiceTestCase
             shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -472,52 +472,52 @@ class ShippingServiceRestTest extends ServiceTestCase
             shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -587,52 +587,52 @@ class ShippingServiceRestTest extends ServiceTestCase
             shipments: [
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
                 ->setProductCodeDelivery(ProductCodeDelivery: '3085'),
             (new Shipment())
                 ->setAddresses(Addresses: [
-                    Address::create(properties: [
-                        'AddressType' => '01',
-                        'City'        => 'Utrecht',
-                        'Countrycode' => 'NL',
-                        'FirstName'   => 'Peter',
-                        'HouseNr'     => '9',
-                        'HouseNrExt'  => 'a bis',
-                        'Name'        => 'de Ruijter',
-                        'Street'      => 'Bilderdijkstraat',
-                        'Zipcode'     => '3521VA',
-                    ]),
-                    Address::create(properties: [
-                        'AddressType' => '02',
-                        'City'        => 'Hoofddorp',
-                        'CompanyName' => 'PostNL',
-                        'Countrycode' => 'NL',
-                        'HouseNr'     => '42',
-                        'Street'      => 'Siriusdreef',
-                        'Zipcode'     => '2132WT',
-                    ]),
+                    new Address(
+                        AddressType: '01',
+                        FirstName: 'Peter',
+                        Name: 'de Ruijter',
+                        Street: 'Bilderdijkstraat',
+                        HouseNr: '9',
+                        HouseNrExt: 'a bis',
+                        Zipcode: '3521VA',
+                        City: 'Utrecht',
+                        Countrycode: 'NL',
+                    ),
+                    new Address(
+                        AddressType: '02',
+                        CompanyName: 'PostNL',
+                        Street: 'Siriusdreef',
+                        HouseNr: '42',
+                        Zipcode: '2132WT',
+                        City: 'Hoofddorp',
+                        Countrycode: 'NL',
+                    ),
                 ])
                 ->setDeliveryAddress(DeliveryAddress: '01')
                 ->setDimension(Dimension: new Dimension(Weight: '2000'))
@@ -649,7 +649,7 @@ class ShippingServiceRestTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var ShippingServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

@@ -45,7 +45,6 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
-use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
@@ -81,20 +80,20 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
     public function setupPostNL(): void
     {
         $this->postnl = new PostNL(
-            customer: Customer::create()
+            customer: (new Customer())
                 ->setCollectionLocation(CollectionLocation: '123456')
                 ->setCustomerCode(CustomerCode: 'DEVC')
                 ->setCustomerNumber(CustomerNumber: '11223344')
                 ->setContactPerson(ContactPerson: 'Test')
-                ->setAddress(Address: Address::create(properties: [
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress(Address: new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ))
                 ->setGlobalPackBarcodeType(GlobalPackBarcodeType: 'AB')
                 ->setGlobalPackCustomerCode(GlobalPackCustomerCode: '1234'),
             apiKey: new UsernameToken(Username: null, Password: 'test'),
@@ -332,7 +331,7 @@ class ShippingStatusServiceSoapTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var ShippingStatusServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);

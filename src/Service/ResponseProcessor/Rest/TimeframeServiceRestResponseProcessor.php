@@ -123,10 +123,9 @@ class TimeframeServiceRestResponseProcessor extends AbstractRestResponseProcesso
             $body->Timeframes = [];
         }
 
-        $object = ResponseTimeframes::create();
-        $object->setReasonNoTimeframes(ReasonNoTimeframes: $body->ReasonNoTimeframes);
-        $object->setTimeframes(Timeframes: $body->Timeframes);
-
-        return $object;
+        return new ResponseTimeframes(
+            ReasonNoTimeframes: $body->ReasonNoTimeframes,
+            Timeframes: $body->Timeframes,
+        );
     }
 }

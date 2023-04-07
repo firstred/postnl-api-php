@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
@@ -111,9 +110,9 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $serie = $this->postnl->findBarcodeSerie(type: '3S', range: $range, eps: false);
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
-            generateBarcode: GenerateBarcode::create()
+            generateBarcode: (new GenerateBarcode())
                 ->setBarcode(
-                    Barcode: Barcode::create()
+                    Barcode: (new Barcode())
                         ->setRange(Range: $range)
                         ->setSerie(Serie: $serie)
                         ->setType(Type: $type)
@@ -149,9 +148,9 @@ class BarcodeServiceRestTest extends ServiceTestCase
         $serie = $this->postnl->findBarcodeSerie(type: $type, range: $range, eps: false);
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGenerateBarcodeRequest(
-            generateBarcode: GenerateBarcode::create()
+            generateBarcode: (new GenerateBarcode())
                 ->setBarcode(
-                    Barcode: Barcode::create()
+                    Barcode: (new Barcode())
                         ->setRange(Range: $range)
                         ->setSerie(Serie: $serie)
                         ->setType(Type: $type)
@@ -168,7 +167,7 @@ class BarcodeServiceRestTest extends ServiceTestCase
                 'CustomerNumber' => '11223344',
                 'Type'           => 'LA',
                 'Serie'          => '00000000-99999999',
-                'Range'          => '1234'
+                'Range'          => '1234',
             ],
             actual: $query
         );
@@ -267,13 +266,14 @@ class BarcodeServiceRestTest extends ServiceTestCase
 
     /**
      * @return BarcodeServiceRestRequestBuilder
+     *
      * @throws \ReflectionException
      */
     private function getRequestBuilder(): BarcodeServiceRestRequestBuilder
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /** @noinspection PhpExpressionResultUnusedInspection */
+        /* @noinspection PhpExpressionResultUnusedInspection */
         $requestBuilderReflection->setAccessible(accessible: true);
         /** @var BarcodeServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
