@@ -57,7 +57,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $UserNameToken)
+	.. php:method:: public __construct( $UserNameToken=null)
 	
 		.. rst-class:: phpdoc-description
 		

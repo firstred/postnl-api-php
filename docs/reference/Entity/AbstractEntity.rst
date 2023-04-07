@@ -76,7 +76,7 @@ Methods
 	
 	
 
-.. rst-class:: public static
+.. rst-class:: public static deprecated
 
 	.. php:method:: public static create( $properties=\[\])
 	
@@ -93,6 +93,7 @@ Methods
 		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use the constructor instead with named arguments
 	
 	
 

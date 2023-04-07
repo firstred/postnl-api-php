@@ -94,6 +94,7 @@ Methods
 * :php:meth:`public getLocation\($getLocation\)<Firstred\\PostNL\\PostNL::getLocation\(\)>`
 * :php:meth:`public findBarcodeSerie\($type, $range, $eps\)<Firstred\\PostNL\\PostNL::findBarcodeSerie\(\)>`
 * :php:meth:`private checkEnvironment\(\)<Firstred\\PostNL\\PostNL::checkEnvironment\(\)>`
+* :php:meth:`public static triggerDeprecation\($package, $version, $message, $args\)<Firstred\\PostNL\\PostNL::triggerDeprecation\(\)>`
 
 
 Constants
@@ -101,14 +102,17 @@ Constants
 
 .. php:const:: MODE_REST = 1
 
+	:Deprecated: 1.4.0 
 
 
 .. php:const:: MODE_SOAP = 2
 
+	:Deprecated: 1.4.0 
 
 
 .. php:const:: MODE_LEGACY = 2
 
+	:Deprecated: 1.4.0 
 
 
 Properties
@@ -261,7 +265,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $customer, $apiKey, $sandbox, $mode=self::MODE\_REST)
+	.. php:method:: public __construct( $customer, $apiKey, $sandbox, $mode=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -2548,6 +2552,47 @@ Methods
 		
 		
 		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: public static
+
+	.. php:method:: public static triggerDeprecation( $package, $version, $message, ...$args)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Triggers a silenced deprecation notice\.
+			
+			| Copyright \(c\) 2020\-present Fabien Potencier
+			| 
+			| Permission is hereby granted, free of charge, to any person obtaining a copy
+			| of this software and associated documentation files \(the "Software"\), to deal
+			| in the Software without restriction, including without limitation the rights
+			| to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+			| copies of the Software, and to permit persons to whom the Software is furnished
+			| to do so, subject to the following conditions:
+			| 
+			| The above copyright notice and this permission notice shall be included in all
+			| copies or substantial portions of the Software\.
+			| 
+			| THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+			| IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+			| FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL THE
+			| AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+			| LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+			| OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+			| THE SOFTWARE\.
+			
+		
+		
+		:Parameters:
+			* **$package** (string)  The name of the Composer package that is triggering the deprecation
+			* **$version** (string)  The version of the package that introduced the deprecation
+			* **$message** (string)  The message of the deprecation
+			* **...$args** (mixed)  Values to insert in the message using printf() formatting
+
+		
+		:Since: 1.4.0 
 	
 	
 

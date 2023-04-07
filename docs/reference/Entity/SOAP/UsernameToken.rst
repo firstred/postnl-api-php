@@ -56,7 +56,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Username, $Password)
+	.. php:method:: public __construct( $Username=null, $Password=null)
 	
 		.. rst-class:: phpdoc-description
 		
