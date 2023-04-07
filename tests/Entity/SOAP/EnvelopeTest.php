@@ -43,8 +43,8 @@ class EnvelopeTest extends TestCase
      */
     public function testHeader()
     {
-        $envelope = Envelope::create()
-            ->setHeader(Header::create())
+        $envelope = (new Envelope())
+            ->setHeader(new Header())
         ;
 
         $this->assertInstanceOf(Header::class, $envelope->getHeader());
@@ -55,8 +55,8 @@ class EnvelopeTest extends TestCase
      */
     public function testBody()
     {
-        $envelope = Envelope::create()
-            ->setBody(Body::create())
+        $envelope = (new Envelope())
+            ->setBody(new Body())
         ;
 
         $this->assertInstanceOf(Body::class, $envelope->getBody());

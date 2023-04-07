@@ -178,7 +178,7 @@ class GetDeliveryDateResponse extends AbstractEntity
             return $json;
         }
 
-        $getDeliveryDateResponse = self::create();
+        $getDeliveryDateResponse = new static();
         try {
             $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
         } catch (Exception $e) {

@@ -26,10 +26,6 @@
 
 namespace Firstred\PostNL\Tests\Misc;
 
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
- use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\CutOffTime;
@@ -42,9 +38,14 @@ use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\DummyLogger;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Class PostNLRestTest.
@@ -59,26 +60,25 @@ class PostNLRestTest extends TestCase
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
     public function setupPostNL()
     {
         $this->postnl = new PostNL(
-            Customer::create()
+            (new Customer())
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress((new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT')
+                )
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
@@ -99,24 +99,24 @@ class PostNLRestTest extends TestCase
      */
     public function testCustomer()
     {
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\Customer', $this->postnl->getCustomer());
+        $this->assertInstanceOf(Customer::class, $this->postnl->getCustomer());
     }
 
     /**
      * @testdox accepts a string token
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws
      */
     public function testSetTokenString()
     {
         $this->postnl->setToken('test');
-        $this->assertInstanceOf('\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken', $this->postnl->getToken());
+        $this->assertInstanceOf(UsernameToken::class, $this->postnl->getToken());
     }
 
     /**
      * @testdox accepts a token object
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws
      */
     public function testSetTokenObject()
     {
@@ -137,10 +137,7 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox returns a combinations of timeframes, locations and the delivery date
      *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\HttpClientException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
     public function testGetTimeframesAndLocations()
     {
@@ -350,36 +347,28 @@ class PostNLRestTest extends TestCase
                 ]),
             (new GetNearestLocations())
                 ->setCountrycode('NL')
-                ->setLocation(Location::create([
-                    'AllowSundaySorting' => true,
-                    'DeliveryDate'       => '29-06-2016',
-                    'DeliveryOptions'    => [
-                        'PGE',
-                    ],
-                    'OpeningTime' => '09:00:00',
-                    'Options'     => [
-                        'Daytime',
-                    ],
-                    'City'       => 'Hoofddorp',
-                    'HouseNr'    => '42',
-                    'HouseNrExt' => 'A',
-                    'Postalcode' => '2132WT',
-                    'Street'     => 'Siriusdreef',
-                ])),
+                ->setLocation((new Location())
+                    ->setAllowSundaySorting(true)
+                    ->setDeliveryDate('29-06-2016')
+                    ->setDeliveryOptions(['PGE'])
+                    ->setOpeningTime('09:00:00')
+                    ->setOptions(['Daytime'])
+                    ->setCity('Hoofddorp')
+                    ->setHouseNr('42')
+                    ->setHouseNrExt('A')
+                    ->setPostalcode('2132WT')
+                    ->setStreet('Siriusdreef')
+                ),
             (new GetDeliveryDate())
                 ->setGetDeliveryDate(
                     (new GetDeliveryDate())
                         ->setAllowSundaySorting(false)
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
-                        ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00'),
-                        ])
+                        ->setCutOffTimes([new CutOffTime('00', '14:00:00')])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
-                        ->setOptions([
-                            'Daytime',
-                        ])
+                        ->setOptions(['Daytime'])
                         ->setPostalCode('2132WT')
                         ->setShippingDate('29-06-2016 14:00:00')
                         ->setShippingDuration('1')
@@ -396,22 +385,23 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox does not accept an invalid token object
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws
      */
     public function testNegativeInvalidToken()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
+        /** @noinspection PhpParamsInspection */
         $this->postnl->setToken(new Address());
     }
 
     /**
      * @testdox returns `false` when the API key is missing
      *
-     * @throws \ReflectionException
+     * @throws
      */
     public function testNegativeKeyMissing()
     {
-        $reflection = new \ReflectionClass('\\Firstred\\PostNL\\PostNL');
+        $reflection = new \ReflectionClass(PostNL::class);
         /** @var PostNL $postnl */
         $postnl = $reflection->newInstanceWithoutConstructor();
 
@@ -421,11 +411,11 @@ class PostNLRestTest extends TestCase
     /**
      * @testdox throws an exception when setting an invalid mode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws
      */
     public function testNegativeInvalidMode()
     {
-        $this->expectException('\\Firstred\\PostNL\\Exception\\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
 
         $this->postnl->setMode('invalid');
     }

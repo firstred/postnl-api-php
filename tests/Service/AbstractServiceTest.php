@@ -45,8 +45,7 @@ class AbstractServiceTest extends ServiceTest
     /**
      * @testdox can get the response text from the value property
      *
-     * @throws ResponseException
-     * @throws HttpClientException
+     * @throws
      */
     public function testGetResponseTextFromArray()
     {
@@ -58,8 +57,7 @@ class AbstractServiceTest extends ServiceTest
     }
 
     /**
-     * @throws HttpClientException
-     * @throws ResponseException
+     * @throws
      */
     public function testGetResponseTextFromException()
     {
@@ -71,12 +69,7 @@ class AbstractServiceTest extends ServiceTest
     /**
      * @testdox can detect and throw a CifDownException (REST)
      *
-     * @throws CifDownException
-     * @throws CifException
-     * @throws HttpClientException
-     * @throws ResponseException
-     * @throws ApiException
-     * @throws InvalidConfigurationException
+     * @throws
      */
     public function testCifDownExceptionRest()
     {
@@ -92,11 +85,7 @@ class AbstractServiceTest extends ServiceTest
     /**
      * @testdox can detect and throw a CifException (REST)
      *
-     * @throws ApiException
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
-     * @throws HttpClientException
+     * @throws
      */
     public function testCifExceptionRest()
     {
@@ -120,8 +109,7 @@ class AbstractServiceTest extends ServiceTest
     /**
      * @testdox can detect and throw a CifDownException (SOAP)
      *
-     * @throws CifDownException
-     * @throws CifException
+     * @throws
      */
     public function testCifDownExceptionSoap()
     {

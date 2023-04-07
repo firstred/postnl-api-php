@@ -310,9 +310,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             $body->Timeframes = [];
         }
 
-        /** @var ResponseTimeframes $object */
-
-        $object = ResponseTimeframes::create();
+        $object = new ResponseTimeframes();
         $object->setReasonNoTimeframes($body->ReasonNoTimeframes);
         $object->setTimeframes($body->Timeframes);
         $this->setService($object);

@@ -30,6 +30,7 @@ use DateTimeInterface;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\UUID;
 use Firstred\PostNL\Util\XmlSerializable;
 use JsonSerializable;
@@ -80,9 +81,16 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use the constructor instead with named arguments
      */
     public static function create(array $properties = [])
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Using `AbstractEntity::create` is now deprecated. Call the constructor with named arguments instead.'
+        );
+
         if (__CLASS__ === get_called_class()) {
             throw new InvalidArgumentException('Invalid class given');
         }

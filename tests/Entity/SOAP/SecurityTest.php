@@ -42,9 +42,7 @@ class SecurityTest extends TestCase
      */
     public function testUsernameToken()
     {
-        $envelope = Security::create()
-            ->setUsernameToken(UsernameToken::create())
-        ;
+        $envelope = new Security(new UsernameToken());
 
         $this->assertInstanceOf(UsernameToken::class, $envelope->getUsernameToken());
     }

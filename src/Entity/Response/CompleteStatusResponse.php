@@ -120,7 +120,7 @@ class CompleteStatusResponse extends AbstractEntity
             $json->CompleteStatusResponse->Shipments = [$json->CompleteStatusResponse->Shipments];
         }
 
-        $completeStatusResponse = self::create();
+        $completeStatusResponse = new static();
         $shipments = [];
         if (!empty($json->CompleteStatusResponse->Shipments)) {
             foreach ($json->CompleteStatusResponse->Shipments as $shipment) {

@@ -190,8 +190,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             return parent::jsonDeserialize($json);
         }
 
-        /** @var OpeningHours $openingHours */
-        $openingHours = self::create();
+        $openingHours = new static();
         foreach (
             [
                 'Monday',

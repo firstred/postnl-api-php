@@ -86,7 +86,7 @@ class UsernameToken extends AbstractEntity
      * @param string|null $Username
      * @param string|null $Password Plaintext password
      */
-    public function __construct($Username, $Password)
+    public function __construct($Username = null, $Password = null)
     {
         parent::__construct();
 

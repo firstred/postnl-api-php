@@ -65,27 +65,25 @@ class DeliveryDateServiceSoapTest extends ServiceTest
     /**
      * @before
      *
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     * @throws NumberParseException
+     * @throws
      */
     public function setupPostNL()
     {
         $this->postnl = new PostNL(
-            Customer::create()
+            (new Customer())
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress((new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT')
+                )
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             false,
@@ -114,14 +112,10 @@ class DeliveryDateServiceSoapTest extends ServiceTest
                         ->setAllowSundaySorting('false')
                         ->setCity('Hoofddorp')
                         ->setCountryCode('NL')
-                        ->setCutOffTimes([
-                            new CutOffTime('00', '14:00:00'),
-                        ])
+                        ->setCutOffTimes([new CutOffTime('00', '14:00:00'),])
                         ->setHouseNr('42')
                         ->setHouseNrExt('A')
-                        ->setOptions([
-                            'Daytime',
-                        ])
+                        ->setOptions(['Daytime',])
                         ->setPostalCode('2132WT')
                         ->setShippingDate('29-06-2016 14:00:00')
                         ->setShippingDuration('1')

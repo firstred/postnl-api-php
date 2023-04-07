@@ -74,7 +74,7 @@ class Security extends AbstractEntity
      *
      * @param UsernameToken $UserNameToken
      */
-    public function __construct(UsernameToken $UserNameToken)
+    public function __construct(UsernameToken $UserNameToken = null)
     {
         parent::__construct();
 

@@ -62,26 +62,25 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @before
      *
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
-     * @throws \ReflectionException
+     * @throws
      */
     public function setupPostNL()
     {
         $this->postnl = new PostNL(
-            Customer::create()
+            (new Customer())
                 ->setCollectionLocation('123456')
                 ->setCustomerCode('DEVC')
                 ->setCustomerNumber('11223344')
                 ->setContactPerson('Test')
-                ->setAddress(Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]))
+                ->setAddress((new Address())
+                    ->setAddressType('02')
+                    ->setCity('Hoofddorp')
+                    ->setCompanyName('PostNL')
+                    ->setCountrycode('NL')
+                    ->setHouseNr('42')
+                    ->setStreet('Siriusdreef')
+                    ->setZipcode('2132WT')
+                )
                 ->setGlobalPackBarcodeType('AB')
                 ->setGlobalPackCustomerCode('1234'), new UsernameToken(null, 'test'),
             true,
@@ -107,8 +106,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox creates a valid 3S barcode request
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \ReflectionException
+     * @throws
      */
     public function testCreatesAValid3SBarcodeRequest()
     {
@@ -117,9 +115,9 @@ class BarcodeServiceRestTest extends ServiceTest
         $serie = $this->postnl->findBarcodeSerie('3S', $range, false);
 
         $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
-            GenerateBarcode::create()
+            (new GenerateBarcode())
                 ->setBarcode(
-                    Barcode::create()
+                    (new Barcode())
                         ->setRange($range)
                         ->setSerie($serie)
                         ->setType($type)
@@ -148,8 +146,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox creates a valid 10S barcode request
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \ReflectionException
+     * @throws
      */
     public function testCreatesAValid10SBarcodeRequest()
     {
@@ -158,9 +155,9 @@ class BarcodeServiceRestTest extends ServiceTest
         $serie = $this->postnl->findBarcodeSerie($type, $range, false);
 
         $this->lastRequest = $request = $this->service->buildGenerateBarcodeRequestREST(
-            GenerateBarcode::create()
+            (new GenerateBarcode())
                            ->setBarcode(
-                               Barcode::create()
+                               (new Barcode())
                                       ->setRange($range)
                                       ->setSerie($serie)
                                       ->setType($type)
@@ -203,7 +200,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws
      */
     public function testSingleBarcodeRest()
     {
@@ -240,8 +237,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox returns several barcodes
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
-     * @throws \Firstred\PostNL\Exception\InvalidConfigurationException
+     * @throws
      */
     public function testMultipleNLBarcodesRest()
     {
@@ -273,7 +269,7 @@ class BarcodeServiceRestTest extends ServiceTest
     /**
      * @testdox return a valid single barcode
      *
-     * @throws \Firstred\PostNL\Exception\InvalidBarcodeException
+     * @throws
      */
     public function testNegativeSingleBarcodeInvalidResponse()
     {
