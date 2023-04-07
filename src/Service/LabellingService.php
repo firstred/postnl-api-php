@@ -451,11 +451,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     {
         $xml = @simplexml_load_string(static::getResponseText($response));
         if (false === $xml) {
-            if (200 === $response->getStatusCode()) {
-                throw new ResponseException('Invalid API Response', null, null, $response);
-            } else {
-                throw new ResponseException('Invalid API Response');
-            }
+            throw new ResponseException('Invalid API Response', null, null, $response);
         }
 
         static::registerNamespaces($xml);

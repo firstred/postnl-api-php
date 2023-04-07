@@ -118,11 +118,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             return $object;
         }
 
-        if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API response', null, null, $response);
-        }
-
-        throw new NotFoundException('Unable to create shipment');
+        throw new ResponseException('Invalid API response', null, null, $response);
     }
 
     /**

@@ -36,7 +36,6 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\RequestInterface;
@@ -100,7 +99,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -113,11 +111,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             return $objects[0];
         }
 
-        if (200 === $response->getStatusCode()) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
-        }
-
-        throw new NotFoundException('Unable to confirm');
+        throw new ResponseException('Invalid API Response', null, null, $response);
     }
 
     /**
