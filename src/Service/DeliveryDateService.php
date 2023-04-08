@@ -44,6 +44,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -71,21 +72,28 @@ use const PHP_QUERY_RFC3986;
 class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '2.2';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/calculate/date';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date';
 
     // SOAP API
+    /** @internal */
     const SOAP_ACTION = 'http://postnl.nl/cif/services/DeliveryDateWebService/IDeliveryDateWebService/GetDeliveryDate';
+    /** @internal */
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/DeliveryDateWebService/';
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/DeliveryDateWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service.
      *
      * @var array
+     * @internal
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -114,7 +122,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getDeliveryDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
         $item = $this->retrieveCachedItem($getDeliveryDate->getId());
@@ -162,8 +173,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getDeliveryDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
         $item = $this->retrieveCachedItem($getDeliveryDate->getId());
@@ -212,7 +225,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getSentDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
         $item = $this->retrieveCachedItem($getSentDate->getId());
@@ -260,8 +276,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getSentDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
         $item = $this->retrieveCachedItem($getSentDate->getId());
@@ -301,7 +319,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -397,7 +418,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetDeliveryDateResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -421,7 +445,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate)
     {
         $soapAction = static::SOAP_ACTION;
@@ -470,7 +496,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response)
     {
         try {
@@ -510,7 +538,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -560,7 +591,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSentDateResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -584,7 +618,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate)
     {
         $soapAction = static::SOAP_ACTION;
@@ -635,7 +671,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSentDateResponseSOAP(ResponseInterface $response)
     {
         try {

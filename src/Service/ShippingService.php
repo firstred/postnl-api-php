@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -58,12 +59,16 @@ use const PHP_QUERY_RFC3986;
 class ShippingService extends AbstractService implements ShippingServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '1';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/v1/shipment';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/v1/shipment';
 
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/';
 
     /**
@@ -84,7 +89,10 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `sendShipment` instead
+     * @internal
      */
+    #[Deprecated]
     public function sendShipmentRest(SendShipment $sendShipment, $confirm = true)
     {
         $item = $this->retrieveCachedItem($sendShipment->getId());
@@ -128,7 +136,10 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @return RequestInterface
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -159,7 +170,10 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processSendShipmentResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));

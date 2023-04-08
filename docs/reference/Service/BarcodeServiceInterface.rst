@@ -42,7 +42,7 @@ Methods
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateBarcodeREST( $generateBarcode)
 	
@@ -83,10 +83,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateBarcode\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateBarcodesREST( $generateBarcodes)
 	
@@ -127,6 +128,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateBarcodes\` instead
 	
 	
 
@@ -162,7 +164,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`generateBarcode\` instead
 	
 	
 
@@ -202,7 +204,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGenerateBarcodeRequestREST( $generateBarcode)
 	
@@ -218,10 +220,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGenerateBarcodeResponseREST( $response)
 	
@@ -262,6 +265,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 

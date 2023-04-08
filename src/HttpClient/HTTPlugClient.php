@@ -42,6 +42,7 @@ use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\NotFoundException;
 use Http\Discovery\Psr18ClientDiscovery;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -296,6 +297,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * @deprecated Please instantiate a new client rather than using this singleton
      */
+    #[Deprecated('Please instantiate a new client rather than using this singleton')]
     public static function getInstance($client = null)
     {
         if (!static::$instance) {
@@ -312,6 +314,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * @deprecated
      */
+    #[Deprecated]
     public function setVerify($verify)
     {
         // Not supported by the HTTPlug client
@@ -324,6 +327,7 @@ class HTTPlugClient extends BaseHttpClient implements ClientInterface
      *
      * @deprecated
      */
+    #[Deprecated]
     public function getVerify()
     {
         return true;

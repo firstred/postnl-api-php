@@ -42,7 +42,7 @@ Methods
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public confirmShipmentREST( $confirming)
 	
@@ -107,10 +107,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`confirmShipment\`
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public confirmShipmentsREST( $confirms)
 	
@@ -162,6 +163,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Used \`confirmShipments\`
 	
 	
 
@@ -197,7 +199,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 use \`confirmShipment\`
 	
 	
 
@@ -233,11 +235,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`confirmShipments\`
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildConfirmRequestREST( $confirming)
 	
@@ -248,10 +250,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processConfirmResponseREST( $response)
 	
@@ -303,6 +306,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 

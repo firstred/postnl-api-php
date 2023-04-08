@@ -26,12 +26,15 @@
 
 namespace Firstred\PostNL\Exception;
 
+use JetBrains\PhpStorm\Deprecated;
+
 /**
  * Class InvalidApiModeException.
  *
  * @since 1.4.0
  * @deprecated 1.4.0 API modes will be removed in a future version
  */
+#[Deprecated]
 class InvalidApiModeException extends InvalidArgumentException
 {
 }

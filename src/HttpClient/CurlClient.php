@@ -32,6 +32,7 @@ use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -76,6 +77,7 @@ class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @deprecated Please instantiate a new client rather than using this singleton
      */
+    #[Deprecated('Please instantiate a new client rather than using this singleton')]
     public static function getInstance()
     {
         if (!static::$instance) {

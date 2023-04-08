@@ -36,6 +36,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\Service as XmlService;
@@ -56,22 +57,33 @@ use const PHP_QUERY_RFC3986;
  */
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
-    /** @var PostNL */
+    /**
+     * @var PostNL
+     * @internal
+     */
     protected $postnl;
 
+    /** @internal */
     const VERSION = '1.1';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v1_1/barcode';
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
 
+    /** @internal */
     const SOAP_ACTION = 'http://postnl.nl/cif/services/BarcodeWebService/IBarcodeWebService/GenerateBarcode';
+    /** @internal */
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
+    /** @internal */
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service.
      *
      * @var array
+     * @internal
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -97,7 +109,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateBarcode` instead
      */
+    #[Deprecated]
     public function generateBarcodeREST(GenerateBarcode $generateBarcode)
     {
         $response = $this->postnl
@@ -122,8 +136,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateBarcode` instead
      */
+    #[Deprecated]
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode)
     {
         return $this->processGenerateBarcodeResponseSOAP(
@@ -146,7 +161,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws \Firstred\PostNL\Exception\InvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateBarcodes` instead
      */
+    #[Deprecated]
     public function generateBarcodesREST(array $generateBarcodes)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -184,6 +201,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function generateBarcodesSOAP(array $generateBarcodes)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -212,7 +230,10 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -243,7 +264,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode)
     {
         $soapAction = static::SOAP_ACTION;
@@ -297,7 +320,10 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateBarcodeResponseREST(ResponseInterface $response)
     {
         static::validateRESTResponse($response);
@@ -325,7 +351,9 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response)
     {
         try {

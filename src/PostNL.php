@@ -85,6 +85,7 @@ use Firstred\PostNL\Factory\GuzzleStreamFactory;
 use Firstred\PostNL\Factory\RequestFactoryInterface as BackwardCompatibleRequestFactoryInterface;
 use Firstred\PostNL\Factory\ResponseFactoryInterface as BackwardCompatibleResponseFactoryInterface;
 use Firstred\PostNL\Factory\StreamFactoryInterface as BackwardCompatibleStreamFactoryInterface;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -153,10 +154,13 @@ use const E_USER_WARNING;
 class PostNL implements LoggerAwareInterface
 {
     /** @deprecated 1.4.0 */
+    #[Deprecated]
     const MODE_REST = 1;
     /** @deprecated 1.4.0 */
+    #[Deprecated]
     const MODE_SOAP = 2;
     /** @deprecated 1.4.0 */
+    #[Deprecated]
     const MODE_LEGACY = 2;
 
     /**
@@ -213,6 +217,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated
      */
+    #[Deprecated]
     public $verifySslCerts = true;
 
     /**
@@ -1010,8 +1015,22 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      */
-    public function generateBarcode($type = '3S', $range = null, $serie = null, $eps = false)
-    {
+    public function generateBarcode(
+        $type = '3S',
+        $range = null,
+        $serie = null,
+        /** @deprecated 1.4.0 */
+        #[Deprecated]
+        $eps = false
+    ) {
+        if ($eps) {
+            static::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '2.0.0',
+                'EPS is no longer supported. Please avoid.'
+            );
+        }
+
         if (2 !== strlen($type)) {
             throw new InvalidBarcodeException("Barcode type `$type` is invalid");
         }
@@ -1695,6 +1714,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated 1.2.0 Use the dedicated methods (get by phase and status are no longer working)
      */
+    #[Deprecated]
     public function getCurrentStatus($currentStatus)
     {
         if (null !== $currentStatus->getShipment()->getPhaseCode()) {
@@ -1920,6 +1940,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated 1.2.0 Use the dedicated getShippingStatus* methods (get by phase and status are no longer working)
      */
+    #[Deprecated]
     public function getCompleteStatus($completeStatus)
     {
         if (null !== $completeStatus->getShipment()->getPhaseCode()) {
@@ -1968,6 +1989,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @deprecated 1.2.0 Use the getSignature(s)By* alternatives
      */
+    #[Deprecated]
     public function getSignature(GetSignature $signature)
     {
         $signature->setCustomer($this->getCustomer());
@@ -2246,8 +2268,23 @@ class PostNL implements LoggerAwareInterface
      *
      * @since 1.0.0
      */
-    public function findBarcodeSerie($type, $range, $eps)
-    {
+    public function findBarcodeSerie(
+        $type,
+        $range,
+        /** @deprecated 1.4.0 */
+        #[Deprecated]
+        $eps = null
+    ) {
+        if (!is_bool($eps)) {
+            $eps = false;
+        } else {
+            static::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '2.0.0',
+                'EPS is no longer supported. Please avoid.'
+            );
+        }
+
         switch ($type) {
             case '2S':
                 $serie = '0000000-9999999';

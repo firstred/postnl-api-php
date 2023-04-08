@@ -38,6 +38,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -78,7 +79,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getNearestLocations` instead
+     * @internal
      */
+    #[Deprecated]
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations);
 
     /**
@@ -97,8 +101,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getNearestLocations` instead
+     * @internal
      */
+    #[Deprecated]
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations);
 
     /**
@@ -118,7 +124,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getLocationsInArea` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations);
 
     /**
@@ -137,8 +146,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getLocationsInArea` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations);
 
     /**
@@ -158,7 +169,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getLocation` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationREST(GetLocation $getLocation);
 
     /**
@@ -177,8 +191,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getLocation` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationSOAP(GetLocation $getLocation);
 
     /**
@@ -189,7 +205,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetNearestLocationsRequestREST(GetNearestLocations $getNearestLocations);
 
     /**
@@ -205,7 +224,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetNearestLocationsResponseREST($response);
 
     /**
@@ -217,7 +239,9 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations);
 
     /**
@@ -235,7 +259,9 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response);
 
     /**
@@ -246,7 +272,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations);
 
     /**
@@ -262,7 +291,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationsInAreaResponseREST($response);
 
     /**
@@ -274,7 +306,9 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations);
 
     /**
@@ -290,7 +324,9 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response);
 
     /**
@@ -301,7 +337,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationRequestREST(GetLocation $getLocation);
 
     /**
@@ -317,7 +356,10 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationResponseREST($response);
 
     /**
@@ -329,7 +371,9 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationRequestSOAP(GetLocation $getLocations);
 
     /**
@@ -347,6 +391,8 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationResponseSOAP(ResponseInterface $response);
 }

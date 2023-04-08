@@ -35,6 +35,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -70,7 +71,10 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true);
 
     /**
@@ -87,7 +91,10 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelsREST(array $generateLabels);
 
     /**
@@ -105,8 +112,10 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws HttpClientException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateLabels`
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true);
 
     /**
@@ -123,8 +132,10 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelsSOAP(array $generateLabels);
 
     /**
@@ -152,7 +163,10 @@ interface LabellingServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateLabelResponseREST($response);
 
     /**
@@ -165,7 +179,9 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true);
 
     /**
@@ -180,6 +196,8 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateLabelResponseSOAP(ResponseInterface $response);
 }

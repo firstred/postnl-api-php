@@ -41,6 +41,7 @@ use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Utils;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -158,6 +159,7 @@ class GuzzleClient extends BaseHttpClient implements ClientInterface, LoggerAwar
      *
      * @deprecated Please instantiate a new client rather than using this singleton
      */
+    #[Deprecated('Please instantiate a new client rather than using this singleton')]
     public static function getInstance()
     {
         if (!static::$instance) {

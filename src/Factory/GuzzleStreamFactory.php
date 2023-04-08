@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Factory;
 
 use GuzzleHttp\Psr7\Utils;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\StreamInterface;
 
 /**
@@ -35,6 +36,7 @@ use Psr\Http\Message\StreamInterface;
  * @since 1.2.0
  * @deprecated 1.4.0
  */
+#[Deprecated]
 final class GuzzleStreamFactory implements StreamFactoryInterface
 {
     /**

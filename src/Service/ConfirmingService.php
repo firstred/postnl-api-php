@@ -38,6 +38,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
@@ -174,6 +175,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function confirmShipmentSOAP(Confirming $confirming)
     {
         $response = $this->postnl->getHttpClient()->doRequest($this->buildConfirmRequestSOAP($confirming));
@@ -196,6 +198,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function confirmShipmentsSOAP(array $confirmings)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -287,6 +290,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function buildConfirmRequestSOAP(Confirming $confirming)
     {
         $soapAction = static::SOAP_ACTION;
@@ -339,6 +343,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function processConfirmResponseSOAP(ResponseInterface $response)
     {
         try {

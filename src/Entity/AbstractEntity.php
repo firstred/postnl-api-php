@@ -33,6 +33,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Util\UUID;
 use Firstred\PostNL\Util\XmlSerializable;
+use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
@@ -83,6 +84,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @since 1.0.0
      * @deprecated 1.4.0 Use the constructor instead with named arguments
      */
+    #[Deprecated]
     public static function create(array $properties = [])
     {
         PostNL::triggerDeprecation(

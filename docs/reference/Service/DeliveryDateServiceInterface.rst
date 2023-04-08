@@ -46,7 +46,7 @@ Methods
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getDeliveryDateREST( $getDeliveryDate)
 	
@@ -111,6 +111,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`getDeliveryDate\` instead
 	
 	
 
@@ -166,11 +167,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`getDeliveryDate\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getSentDateREST( $getSentDate)
 	
@@ -250,6 +251,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 USe \`getSentDate\` instead
 	
 	
 
@@ -309,7 +311,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGetDeliveryDateRequestREST( $getDeliveryDate)
 	
@@ -325,10 +327,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGetDeliveryDateResponseREST( $response)
 	
@@ -353,6 +356,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
@@ -407,7 +411,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGetSentDateRequestREST( $getSentDate)
 	
@@ -423,10 +427,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGetSentDateResponseREST( $response)
 	
@@ -458,6 +463,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 

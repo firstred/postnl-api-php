@@ -35,6 +35,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -67,6 +68,7 @@ class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareI
      *
      * @deprecated Please instantiate a new client rather than using this singleton
      */
+    #[Deprecated('Please instantiate a new client rather than using this singleton')]
     public static function getInstance()
     {
         if (!static::$instance) {

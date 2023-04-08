@@ -31,6 +31,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -129,6 +130,7 @@ class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, Logge
      *
      * @deprecated Please instantiate a new client rather than using this singleton
      */
+    #[Deprecated('Please instantiate a new client rather than using this singleton')]
     public static function getInstance()
     {
         if (!static::$instance) {

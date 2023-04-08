@@ -32,6 +32,7 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -62,7 +63,9 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateBarcode` instead
      */
+    #[Deprecated]
     public function generateBarcodeREST(GenerateBarcode $generateBarcode);
 
     /**
@@ -79,7 +82,9 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateBarcodes` instead
      */
+    #[Deprecated]
     public function generateBarcodesREST(array $generateBarcodes);
 
     /**
@@ -95,8 +100,9 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateBarcode` instead
      */
+    #[Deprecated]
     public function generateBarcodeSOAP(GenerateBarcode $generateBarcode);
 
     /**
@@ -114,6 +120,7 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function generateBarcodesSOAP(array $generateBarcodes);
 
     /**
@@ -124,7 +131,10 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateBarcodeRequestREST(GenerateBarcode $generateBarcode);
 
     /**
@@ -141,7 +151,10 @@ interface BarcodeServiceInterface extends ServiceInterface
      * @throws InvalidConfigurationException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateBarcodeResponseREST(ResponseInterface $response);
 
     /**
@@ -153,7 +166,9 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateBarcodeRequestSOAP(GenerateBarcode $generateBarcode);
 
     /**
@@ -170,6 +185,8 @@ interface BarcodeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateBarcodeResponseSOAP(ResponseInterface $response);
 }

@@ -35,6 +35,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -69,7 +70,10 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `sendShipment` instead
+     * @internal
      */
+    #[Deprecated]
     public function sendShipmentRest(SendShipment $sendShipment, $confirm = true);
 
     /**
@@ -79,7 +83,10 @@ interface ShippingServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildSendShipmentRequestREST(SendShipment $sendShipment, $confirm = true);
 
     /**
@@ -95,6 +102,9 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processSendShipmentResponseREST($response);
 }

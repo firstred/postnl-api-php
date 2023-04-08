@@ -29,6 +29,7 @@ namespace Firstred\PostNL\HttpClient;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -144,6 +145,7 @@ abstract class BaseHttpClient
      *
      * @deprecated
      */
+    #[Deprecated]
     public function getVerify()
     {
         return $this->verify;
@@ -158,6 +160,7 @@ abstract class BaseHttpClient
      *
      * @deprecated
      */
+    #[Deprecated]
     public function setVerify($verify)
     {
         $this->verify = $verify;

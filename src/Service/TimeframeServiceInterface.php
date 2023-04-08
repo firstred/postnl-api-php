@@ -35,6 +35,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -68,7 +69,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getTimeframes` instead
+     * @internal
      */
+    #[Deprecated]
     public function getTimeframesREST(GetTimeframes $getTimeframes);
 
     /**
@@ -86,8 +90,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getTimeframes` instead
+     * @internal
      */
+    #[Deprecated]
     public function getTimeframesSOAP(GetTimeframes $getTimeframes);
 
     /**
@@ -98,7 +104,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes);
 
     /**
@@ -114,7 +123,10 @@ interface TimeframeServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetTimeframesResponseREST($response);
 
     /**
@@ -126,7 +138,9 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes);
 
     /**
@@ -143,6 +157,8 @@ interface TimeframeServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetTimeframesResponseSOAP(ResponseInterface $response);
 }

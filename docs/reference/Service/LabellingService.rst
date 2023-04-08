@@ -93,7 +93,7 @@ Properties
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateLabelREST( $generateLabel, $confirm=true)
 	
@@ -174,10 +174,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateLabel\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateLabelsREST( $generateLabels)
 	
@@ -218,6 +219,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
@@ -263,7 +265,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
@@ -319,11 +321,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGenerateLabelRequestREST( $generateLabel, $confirm=true)
 	
@@ -340,6 +342,7 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 

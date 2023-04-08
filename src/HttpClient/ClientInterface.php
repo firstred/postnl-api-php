@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\HttpClient;
 
 use Firstred\PostNL\Exception\HttpClientException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -79,6 +80,7 @@ interface ClientInterface
      *
      * @deprecated
      */
+    #[Deprecated]
     public function setVerify($verify);
 
     /**
@@ -88,6 +90,7 @@ interface ClientInterface
      *
      * @deprecated
      */
+    #[Deprecated]
     public function getVerify();
 
     /**

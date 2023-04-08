@@ -26,12 +26,15 @@
 
 namespace Firstred\PostNL\Exception;
 
+use JetBrains\PhpStorm\Deprecated;
+
 /**
  * Class InvalidMessageTimestampException.
  *
  * @since 1.4.0
  * @deprecated 1.4.0 SOAP messages will be removed in a future version
  */
+#[Deprecated]
 class InvalidMessageTimeStampException extends InvalidArgumentException
 {
 }

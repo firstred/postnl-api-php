@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Factory;
 
 use GuzzleHttp\Psr7\Response;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -35,6 +36,7 @@ use Psr\Http\Message\ResponseInterface;
  * @since 1.2.0
  * @deprecated 1.4.0
  */
+#[Deprecated]
 final class GuzzleResponseFactory implements ResponseFactoryInterface
 {
     /**

@@ -30,6 +30,8 @@ Classes
 	ApiConnectionException <ApiConnectionException>
 	NotSupportedException <NotSupportedException>
 	ApiException <ApiException>
+	InvalidMessageTimeStampException <InvalidMessageTimeStampException>
+	InvalidApiModeException <InvalidApiModeException>
 	InvalidMethodException <InvalidMethodException>
 	ResponseException <ResponseException>
 	InvalidBarcodeException <InvalidBarcodeException>

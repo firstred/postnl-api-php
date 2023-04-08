@@ -40,6 +40,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -68,22 +69,30 @@ use const PHP_QUERY_RFC3986;
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '2.2';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_2/label';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/label';
 
     // SOAP API
+    /** @internal */
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabel';
+    /** @internal */
     const SOAP_ACTION_NO_CONFIRM = 'http://postnl.nl/cif/services/LabellingWebService/ILabellingWebService/GenerateLabelWithoutConfirm';
+    /** @internal */
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service.
      *
      * @var array
+     * @internal
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE     => 'soap',
@@ -95,6 +104,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         self::COMMON_NAMESPACE       => 'common',
     ];
 
+    /** @internal */
     private static $insuranceProductCodes =  [3534, 3544, 3087, 3094];
 
     /**
@@ -115,7 +125,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateLabel` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelREST(GenerateLabel $generateLabel, $confirm = true)
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
@@ -167,7 +180,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelsREST(array $generateLabels)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -227,8 +243,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws HttpClientException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
         $item = $this->retrieveCachedItem($generateLabel->getId());
@@ -273,8 +291,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `generateLabels` instead
+     * @internal
      */
+    #[Deprecated]
     public function generateLabelsSOAP(array $generateLabels)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -329,7 +349,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateLabelRequestREST(GenerateLabel $generateLabel, $confirm = true)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -366,7 +389,10 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecatd 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateLabelResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -391,7 +417,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGenerateLabelRequestSOAP(GenerateLabel $generateLabel, $confirm = true)
     {
         $soapAction = $confirm ? static::SOAP_ACTION : static::SOAP_ACTION_NO_CONFIRM;
@@ -446,7 +474,9 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {
         $xml = @simplexml_load_string(static::getResponseText($response));

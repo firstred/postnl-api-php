@@ -35,6 +35,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -67,7 +68,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `confirmShipment`
      */
+    #[Deprecated]
     public function confirmShipmentREST(Confirming $confirming);
 
     /**
@@ -85,7 +88,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Used `confirmShipments`
      */
+    #[Deprecated]
     public function confirmShipmentsREST(array $confirms);
 
     /**
@@ -101,8 +106,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 use `confirmShipment`
      */
+    #[Deprecated]
     public function confirmShipmentSOAP(Confirming $confirming);
 
     /**
@@ -118,8 +124,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `confirmShipments`
      */
+    #[Deprecated]
     public function confirmShipmentsSOAP(array $confirmings);
 
     /**
@@ -128,7 +135,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function buildConfirmRequestREST(Confirming $confirming);
 
     /**
@@ -146,7 +155,9 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function processConfirmResponseREST($response);
 
     /**
@@ -157,6 +168,7 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function buildConfirmRequestSOAP(Confirming $confirming);
 
     /**
@@ -174,5 +186,6 @@ interface ConfirmingServiceInterface extends ServiceInterface
      * @since 1.0.0
      * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function processConfirmResponseSOAP(ResponseInterface $response);
 }

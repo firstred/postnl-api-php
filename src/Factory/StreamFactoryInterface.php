@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Factory;
 
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\StreamInterface;
 use RuntimeException;
 
@@ -39,6 +40,7 @@ use RuntimeException;
  *
  * @deprecated 1.4.0
  */
+#[Deprecated]
 interface StreamFactoryInterface
 {
     /**

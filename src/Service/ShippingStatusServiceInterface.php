@@ -44,6 +44,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -67,7 +68,7 @@ use Psr\Http\Message\ResponseInterface;
  * @method RequestInterface                buildGetUpdatedShipmentsRequest(Customer $customer, DateTimeInterface|null $dateTimeFrom, DateTimeInterface|null $dateTimeTo)
  * @method UpdatedShipmentsResponse        processGetUpdatedShipmentsResponse(ResponseInterface $response)
  *
- * @since 1.2.0
+ * @since 1.0.0
  * @internal
  */
 interface ShippingStatusServiceInterface extends ServiceInterface
@@ -95,7 +96,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `currentStatus` instead
+     * @internal
      */
+    #[Deprecated]
     public function currentStatusREST($currentStatus);
 
     /**
@@ -112,7 +116,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `currentStatuses` instead
+     * @internal
      */
+    #[Deprecated]
     public function currentStatusesREST(array $currentStatuses);
 
     /**
@@ -137,7 +144,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `completeStatus` instead
+     * @internal
      */
+    #[Deprecated]
     public function completeStatusREST($completeStatus);
 
     /**
@@ -154,7 +164,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `completeStatuses` instead
+     * @internal
      */
+    #[Deprecated]
     public function completeStatusesREST(array $completeStatuses);
 
     /**
@@ -180,7 +193,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getSignature` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSignatureREST(GetSignature $getSignature);
 
     /**
@@ -197,7 +213,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `getSignatures` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSignaturesREST(array $getSignatures);
 
     /**
@@ -212,7 +231,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildCurrentStatusRequestREST($currentStatus);
 
     /**
@@ -228,7 +250,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processCurrentStatusResponseREST($response);
 
     /**
@@ -243,7 +268,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus);
 
     /**
@@ -259,7 +287,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processCompleteStatusResponseREST($response);
 
     /**
@@ -268,7 +299,12 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
-    */
+     *
+     * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
+     */
+    #[Deprecated]
     public function buildGetSignatureRequestREST(GetSignature $getSignature);
 
     /**
@@ -284,7 +320,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSignatureResponseREST($response);
 
     /**
@@ -306,7 +345,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws NotFoundException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function getUpdatedShipmentsREST(
         Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
@@ -323,7 +365,10 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetUpdatedShipmentsRequestREST(
         Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
@@ -343,6 +388,9 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetUpdatedShipmentsResponseREST(ResponseInterface $response);
 }

@@ -37,6 +37,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -72,7 +73,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getDeliveryDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate);
 
     /**
@@ -90,8 +94,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getDeliveryDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate);
 
     /**
@@ -111,7 +117,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 USe `getSentDate` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSentDateREST(GetSentDateRequest $getSentDate);
 
     /**
@@ -130,7 +139,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function getSentDateSOAP(GetSentDateRequest $getSentDate);
 
     /**
@@ -141,7 +152,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetDeliveryDateRequestREST(GetDeliveryDate $getDeliveryDate);
 
     /**
@@ -156,7 +170,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetDeliveryDateResponseREST($response);
 
     /**
@@ -168,7 +185,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetDeliveryDateRequestSOAP(GetDeliveryDate $getDeliveryDate);
 
     /**
@@ -183,7 +202,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetDeliveryDateResponseSOAP(ResponseInterface $response);
 
     /**
@@ -194,7 +215,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetSentDateRequestREST(GetSentDateRequest $getSentDate);
 
     /**
@@ -210,7 +234,10 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSentDateResponseREST($response);
 
     /**
@@ -222,7 +249,9 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetSentDateRequestSOAP(GetSentDateRequest $getSentDate);
 
     /**
@@ -239,6 +268,8 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSentDateResponseSOAP(ResponseInterface $response);
 }

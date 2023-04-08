@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\Factory;
 
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -38,6 +39,7 @@ use Psr\Http\Message\ResponseInterface;
  * @author Márk Sági-Kazár <mark.sagikazar@gmail.com>
  * @deprecated 1.4.0
  */
+#[Deprecated]
 interface ResponseFactoryInterface
 {
     /**

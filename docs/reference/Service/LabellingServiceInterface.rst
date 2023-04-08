@@ -42,7 +42,7 @@ Methods
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateLabelREST( $generateLabel, $confirm=true)
 	
@@ -123,10 +123,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public generateLabelsREST( $generateLabels)
 	
@@ -167,6 +168,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
@@ -212,7 +214,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\`
 	
 	
 
@@ -257,7 +259,7 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.0.0 
-		:Deprecated: 1.4.0 
+		:Deprecated: 1.4.0 Use \`generateLabels\` instead
 	
 	
 
@@ -281,7 +283,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGenerateLabelResponseREST( $response)
 	
@@ -313,6 +315,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 

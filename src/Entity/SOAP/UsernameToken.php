@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Entity\SOAP;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use JetBrains\PhpStorm\Deprecated;
 use Sabre\Xml\Writer;
 
 /**
@@ -40,6 +41,7 @@ use Sabre\Xml\Writer;
  * @since 1.0.0
  * @deprecated 1.4.0
  */
+#[Deprecated]
 class UsernameToken extends AbstractEntity
 {
     /** @var string[][] */

@@ -43,6 +43,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -65,21 +66,28 @@ use const PHP_QUERY_RFC3986;
 class TimeframeService extends AbstractService implements TimeframeServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '2.1';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/calculate/timeframes';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
 
     // SOAP API
+    /** @internal */
     const SOAP_ACTION = 'http://postnl.nl/cif/services/TimeframeWebService/ITimeframeWebService/GetTimeframes';
+    /** @internal */
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/TimeframeWebService/';
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/TimeframeWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service.
      *
      * @var array
+     * @internal
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -109,7 +117,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getTimeframes` instead
+     * @internal
      */
+    #[Deprecated]
     public function getTimeframesREST(GetTimeframes $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
@@ -157,8 +168,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getTimeframes` instead
+     * @internal
      */
+    #[Deprecated]
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
         $item = $this->retrieveCachedItem($getTimeframes->getId());
@@ -198,7 +211,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetTimeframesRequestREST(GetTimeframes $getTimeframes)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -257,7 +273,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetTimeframesResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -327,7 +346,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetTimeframesRequestSOAP(GetTimeframes $getTimeframes)
     {
         $soapAction = static::SOAP_ACTION;
@@ -378,7 +399,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetTimeframesResponseSOAP(ResponseInterface $response)
     {
         $xml = simplexml_load_string(static::getResponseText($response));

@@ -48,6 +48,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -81,12 +82,16 @@ use const PHP_QUERY_RFC3986;
 class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '2';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2/status';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/status';
 
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/';
 
     /**
@@ -117,7 +122,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `currentStatus` instead
+     * @internal
      */
+    #[Deprecated]
     public function currentStatusREST($currentStatus)
     {
         $item = $this->retrieveCachedItem($currentStatus->getId());
@@ -164,7 +172,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `currentStatuses` instead
+     * @internal
      */
+    #[Deprecated]
     public function currentStatusesREST(array $currentStatuses)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -231,7 +242,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `completeStatus` instead
+     * @internal
      */
+    #[Deprecated]
     public function completeStatusREST($completeStatus)
     {
         try {
@@ -282,7 +296,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `completeStatuses` instead
+     * @internal
      */
+    #[Deprecated]
     public function completeStatusesREST(array $completeStatuses)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -344,7 +361,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getSignature` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSignatureREST(GetSignature $getSignature)
     {
         $item = $this->retrieveCachedItem($getSignature->getId());
@@ -391,7 +411,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0 Use `getSignatures` instead
+     * @internal
      */
+    #[Deprecated]
     public function getSignaturesREST(array $getSignatures)
     {
         $httpClient = $this->postnl->getHttpClient();
@@ -448,7 +471,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildCurrentStatusRequestREST($currentStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -512,7 +538,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processCurrentStatusResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -537,7 +566,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildCompleteStatusRequestREST(CompleteStatus $completeStatus)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -607,7 +639,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processCompleteStatusResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -687,7 +722,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetSignatureRequestREST(GetSignature $getSignature)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -713,7 +751,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetSignatureResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -740,7 +781,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws NotFoundException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function getUpdatedShipmentsREST(
         Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
@@ -793,7 +837,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @return RequestInterface
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetUpdatedShipmentsRequestREST(
         Customer $customer,
         DateTimeInterface $dateTimeFrom = null,
@@ -827,7 +874,10 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws ResponseException
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetUpdatedShipmentsResponseREST(ResponseInterface $response)
     {
         $body = json_decode(static::getResponseText($response));

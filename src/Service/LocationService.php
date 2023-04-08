@@ -47,6 +47,7 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
@@ -75,22 +76,30 @@ use const PHP_QUERY_RFC3986;
 class LocationService extends AbstractService implements LocationServiceInterface
 {
     // API Version
+    /** @internal */
     const VERSION = '2.1';
 
     // Endpoints
+    /** @internal */
     const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v2_1/locations';
+    /** @internal */
     const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
 
     // SOAP API
+    /** @internal */
     const SOAP_ACTION = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetNearestLocations';
+    /** @internal */
     const SOAP_ACTION_LOCATIONS_IN_AREA = 'http://postnl.nl/cif/services/LocationWebService/ILocationWebService/GetLocationsInArea';
+    /** @internal */
     const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LocationWebService/';
+    /** @internal */
     const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LocationWebService/';
 
     /**
      * Namespaces uses for the SOAP version of this service.
      *
      * @var array
+     * @internal
      */
     public static $namespaces = [
         self::ENVELOPE_NAMESPACE                                    => 'soap',
@@ -120,7 +129,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getNearestLocations` instead
+     * @internal
      */
+    #[Deprecated]
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
@@ -169,8 +181,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getNearestLocations` instead
+     * @internal
      */
+    #[Deprecated]
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
@@ -219,7 +233,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getLocationsInArea` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
         $item = $this->retrieveCachedItem($getLocations->getId());
@@ -268,8 +285,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getLocationsInArea` instead
+     * @internal
      */
+    #[Deprecated]
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
         $item = $this->retrieveCachedItem($getNearestLocations->getId());
@@ -319,7 +338,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0 Use `getLocation`
+     * @internal
      */
+    #[Deprecated]
     public function getLocationREST(GetLocation $getLocation)
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
@@ -368,8 +390,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws NotFoundException
      *
      * @since 1.0.0
-     * @deprecated 1.4.0
+     * @deprecated 1.4.0 Use `getLocation`
+     * @internal
      */
+    #[Deprecated]
     public function getLocationSOAP(GetLocation $getLocation)
     {
         $item = $this->retrieveCachedItem($getLocation->getId());
@@ -409,7 +433,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetNearestLocationsRequestREST(GetNearestLocations $getNearestLocations)
     {
         $endpoint = '/nearest';
@@ -486,7 +513,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetNearestLocationsResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -507,7 +537,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetNearestLocationsRequestSOAP(GetNearestLocations $getLocations)
     {
         $soapAction = static::SOAP_ACTION;
@@ -559,7 +591,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
         $xml = simplexml_load_string(static::getResponseText($response));
@@ -603,7 +637,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationsInAreaRequestREST(GetLocationsInArea $getLocations)
     {
         $location = $getLocations->getLocation();
@@ -658,7 +695,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationsInAreaResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -681,7 +721,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationsInAreaRequestSOAP(GetLocationsInArea $getLocations)
     {
         $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
@@ -731,7 +773,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
         $xml = simplexml_load_string(static::getResponseText($response));
@@ -775,7 +819,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @return RequestInterface
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationRequestREST(GetLocation $getLocation)
     {
         $apiKey = $this->postnl->getRestApiKey();
@@ -809,7 +856,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PostNLInvalidArgumentException
      *
      * @since 1.0.0
+     * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationResponseREST($response)
     {
         $body = json_decode(static::getResponseText($response));
@@ -862,7 +912,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function buildGetLocationRequestSOAP(GetLocation $getLocations)
     {
         $soapAction = static::SOAP_ACTION_LOCATIONS_IN_AREA;
@@ -914,7 +966,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @since 1.0.0
      * @deprecated 1.4.0
+     * @internal
      */
+    #[Deprecated]
     public function processGetLocationResponseSOAP(ResponseInterface $response)
     {
         $xml = simplexml_load_string(static::getResponseText($response));

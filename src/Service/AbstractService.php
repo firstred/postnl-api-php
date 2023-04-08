@@ -57,15 +57,25 @@ use function is_array;
  */
 abstract class AbstractService
 {
-    /** @var array */
+    /**
+     * @var array
+     * @internal
+     */
     public static $namespaces = [];
 
-    /** @var PostNL */
+    /**
+     * @var PostNL
+     * @internal
+     */
     protected $postnl;
 
+    /** @internal */
     const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
+    /** @internal */
     const XML_SCHEMA_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
+    /** @internal */
     const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
+    /** @internal */
     const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
 
     /**
@@ -77,6 +87,7 @@ abstract class AbstractService
      * A `DateInterval` can be used as well to set the TTL
      *
      * @var int|DateTimeInterface|DateInterval|null
+     * @internal
      */
     public $ttl = null;
 
@@ -87,6 +98,7 @@ abstract class AbstractService
      * `null` disables the cache
      *
      * @var CacheItemPoolInterface|null
+     * @internal
      */
     public $cache = null;
 
@@ -113,6 +125,7 @@ abstract class AbstractService
      * @throws InvalidMethodException
      *
      * @since 1.0.0
+     * @internal
      */
     public function __call($name, $args)
     {
@@ -178,6 +191,7 @@ abstract class AbstractService
      * @param SimpleXMLElement $element
      *
      * @since 1.0.0
+     * @internal
      */
     public static function registerNamespaces(SimpleXMLElement $element)
     {
@@ -284,6 +298,7 @@ abstract class AbstractService
      * @throws CifException
      *
      * @since 1.0.0
+     * @internal
      */
     public static function validateSOAPResponse(SimpleXMLElement $xml)
     {

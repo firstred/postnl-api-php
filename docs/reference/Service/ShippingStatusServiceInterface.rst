@@ -49,7 +49,7 @@ Methods
 Methods
 -------
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public currentStatusREST( $currentStatus)
 	
@@ -135,10 +135,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`currentStatus\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public currentStatusesREST( $currentStatuses)
 	
@@ -179,10 +180,11 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 Use \`currentStatuses\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public completeStatusREST( $completeStatus)
 	
@@ -253,10 +255,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`completeStatus\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public completeStatusesREST( $completeStatuses)
 	
@@ -297,10 +300,11 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 Use \`completeStatuses\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getSignatureREST( $getSignature)
 	
@@ -386,10 +390,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 Use \`getSignature\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getSignaturesREST( $getSignatures)
 	
@@ -430,10 +435,11 @@ Methods
 		:Throws: :any:`\\Psr\\Cache\\InvalidArgumentException <Psr\\Cache\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 Use \`getSignatures\` instead
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildCurrentStatusRequestREST( $currentStatus)
 	
@@ -453,10 +459,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processCurrentStatusResponseREST( $response)
 	
@@ -488,10 +495,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildCompleteStatusRequestREST( $completeStatus)
 	
@@ -511,10 +519,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processCompleteStatusResponseREST( $response)
 	
@@ -546,10 +555,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGetSignatureRequestREST( $getSignature)
 	
@@ -564,10 +574,12 @@ Methods
 
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGetSignatureResponseREST( $response)
 	
@@ -599,10 +611,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getUpdatedShipmentsREST( $customer, $dateTimeFrom=null, $dateTimeTo=null)
 	
@@ -684,10 +697,11 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotFoundException <Firstred\\PostNL\\Exception\\NotFoundException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public buildGetUpdatedShipmentsRequestREST( $customer, $dateTimeFrom=null, $dateTimeTo=null)
 	
@@ -705,10 +719,11 @@ Methods
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public processGetUpdatedShipmentsResponseREST( $response)
 	
@@ -740,6 +755,7 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 
 	
 	
 

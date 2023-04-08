@@ -64,7 +64,7 @@ Methods
 			* **$MessageTimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
 
 		
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidMessageTimeStampException <Firstred\\PostNL\\Exception\\InvalidMessageTimeStampException>` 
 	
 	
 

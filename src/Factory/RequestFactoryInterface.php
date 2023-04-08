@@ -26,6 +26,7 @@
 
 namespace Firstred\PostNL\Factory;
 
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -39,6 +40,7 @@ use Psr\Http\Message\UriInterface;
  * @since 1.2.0
  * @deprecated 1.4.0
  */
+#[Deprecated]
 interface RequestFactoryInterface
 {
     /**

@@ -36,6 +36,7 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 use Sabre\Xml\Writer;
 
 /**
@@ -52,6 +53,7 @@ use Sabre\Xml\Writer;
  *
  * @deprecated 1.2.0
  */
+#[Deprecated]
 class CurrentStatusByPhase extends AbstractEntity
 {
     /**
