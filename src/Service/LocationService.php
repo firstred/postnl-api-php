@@ -173,7 +173,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -277,7 +276,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -382,7 +380,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -584,7 +581,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -602,7 +598,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException('Could not parse response', 0, $e);
+        }
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
                 if (false !== strpos($item['name'], 'DeliveryOptions')) {
@@ -766,7 +766,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -784,7 +783,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException('Could not parse response', 0, $e);
+        }
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
                 if (false !== strpos($item['name'], 'DeliveryOptions')) {
@@ -959,7 +962,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -977,7 +979,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
 
         $reader = new Reader();
         $reader->xml(static::getResponseText($response));
-        $array = array_values($reader->parse()['value'][0]['value']);
+        try {
+            $array = array_values($reader->parse()['value'][0]['value']);
+        } catch (LibXMLException $e) {
+            throw new ResponseException('Could not parse response', 0, $e);
+        }
         $array = $array[0];
 
         /** @var GetLocationsInAreaResponse $object */

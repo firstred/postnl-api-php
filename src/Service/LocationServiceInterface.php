@@ -94,7 +94,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -139,7 +138,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -184,7 +182,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
@@ -253,7 +250,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -318,7 +314,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
@@ -385,7 +380,6 @@ interface LocationServiceInterface extends ServiceInterface
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws LibXMLException
      * @throws ResponseException
      * @throws HttpClientException
      *
