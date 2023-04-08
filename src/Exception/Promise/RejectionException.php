@@ -48,6 +48,7 @@
 
 namespace Firstred\PostNL\Exception\Promise;
 
+use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
 use RuntimeException;
 
@@ -57,7 +58,9 @@ use RuntimeException;
  * The reason value is available via the getReason() method.
  *
  * @since 1.0.0
+ * @deprecated
  */
+#[Deprecated]
 class RejectionException extends RuntimeException
 {
     /** @var mixed Rejection reason. */

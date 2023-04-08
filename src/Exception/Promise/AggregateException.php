@@ -48,11 +48,15 @@
 
 namespace Firstred\PostNL\Exception\Promise;
 
+use JetBrains\PhpStorm\Deprecated;
+
 /**
  * Exception thrown when too many errors occur in the some() or any() methods.
  *
  * @since 1.0.0
+ * @deprecated
  */
+#[Deprecated]
 class AggregateException extends RejectionException
 {
     /**

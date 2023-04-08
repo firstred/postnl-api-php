@@ -48,11 +48,15 @@
 
 namespace Firstred\PostNL\Exception\Promise;
 
+use JetBrains\PhpStorm\Deprecated;
+
 /**
  * Exception that is set as the reason for a promise that has been cancelled.
  *
  * @since 1.0.0
+ * @deprecated
  */
+#[Deprecated]
 class CancellationException extends RejectionException
 {
 }
