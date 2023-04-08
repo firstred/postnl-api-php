@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Exception;
  * Class InvalidApiModeException.
  *
  * @since 1.4.0
+ * @deprecated 1.4.0 API modes will be removed in a future version
  */
 class InvalidApiModeException extends InvalidArgumentException
 {

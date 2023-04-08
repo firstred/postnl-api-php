@@ -30,6 +30,7 @@ namespace Firstred\PostNL\Exception;
  * Class InvalidMessageTimestampException.
  *
  * @since 1.4.0
+ * @deprecated 1.4.0 SOAP messages will be removed in a future version
  */
 class InvalidMessageTimeStampException extends InvalidArgumentException
 {
