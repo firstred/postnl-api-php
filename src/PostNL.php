@@ -67,13 +67,15 @@ use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidApiModeException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
+use Firstred\PostNL\Exception\InvalidMultiRequestException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotFoundException as PostNLNotFoundException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
@@ -117,7 +119,6 @@ use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\NotFoundException;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -304,7 +305,8 @@ class PostNL implements LoggerAwareInterface
      *                                       - `MODE_SOAP`: New SOAP API
      *                                       - `MODE_LEGACY`: Not supported anymore, converts to `MODE_SOAP`
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidApiModeException
+     * @throws InvalidConfigurationException
      */
     public function __construct(
         Customer $customer,
@@ -338,7 +340,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return PostNL
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -354,7 +356,7 @@ class PostNL implements LoggerAwareInterface
             return $this;
         }
 
-        throw new InvalidArgumentException('Invalid username/token');
+        throw new InvalidConfigurationException('Invalid username/token');
     }
 
     /**
@@ -464,7 +466,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return PostNL
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidApiModeException
      *
      * @since 1.0.0
      */
@@ -475,7 +477,7 @@ class PostNL implements LoggerAwareInterface
             static::MODE_SOAP,
             static::MODE_LEGACY,
         ])) {
-            throw new InvalidArgumentException('Mode not supported');
+            throw new InvalidApiModeException('Mode not supported');
         }
 
         if (in_array($mode, [static::MODE_SOAP, static::MODE_LEGACY])
@@ -532,7 +534,6 @@ class PostNL implements LoggerAwareInterface
                     if (HttpAsyncClientDiscovery::find()) {
                         $this->httpClient = new HTTPlugClient();
                     }
-                } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
@@ -546,7 +547,6 @@ class PostNL implements LoggerAwareInterface
                     if (Psr18ClientDiscovery::find()) {
                         $this->httpClient = new HTTPlugClient();
                     }
-                } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
@@ -560,7 +560,6 @@ class PostNL implements LoggerAwareInterface
                     if (HttpClientDiscovery::find()) {
                         $this->httpClient = new HTTPlugClient();
                     }
-                } catch (NotFoundException $e) {
                 } catch (\Http\Discovery\Exception\NotFoundException $e) {
                 } catch (NoCandidateFoundException $e) {
                 } catch (DiscoveryFailedException $e) {
@@ -1154,14 +1153,13 @@ class PostNL implements LoggerAwareInterface
      *
      * @return SendShipmentResponse
      *
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidMessageTimeStampException
      *
      * @since 1.2.0
      */
@@ -1176,7 +1174,8 @@ class PostNL implements LoggerAwareInterface
                 new LabellingMessage($printertype),
                 $this->customer
             ),
-            $confirm);
+            $confirm
+        );
     }
 
     /**
@@ -1224,13 +1223,13 @@ class PostNL implements LoggerAwareInterface
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws PdfReaderException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidMessageTimeStampException
      *
      * @since 1.2.0
      */
@@ -1399,8 +1398,8 @@ class PostNL implements LoggerAwareInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
+     * @throws InvalidMessageTimeStampException
      *
      * @since 1.0.0
      */
@@ -1461,16 +1460,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @return GenerateLabelResponse[]|string
      *
-     * @throws PostNLException
-     * @throws NotSupportedException
      * @throws CrossReferenceException
      * @throws FilterException
-     * @throws PdfParserException
-     * @throws PdfTypeException
-     * @throws PdfReaderException
      * @throws HttpClientException
+     * @throws InvalidMessageTimeStampException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws NotSupportedException
+     * @throws PdfParserException
+     * @throws PdfReaderException
+     * @throws PdfTypeException
+     * @throws PostNLException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1657,8 +1656,7 @@ class PostNL implements LoggerAwareInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -1690,9 +1688,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      *
@@ -1732,9 +1729,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      *
      * @since 1.2.0
      */
@@ -1774,7 +1770,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1820,7 +1815,6 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
@@ -1864,7 +1858,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1920,9 +1913,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws ResponseException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      *
@@ -2015,7 +2007,6 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -2111,10 +2102,10 @@ class PostNL implements LoggerAwareInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

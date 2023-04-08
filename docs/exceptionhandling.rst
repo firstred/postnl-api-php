@@ -9,7 +9,7 @@ on each other.
 
 .. code-block:: none
 
-    . \Exception
+    . Exception : Throwable
     ├── Firstred\PostNL\Exception\PostNLException
     │   ├── Firstred\PostNL\Exception\ApiException
     │   │   ├── Firstred\PostNL\Exception\ApiConnectionException
@@ -20,8 +20,10 @@ on each other.
     │   │   └── Firstred\PostNL\Exception\ShipmentNotFoundException
     │   ├── Firstred\PostNL\Exception\HttpClientException
     │   └── Firstred\PostNL\Exception\InvalidArgumentException
+    │       ├── Firstred\PostNL\Exception\InvalidApiModeException
     │       ├── Firstred\PostNL\Exception\InvalidBarcodeException
     │       ├── Firstred\PostNL\Exception\InvalidConfigurationException
+    │       ├── Firstred\PostNL\Exception\InvalidMessageTimeStampException
     │       ├── Firstred\PostNL\Exception\InvalidMethodException
     │       ├── Firstred\PostNL\Exception\NotImplementedException
     │       └── Firstred\PostNL\Exception\NotSupportedException

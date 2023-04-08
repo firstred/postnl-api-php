@@ -31,7 +31,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -93,7 +93,7 @@ class Message extends AbstractEntity
      * @param string|null                   $MessageID
      * @param string|DateTimeInterface|null $MessageTimeStamp
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidMessageTimeStampException
      */
     public function __construct($MessageID = null, $MessageTimeStamp = null)
     {
@@ -103,7 +103,7 @@ class Message extends AbstractEntity
         try {
             $this->setMessageTimeStamp($MessageTimeStamp ?: new DateTimeImmutable('NOW', new DateTimeZone('Europe/Amsterdam')));
         } catch (Exception $e) {
-            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            throw new InvalidMessageTimeStampException($e->getMessage(), 0, $e);
         }
     }
 
@@ -112,7 +112,7 @@ class Message extends AbstractEntity
      *
      * @return static
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidMessageTimeStampException
      *
      * @since 1.2.0
      */
@@ -122,7 +122,7 @@ class Message extends AbstractEntity
             try {
                 $MessageTimeStamp = new DateTimeImmutable($MessageTimeStamp, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidMessageTimeStampException($e->getMessage(), 0, $e);
             }
         }
 
