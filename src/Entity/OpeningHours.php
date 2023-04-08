@@ -28,7 +28,6 @@ namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -39,6 +38,7 @@ use Firstred\PostNL\Service\TimeframeService;
 use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
+use ReturnTypeWillChange;
 use stdClass;
 use function is_numeric;
 use function is_string;
@@ -180,7 +180,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @return OpeningHours
      *
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -273,7 +273,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         // Access as $openingHours['Monday']
@@ -285,11 +285,11 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @return mixed
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         // Always return an array when accessing this object as an array
@@ -314,7 +314,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if ($this->offsetExists($offset)) {
@@ -327,7 +327,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if ($this->offsetExists($offset)) {
@@ -339,11 +339,11 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @return mixed
      *
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         if (!$this->valid()) {
@@ -356,7 +356,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     /**
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next()
     {
         ++$this->currentDay;
@@ -366,11 +366,11 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @return string
      *
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return static::findCurrentDayString($this->currentDay);
@@ -381,7 +381,7 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      *
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         try {
@@ -389,15 +389,13 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
             return true;
         } catch (InvalidArgumentException $e) {
             return false;
-        } catch (NotSupportedException $e) {
-            return false;
         }
     }
 
     /**
      * @since 1.2.0
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         $this->currentDay = 0;

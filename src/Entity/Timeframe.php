@@ -30,14 +30,13 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
-use InvalidArgumentException;
 use Sabre\Xml\Writer;
 use function in_array;
 use function is_string;
@@ -221,7 +220,7 @@ class Timeframe extends AbstractEntity
      * @param Timeframe[]|null              $Timeframes
      * @param string|DateTimeInterface|null $StartDate
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         $City = null,
@@ -262,7 +261,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -272,7 +271,7 @@ class Timeframe extends AbstractEntity
             try {
                 $Date = new DateTimeImmutable($Date, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
@@ -286,7 +285,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -296,7 +295,7 @@ class Timeframe extends AbstractEntity
             try {
                 $StartDate = new DateTimeImmutable($StartDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
@@ -310,7 +309,7 @@ class Timeframe extends AbstractEntity
      *
      * @return static
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -320,7 +319,7 @@ class Timeframe extends AbstractEntity
             try {
                 $EndDate = new DateTimeImmutable($EndDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
@@ -389,15 +388,13 @@ class Timeframe extends AbstractEntity
                     }
                     $json['Timeframes'] = ['TimeframeTimeFrame' => $timeframes];
                 } elseif ('SundaySorting' === $propertyName) {
-                    if (isset($this->$propertyName)) {
-                        if (is_bool($this->$propertyName)) {
-                            $value = $this->$propertyName ? 'true' : 'false';
-                        } else {
-                            $value = $this->$propertyName;
-                        }
-
-                        $json[$propertyName] = $value;
+                    if (is_bool($this->$propertyName)) {
+                        $value = $this->$propertyName ? 'true' : 'false';
+                    } else {
+                        $value = $this->$propertyName;
                     }
+
+                    $json[$propertyName] = $value;
                 } else {
                     $json[$propertyName] = $this->$propertyName;
                 }

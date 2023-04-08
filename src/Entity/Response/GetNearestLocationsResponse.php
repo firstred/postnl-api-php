@@ -27,7 +27,7 @@
 namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -93,9 +93,9 @@ class GetNearestLocationsResponse extends AbstractEntity
     /**
      * @param stdClass $json
      *
-     * @return mixed|stdClass|null
+     * @return GetNearestLocationsResponse|stdClass|null
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws NotSupportedException
      *
      * @since 1.2.0

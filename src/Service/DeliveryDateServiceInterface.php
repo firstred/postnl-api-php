@@ -33,7 +33,7 @@ use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -68,7 +68,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws CifException
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      *
@@ -112,7 +112,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      *
@@ -167,7 +167,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      *
      * @throws ResponseException
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0
@@ -231,7 +231,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0

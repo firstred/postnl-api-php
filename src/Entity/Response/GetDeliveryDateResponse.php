@@ -31,14 +31,13 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
-use ReflectionException;
 use Sabre\Xml\Writer;
 use stdClass;
 use function is_array;
@@ -98,7 +97,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      * @param string|DateTimeInterface|null $DeliveryDate
      * @param string[]|null                 $Options
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($DeliveryDate = null, array $Options = null)
     {
@@ -113,7 +112,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      *
      * @return static
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -123,7 +122,7 @@ class GetDeliveryDateResponse extends AbstractEntity
             try {
                 $DeliveryDate = new DateTimeImmutable($DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
             } catch (Exception $e) {
-                throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException($e->getMessage(), 0, $e);
             }
         }
 
@@ -170,7 +169,7 @@ class GetDeliveryDateResponse extends AbstractEntity
      *
      * @return GetDeliveryDateResponse|object|stdClass|null
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function jsonDeserialize(stdClass $json)
     {
@@ -182,7 +181,7 @@ class GetDeliveryDateResponse extends AbstractEntity
         try {
             $getDeliveryDateResponse->DeliveryDate = new DateTimeImmutable($json->GetDeliveryDateResponse->DeliveryDate, new DateTimeZone('Europe/Amsterdam'));
         } catch (Exception $e) {
-            throw new PostNLInvalidArgumentException($e->getMessage(), 0, $e);
+            throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
         if (isset($json->GetDeliveryDateResponse->Options)) {
             if (!is_array($json->GetDeliveryDateResponse->Options)) {

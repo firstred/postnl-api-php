@@ -31,7 +31,7 @@ use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -67,7 +67,7 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      * @deprecated 1.4.0 Use `sendShipment` instead
@@ -99,7 +99,7 @@ interface ShippingServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      * @deprecated 1.4.0

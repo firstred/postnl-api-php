@@ -31,12 +31,11 @@ use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -86,7 +85,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      * @deprecated 1.4.0 Use `sendShipment` instead
@@ -167,7 +166,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      * @deprecated 1.4.0

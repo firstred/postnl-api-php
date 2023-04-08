@@ -41,12 +41,11 @@ use Firstred\PostNL\Entity\SOAP\Security;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -123,7 +122,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
@@ -229,7 +228,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws NotFoundException
      *
      * @since 1.0.0
@@ -333,7 +332,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -510,7 +509,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0
@@ -692,7 +691,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0
@@ -853,7 +852,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0

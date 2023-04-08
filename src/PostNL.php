@@ -70,7 +70,6 @@ use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\InvalidApiModeException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
-use Firstred\PostNL\Exception\InvalidMultiRequestException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
