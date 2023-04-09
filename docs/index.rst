@@ -13,12 +13,10 @@ These PHP API bindings aim to make it easier to connect to PostNL's CIF API, use
 
 - Follows PHP standards, some of them are:
 
-  - PSR-7 interfaces for requests and responses. Build and process functions are provided for every service so you can create your own mix of batch requests. See the `Firstred\\PostNL\\PostNL::getTimeframesAndNearestLocations <https://github.com/firstred/postnl-api-php/blob/b3f5c6e5a92edabb759ba32720b3fcb5a49635c0/src/PostNL.php#L2076-L2158>`_ method for an example.
-    
-  - PSR-6 caching, so you can use your favorite cache for caching API responses. Chapter :ref:`caching`.
-    
   - PSR-3 logging. You can log the requests and responses for debugging purposes. More info on the page :ref:`logging`.
 
+  - PSR-7 interfaces for requests and responses. Build and process functions are provided for every service so you can create your own mix of batch requests. See the `Firstred\\PostNL\\PostNL::getTimeframesAndNearestLocations <https://github.com/firstred/postnl-api-php/blob/b3f5c6e5a92edabb759ba32720b3fcb5a49635c0/src/PostNL.php#L2076-L2158>`_ method for an example.
+    
   - PSR-18 HTTP Clients or HTTPlug clients.
 
 - Framework agnostic. You can use this library with any framework.
