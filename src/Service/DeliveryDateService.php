@@ -505,9 +505,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -518,7 +518,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         $array = $array[0];
 
@@ -680,9 +680,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -693,7 +693,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         $array = $array[0];
 

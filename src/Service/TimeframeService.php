@@ -410,9 +410,9 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -423,7 +423,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         foreach ($array[0]['value'][1]['value'] as &$timeframes) {
             foreach ($timeframes['value'] as &$item) {

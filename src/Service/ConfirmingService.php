@@ -351,9 +351,9 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', $e->getCode(), $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -364,7 +364,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         try {
             $array = array_values($reader->parse()['value'][0]['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         $array = $array[0];
 

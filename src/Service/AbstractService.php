@@ -221,7 +221,7 @@ abstract class AbstractService
         if (json_last_error() !== JSON_ERROR_NONE) {
             $previous = new JsonException(json_last_error_msg(), json_last_error());
 
-            throw new ResponseException($previous->getMessage(), $previous->getCode(), $previous, $response);
+            throw new ResponseException('Could not parse response', 0, $previous, $response);
         }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {

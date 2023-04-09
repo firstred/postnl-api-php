@@ -598,9 +598,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -611,7 +611,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException('Could not parse response', 0, $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
@@ -791,9 +791,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -804,7 +804,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException('Could not parse response', 0, $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         foreach ($array[0]['value'][0]['value'] as &$responseLocation) {
             foreach ($responseLocation['value'] as &$item) {
@@ -995,9 +995,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         } catch (HttpClientException $e) {
             throw $e;
         } catch (ResponseException $e) {
-            throw $e;
+            throw new ResponseException($e->getMessage(), 0, $e, $response);
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
 
         static::registerNamespaces($xml);
@@ -1008,7 +1008,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         try {
             $array = array_values($reader->parse()['value'][0]['value']);
         } catch (LibXMLException $e) {
-            throw new ResponseException('Could not parse response', 0, $e);
+            throw new ResponseException('Could not parse response', 0, $e, $response);
         }
         $array = $array[0];
 
