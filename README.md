@@ -72,23 +72,23 @@ use Firstred\PostNL\Entity\Dimension;
 
 require_once __DIR__.'/vendor/autoload.php';
 
-$customer = Customer::create([
-    'CollectionLocation' => '123456',
-    'CustomerCode'       => 'DEVC',
-    'CustomerNumber'     => '11223344',
-    'ContactPerson'      => 'Peter',
-    'Address'            => Address::create([
-        'AddressType' => '02',
-        'City'        => 'Hoofddorp',
-        'CompanyName' => 'PostNL',
-        'Countrycode' => 'NL',
-        'HouseNr'     => '42',
-        'Street'      => 'Siriusdreef',
-        'Zipcode'     => '2132WT',
-    ]),
-    'Email'              => 'info@voorbeeld.nl',
-    'Name'               => 'Michael',
-]);
+$customer = (new Customer())
+    ->setCollectionLocation('123456')
+    ->setCustomerCode('DEVC')
+    ->setCustomerNumber('11223344')
+    ->setContactPerson('Peter')
+    ->setAddress((new Address())
+        ->setAddressType('02')
+        ->setCity('Hoofddorp')
+        ->setCompanyName('PostNL')
+        ->setCountrycode('NL')
+        ->setHouseNr('42')
+        ->setStreet('Siriusdreef')
+        ->setZipcode('2132WT')
+    )
+    ->setEmail('info@voorbeeld.nl')
+    ->setName('Michael')
+;
 
 $apikey = 'YOUR_API_KEY_HERE';
 $sandbox = false;
@@ -97,24 +97,23 @@ $postnl = new PostNL($customer, $apikey, $sandbox);
 
 $barcode = $postnl->generateBarcodeByCountryCode('NL');
 
-$shipment = Shipment::create([
-    'Addresses'           => [
-        Address::create([
-            'AddressType' => '01',
-            'City'        => 'Utrecht',
-            'Countrycode' => 'NL',
-            'FirstName'   => 'Peter',
-            'HouseNr'     => '9',
-            'HouseNrExt'  => 'a bis',
-            'Name'        => 'de Ruijter',
-            'Street'      => 'Bilderdijkstraat',
-            'Zipcode'     => '3521VA',
-        ]),
-    ],
-    'Barcode'             => $barcode,
-    'Dimension'           => new Dimension(/* weight */ '2000'),
-    'ProductCodeDelivery' => '3085',
-]);
+$shipment = (new Shipment())
+    ->setAddresses([
+        (new Address())
+            ->setAddressType('01')
+            ->setCity('Utrecht')
+            ->setCountrycode('NL')
+            ->setFirstName('Peter')
+            ->setHouseNr('9')
+            ->setHouseNrExt('a bis')
+            ->setName('de Ruijter')
+            ->setStreet('Bilderdijkstraat')
+            ->setZipcode('3521VA'),
+    ])
+    ->setBarcode($barcode)
+    ->setDimension(new Dimension(/* weight */ '2000'))
+    ->setProductCodeDelivery('3085')
+;
 
 header('Content-Type: application/pdf');
 header('Content-Disposition: attachment; filename="label.pdf"');
