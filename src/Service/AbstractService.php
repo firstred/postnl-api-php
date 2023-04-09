@@ -39,6 +39,7 @@ use Firstred\PostNL\Exception\InvalidMethodException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
 use GuzzleHttp\Psr7\Response;
+use JsonException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -217,6 +218,11 @@ abstract class AbstractService
     public static function validateRESTResponse($response)
     {
         $body = json_decode(static::getResponseText($response));
+        if ($errorMsg = json_last_error_msg()) {
+            $previous = new JsonException($errorMsg, json_last_error());
+
+            throw new ResponseException($errorMsg, json_last_error_msg(), $previous, $response);
+        }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
             throw new InvalidConfigurationException('Invalid Api Key');
@@ -228,36 +234,36 @@ abstract class AbstractService
 
         if (!empty($body->Errors->Error)) {
             $exceptionData = [];
-            foreach ($body->Errors->Error as $error) {
-                if (isset($error->ErrorMsg)) {
+            foreach ($body->Errors->Error as $errorMsg) {
+                if (isset($errorMsg->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
-                        'message'     => isset($error->ErrorMsg) ? $error->ErrorMsg : '',
-                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                        'description' => $errorMsg->ErrorMsg,
+                        'message'     => $errorMsg->ErrorMsg,
+                        'code'        => isset($errorMsg->ErrorNumber) ? (int) $errorMsg->ErrorNumber : 0,
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error->Description) ? (string) $error->Description : null,
-                        'message'     => isset($error->ErrorMsg) ? (string) $error->ErrorMsg : null,
-                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                        'description' => isset($errorMsg->Description) ? (string) $errorMsg->Description : null,
+                        'message'     => null,
+                        'code'        => isset($errorMsg->ErrorNumber) ? (int) $errorMsg->ErrorNumber : 0,
                     ];
                 }
             }
             throw new CifException($exceptionData);
         } elseif (!empty($body->Errors)) {
             $exceptionData = [];
-            foreach ($body->Errors as $error) {
-                if (isset($error->ErrorMsg)) {
+            foreach ($body->Errors as $errorMsg) {
+                if (isset($errorMsg->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => $error->ErrorMsg,
-                        'message'     => $error->ErrorMsg,
-                        'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
+                        'description' => $errorMsg->ErrorMsg,
+                        'message'     => $errorMsg->ErrorMsg,
+                        'code'        => isset($errorMsg->ErrorNumber) ? (int) $errorMsg->ErrorNumber : 0,
                     ];
                 } else {
                     $exceptionData[] = [
-                        'description' => isset($error->Description) ? (string) $error->Description : null,
-                        'message'     => isset($error->Error) ? (string) $error->Error : null,
-                        'code'        => isset($error->Code) ? (int) $error->Code : 0,
+                        'description' => isset($errorMsg->Description) ? (string) $errorMsg->Description : null,
+                        'message'     => isset($errorMsg->Error) ? (string) $errorMsg->Error : null,
+                        'code'        => isset($errorMsg->Code) ? (int) $errorMsg->Code : 0,
                     ];
                 }
             }
@@ -276,12 +282,12 @@ abstract class AbstractService
             && is_array($body->ResponseShipments[0]->Errors)
             && !empty($body->ResponseShipments[0]->Errors)
         ) {
-            $error = $body->ResponseShipments[0]->Errors[0];
+            $errorMsg = $body->ResponseShipments[0]->Errors[0];
 
             $exceptionData = [[
-                'message'     => isset($error->message) ? (string) $error->message : null,
-                'description' => isset($error->description) ? (string) $error->description : null,
-                'code'        => isset($error->code) ? (int) $error->code : 0,
+                'message'     => isset($errorMsg->message) ? (string) $errorMsg->message : null,
+                'description' => isset($errorMsg->description) ? (string) $errorMsg->description : null,
+                'code'        => isset($errorMsg->code) ? (int) $errorMsg->code : 0,
             ]];
             throw new CifException($exceptionData);
         }

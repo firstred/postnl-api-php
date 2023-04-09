@@ -353,7 +353,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         } catch (ResponseException $e) {
             throw $e;
         } catch (Exception $e) {
-            throw new ResponseException($e->getMessage(), $e->getCode(), $e);
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
         }
 
         static::registerNamespaces($xml);

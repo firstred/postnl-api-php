@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Coordinates;
@@ -54,6 +55,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -591,7 +593,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function processGetNearestLocationsResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -776,7 +786,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function processGetLocationsInAreaResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);
@@ -972,7 +990,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function processGetLocationResponseSOAP(ResponseInterface $response)
     {
-        $xml = simplexml_load_string(static::getResponseText($response));
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
+        }
 
         static::registerNamespaces($xml);
         static::validateSOAPResponse($xml);

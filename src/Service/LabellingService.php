@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Service;
 
 use DateTimeImmutable;
+use Exception;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
@@ -48,6 +49,7 @@ use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
 use Sabre\Xml\Reader;
 use Sabre\Xml\Service as XmlService;
+use SimpleXMLElement;
 use function http_build_query;
 use function in_array;
 use function json_encode;
@@ -478,9 +480,14 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     #[Deprecated]
     public function processGenerateLabelResponseSOAP(ResponseInterface $response)
     {
-        $xml = @simplexml_load_string(static::getResponseText($response));
-        if (false === $xml) {
-            throw new ResponseException('Invalid API Response', null, null, $response);
+        try {
+            $xml = new SimpleXMLElement(static::getResponseText($response));
+        } catch (HttpClientException $e) {
+            throw $e;
+        } catch (ResponseException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new ResponseException($e->getMessage(), $e->getCode(), $e, $response);
         }
 
         static::registerNamespaces($xml);
