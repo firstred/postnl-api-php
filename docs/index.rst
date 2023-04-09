@@ -13,8 +13,6 @@ These API bindings make it easy to connect to PostNL's CIF API, used for retriev
 
   - PSR-7 interfaces for requests and responses. Build and process functions are provided so you can create your own mix of batch requests.
     
-  - PSR-6 caching, so you can use your favorite cache for caching API responses.
-    
   - PSR-3 logging. You can log the requests and responses for debugging purposes.
     
 - Framework agnostic. You can use this library with any framework.
