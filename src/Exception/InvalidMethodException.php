@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class InvalidMethodException.
  *
+ * Thrown when an invalid method is called.
+ *
  * @since 1.0.0
  */
 class InvalidMethodException extends HttpClientException

@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class CifException.
  *
+ * Thrown when the CIF API has a fatal error.
+ *
  * @since 1.0.0
  */
 class CifException extends ApiException

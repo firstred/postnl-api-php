@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class InvalidBarcodeException.
  *
+ * Thrown when an invalid barcode has been passed.
+ *
  * @since 1.0.0
  */
 class InvalidBarcodeException extends InvalidArgumentException

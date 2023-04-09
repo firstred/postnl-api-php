@@ -26,11 +26,17 @@
 
 namespace Firstred\PostNL\Exception;
 
+use JetBrains\PhpStorm\Deprecated;
+
 /**
  * Class InvalidArgumentException.
  *
+ * Thrown when a `Shipment` object could not be found.
+ *
  * @since 1.2.0
+ * @deprecated 1.4.0 Use `NotFoundException`
  */
-class ShipmentNotFoundException extends ApiException
+#[Deprecated]
+class ShipmentNotFoundException extends NotFoundException
 {
 }

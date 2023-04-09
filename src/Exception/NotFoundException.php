@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class NotFoundException.
  *
+ * Thrown when (a) requested object(s) could not be found.
+ *
  * @since 1.2.0
  */
 class NotFoundException extends ApiException

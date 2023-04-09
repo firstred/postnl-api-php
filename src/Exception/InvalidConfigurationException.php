@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class InvalidConfigurationException.
  *
+ * Thrown when there is a configuration error.
+ *
  * @since 1.0.0
  */
 class InvalidConfigurationException extends InvalidArgumentException

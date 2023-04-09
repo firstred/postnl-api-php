@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class NotSupportedException
  *
+ * Thrown when a feature is not supported (anymore).
+ *
  * @since 1.0.0
  */
 class NotSupportedException extends InvalidArgumentException

@@ -31,6 +31,8 @@ use JetBrains\PhpStorm\Deprecated;
 /**
  * Class InvalidApiModeException.
  *
+ * Thrown when an invalid API mode has been selected.
+ *
  * @since 1.4.0
  * @deprecated 1.4.0 API modes will be removed in a future version
  */

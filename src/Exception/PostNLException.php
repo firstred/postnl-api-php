@@ -31,6 +31,8 @@ use Exception;
 /**
  * Class AbstractException
  *
+ * Group of exceptions that can be thrown by this library.
+ *
  * @since 1.0.0
  */
 abstract class PostNLException extends Exception

@@ -29,6 +29,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class NotImplementedException.
  *
+ * Thrown when a feature is not implemented (yet).
+ *
  * @since 1.0.0
  */
 class NotImplementedException extends InvalidArgumentException
