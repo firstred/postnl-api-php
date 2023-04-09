@@ -1,4 +1,4 @@
-.gitignore/ export-ignore
+.gitignore export-ignore
 .idea/ export-ignore
 docs/ export-ignore
 tests/ export-ignore
