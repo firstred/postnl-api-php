@@ -218,10 +218,10 @@ abstract class AbstractService
     public static function validateRESTResponse($response)
     {
         $body = json_decode(static::getResponseText($response));
-        if ($errorMsg = json_last_error_msg()) {
-            $previous = new JsonException($errorMsg, json_last_error());
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $previous = new JsonException(json_last_error_msg(), json_last_error());
 
-            throw new ResponseException($errorMsg, json_last_error_msg(), $previous, $response);
+            throw new ResponseException($previous->getMessage(), $previous->getCode(), $previous, $response);
         }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
