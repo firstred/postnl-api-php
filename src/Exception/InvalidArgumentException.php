@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class InvalidArgumentException.
  *
+ * Group of exceptions that are the result of an invalid passed argument.
+ *
  * @since 1.0.0
  */
 class InvalidArgumentException extends PostNLException

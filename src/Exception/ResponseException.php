@@ -35,6 +35,8 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Class ResponseException.
  *
+ * Thrown when there was a problem with the response returned by the CIF API.
+ *
  * @since 1.0.0
  */
 class ResponseException extends ApiException

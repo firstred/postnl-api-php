@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class ApiConnectionException.
  *
+ * Thrown when there is a problem connecting to the CIF API.
+ *
  * @since 1.0.0
  */
 class ApiConnectionException extends ApiException

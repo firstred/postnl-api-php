@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class ApiException.
  *
+ * Group of API exceptions.
+ *
  * @since 1.0.0
  */
 class ApiException extends PostNLException

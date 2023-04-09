@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Exception;
 /**
  * Class CifDownException.
  *
+ * Thrown when the CIF API is down.
+ *
  * @since 1.0.0
  */
 class CifDownException extends ApiException

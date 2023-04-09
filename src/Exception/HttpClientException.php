@@ -33,6 +33,10 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
+ * Class HttpClientException.
+ *
+ * Thrown when the HTTP Client has an error.
+ *
  * @since 1.0.0
  */
 class HttpClientException extends PostNLException

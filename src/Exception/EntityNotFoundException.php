@@ -29,6 +29,17 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Exception;
 
-class EntityNotFoundException extends PostNLException
+use JetBrains\PhpStorm\Deprecated;
+
+/**
+ * Class InvalidMessageTimestampException.
+ *
+ * Thrown when the timestamp of a `Message` entity is invalid.
+ *
+ * @since 1.4.0
+ * @deprecated 1.4.0 SOAP messages will be removed in a future version
+ */
+#[Deprecated]
+class InvalidMessageTimeStampException extends InvalidArgumentException
 {
 }
