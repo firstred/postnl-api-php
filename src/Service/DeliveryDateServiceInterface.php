@@ -38,7 +38,6 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -70,7 +69,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getDeliveryDate` instead
@@ -91,7 +89,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getDeliveryDate` instead
@@ -114,7 +111,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 USe `getSentDate` instead
@@ -135,7 +131,6 @@ interface DeliveryDateServiceInterface extends ServiceInterface
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0

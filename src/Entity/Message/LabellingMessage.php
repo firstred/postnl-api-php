@@ -27,7 +27,6 @@
 namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;

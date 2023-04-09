@@ -45,7 +45,6 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -91,7 +90,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
      *
@@ -112,7 +110,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -160,7 +157,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -186,7 +182,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -209,7 +204,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -338,7 +332,6 @@ interface ShippingStatusServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotSupportedException
      * @throws InvalidArgumentException

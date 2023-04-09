@@ -46,11 +46,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function json_decode;
@@ -116,7 +112,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
      *
@@ -127,30 +122,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     #[Deprecated]
     public function currentStatusREST($currentStatus)
     {
-        $item = $this->retrieveCachedItem($currentStatus->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestREST($currentStatus));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildCurrentStatusRequestREST($currentStatus));
+        static::validateRESTResponse($response);
 
         $object = $this->processCurrentStatusResponseREST($response);
         if ($object instanceof CurrentStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -167,7 +143,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -181,14 +156,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $responses = [];
         foreach ($currentStatuses as $index => $currentStatus) {
-            $item = $this->retrieveCachedItem($index);
-            $response = null;
-            if ($item instanceof CacheItemInterface && $item->isHit()) {
-                $response = $item->get();
-                $response = PsrMessage::parseResponse($response);
-                $responses[$index] = $response;
-            }
-
             $httpClient->addOrUpdateRequest(
                 $index,
                 $this->buildCurrentStatusRequestREST($currentStatus)
@@ -196,20 +163,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof ResponseInterface
-                && 200 === $newResponse->getStatusCode()
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(PsrMessage::toString($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
 
         $currentStatusResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
@@ -247,34 +200,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     #[Deprecated]
     public function completeStatusREST($completeStatus)
     {
-        try {
-            $item = $this->retrieveCachedItem($completeStatus->getId());
-        } catch (PsrCacheInvalidArgumentException $e) {
-            $item = null;
-        }
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestREST($completeStatus));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildCompleteStatusRequestREST($completeStatus));
+        static::validateRESTResponse($response);
 
         $object = $this->processCompleteStatusResponseREST($response);
         if ($object instanceof CompleteStatusResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -291,7 +221,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -305,14 +234,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $responses = [];
         foreach ($completeStatuses as $index => $completeStatus) {
-            $item = $this->retrieveCachedItem($index);
-            $response = null;
-            if ($item instanceof CacheItemInterface && $item->isHit()) {
-                $response = $item->get();
-                $response = PsrMessage::parseResponse($response);
-                $responses[$index] = $response;
-            }
-
             $httpClient->addOrUpdateRequest(
                 $index,
                 $this->buildCompleteStatusRequestREST($completeStatus)
@@ -320,20 +241,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof ResponseInterface
-                && 200 === $newResponse->getStatusCode()
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(PsrMessage::toString($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
 
         $completeStatusResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
@@ -353,7 +260,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -366,30 +272,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     #[Deprecated]
     public function getSignatureREST(GetSignature $getSignature)
     {
-        $item = $this->retrieveCachedItem($getSignature->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSignatureRequestREST($getSignature));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetSignatureResponseREST($response);
         if ($object instanceof GetSignatureResponseSignature) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -406,7 +293,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
      * @since 1.2.0
@@ -420,14 +306,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $responses = [];
         foreach ($getSignatures as $index => $getsignature) {
-            $item = $this->retrieveCachedItem($index);
-            $response = null;
-            if ($item instanceof CacheItemInterface && $item->isHit()) {
-                $response = $item->get();
-                $response = PsrMessage::parseResponse($response);
-                $responses[$index] = $response;
-            }
-
             $httpClient->addOrUpdateRequest(
                 $index,
                 $this->buildGetSignatureRequestREST($getsignature)
@@ -435,20 +313,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            if ($newResponse instanceof ResponseInterface
-                && 200 === $newResponse->getStatusCode()
-            ) {
-                $item = $this->retrieveCachedItem($uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(PsrMessage::toString($newResponse));
-                    $this->cache->saveDeferred($item);
-                }
-            }
-        }
-        if ($this->cache instanceof CacheItemPoolInterface) {
-            $this->cache->commit();
-        }
 
         $signatureResponses = [];
         foreach ($responses + $newResponses as $uuid => $response) {
@@ -773,7 +637,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -796,30 +659,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         $dateTimeFromString = $dateTimeFrom ? $dateTimeFrom->format('YmdHis') : '';
         $dateTimeToString = $dateTimeTo ? $dateTimeTo->format('YmdHis') : '';
 
-        $item = $this->retrieveCachedItem("{$customer->getCustomerNumber()}-$dateTimeFromString-$dateTimeToString");
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetUpdatedShipmentsRequestREST($customer, $dateTimeFrom, $dateTimeTo));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetUpdatedShipmentsRequestREST($customer, $dateTimeFrom, $dateTimeTo));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetUpdatedShipmentsResponseREST($response);
         if (is_array($object) && !empty($object) && $object[0] instanceof UpdatedShipmentsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 

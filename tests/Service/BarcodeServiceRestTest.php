@@ -91,8 +91,6 @@ class BarcodeServiceRestTest extends ServiceTest
         $this->postnl->setLogger($logger);
 
         $this->service = $this->postnl->getBarcodeService();
-        $this->service->setCache(new VoidCachePool());
-        $this->service->setTtl(1);
     }
 
     /**

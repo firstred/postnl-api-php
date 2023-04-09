@@ -41,7 +41,6 @@ use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
-use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
@@ -49,33 +48,34 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
+use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
-use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\SOAP\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidApiModeException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
-use Firstred\PostNL\Exception\PostNLException;
-use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\InvalidMessageTimeStampException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
+use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\Factory\GuzzleRequestFactory;
@@ -84,10 +84,6 @@ use Firstred\PostNL\Factory\GuzzleStreamFactory;
 use Firstred\PostNL\Factory\RequestFactoryInterface as BackwardCompatibleRequestFactoryInterface;
 use Firstred\PostNL\Factory\ResponseFactoryInterface as BackwardCompatibleResponseFactoryInterface;
 use Firstred\PostNL\Factory\StreamFactoryInterface as BackwardCompatibleStreamFactoryInterface;
-use JetBrains\PhpStorm\Deprecated;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 use Firstred\PostNL\HttpClient\ClientInterface;
 use Firstred\PostNL\HttpClient\CurlClient;
 use Firstred\PostNL\HttpClient\GuzzleClient;
@@ -112,7 +108,6 @@ use Firstred\PostNL\Util\DummyLogger;
 use Firstred\PostNL\Util\RFPdi;
 use Firstred\PostNL\Util\Util;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use GuzzleHttp\Psr7\Response;
 use Http\Discovery\Exception\ClassInstantiationFailedException;
 use Http\Discovery\Exception\DiscoveryFailedException;
@@ -120,8 +115,11 @@ use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use Psr\Cache\CacheItemInterface;
+use JetBrains\PhpStorm\Deprecated;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Sabre\Xml\Version;
@@ -2136,19 +2134,6 @@ class PostNL implements LoggerAwareInterface
         GetDeliveryDate $getDeliveryDate
     ) {
         $results = [];
-        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem($getTimeframes->getId());
-        if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
-            $results['timeframes'] = PsrMessage::parseResponse($itemTimeframe->get());
-        }
-        $itemLocation = $this->getLocationService()->retrieveCachedItem($getNearestLocations->getId());
-        if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
-            $results['locations'] = PsrMessage::parseResponse($itemLocation->get());
-        }
-        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem($getDeliveryDate->getId());
-        if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
-            $results['delivery_date'] = PsrMessage::parseResponse($itemDeliveryDate->get());
-        }
-
         $this->getHttpClient()->addOrUpdateRequest(
             'timeframes',
             $this->getTimeframeService()->buildGetTimeframesRequest($getTimeframes)
@@ -2187,31 +2172,16 @@ class PostNL implements LoggerAwareInterface
                             TimeframeService::validateRESTResponse($response);
                         }
 
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(PsrMessage::toString($response));
-                            $this->getTimeframeService()->cacheItem($itemTimeframe);
-                        }
-
                         break;
                     case 'locations':
                         if (static::MODE_REST === $this->getMode()) {
                             LocationService::validateRESTResponse($response);
                         }
 
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(PsrMessage::toString($response));
-                            $this->getLocationService()->cacheItem($itemLocation);
-                        }
-
                         break;
                     case 'delivery_date':
                         if (static::MODE_REST === $this->getMode()) {
                             DeliveryDateService::validateRESTResponse($response);
-                        }
-
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(PsrMessage::toString($response));
-                            $this->getDeliveryDateService()->cacheItem($itemDeliveryDate);
                         }
 
                         break;

@@ -46,10 +46,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
@@ -125,7 +122,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
      *
@@ -136,30 +132,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getNearestLocationsREST(GetNearestLocations $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestREST($getNearestLocations));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestREST($getNearestLocations));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetNearestLocationsResponseREST($response);
         if ($object instanceof GetNearestLocationsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -176,7 +153,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -187,29 +163,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getNearestLocationsSOAP(GetNearestLocations $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestSOAP($getNearestLocations));
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetNearestLocationsRequestSOAP($getNearestLocations));
 
         $object = $this->processGetNearestLocationsResponseSOAP($response);
         if ($object instanceof GetNearestLocationsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -226,7 +183,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -239,30 +195,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getLocationsInAreaREST(GetLocationsInArea $getLocations)
     {
-        $item = $this->retrieveCachedItem($getLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequest($getLocations));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequest($getLocations));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetLocationsInAreaResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -279,7 +216,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -290,30 +226,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getLocationsInAreaSOAP(GetLocationsInArea $getNearestLocations)
     {
-        $item = $this->retrieveCachedItem($getNearestLocations->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequestSOAP($getNearestLocations));
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationsInAreaRequestSOAP($getNearestLocations));
 
         $object = $this->processGetLocationsInAreaResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -330,7 +246,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      * @throws HttpClientException
@@ -343,30 +258,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getLocationREST(GetLocation $getLocation)
     {
-        $item = $this->retrieveCachedItem($getLocation->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestREST($getLocation));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestREST($getLocation));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetLocationResponseREST($response);
         if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -383,7 +279,6 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -394,29 +289,10 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     #[Deprecated]
     public function getLocationSOAP(GetLocation $getLocation)
     {
-        $item = $this->retrieveCachedItem($getLocation->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestSOAP($getLocation));
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetLocationRequestSOAP($getLocation));
 
         $object = $this->processGetLocationResponseSOAP($response);
         if ($object instanceof GetLocationsInAreaResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 

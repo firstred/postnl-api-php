@@ -42,10 +42,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
@@ -118,7 +115,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      * @throws InvalidArgumentException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getDeliveryDate` instead
@@ -127,30 +123,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     #[Deprecated]
     public function getDeliveryDateREST(GetDeliveryDate $getDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestREST($getDeliveryDate));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestREST($getDeliveryDate));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetDeliveryDateResponseREST($response);
         if ($object instanceof GetDeliveryDateResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -169,7 +146,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getDeliveryDate` instead
@@ -178,29 +154,9 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     #[Deprecated]
     public function getDeliveryDateSOAP(GetDeliveryDate $getDeliveryDate)
     {
-        $item = $this->retrieveCachedItem($getDeliveryDate->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestSOAP($getDeliveryDate));
-        }
-
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetDeliveryDateRequestSOAP($getDeliveryDate));
         $object = $this->processGetDeliveryDateResponseSOAP($response);
         if ($object instanceof GetDeliveryDateResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -221,7 +177,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getSentDate` instead
@@ -230,30 +185,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     #[Deprecated]
     public function getSentDateREST(GetSentDateRequest $getSentDate)
     {
-        $item = $this->retrieveCachedItem($getSentDate->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestREST($getSentDate));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestREST($getSentDate));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetSentDateResponseREST($response);
         if ($object instanceof GetSentDateResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -272,7 +208,6 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws HttpClientException
      * @throws NotFoundException
-     * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.0.0
      * @deprecated 1.4.0 Use `getSentDate` instead
@@ -281,29 +216,10 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     #[Deprecated]
     public function getSentDateSOAP(GetSentDateRequest $getSentDate)
     {
-        $item = $this->retrieveCachedItem($getSentDate->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestSOAP($getSentDate));
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetSentDateRequestSOAP($getSentDate));
 
         $object = $this->processGetSentDateResponseSOAP($response);
         if ($object instanceof GetSentDateResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 

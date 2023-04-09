@@ -39,6 +39,7 @@ use Firstred\PostNL\Exception\InvalidMethodException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\PostNL;
 use GuzzleHttp\Psr7\Response;
+use JetBrains\PhpStorm\Deprecated;
 use JsonException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -89,7 +90,9 @@ abstract class AbstractService
      *
      * @var int|DateTimeInterface|DateInterval|null
      * @internal
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public $ttl = null;
 
     /**
@@ -100,7 +103,9 @@ abstract class AbstractService
      *
      * @var CacheItemPoolInterface|null
      * @internal
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public $cache = null;
 
     /**
@@ -110,10 +115,14 @@ abstract class AbstractService
      * @param CacheItemPoolInterface|null             $cache
      * @param int|DateTimeInterface|DateInterval|null $ttl
      */
-    public function __construct($postnl, $cache = null, $ttl = null)
-    {
+    public function __construct(
+        $postnl,
+        #[Deprecated]
+        $cache = null,
+        #[Deprecated]
+        $ttl = null
+    ) {
         $this->postnl = $postnl;
-        $this->cache = $cache;
         $this->ttl = $ttl;
     }
 
@@ -384,23 +393,13 @@ abstract class AbstractService
      */
     public function retrieveCachedItem($uuid)
     {
-        // An integer cache key means it should not be cached
-        if (!is_string($uuid)) {
-            return null;
-        }
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
 
-        $reflection = new ReflectionClass($this);
-        $uuid .= (PostNL::MODE_REST === $this->postnl->getMode()
-            || $this instanceof ShippingServiceInterface
-            || $this instanceof ShippingStatusServiceInterface
-        ) ? 'rest' : 'soap';
-        $uuid .= strtolower(substr($reflection->getShortName(), 0, strlen($reflection->getShortName()) - 7));
-        $item = null;
-        if ($this->cache instanceof CacheItemPoolInterface && !is_null($this->ttl)) {
-            $item = $this->cache->getItem($uuid);
-        }
-
-        return $item;
+        return null;
     }
 
     /**
@@ -412,19 +411,11 @@ abstract class AbstractService
      */
     public function cacheItem(CacheItemInterface $item)
     {
-        if ($this->ttl instanceof DateInterval || is_int($this->ttl)) {
-            // Reset expires at first -- it might have been set
-            $item->expiresAt(null);
-            // Then set the interval
-            $item->expiresAfter($this->ttl);
-        } else {
-            // Reset expires after first -- it might have been set
-            $item->expiresAfter(null);
-            // Then set the expiration time
-            $item->expiresAt($this->ttl);
-        }
-
-        $this->cache->save($item);
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
     }
 
     /**
@@ -438,7 +429,11 @@ abstract class AbstractService
      */
     public function removeCachedItem(CacheItemInterface $item)
     {
-        $this->cache->deleteItem($item->getKey());
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
     }
 
     /**
@@ -448,6 +443,12 @@ abstract class AbstractService
      */
     public function getTtl()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
+
         return $this->ttl;
     }
 
@@ -460,6 +461,12 @@ abstract class AbstractService
      */
     public function setTtl($ttl = null)
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
+
         $this->ttl = $ttl;
 
         return $this;
@@ -469,9 +476,17 @@ abstract class AbstractService
      * @return CacheItemPoolInterface|null
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function getCache()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
+
         return $this->cache;
     }
 
@@ -481,9 +496,17 @@ abstract class AbstractService
      * @return static
      *
      * @since 1.2.0
+     * @deprecated 1.4.0
      */
+    #[Deprecated]
     public function setCache($cache = null)
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.0',
+            'Caching is being completely reworked and support has been removed from 1.x.x.'
+        );
+
         $this->cache = $cache;
 
         return $this;

@@ -39,10 +39,8 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Sabre\Xml\LibXMLException;
 
 /**
  * Class LocationService.
@@ -74,7 +72,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
-     * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
      *
@@ -95,7 +92,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -116,7 +112,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -139,7 +134,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *
@@ -160,7 +154,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      * @throws HttpClientException
@@ -183,7 +176,6 @@ interface LocationServiceInterface extends ServiceInterface
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotFoundException
      *

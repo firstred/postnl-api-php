@@ -42,10 +42,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Sabre\Xml\LibXMLException;
@@ -111,7 +108,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws PsrCacheInvalidArgumentException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
      * @throws ResponseException
@@ -124,30 +120,11 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
     #[Deprecated]
     public function getTimeframesREST(GetTimeframes $getTimeframes)
     {
-        $item = $this->retrieveCachedItem($getTimeframes->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
-            static::validateRESTResponse($response);
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestREST($getTimeframes));
+        static::validateRESTResponse($response);
 
         $object = $this->processGetTimeframesResponseREST($response);
         if ($object instanceof ResponseTimeframes) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
@@ -163,7 +140,6 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws ResponseException
      * @throws NotFoundException
@@ -175,29 +151,10 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
     #[Deprecated]
     public function getTimeframesSOAP(GetTimeframes $getTimeframes)
     {
-        $item = $this->retrieveCachedItem($getTimeframes->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
-        }
+        $response = $this->postnl->getHttpClient()->doRequest($this->buildGetTimeframesRequestSOAP($getTimeframes));
 
         $object = $this->processGetTimeframesResponseSOAP($response);
         if ($object instanceof ResponseTimeframes) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 

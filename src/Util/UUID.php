@@ -26,8 +26,8 @@
 
 namespace Firstred\PostNL\Util;
 
-use Symfony\Component\Uid\Uuid as SymfonyUuid;
 use Ramsey\Uuid\Uuid as RamseyUuid;
+use Symfony\Component\Uid\Uuid as SymfonyUuid;
 
 /**
  * Class UUID.

@@ -32,13 +32,9 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
-use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function http_build_query;
@@ -78,11 +74,9 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      *
      * @return SendShipmentResponse|null
      *
-     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws InvalidArgumentException
@@ -94,34 +88,14 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     #[Deprecated]
     public function sendShipmentRest(SendShipment $sendShipment, $confirm = true)
     {
-        $item = $this->retrieveCachedItem($sendShipment->getId());
-        $response = null;
+        $response = $this->postnl->getHttpClient()->doRequest(
+            $this->buildSendShipmentRequestREST($sendShipment, $confirm)
+        );
 
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse($response);
-            } catch (InvalidArgumentException $e) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->postnl->getHttpClient()->doRequest(
-                $this->buildSendShipmentRequestREST($sendShipment, $confirm)
-            );
-
-            static::validateRESTResponse($response);
-        }
+        static::validateRESTResponse($response);
 
         $object = $this->processSendShipmentResponseREST($response);
         if ($object instanceof SendShipmentResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(PsrMessage::toString($response));
-                $this->cacheItem($item);
-            }
-
             return $object;
         }
 
