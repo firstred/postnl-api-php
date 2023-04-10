@@ -407,7 +407,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @return false|string If found, singular name of property
      *
      * @since 1.2.0
+     * @deprecated 1.4.1
+     * @internal
      */
+    #[Deprecated]
     public static function shouldBeAnArray($fqcn, $propertyName)
     {
         try {
@@ -448,7 +451,10 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @throws InvalidArgumentException
      *
      * @since 1.2.0
+     * @deprecated 1.4.1
+     * @internal
      */
+    #[Deprecated]
     public static function getFullyQualifiedEntityClassName($shortName)
     {
         foreach ([
