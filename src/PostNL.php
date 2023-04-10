@@ -333,52 +333,11 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * @param int $mode
-     *
-     * @return static
-     *
-     * @throws PostNLInvalidArgumentException
-     *
-     * @deprecated 2.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public function setMode(int $mode): static
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `PostNL::setMode` is deprecated, use `PostNL::setApiMode` instead.',
-        );
-
-        return $this->setApiMode(mode: $mode);
-    }
-
-    /**
-     * @return int
-     *
-     * @deprecated
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public function getMode(): int
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `PostNL::getMode` is deprecated, use `PostNL::getApiMode` instead.',
-        );
-
-        return $this->getApiMode();
-    }
-
-    /**
      * HttpClient.
      *
      * Automatically load Guzzle when available
      *
+     * @throws PostNLInvalidArgumentException
      * @since 1.0.0
      */
     public function getHttpClient(): HTTPlugHttpClient|CurlHttpClient|HttpClientInterface|GuzzleHttpClient
