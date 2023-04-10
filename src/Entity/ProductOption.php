@@ -35,6 +35,7 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\TimeframeService;
+use stdClass;
 
 /**
  * Class ProductOption.
@@ -121,7 +122,7 @@ class ProductOption extends AbstractEntity
      *
      * @since 1.2.0
      */
-    public static function jsonDeserialize($json)
+    public static function jsonDeserialize(stdClass $json)
     {
         if (isset($json->ProductOption->CharacteristicCode)) {
             $json->ProductOption->Characteristic = $json->ProductOption->CharacteristicCode;
