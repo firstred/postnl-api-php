@@ -31,12 +31,14 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class Status.
@@ -170,9 +172,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCurrentStatusPhaseCode()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseCode;
     }
 
@@ -182,9 +193,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCurrentStatusPhaseDescription()
     {
+        PostNL::triggerDeprecation(
+        'firstred/postnl-api-php',
+        '1.4.1',
+        'SOAP support is going to be removed. Please use an alternative.'
+    );
+
         return $this->PhaseDescription;
     }
 
@@ -194,9 +214,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCurrentStatusStatusCode()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -206,9 +235,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCurrentStatusStatusDescription()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -218,9 +256,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCurrentStatusTimeStamp()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -230,9 +277,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCompleteStatusPhaseCode()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseCode;
     }
 
@@ -242,9 +298,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCompleteStatusPhaseDescription()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -254,9 +319,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCompleteStatusStatusCode()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -266,9 +340,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCompleteStatusStatusDescription()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 
@@ -278,9 +361,18 @@ class Status extends AbstractEntity
      * @return string|null
      *
      * @since 1.2.0
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
      */
+    #[Deprecated]
     public function getCompleteStatusTimeStamp()
     {
+        PostNL::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            'SOAP support is going to be removed. Please use an alternative.'
+        );
+
         return $this->PhaseDescription;
     }
 }
