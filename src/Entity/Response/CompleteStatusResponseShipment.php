@@ -379,6 +379,15 @@ class CompleteStatusResponseShipment extends AbstractEntity
             }
         }
 
+        if (isset($json->CompleteStatusResponseShipment->Amount)) {
+            $json->CompleteStatusResponseShipment->Amounts = $json->CompleteStatusResponseShipment->Amount;
+            unset($json->CompleteStatusResponseShipment->Amount);
+
+            if (!is_array($json->CompleteStatusResponseShipment->Amounts)) {
+                $json->CompleteStatusResponseShipment->Amounts = [$json->CompleteStatusResponseShipment->Amounts];
+            }
+        }
+
         return parent::jsonDeserialize($json);
     }
 

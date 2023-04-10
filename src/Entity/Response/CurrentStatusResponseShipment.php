@@ -41,6 +41,7 @@ use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
@@ -325,7 +326,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @return mixed|stdClass|null
      *
      * @throws InvalidArgumentException
-     * @throws \Firstred\PostNL\Exception\NotSupportedException
+     * @throws NotSupportedException
      *
      * @since 1.2.0
      */
@@ -337,6 +338,15 @@ class CurrentStatusResponseShipment extends AbstractEntity
 
             if (!is_array($json->CurrentStatusResponseShipment->Addresses)) {
                 $json->CurrentStatusResponseShipment->Addresses = [$json->CurrentStatusResponseShipment->Addresses];
+            }
+        }
+
+        if (isset($json->CurrentStatusResponseShipment->Amount)) {
+            $json->CurrentStatusResponseShipment->Amounts = $json->CurrentStatusResponseShipment->Amount;
+            unset($json->CurrentStatusResponseShipment->Amount);
+
+            if (!is_array($json->CurrentStatusResponseShipment->Amounts)) {
+                $json->CurrentStatusResponseShipment->Amounts = [$json->CurrentStatusResponseShipment->Amounts];
             }
         }
 

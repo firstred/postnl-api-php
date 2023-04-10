@@ -30,6 +30,7 @@ use Cache\Adapter\Void\VoidCachePool;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Amount;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Message\Message;
@@ -255,7 +256,10 @@ class ShippingStatusServiceRestTest extends ServiceTest
 
         $this->assertInstanceOf(CompleteStatusResponse::class, $completeStatusResponse);
         $this->assertInstanceOf(StatusAddress::class, $completeStatusResponse->getShipments()[0]->getAddresses()[0]);
-        $this->assertNull($completeStatusResponse->getShipments()[0]->getAmounts());
+        $this->assertTrue(
+            null === $completeStatusResponse->getShipments()[0]->getAmounts()
+            || $completeStatusResponse->getShipments()[0]->getAmounts()[0] instanceof Amount
+        );
         if (is_array($completeStatusResponse->getShipments()[0]->getProductOptions())) {
             $this->assertInstanceOf(ProductOption::class, $completeStatusResponse->getShipments()[0]->getProductOptions()[0]);
         } else {
