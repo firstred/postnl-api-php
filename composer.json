@@ -51,7 +51,7 @@
         "php-http/message-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "psr/http-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "sabre/xml": "To use the SOAP API -- supports ^4.0",
-        "symfony/http-client": "Another popular HTTP client you can use natively -- supports ^6.0"
+        "symfony/http-client": "Another popular HTTP client you can use natively -- supports ^5.4"
     },
     "autoload": {
         "files": ["src/deprecated.php"],
