@@ -32,6 +32,7 @@ use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\ShippingService;
+use Firstred\PostNL\Service\ShippingStatusService;
 use Firstred\PostNL\Service\TimeframeService;
 
 /**
@@ -62,11 +63,11 @@ class Customer extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
+        'Barcode'        => [
             'CustomerCode'   => BarcodeService::DOMAIN_NAMESPACE,
             'CustomerNumber' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
+        'Confirming'     => [
             'Address'            => ConfirmingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => ConfirmingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => ConfirmingService::DOMAIN_NAMESPACE,
@@ -75,7 +76,7 @@ class Customer extends AbstractEntity
             'Email'              => ConfirmingService::DOMAIN_NAMESPACE,
             'Name'               => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
+        'Labelling'      => [
             'Address'            => LabellingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => LabellingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => LabellingService::DOMAIN_NAMESPACE,
@@ -84,7 +85,7 @@ class Customer extends AbstractEntity
             'Email'              => LabellingService::DOMAIN_NAMESPACE,
             'Name'               => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate' => [
+        'DeliveryDate'   => [
             'Address'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'CollectionLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
             'ContactPerson'      => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -93,7 +94,7 @@ class Customer extends AbstractEntity
             'Email'              => DeliveryDateService::DOMAIN_NAMESPACE,
             'Name'               => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
+        'Location'       => [
             'Address'            => LocationService::DOMAIN_NAMESPACE,
             'CollectionLocation' => LocationService::DOMAIN_NAMESPACE,
             'ContactPerson'      => LocationService::DOMAIN_NAMESPACE,
@@ -102,7 +103,7 @@ class Customer extends AbstractEntity
             'Email'              => LocationService::DOMAIN_NAMESPACE,
             'Name'               => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
+        'Timeframe'      => [
             'Address'            => TimeframeService::DOMAIN_NAMESPACE,
             'CollectionLocation' => TimeframeService::DOMAIN_NAMESPACE,
             'ContactPerson'      => TimeframeService::DOMAIN_NAMESPACE,
@@ -111,7 +112,7 @@ class Customer extends AbstractEntity
             'Email'              => TimeframeService::DOMAIN_NAMESPACE,
             'Name'               => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping' => [
+        'Shipping'       => [
             'Address'            => ShippingService::DOMAIN_NAMESPACE,
             'CollectionLocation' => ShippingService::DOMAIN_NAMESPACE,
             'ContactPerson'      => ShippingService::DOMAIN_NAMESPACE,
@@ -119,6 +120,11 @@ class Customer extends AbstractEntity
             'CustomerNumber'     => ShippingService::DOMAIN_NAMESPACE,
             'Email'              => ShippingService::DOMAIN_NAMESPACE,
             'Name'               => ShippingService::DOMAIN_NAMESPACE,
+        ],
+        'ShippingStatus' => [
+            'CustomerCode'       => ShippingStatusService::DOMAIN_NAMESPACE,
+            'CustomerNumber'     => ShippingStatusService::DOMAIN_NAMESPACE,
+            'Name'               => ShippingStatusService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
