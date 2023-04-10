@@ -166,25 +166,9 @@ class MockHttpClient extends BaseHttpClient implements HttpClientInterface, Logg
      * @param RequestInterface[] $requests
      *
      * @return ResponseInterface[]|HttpClientException[]
-     *
-     * @throws InvalidArgumentException
      */
     public function doRequests(array $requests = []): array
     {
-        if ($requests instanceof RequestInterface) {
-            user_error(
-                message: 'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                error_level: E_USER_DEPRECATED
-            );
-            $requests = [$requests];
-        }
-        if (!is_array(value: $requests)) {
-            throw new InvalidArgumentException(message: 'Invalid requests array passed');
-        }
-        if (!is_array(value: $this->pendingRequests)) {
-            $this->pendingRequests = [];
-        }
-
         // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();

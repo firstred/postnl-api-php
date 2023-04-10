@@ -32,7 +32,7 @@ namespace Firstred\PostNL\HttpClient;
 use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Util\EachPromise;
+use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\TransferException;
@@ -43,7 +43,6 @@ use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\Exception\NotFoundException as DiscoveryNotFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\NotFoundException;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
@@ -51,11 +50,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-
-use function is_array;
-use function user_error;
-
-use const E_USER_DEPRECATED;
 
 /**
  * Class HTTPlugClient.
@@ -80,6 +74,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
      * @param HttpAsyncClient|HttpClient|null $client
      * @param LoggerInterface|null            $logger
      * @param int                             $concurrency
+     * @param int                             $maxRetries
      *
      * @throws HttpClientException
      *
@@ -90,7 +85,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
         HttpAsyncClient|HttpClient $client = null,
         LoggerInterface $logger = null,
         int $concurrency = 5,
-        $maxRetries = 5
+        int $maxRetries = 5,
     ) {
         $this->logger = $logger;
         $this->concurrency = $concurrency;
@@ -99,28 +94,19 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
         if (null === $client) {
             try {
                 $client = HttpAsyncClientDiscovery::find();
-            } catch (NotFoundException $e) {
-            } catch (DiscoveryNotFoundException $e) {
-            } catch (NoCandidateFoundException $e) {
-            } catch (DiscoveryFailedException $e) {
+            } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException) {
             }
         }
         if (null === $client) {
             try {
                 $client = Psr18ClientDiscovery::find();
-            } catch (NotFoundException $e) {
-            } catch (DiscoveryNotFoundException $e) {
-            } catch (NoCandidateFoundException $e) {
-            } catch (DiscoveryFailedException $e) {
+            } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException) {
             }
         }
         if (null === $client) {
             try {
                 $client = HttpClientDiscovery::find();
-            } catch (NotFoundException $e) {
-            } catch (DiscoveryNotFoundException $e) {
-            } catch (NoCandidateFoundException $e) {
-            } catch (DiscoveryFailedException $e) {
+            } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException) {
             }
         }
 
@@ -144,20 +130,6 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
      */
     public function doRequests(array $requests = []): array
     {
-        if ($requests instanceof RequestInterface) {
-            user_error(
-                message: 'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                error_level: E_USER_DEPRECATED
-            );
-            $requests = [$requests];
-        }
-        if (!is_array(value: $requests)) {
-            throw new InvalidArgumentException(message: 'Invalid requests array passed');
-        }
-        if (!is_array(value: $this->pendingRequests)) {
-            $this->pendingRequests = [];
-        }
-
         // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
@@ -171,7 +143,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
                 foreach ($requests as $index => $request) {
                     try {
                         yield $index => $client->sendAsyncRequest(request: $request);
-                    } catch (Exception $e) {
+                    } catch (Exception) {
                     }
                 }
             });
@@ -190,15 +162,13 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, L
                     ]
                 ))->promise();
 
-                if ($promise) {
-                    $promise->wait(unwrap: true);
-                }
-            } catch (HttpException $e) {
+                $promise?->wait(unwrap: true);
+            } catch (HttpException) {
                 // Ignore HttpExceptions, we are going to handle them in the response validator
             } catch (TransferException $e) {
                 // Other transfer exceptions should be thrown
                 throw $e;
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // Unreachable code, these kinds of exceptions should not be unwrapped
             }
         } else {

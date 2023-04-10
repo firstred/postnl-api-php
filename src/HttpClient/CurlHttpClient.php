@@ -128,10 +128,6 @@ class CurlHttpClient extends BaseHttpClient implements HttpClientInterface, Logg
      */
     public function doRequests(array $requests = []): array
     {
-        if (!is_array(value: $requests)) {
-            throw new InvalidArgumentException(message: 'Invalid requests array passed');
-        }
-
         // Reset request headers array
         $curlHandles = [];
         $mh = curl_multi_init();
