@@ -29,19 +29,18 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 use Sabre\Xml\Writer;
 
 /**
  * Class GetTimeframes.
- *
- * @method Message|null     getMessage()
- * @method GetTimeframes    setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -79,7 +78,11 @@ class GetTimeframes extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     /** @var Timeframe[]|null */
     protected $Timeframe;
@@ -91,12 +94,23 @@ class GetTimeframes extends AbstractEntity
      * @param Message|null     $Message
      * @param Timeframe[]|null $Timeframes
      */
-    public function __construct(Message $Message = null, array $Timeframes = null)
-    {
+    public function __construct(
+        #[Deprecated]
+        Message $Message = null,
+        array $Timeframes = null
+    ) {
         parent::__construct();
 
-        $this->setMessage($Message ?: new Message());
         $this->setTimeframe($Timeframes);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
+        $this->setMessage($Message ?: new Message());
     }
 
     /**
@@ -156,6 +170,32 @@ class GetTimeframes extends AbstractEntity
     public function getTimeframes()
     {
         return $this->Timeframe;
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function getMessage()
+    {
+        return $this->Message;
+    }
+
+    /**
+     * @param Message|null $Message
+     *
+     * @return static
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function setMessage($Message)
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 
     /**

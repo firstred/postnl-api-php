@@ -28,12 +28,14 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class GetLocation.
@@ -41,10 +43,8 @@ use Firstred\PostNL\Service\TimeframeService;
  * This class is both the container and can be the actual GetLocation object itself!
  *
  * @method string|null  getLocationCode()
- * @method Message|null getMessage()
  * @method string|null  getRetailNetworkID()
  * @method GetLocation  setLocationCode(string|null $LocationCode = null)
- * @method GetLocation  setMessage(Message|null $Message = null)
  * @method GetLocation  setRetailNetworkID(string|null $RetailNetworkID = null)
  *
  * @since 1.0.0
@@ -91,7 +91,11 @@ class GetLocation extends AbstractEntity
     // @codingStandardsIgnoreStart
     /** @var string|null */
     protected $LocationCode;
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     /** @var string|null */
     protected $RetailNetworkID;
@@ -106,13 +110,48 @@ class GetLocation extends AbstractEntity
      */
     public function __construct(
         $LocationCode = null,
+        #[Deprecated]
         Message $Message = null,
         $RetailNetworkID = null
     ) {
         parent::__construct();
 
         $this->setLocationCode($LocationCode);
-        $this->setMessage($Message ?: new Message());
         $this->setRetailNetworkID($RetailNetworkID);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
+        $this->setMessage($Message ?: new Message());
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function getMessage()
+    {
+        return $this->Message;
+    }
+
+    /**
+     * @param Message|null $Message
+     *
+     * @return static
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function setMessage($Message)
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 }

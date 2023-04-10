@@ -34,12 +34,14 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 use Sabre\Xml\Writer;
 use function in_array;
 
@@ -61,7 +63,6 @@ use function in_array;
  * @method string|null            getShippingDuration()
  * @method string|null            getStreet()
  * @method GetDeliveryDate|null   getGetDeliveryDate()
- * @method Message|null           getMessage()
  * @method GetDeliveryDate        setCity(string|null $City = null)
  * @method GetDeliveryDate        setCountryCode(string|null $CountryCode = null)
  * @method GetDeliveryDate        setCutOffTimes(CutOffTime[]|null $CutOffTimes = null)
@@ -72,7 +73,6 @@ use function in_array;
  * @method GetDeliveryDate        setShippingDuration(int|null $ShippingDuration = null)
  * @method GetDeliveryDate        setStreet(string|null $Street = null)
  * @method GetDeliveryDate        setGetDeliveryDate(GetDeliveryDate|null $GetDeliveryDate = null)
- * @method GetDeliveryDate        setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -208,7 +208,11 @@ class GetDeliveryDate extends AbstractEntity
     protected $Street;
     /** @var GetDeliveryDate|null */
     protected $GetDeliveryDate;
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     // @codingStandardsIgnoreEnd
 
@@ -246,6 +250,7 @@ class GetDeliveryDate extends AbstractEntity
         $ShippingDuration = null,
         $Street = null,
         GetDeliveryDate $GetDeliveryDate = null,
+        #[Deprecated]
         $Message = null
     ) {
         parent::__construct();
@@ -263,6 +268,14 @@ class GetDeliveryDate extends AbstractEntity
         $this->setShippingDuration($ShippingDuration);
         $this->setStreet($Street);
         $this->setGetDeliveryDate($GetDeliveryDate);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
         $this->setMessage($Message);
     }
 
@@ -323,6 +336,32 @@ class GetDeliveryDate extends AbstractEntity
         }
 
         $this->AllowSundaySorting = $AllowSundaySorting;
+
+        return $this;
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function getMessage()
+    {
+        return $this->Message;
+    }
+
+    /**
+     * @param Message|null $Message
+     *
+     * @return static
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function setMessage($Message)
+    {
+        $this->Message = $Message;
 
         return $this;
     }

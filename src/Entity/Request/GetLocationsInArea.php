@@ -29,12 +29,14 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class GetLocationsInArea.
@@ -94,7 +96,11 @@ class GetLocationsInArea extends AbstractEntity
     protected $Countrycode;
     /** @var Location|null */
     protected $Location;
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     // @codingStandardsIgnoreEnd
 
@@ -114,6 +120,14 @@ class GetLocationsInArea extends AbstractEntity
 
         $this->setCountrycode($Countrycode);
         $this->setLocation($Location);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
         $this->setMessage($Message ?: new Message());
     }
 }

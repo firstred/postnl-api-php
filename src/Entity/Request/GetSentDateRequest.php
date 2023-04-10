@@ -28,20 +28,20 @@ namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class GetSentDateRequest.
  *
  * @method GetSentDate|null   getGetSentDate()
- * @method Message|null       getMessage()
  * @method GetSentDateRequest setGetSentDate(GetSentDate|null $GetSentDate = null)
- * @method GetSentDateRequest setMessage(Message|null $Message = null)
  *
  * @since 1.0.0
  */
@@ -81,7 +81,11 @@ class GetSentDateRequest extends AbstractEntity
     // @codingStandardsIgnoreStart
     /** @var GetSentDate|null */
     protected $GetSentDate;
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     // @codingStandardsIgnoreEnd
 
@@ -93,11 +97,46 @@ class GetSentDateRequest extends AbstractEntity
      */
     public function __construct(
         GetSentDate $GetSentDate = null,
+        #[Deprecated]
         Message $Message = null
     ) {
         parent::__construct();
 
         $this->setGetSentDate($GetSentDate);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
         $this->setMessage($Message ?: new Message());
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function getMessage()
+    {
+        return $this->Message;
+    }
+
+    /**
+     * @param Message|null $Message
+     *
+     * @return static
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removec
+     */
+    #[Deprecated]
+    public function setMessage($Message)
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 }

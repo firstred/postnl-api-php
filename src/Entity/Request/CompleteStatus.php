@@ -30,21 +30,21 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\DeliveryDateService;
 use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\TimeframeService;
+use JetBrains\PhpStorm\Deprecated;
 use Sabre\Xml\Writer;
 
 /**
  * Class CompleteStatus.
  *
- * @method Message|null   getMessage()
  * @method Customer|null  getCustomer()
  * @method Shipment|null  getShipment()
- * @method CompleteStatus setMessage(Message|null $Message = null)
  * @method CompleteStatus setCustomer(Customer|null $Customer = null)
  * @method CompleteStatus setShipment(Shipment|null $Shipment = null)
  *
@@ -90,7 +90,11 @@ class CompleteStatus extends AbstractEntity
         ],
     ];
     // @codingStandardsIgnoreStart
-    /** @var Message|null */
+    /**
+     * @var Message|null
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
     protected $Message;
     /** @var Customer|null */
     protected $Customer;
@@ -105,13 +109,25 @@ class CompleteStatus extends AbstractEntity
      * @param Customer|null $Customer
      * @param Message|null  $Message
      */
-    public function __construct(Shipment $Shipment = null, Customer $Customer = null, Message $Message = null)
-    {
+    public function __construct(
+        Shipment $Shipment = null,
+        Customer $Customer = null,
+        #[Deprecated]
+        Message $Message = null
+    ) {
         parent::__construct();
 
-        $this->setMessage($Message ?: new Message());
         $this->setShipment($Shipment);
         $this->setCustomer($Customer);
+
+        if ($Message instanceof Message) {
+            PostNL::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Please do not pass a `Message` object. SOAP support is going to be removed.'
+            );
+        }
+        $this->setMessage($Message ?: new Message());
     }
 
     /**
@@ -137,5 +153,31 @@ class CompleteStatus extends AbstractEntity
         }
         // Auto extending this object with other properties is not supported with SOAP
         $writer->write($xml);
+    }
+
+    /**
+     * @return Message|null
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function getMessage()
+    {
+        return $this->Message;
+    }
+
+    /**
+     * @param Message|null $Message
+     *
+     * @return static
+     *
+     * @deprecated 1.4.1 SOAP support is going to be removed
+     */
+    #[Deprecated]
+    public function setMessage($Message)
+    {
+        $this->Message = $Message;
+
+        return $this;
     }
 }
