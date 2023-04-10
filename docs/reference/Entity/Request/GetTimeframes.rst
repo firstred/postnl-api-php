@@ -34,6 +34,8 @@ Methods
 * :php:meth:`public setTimeframes\($timeframes\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::setTimeframes\(\)>`
 * :php:meth:`public getTimeframe\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getTimeframe\(\)>`
 * :php:meth:`public getTimeframes\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getTimeframes\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::setMessage\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::xmlSerialize\(\)>`
 
 
@@ -53,6 +55,7 @@ Properties
 .. php:attr:: protected static Message
 
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	:Deprecated: 1.4.1 SOAP support is going to be removed
 
 
 .. php:attr:: protected static Timeframe
@@ -146,6 +149,30 @@ Methods
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
 		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 

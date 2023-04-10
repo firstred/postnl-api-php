@@ -60,6 +60,7 @@ Properties
 .. php:attr:: protected static Message
 
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	:Deprecated: 1.4.1 SOAP support is going to be removed
 
 
 Methods

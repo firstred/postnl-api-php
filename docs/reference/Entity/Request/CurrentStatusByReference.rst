@@ -30,6 +30,8 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Shipment, $Customer, $Message\)<Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference::\_\_construct\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference::setMessage\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\CurrentStatusByReference::xmlSerialize\(\)>`
 
 
@@ -49,6 +51,7 @@ Properties
 .. php:attr:: protected static Message
 
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	:Deprecated: 1.4.1 SOAP support is going to be removed
 
 
 .. php:attr:: protected static Customer
@@ -80,6 +83,30 @@ Methods
 			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 

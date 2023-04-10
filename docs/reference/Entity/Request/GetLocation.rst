@@ -32,6 +32,8 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($LocationCode, $Message, $RetailNetworkID\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::\_\_construct\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::setMessage\(\)>`
 
 
 Properties
@@ -55,6 +57,7 @@ Properties
 .. php:attr:: protected static Message
 
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	:Deprecated: 1.4.1 SOAP support is going to be removed
 
 
 .. php:attr:: protected static RetailNetworkID
@@ -81,6 +84,30 @@ Methods
 			* **$RetailNetworkID** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 

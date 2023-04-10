@@ -186,7 +186,7 @@ Methods
 	
 	
 
-.. rst-class:: public static
+.. rst-class:: public static deprecated
 
 	.. php:method:: public static shouldBeAnArray( $fqcn, $propertyName)
 	
@@ -203,10 +203,11 @@ Methods
 		
 		:Returns: false | string If found, singular name of property
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 
 	
 	
 
-.. rst-class:: public static
+.. rst-class:: public static deprecated
 
 	.. php:method:: public static getFullyQualifiedEntityClassName( $shortName)
 	
@@ -223,6 +224,7 @@ Methods
 		:Returns: string The FQCN
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 
 	
 	
 

@@ -32,6 +32,7 @@ Methods
 * :php:meth:`public \_\_construct\($customer, $apiKey, $sandbox, $mode\)<Firstred\\PostNL\\PostNL::\_\_construct\(\)>`
 * :php:meth:`public setToken\($apiKey\)<Firstred\\PostNL\\PostNL::setToken\(\)>`
 * :php:meth:`public getRestApiKey\(\)<Firstred\\PostNL\\PostNL::getRestApiKey\(\)>`
+* :php:meth:`public getApiKey\(\)<Firstred\\PostNL\\PostNL::getApiKey\(\)>`
 * :php:meth:`public getToken\(\)<Firstred\\PostNL\\PostNL::getToken\(\)>`
 * :php:meth:`public getCustomer\(\)<Firstred\\PostNL\\PostNL::getCustomer\(\)>`
 * :php:meth:`public setCustomer\($customer\)<Firstred\\PostNL\\PostNL::setCustomer\(\)>`
@@ -311,7 +312,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getRestApiKey()
 	
@@ -323,10 +324,26 @@ Methods
 		
 		:Returns: bool | string 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.1 Use \`getApiKey\` instead
 	
 	
 
 .. rst-class:: public
+
+	.. php:method:: public getApiKey()
+	
+		.. rst-class:: phpdoc-description
+		
+			| Get API Key\.
+			
+		
+		
+		:Returns: null | string 
+		:Since: 1.4.1 
+	
+	
+
+.. rst-class:: public deprecated
 
 	.. php:method:: public getToken()
 	
@@ -338,6 +355,7 @@ Methods
 		
 		:Returns: bool | :any:`\\Firstred\\PostNL\\Entity\\SOAP\\UsernameToken <Firstred\\PostNL\\Entity\\SOAP\\UsernameToken>` 
 		:Since: 1.0.0 
+		:Deprecated: 1.4.1 Use \`getApiKey\` instead
 	
 	
 

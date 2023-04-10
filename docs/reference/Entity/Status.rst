@@ -116,7 +116,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCurrentStatusPhaseCode()
 	
@@ -128,10 +128,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCurrentStatusPhaseDescription()
 	
@@ -143,10 +144,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCurrentStatusStatusCode()
 	
@@ -158,10 +160,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCurrentStatusStatusDescription()
 	
@@ -173,10 +176,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCurrentStatusTimeStamp()
 	
@@ -188,10 +192,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCompleteStatusPhaseCode()
 	
@@ -203,10 +208,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCompleteStatusPhaseDescription()
 	
@@ -218,10 +224,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCompleteStatusStatusCode()
 	
@@ -233,10 +240,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCompleteStatusStatusDescription()
 	
@@ -248,10 +256,11 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCompleteStatusTimeStamp()
 	
@@ -263,6 +272,7 @@ Methods
 		
 		:Returns: string | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 

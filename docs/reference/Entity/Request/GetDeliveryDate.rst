@@ -35,6 +35,8 @@ Methods
 * :php:meth:`public setShippingDate\($shippingDate\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setShippingDate\(\)>`
 * :php:meth:`public setPostalCode\($postcode\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setPostalCode\(\)>`
 * :php:meth:`public setAllowSundaySorting\($AllowSundaySorting\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setAllowSundaySorting\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::setMessage\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate::xmlSerialize\(\)>`
 
 
@@ -119,6 +121,7 @@ Properties
 .. php:attr:: protected static Message
 
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	:Deprecated: 1.4.1 SOAP support is going to be removed
 
 
 Methods
@@ -200,6 +203,30 @@ Methods
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate <Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate>` 
 		:Since: 1.0.0 
 		:Since: 1.0.0 
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
+		:Deprecated: 1.4.1 SOAP support is going to be removed
 	
 	
 
