@@ -40,7 +40,7 @@ use Psr\Log\LoggerInterface;
  *
  * @since 1.0.0
  */
-interface HttpClientInterface
+interface HttpClientInterface extends LoggerAwareInterface
 {
     /**
      * Get the logger.

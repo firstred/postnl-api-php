@@ -58,7 +58,7 @@ use Psr\Log\LogLevel;
  *
  * @internal
  */
-class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
+class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     /** @var static */
     protected static HTTPlugHttpClient $instance;

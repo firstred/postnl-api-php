@@ -67,7 +67,7 @@ if (!defined(constant_name: 'CURLE_SSL_CACERT_BADFILE')) {
  *
  * @internal
  */
-class CurlHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
+class CurlHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     /** @var array|callable|null */
     protected $defaultOptions;

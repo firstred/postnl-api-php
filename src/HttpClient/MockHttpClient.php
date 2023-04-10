@@ -55,7 +55,7 @@ use const E_USER_DEPRECATED;
  *
  * @internal
  */
-class MockHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
+class MockHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     public const DEFAULT_TIMEOUT = 60;
     public const DEFAULT_CONNECT_TIMEOUT = 20;

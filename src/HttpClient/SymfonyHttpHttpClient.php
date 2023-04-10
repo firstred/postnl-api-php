@@ -56,7 +56,7 @@ use function array_merge;
  *
  * @internal
  */
-class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
+class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     public const DEFAULT_TIMEOUT = 60;
     public const DEFAULT_CONNECT_TIMEOUT = 20;
