@@ -48,6 +48,7 @@ use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -63,7 +64,7 @@ use const E_USER_DEPRECATED;
  *
  * @internal
  */
-class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
+class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface, LoggerAwareInterface
 {
     /** @var static */
     protected static HTTPlugHttpClient $instance;

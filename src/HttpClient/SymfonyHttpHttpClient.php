@@ -31,7 +31,6 @@ namespace Firstred\PostNL\HttpClient;
 
 use Composer\CaBundle\CaBundle;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
@@ -39,21 +38,16 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\HttpClient as SymfonyHttpClient;
 use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
-use Symfony\Component\HttpClient\RetryableHttpClient;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Component\HttpClient\RetryableHttpClient as RetryableSymfonyHttpClient;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface as SymfonyHttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface as SymfonyHttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpClientResponseInterface;
-
 use function array_merge;
-use function is_array;
-use function user_error;
-
-use const E_USER_DEPRECATED;
 
 /**
  * Class SymfonyHttpClientInterface.
@@ -70,22 +64,22 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
     /** @var array */
     protected array $defaultOptions = [];
 
-    /** @var HttpClientInterface */
-    private ?HttpClientInterface $client;
+    /** @var SymfonyHttpClientInterface|null */
+    private ?SymfonyHttpClientInterface $client;
 
     /**
      * SymfonyHttpClient constructor.
      *
-     * @param HttpClientInterface|null $client
-     * @param LoggerInterface|null     $logger
-     * @param int                      $concurrency
-     * @param int                      $maxRetries
+     * @param RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null $client
+     * @param LoggerInterface|null                                       $logger
+     * @param int                                                        $concurrency
+     * @param int                                                        $maxRetries
      *
      * @since 1.3.0 Custom constructor
      */
     public function __construct(
-        HttpClientInterface $client = null,
-        LoggerInterface $logger = null,
+        RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null $client = null,
+        LoggerInterface|null $logger = null,
         int $concurrency = 5,
         int $maxRetries = 5
     ) {
@@ -98,19 +92,19 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
     /**
      * Get the Symfony HTTP Client.
      *
-     * @return HttpClientInterface
+     * @return RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null
      */
-    private function getClient(): RetryableHttpClient|HttpClientInterface|null
+    private function getClient(): RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null
     {
         if (!$this->client) {
             $retryStrategy = new GenericRetryStrategy(
-                [0, 423, 425, 429, 500, 502, 503, 504, 507, 510],
-                1000,
-                3.0,
-                5000,
-                0.3
+                statusCodes: [0, 423, 425, 429, 500, 502, 503, 504, 507, 510],
+                delayMs: 1000,
+                multiplier: 3.0,
+                maxDelayMs: 5000,
+                jitter: 0.3
             );
-            $client = new RetryableHttpClient(HttpClient::create(array_merge(
+            $client = new RetryableSymfonyHttpClient(client: SymfonyHttpClient::create(defaultOptions: array_merge(
                 [
                     'max_duration'  => $this->getTimeout(),
                     'timeout'       => $this->getConnectTimeout(),
@@ -120,7 +114,7 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
                     'verify_peer'   => true,
                 ],
                 $this->defaultOptions
-            ), $this->getConcurrency()), $retryStrategy, $this->getMaxRetries());
+            ), maxHostConnections: $this->getConcurrency()), strategy: $retryStrategy, maxRetries: $this->getMaxRetries());
 
             $this->client = $client;
         }
@@ -185,19 +179,13 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
 
             try {
                 return $this->convertSymfonyHttpClientResponseToPsrResponse(symfonyHttpClientResponse: $httpClient->request(
-                    $symfonyHttpClientRequestParts['method'],
-                    $symfonyHttpClientRequestParts['url'],
-                    $symfonyHttpClientRequestParts['options']
+                    method: $symfonyHttpClientRequestParts['method'],
+                    url: $symfonyHttpClientRequestParts['url'],
+                    options: $symfonyHttpClientRequestParts['options']
                 ));
             } catch (NotSupportedException $e) {
                 throw new HttpClientException(message: $e->getMessage(), code: (int) null, previous: $e);
-            } catch (ClientExceptionInterface $e) {
-                throw new HttpClientException(message: $e->getMessage(), code: (int) null, previous: $e);
-            } catch (RedirectionExceptionInterface $e) {
-                throw new HttpClientException(message: $e->getMessage(), code: (int) null, previous: $e);
-            } catch (ServerExceptionInterface $e) {
-                throw new HttpClientException(message: $e->getMessage(), code: (int) null, previous: $e);
-            } catch (TransportExceptionInterface $e) {
+            } catch (SymfonyHttpClientExceptionInterface|RedirectionExceptionInterface|TransportExceptionInterface|ServerExceptionInterface $e) {
                 throw new HttpClientException(message: $e->getMessage(), code: (int) null, previous: $e);
             }
         } catch (TransportExceptionInterface $e) {
@@ -225,25 +213,9 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
      * @param RequestInterface[] $requests
      *
      * @return HttpClientException[]|ResponseInterface[]
-     *
-     * @throws InvalidArgumentException
      */
     public function doRequests(array $requests = []): array
     {
-        if ($requests instanceof RequestInterface) {
-            user_error(
-                message: 'Passing a single request to HttpClientInterface::doRequests is deprecated',
-                error_level: E_USER_DEPRECATED
-            );
-            $requests = [$requests];
-        }
-        if (!is_array(value: $requests)) {
-            throw new InvalidArgumentException(message: 'Invalid requests array passed');
-        }
-        if (!is_array(value: $this->pendingRequests)) {
-            $this->pendingRequests = [];
-        }
-
         // Handle pending requests as well
         $requests = $this->pendingRequests + $requests;
         $httpClient = $this->getClient();
@@ -255,32 +227,26 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
 
             try {
                 $responses[$id] = $httpClient->request(
-                    $symfonyHttpClientRequestParts['method'],
-                    $symfonyHttpClientRequestParts['url'],
-                    $symfonyHttpClientRequestParts['options']
+                    method: $symfonyHttpClientRequestParts['method'],
+                    url: $symfonyHttpClientRequestParts['url'],
+                    options: $symfonyHttpClientRequestParts['options']
                 );
             } catch (TransportExceptionInterface $e) {
                 $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
             }
         }
 
-        foreach ($this->client->stream($responses) as $response => $chunk) {
-            $id = $response->getInfo('user_data');
+        foreach ($this->client->stream(responses: $responses) as $response => $chunk) {
+            $id = $response->getInfo(type: 'user_data');
             try {
                 if ($chunk->isLast()) {
                     // the full content of $response just completed
                     // $response->getContent() is now a non-blocking call
                     $responses[$id] = $this->convertSymfonyHttpClientResponseToPsrResponse(symfonyHttpClientResponse: $response);
                 }
-            } catch (TransportExceptionInterface $e) {
+            } catch (TransportExceptionInterface|SymfonyHttpClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface $e) {
                 $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
             } catch (NotSupportedException $e) {
-                $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
-            } catch (ClientExceptionInterface $e) {
-                $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
-            } catch (RedirectionExceptionInterface $e) {
-                $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
-            } catch (ServerExceptionInterface $e) {
                 $responses[$id] = new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
             }
         }
@@ -351,7 +317,7 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
      *
      * @throws TransportExceptionInterface
      * @throws NotSupportedException
-     * @throws ClientExceptionInterface
+     * @throws SymfonyHttpClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      *

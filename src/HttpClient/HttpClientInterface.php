@@ -32,6 +32,7 @@ namespace Firstred\PostNL\HttpClient;
 use Firstred\PostNL\Exception\HttpClientException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,13 +48,6 @@ interface HttpClientInterface
      * @return LoggerInterface
      */
     public function getLogger(): LoggerInterface;
-
-    /**
-     * Set the logger.
-     *
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger);
 
     /**
      * Adds a request to the list of pending requests
