@@ -46,6 +46,7 @@ use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use function is_array;
@@ -57,7 +58,7 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.2.0
  */
-class HTTPlugClient extends BaseHttpClient implements ClientInterface
+class HTTPlugClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
 {
     /** @var static */
     protected static $instance;
