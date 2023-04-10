@@ -12,7 +12,11 @@
     "keywords": ["postnl", "shipping", "shipments"],
     "scripts": {
         "docs:build": "sphinx-build -b html docs docsbuild",
-        "test": "vendor/bin/phpunit -c phpunit.xml --testdox tests"
+        "test": "vendor/bin/phpunit -c phpunit.xml --testdox tests",
+        "csfix": "vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix src/ tests/",
+        "csfix:dryrun": "vendor/bin/php-cs-fixer --config=.php-cs-fixer.php --dry-run fix src/ tests/",
+        "csfix:src": "vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix src/",
+        "csfix:tests": "vendor/bin/php-cs-fixer --config=.php-cs-fixer.php fix tests/"
     },
     "require": {
         "php": "^8.1",
