@@ -1714,6 +1714,12 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated]
     public function getCurrentStatus($currentStatus)
     {
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.2.0',
+            'Use the dedicated methods (get by phase and status are no longer working)'
+        );
+
         if (null !== $currentStatus->getShipment()->getPhaseCode()) {
             throw new NotSupportedException('Getting the current status by phase code is no longer supported.');
         }
@@ -1940,6 +1946,12 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated]
     public function getCompleteStatus($completeStatus)
     {
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.2.0',
+            'Use the dedicated getShippingStatus* methods (get by phase and status are no longer working)'
+        );
+
         if (null !== $completeStatus->getShipment()->getPhaseCode()) {
             throw new NotSupportedException('Getting the complete status by phase code is no longer supported.');
         }
@@ -1989,6 +2001,12 @@ class PostNL implements LoggerAwareInterface
     #[Deprecated]
     public function getSignature(GetSignature $signature)
     {
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.2.0',
+            'Use the getSignature(s)By* alternatives'
+        );
+
         $signature->setCustomer($this->getCustomer());
         if (!$signature->getMessage()) {
             $signature->setMessage(new Message());
