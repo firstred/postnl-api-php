@@ -47,13 +47,13 @@ Install the latest development build through composer
 =====================================================
 
 During your development, you can keep up with the latest changes on the master
-branch by setting the version requirement for this library to ``dev-1.2.x``.
+branch by setting the version requirement for this library to ``dev-1.4.x``.
 
 .. code-block:: json
 
    {
       "require": {
-         "firstred/postnl-api-php": "dev-1.2.x"
+         "firstred/postnl-api-php": "dev-1.4.x"
       }
    }
 

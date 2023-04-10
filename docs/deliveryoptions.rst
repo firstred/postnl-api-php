@@ -54,6 +54,11 @@ Here's how you can retrieve the closest delivery date:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\CutOffTime;
+    use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
     foreach (range(1, 7) as $day) {
@@ -100,6 +105,11 @@ Shipping dates
 The Shipping Date service almost works in the same way as the Delivery Date service, except this time you provide the actual delivery date in order to calculate the closest shipping date.
 
 .. code-block:: php
+
+    <?php
+
+    use Firstred\PostNL\Entity\CutOffTime;
+    use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
@@ -154,6 +164,10 @@ Timeframes
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\CutOffTime;
+
     $deliveryDaysWindow = 7;
     $dropoffDelay = 0;
 
@@ -198,6 +212,11 @@ Here's an example of how you can retrieve the nearest location by postcode:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Location;
+    use Firstred\PostNL\Entity\Request\GetNearestLocations;
+
     $postnl->getNearestLocations(
         (new GetNearestLocations())
             ->setCountrycode('NL')
@@ -209,7 +228,7 @@ Here's an example of how you can retrieve the nearest location by postcode:
                     ->setHouseNr('66')
                     ->setPostalcode('2132WT')
             )
-        );
+    );
 
 .. confval:: getNearestLocations
     :required: true
@@ -225,6 +244,13 @@ Nearest locations by coordinates
 You can also get the locations by specifying a bounding box. One can be drawn by providing the North-West and South-East corner of the box:
 
 .. code-block:: php
+
+    <?php
+
+    use Firstred\PostNL\Entity\CoordinatesNorthWest;
+    use Firstred\PostNL\Entity\CoordinatesSouthEast;
+    use Firstred\PostNL\Entity\Location;
+    use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 
      $postnl->getLocationsInArea(
          (new GetLocationsInArea())
@@ -245,7 +271,7 @@ You can also get the locations by specifying a bounding box. One can be drawn by
                              ->setLongitude((string) 5.015643)
                      )
                      ->setCoordinatesSouthEast(
-                         (new CoordinatesNorthWest())
+                         (new CoordinatesSouthEast())
                              ->setLatitude((string) 52.017473)
                              ->setLongitude((string) 5.065254)
                      )

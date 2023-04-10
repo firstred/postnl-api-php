@@ -9,6 +9,8 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. code-block:: php
 
+    <?php
+
     use League\Flysystem\Adapter\Local;
     use League\Flysystem\Filesystem;
 

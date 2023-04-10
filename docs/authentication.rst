@@ -108,6 +108,11 @@ When you have all the required information, you are ready to configure the libra
 
     .. code-block:: php
 
+        <?php
+
+        use Firstred\PostNL\Entity\Address;
+        use Firstred\PostNL\Entity\Customer;
+
         $apiKey = 'qjsdjufhjasudhfaSDFasdifh324';
         $customer = (new Customer())
             ->setCollectionLocation('123456')
@@ -124,7 +129,8 @@ When you have all the required information, you are ready to configure the libra
                 ->setZipcode('2132WT')
             )
             ->setGlobalPackBarcodeType('AB')
-            ->setGlobalPackCustomerCode('1234');
+            ->setGlobalPackCustomerCode('1234')
+        ;
 
         $postnl = new PostNL(
             $customer,        // The filled Customer object
@@ -145,6 +151,11 @@ The PostNL client constructor accepts a few options:
 
     .. code-block:: php
 
+        <?php
+
+        use Firstred\PostNL\Entity\Address;
+        use Firstred\PostNL\Entity\Customer;
+
         // Create a new customer
         $client = (new Customer())
             ->setCollectionLocation('123456')              // Your collection location
@@ -163,7 +174,8 @@ The PostNL client constructor accepts a few options:
                 ->setZipcode('2132WT')
             )
             ->setEmail('test@voorbeeld.nl')
-            ->setName('Michael');
+            ->setName('Michael')
+        ;
 
 .. confval:: apiKey
 

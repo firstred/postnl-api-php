@@ -29,6 +29,11 @@ There are four ways in which entities can be instantiated. Either by
 
         .. code-block:: php
 
+            <?php
+
+            use Firstred\PostNL\Entity\Address;
+            use Firstred\PostNL\Entity\Customer;
+
             // Your PostNL credentials
             $customer = new Customer(
                 '11223344',
@@ -51,6 +56,11 @@ There are four ways in which entities can be instantiated. Either by
     .. tab:: 2 - Constructor named args
 
         .. code-block:: php
+
+            <?php
+
+            use Firstred\PostNL\Entity\Address;
+            use Firstred\PostNL\Entity\Customer;
 
             // Your PostNL credentials
             $customer = new Customer(
@@ -75,6 +85,11 @@ There are four ways in which entities can be instantiated. Either by
 
         .. code-block:: php
 
+            <?php
+
+            use Firstred\PostNL\Entity\Address;
+            use Firstred\PostNL\Entity\Customer;
+
             $customer = Customer::create([
                 'CustomerNumber'     => '11223344',
                 'CustomerCode'       => 'DEVC',
@@ -97,6 +112,11 @@ There are four ways in which entities can be instantiated. Either by
 
         .. code-block:: php
 
+            <?php
+
+            use Firstred\PostNL\Entity\Address;
+            use Firstred\PostNL\Entity\Customer;
+
             $customer = (new Customer())
                 ->setCustomerNumber('11223344')
                 ->setCustomerCode('DEVC')
@@ -112,7 +132,8 @@ There are four ways in which entities can be instantiated. Either by
                     ->setZipcode('2132WT')
                     ->setCity('Hoofddorp')
                     ->setCountrycode('NL')
-                );
+                )
+            ;
 
 
 --------------------------
