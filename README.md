@@ -36,7 +36,7 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Barcode webservice                          | ✓                         | ✓                         | 1.1     |
 | Labelling webservice                        | ✓                         | ✓                         | 2.2     |
 | Confirming webservice                       | ✓                         | ✓                         | 2.0     |
-| Shippingstatus webservice                   | ✓                         | ✓                         | 2.0     |
+| Shippingstatus webservice                   | ✓                         | ✓\*                       | 2.0     |
 | Shipping webservice                         | ✓                         | ✓\*                       | 2.0     |
 | **Delivery Options**                        |                           |                           |         |
 | Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
