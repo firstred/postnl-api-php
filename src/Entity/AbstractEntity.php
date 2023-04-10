@@ -233,11 +233,23 @@ abstract class AbstractEntity implements JsonSerializable
         }
 
         $entityName = $properties[0]->getName();
+        if ($json->$entityName instanceof self) {
+            return $json->$entityName;
+        }
+
         // Instantiate a new entity
         $entity = new static();
 
         // Iterate over all the possible properties
         $propertyNames = array_keys(array: $entity->getSerializableProperties());
+        $deserializablePropertyNames = array_keys(array: (array) $json->$entityName);
+        $diffPropertyNames = array_diff($deserializablePropertyNames, $propertyNames);
+        if (count(value: $diffPropertyNames)) {
+            trigger_error(
+                message: "Deserializable entity `$entityName` contains unknown properties: `['".implode(separator: "','", array: $diffPropertyNames)."']`",
+                error_level: E_USER_WARNING,
+            );
+        }
         foreach ($propertyNames as $propertyName) {
             if (!isset($json->$entityName->$propertyName)) {
                 continue;
