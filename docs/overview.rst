@@ -17,7 +17,7 @@ Nowadays there are two APIs you can choose from: SOAP or REST. PostNL's REST API
 REST API Requirements
 =====================
 
-#. PHP 5.6 or higher (up to and including 8.0)
+#. PHP 5.6 or higher (up to and including 8.2)
 #. `JSON extension <https://www.php.net/manual/en/book.json.php>`_
 #. An HTTP Client such as `Symfony's HTTP Client <https://symfony.com/doc/current/http_client.html>`_ (PostNL lib v1.3.0 or higher) or `Guzzle <https://docs.guzzlephp.org/>`_ (or at least have the `PHP cURL extension <https://www.php.net/manual/en/book.curl.php>`_ installed)
 #. ``opcache.save_comments`` set to ``1``
@@ -27,7 +27,7 @@ REST API Requirements
 SOAP API Requirements
 =====================
 
-#. PHP 5.6 or higher (up to and including 8.0)
+#. PHP 5.6 or higher (up to and including 8.2)
 #. `JSON extension <https://www.php.net/manual/en/book.json.php>`_ (both the Shipping webservice and Shipping Status webservice can only be handled by the REST API)
 #. `XMLWriter extension <https://www.php.net/manual/en/book.xmlwriter.php>`_
 #. `XMLReader extension <https://www.php.net/manual/en/book.xmlreader.php>`_
@@ -66,7 +66,7 @@ Licensed using the `MIT license <http://opensource.org/licenses/MIT>`_.
 
     The MIT License (MIT).
 
-    Copyright (c) 2017-2021 Michael Dekker (https://github.com/firstred)
+    Copyright (c) 2017-2023 Michael Dekker (https://github.com/firstred)
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
     associated documentation files (the "Software"), to deal in the Software without restriction,
