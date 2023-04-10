@@ -503,7 +503,7 @@ class PostNL implements LoggerAwareInterface
                 version: '2.0.0',
                 message: 'Using the SOAP API is deprecated. Do not set an API mode to use the recommended API.',
             );
-        } else {
+        } elseif (self::MODE_REST !== $mode) {
             throw new InvalidApiModeException(message: 'Mode not supported');
         }
 
@@ -1945,7 +1945,11 @@ class PostNL implements LoggerAwareInterface
      */
     public function getUpdatedShipments(DateTimeInterface $dateTimeFrom = null, DateTimeInterface $dateTimeTo = null): array
     {
-        return $this->getShippingStatusService()->getUpdatedShipments($this->getCustomer(), $dateTimeFrom, $dateTimeTo);
+        return $this->getShippingStatusService()->getUpdatedShipments(
+            customer: $this->getCustomer(),
+            dateTimeFrom: $dateTimeFrom,
+            dateTimeTo: $dateTimeTo,
+        );
     }
 
     /**
