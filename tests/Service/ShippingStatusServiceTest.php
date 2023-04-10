@@ -33,6 +33,7 @@ use Cache\Adapter\Void\VoidCachePool;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
+use Firstred\PostNL\Entity\Amount;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Message\Message;
@@ -154,6 +155,10 @@ class ShippingStatusServiceTest extends ServiceTestCase
 
         $this->assertInstanceOf(expected: Dimension::class, actual: $currentStatusResponseShipment->getDimension());
         $this->assertInstanceOf(expected: StatusAddress::class, actual: $currentStatusResponseShipment->getAddresses()[0]);
+        $this->assertTrue(
+            condition: null === $currentStatusResponseShipment->getAmounts()
+                || $currentStatusResponseShipment->getAmounts()[0] instanceof Amount
+        );
 
         $this->assertIsString(actual: $currentStatusResponseShipment->getMainBarcode());
         $this->assertIsString(actual: $currentStatusResponseShipment->getBarcode());
@@ -241,6 +246,10 @@ class ShippingStatusServiceTest extends ServiceTestCase
 
         $this->assertInstanceOf(expected: CompleteStatusResponseShipment::class, actual: $completeStatusResponse);
         $this->assertInstanceOf(expected: StatusAddress::class, actual: $completeStatusResponse->getAddresses()[0]);
+        $this->assertTrue(
+            condition: null === $completeStatusResponse->getAmounts()
+                || $completeStatusResponse->getAmounts()[0] instanceof Amount
+        );
         if (is_array(value: $completeStatusResponse->getProductOptions())) {
             $this->assertInstanceOf(expected: ProductOption::class, actual: $completeStatusResponse->getProductOptions()[0]);
         } else {
