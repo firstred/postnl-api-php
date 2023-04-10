@@ -30,8 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Exception\ServiceNotSetException;
-use InvalidArgumentException;
 
 /**
  * @since 1.0.0

@@ -42,11 +42,8 @@ use Firstred\PostNL\Util\UUID;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionIntersectionType;
-use ReflectionNamedType;
 use ReflectionObject;
 use ReflectionProperty;
-use ReflectionUnionType;
 use stdClass;
 use TypeError;
 use function array_keys;
@@ -161,11 +158,11 @@ abstract class AbstractEntity implements JsonSerializable
     }
 
     /**
-     * @return array<string, class-string|'bool'|'int'|'float'|'string'>
+     * @return array<string, string>
      *
      * @since 2.0.0
      */
-    public function getSerializableProperties(): array
+    public function getSerializableProperties(bool $withAliases = false): array
     {
         $serializableProperties = [];
 
@@ -174,9 +171,15 @@ abstract class AbstractEntity implements JsonSerializable
             foreach ($property->getAttributes(name: SerializableProperty::class) as $attribute) {
                 $supportedServices = $attribute->getArguments()['supportedServices'] ?? [];
                 if (empty($supportedServices)
-                    || isset($this->currentService) && in_array(needle: $this->currentService, haystack: $supportedServices)
+                    || !isset($this->currentService)
+                    || in_array(needle: $this->currentService, haystack: $supportedServices)
                 ) {
-                    $serializableProperties[$property->getName()] = $attribute->getArguments()['type'] ?? '';
+                    $serializableProperties[$property->getName()] = $property->getName();
+                    if ($withAliases) {
+                        foreach ($attribute->getArguments()['aliases'] ?? [] as $alias) {
+                            $serializableProperties[$alias] = $property->getName();
+                        }
+                    }
                 }
             }
         }
@@ -241,21 +244,22 @@ abstract class AbstractEntity implements JsonSerializable
         $entity = new static();
 
         // Iterate over all the possible properties
-        $propertyNames = array_keys(array: $entity->getSerializableProperties());
+        $propertyNames = $entity->getSerializableProperties(withAliases: true);
         $deserializablePropertyNames = array_keys(array: (array) $json->$entityName);
-        $diffPropertyNames = array_diff($deserializablePropertyNames, $propertyNames);
+        $diffPropertyNames = array_diff($deserializablePropertyNames, array_keys(array: $propertyNames), ['Errors']);
         if (count(value: $diffPropertyNames)) {
             trigger_error(
                 message: "Deserializable entity `$entityName` contains unknown properties: `['".implode(separator: "','", array: $diffPropertyNames)."']`",
                 error_level: E_USER_WARNING,
             );
         }
-        foreach ($propertyNames as $propertyName) {
-            if (!isset($json->$entityName->$propertyName)) {
+
+        foreach ($propertyNames as $propertyAlias => $propertyName) {
+            if (!isset($json->$entityName->$propertyAlias)) {
                 continue;
             }
 
-            $value = $json->$entityName->$propertyName;
+            $value = $json->$entityName->$propertyAlias;
 
             try {
                 $reflectionProperty = (new ReflectionClass(objectOrClass: $entity))->getProperty(name: $propertyName);

@@ -37,23 +37,29 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 class ProductOption extends AbstractEntity
 {
     /** @var string|null $Characteristic */
-    #[SerializableProperty(type: 'string')]
+    #[SerializableProperty(type: 'string', aliases: ['CharacteristicCode'])]
     protected ?string $Characteristic = null;
 
     /** @var string|null $Option */
-    #[SerializableProperty(type: 'string')]
+    #[SerializableProperty(type: 'string', aliases: ['OptionCode'])]
     protected ?string $Option = null;
+
+    /** @var string|null $Description */
+    #[SerializableProperty(type: 'string', aliases: ['OptionDescription'])]
+    protected ?string $Description = null;
 
     /**
      * @param string|null $Characteristic
      * @param string|null $Option
+     * @param string|null $Description
      */
-    public function __construct(?string $Characteristic = null, ?string $Option = null)
+    public function __construct(?string $Characteristic = null, ?string $Option = null, ?string $Description = null)
     {
         parent::__construct();
 
         $this->setCharacteristic(Characteristic: $Characteristic);
         $this->setOption(Option: $Option);
+        $this->setDescription(Description: $Description);
     }
 
     /**
@@ -92,6 +98,26 @@ class ProductOption extends AbstractEntity
     public function setOption(?string $Option): static
     {
         $this->Option = $Option;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->Description;
+    }
+
+    /**
+     * @param string|null $Description
+     *
+     * @return static
+     */
+    public function setDescription(?string $Description): static
+    {
+        $this->Description = $Description;
 
         return $this;
     }

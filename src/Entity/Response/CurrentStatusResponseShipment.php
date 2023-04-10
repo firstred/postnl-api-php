@@ -36,6 +36,7 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Amount;
+use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Dimension;
 use Firstred\PostNL\Entity\Expectation;
 use Firstred\PostNL\Entity\Group;
@@ -47,7 +48,6 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
 use TypeError;
 use function is_array;
@@ -69,6 +69,10 @@ class CurrentStatusResponseShipment extends AbstractEntity
     /** @var string|null $Barcode */
     #[SerializableProperty(type: 'string')]
     protected ?string $Barcode = null;
+
+    /** @var Customer|null $Customer */
+    #[SerializableProperty(type: Customer::class)]
+    protected ?Customer $Customer = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
     #[SerializableProperty(type: 'string')]
@@ -131,6 +135,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
         /* @param Amount[]|null $Amounts */
         ?array $Amounts = null,
         ?string $Barcode = null,
+        ?Customer $Customer = null,
         DateTimeInterface|string|null $DeliveryDate = null,
         ?Dimension $Dimension = null,
         ?Expectation $Expectation = null,
@@ -153,6 +158,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
         $this->setAddresses(Addresses: $Addresses);
         $this->setAmounts(Amounts: $Amounts);
         $this->setBarcode(Barcode: $Barcode);
+        $this->setCustomer(Customer: $Customer);
         $this->setDeliveryDate(DeliveryDate: $DeliveryDate);
         $this->setDimension(Dimension: $Dimension);
         $this->setExpectation(Expectation: $Expectation);
@@ -268,6 +274,26 @@ class CurrentStatusResponseShipment extends AbstractEntity
     public function setBarcode(?string $Barcode): static
     {
         $this->Barcode = $Barcode;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->Customer;
+    }
+
+    /**
+     * @param Customer|null $Customer
+     *
+     * @return static
+     */
+    public function setCustomer(?Customer $Customer): static
+    {
+        $this->Customer = $Customer;
 
         return $this;
     }

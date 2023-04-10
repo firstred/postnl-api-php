@@ -241,7 +241,6 @@ class ShippingStatusServiceTest extends ServiceTestCase
 
         $this->assertInstanceOf(expected: CompleteStatusResponseShipment::class, actual: $completeStatusResponse);
         $this->assertInstanceOf(expected: StatusAddress::class, actual: $completeStatusResponse->getAddresses()[0]);
-        $this->assertNull(actual: $completeStatusResponse->getAmounts());
         if (is_array(value: $completeStatusResponse->getProductOptions())) {
             $this->assertInstanceOf(expected: ProductOption::class, actual: $completeStatusResponse->getProductOptions()[0]);
         } else {

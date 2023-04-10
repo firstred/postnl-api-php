@@ -45,6 +45,7 @@ class SerializableProperty
      *
      * @param class-string|'bool'|'int'|'float'|'string' $type              Property type
      * @param bool                                       $isArray           Should the property be an array
+     * @param string[]                                   $aliases           Property shortname aliases such as `Address`
      * @param class-string[]                             $supportedServices Supported services, empty array = all
      *
      * @throws InvalidArgumentException
@@ -55,6 +56,7 @@ class SerializableProperty
     public function __construct(
         public string $type,
         public bool $isArray = false,
+        public array $aliases = [],
         public array $supportedServices = [],
     ) {
         try {

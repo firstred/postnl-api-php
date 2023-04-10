@@ -36,7 +36,6 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use InvalidArgumentException;
 use function in_array;
 use function is_string;
 

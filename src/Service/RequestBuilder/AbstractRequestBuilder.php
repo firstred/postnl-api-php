@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder;
 
-use DateTimeImmutable;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;

@@ -36,7 +36,6 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 
 /**
  * @since 1.0.0

@@ -58,7 +58,7 @@ class Status extends AbstractEntity
     protected ?string $StatusDescription = null;
 
     /** @var DateTimeInterface|null $TimeStamp */
-    #[SerializableProperty(type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class, aliases: ['Timestamp'])]
     protected ?DateTimeInterface $TimeStamp = null;
 
     /**

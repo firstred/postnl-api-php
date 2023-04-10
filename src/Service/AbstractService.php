@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Service;
 use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;

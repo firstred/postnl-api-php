@@ -34,7 +34,6 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 
 /**
  * @since 1.0.0

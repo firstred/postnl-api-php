@@ -35,6 +35,7 @@ use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\ShippingServiceInterface;
+use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 
 /**
@@ -122,6 +123,7 @@ class Customer extends AbstractEntity
             LocationServiceInterface::class,
             TimeframeServiceInterface::class,
             ShippingServiceInterface::class,
+            ShippingStatusServiceInterface::class,
         ],
     )]
     protected ?string $Name = null;

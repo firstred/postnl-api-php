@@ -34,9 +34,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
 use TypeError;
 

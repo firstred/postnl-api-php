@@ -49,7 +49,6 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException as PostNLNotSupportedException;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
 
 /**
@@ -62,7 +61,7 @@ class CompleteStatusResponseShipment extends AbstractEntity
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableProperty(type: Amount::class, isArray: true)]
+    #[SerializableProperty(type: Amount::class, isArray: true, aliases: ['Amount'])]
     protected ?array $Amounts = null;
 
     /** @var string|null $Barcode */

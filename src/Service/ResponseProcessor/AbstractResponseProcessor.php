@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
-use DateTimeImmutable;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Response;

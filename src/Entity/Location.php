@@ -35,7 +35,6 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 use function in_array;
 
 /**
