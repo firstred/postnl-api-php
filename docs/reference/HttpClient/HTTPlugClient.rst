@@ -22,7 +22,7 @@ HTTPlugClient
 		:php:class:`Firstred\\PostNL\\HttpClient\\BaseHttpClient`
 	
 	:Implements:
-		:php:interface:`Firstred\\PostNL\\HttpClient\\ClientInterface` 
+		:php:interface:`Firstred\\PostNL\\HttpClient\\ClientInterface` :php:interface:`Psr\\Log\\LoggerAwareInterface` 
 	
 
 
