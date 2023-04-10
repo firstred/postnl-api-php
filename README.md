@@ -1,12 +1,12 @@
 # PostNL REST/SOAP API PHP Bindings
 
-[![Latest Stable Version](http://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
-[![Total Downloads](http://poser.pugx.org/firstred/postnl-api-php/downloads)](https://packagist.org/packages/firstred/postnl-api-php)
+[![Latest Stable Version](https://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
+[![Total Downloads](https://poser.pugx.org/firstred/postnl-api-php/downloads)](https://packagist.org/packages/firstred/postnl-api-php)
 [![.github/workflows/test.yaml](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml/badge.svg)](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml)
 [![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
 [![license mit](https://poser.pugx.org/firstred/postnl-api-php/license.svg)](https://packagist.org/packages/firstred/postnl-api-php)
-[![PHP Version Require](http://poser.pugx.org/firstred/postnl-api-php/require/php)](https://packagist.org/packages/firstred/postnl-api-php)
+[![PHP Version Require](.github/badges/php_required.svg)](https://packagist.org/packages/firstred/postnl-api-php)
 
 ## About
 
