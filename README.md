@@ -148,7 +148,7 @@ composer require abbadon1334/phpdoc-to-rst -W
 ```
 
 This repository includes a simple PHP file which utilizes the above-mentioned tool to generate the reference RST files programmatically. It also moves around a few files to integrate the reference with the rest of the documentation.  
-Simply run (tested w/ PHP 8.1):
+Simply run (tested w/ PHP 8.2):
 
 ```
 php ./build-docs-reference.php
