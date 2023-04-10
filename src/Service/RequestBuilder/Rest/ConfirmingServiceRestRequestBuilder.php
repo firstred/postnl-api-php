@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\ConfirmingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
@@ -49,6 +50,7 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
 
     /**
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -72,6 +74,7 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

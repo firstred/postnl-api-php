@@ -35,8 +35,11 @@ use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -114,12 +117,18 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     /**
      * Generate a single barcode.
      *
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @param GenerateLabel $generateLabel
+     * @param bool          $confirm
+     *
+     * @return GenerateLabelResponse
+     * @throws ApiException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     *
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
      */
     public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
@@ -164,9 +173,11 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws ApiException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
      * @since 1.0.0
-     */
+*/
     public function generateLabels(array $generateLabels): array
     {
         $httpClient = $this->getHttpClient();

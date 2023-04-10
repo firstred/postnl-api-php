@@ -36,6 +36,7 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
@@ -80,6 +81,7 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

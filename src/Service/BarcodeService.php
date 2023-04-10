@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -110,6 +111,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -134,6 +136,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @throws HttpClientException
      * @throws ResponseException
      * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */

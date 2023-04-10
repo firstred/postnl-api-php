@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
@@ -54,6 +55,8 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     /**
      * Build the GenerateLabel request for the REST API.
      *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface
@@ -123,6 +126,9 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * Build the GetLocationsInArea request for the REST API.
      *
      * @since 2.0.0
+     *
+     * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface
     {
@@ -168,6 +174,9 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     /**
      * Build the GetLocation request for the REST API.
      *
+     * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function buildGetLocationRequest(GetLocation $getLocation): RequestInterface
@@ -196,6 +205,7 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

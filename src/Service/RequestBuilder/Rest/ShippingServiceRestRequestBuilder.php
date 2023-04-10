@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Psr\Http\Message\RequestInterface;
@@ -57,6 +58,7 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -82,6 +84,7 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

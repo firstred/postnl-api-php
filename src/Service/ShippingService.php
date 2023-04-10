@@ -33,8 +33,10 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -124,6 +126,8 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */

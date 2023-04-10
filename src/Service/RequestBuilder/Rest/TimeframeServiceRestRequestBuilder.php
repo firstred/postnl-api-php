@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Psr\Http\Message\RequestInterface;
@@ -56,6 +57,7 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -110,6 +112,7 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

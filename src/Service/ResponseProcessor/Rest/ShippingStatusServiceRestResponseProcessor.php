@@ -67,6 +67,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -186,6 +187,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -209,6 +211,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

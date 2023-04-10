@@ -143,6 +143,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -186,6 +187,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws DeserializationException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */
@@ -365,6 +367,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */
@@ -407,6 +411,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */
@@ -471,6 +477,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws EntityNotFoundException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */

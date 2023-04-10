@@ -33,6 +33,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
@@ -85,6 +86,7 @@ class GetNearestLocationsResponse extends AbstractEntity
      * @throws DeserializationException
      * @throws NotSupportedException
      * @throws EntityNotFoundException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */

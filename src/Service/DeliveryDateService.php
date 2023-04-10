@@ -35,9 +35,13 @@ use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
+use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
@@ -116,12 +120,15 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      *
      * @return GetDeliveryDateResponse
      *
+     * @throws ApiException
      * @throws CifDownException
      * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 1.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
@@ -163,7 +170,11 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     *
+     * @throws ApiException
+     * @throws DeserializationException
+     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      * @since 1.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse

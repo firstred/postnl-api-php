@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\DeserializationException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
 
@@ -509,6 +510,7 @@ class ResponseLocation extends AbstractEntity
      * @throws DeserializationException
      * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

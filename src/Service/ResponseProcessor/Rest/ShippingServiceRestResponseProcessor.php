@@ -33,6 +33,7 @@ use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingServiceResponseProcessorInterface;
@@ -57,6 +58,7 @@ class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws ResponseException
      * @throws DeserializationException
      * @throws EntityNotFoundException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

@@ -34,6 +34,7 @@ use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
@@ -59,6 +60,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -153,6 +155,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -197,6 +200,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

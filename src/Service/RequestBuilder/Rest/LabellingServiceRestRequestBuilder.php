@@ -32,6 +32,7 @@ namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
@@ -58,6 +59,8 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     /**
      * Build the GenerateLabel request for the REST API.
      *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
     public function buildGenerateLabelRequest(GenerateLabel $generateLabel, bool $confirm = true): RequestInterface
@@ -90,6 +93,7 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

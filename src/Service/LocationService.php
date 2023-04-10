@@ -36,8 +36,12 @@ use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -114,13 +118,20 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     /**
      * Get the nearest locations via REST.
      *
+     * @param GetNearestLocations $getNearestLocations
+     *
+     * @return GetNearestLocationsResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
+     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     * @throws NotFoundException
-     *
+     * @throws \ReflectionException
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
@@ -157,15 +168,19 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     /**
      * Get the nearest locations via REST.
      *
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @param GetLocationsInArea $getLocations
+     * @return GetLocationsInAreaResponse
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws NotFoundException
-     *
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
      * @since 1.0.0
-     */
+*/
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse
     {
         $item = $this->retrieveCachedItem(uuid: $getLocations->getId());
@@ -196,15 +211,20 @@ class LocationService extends AbstractService implements LocationServiceInterfac
     /**
      * Get the location via REST.
      *
-     * @throws ResponseException
-     * @throws PsrCacheInvalidArgumentException
+     * @param GetLocation $getLocation
+     * @return GetLocationsInAreaResponse
+     * @throws HttpClientException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
-     * @throws HttpClientException
-     * @throws NotFoundException
-     *
+     * @throws PsrCacheInvalidArgumentException
+     * @throws ResponseException
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
+     * @throws \ReflectionException
      * @since 1.0.0
-     */
+*/
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
     {
         $item = $this->retrieveCachedItem(uuid: $getLocation->getId());

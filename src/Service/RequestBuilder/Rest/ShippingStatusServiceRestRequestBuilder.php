@@ -37,6 +37,7 @@ use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Psr\Http\Message\RequestInterface;
@@ -60,6 +61,8 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * - CurrentStatus
      * - CurrentStatusByReference
      *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
     public function buildCurrentStatusRequest(CurrentStatusByReference|CurrentStatus $currentStatus): RequestInterface
@@ -126,6 +129,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -193,6 +197,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -218,6 +223,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
@@ -247,6 +253,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      * @return void
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
