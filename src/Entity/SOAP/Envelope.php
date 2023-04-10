@@ -30,6 +30,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
 use Firstred\PostNL\Service\LabellingService;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class Envelope.
@@ -42,7 +43,9 @@ use Firstred\PostNL\Service\LabellingService;
  * NOTE: this class has been introduced for deserializing
  *
  * @since 1.0.0
+ * @deprecated 1.4.1 SOAP support is going to be removed
  */
+#[Deprecated]
 class Envelope extends AbstractEntity
 {
     /**

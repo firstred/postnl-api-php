@@ -349,11 +349,17 @@ class PostNL implements LoggerAwareInterface
     public function setToken($apiKey)
     {
         if ($apiKey instanceof UsernameToken) {
-            $this->apiKey = $apiKey;
+            static::triggerDeprecation(
+                'firstred/postnl-api-php',
+                '1.4.1',
+                'Use a string for the API key instead of a `UserNameToken`'
+            );
+
+            $this->apiKey = $apiKey->getPassword();
 
             return $this;
         } elseif (is_string($apiKey)) {
-            $this->apiKey = new UsernameToken(null, $apiKey);
+            $this->apiKey = $apiKey;
 
             return $this;
         }
@@ -367,14 +373,34 @@ class PostNL implements LoggerAwareInterface
      * @return bool|string
      *
      * @since 1.0.0
+     * @deprecated 1.4.1 Use `getApiKey` instead
      */
+    #[Deprecated]
     public function getRestApiKey()
     {
-        if ($this->apiKey instanceof UsernameToken) {
-            return $this->apiKey->getPassword();
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            '`getRestApiKey` is deprecated, use `getApiKey` instead'
+        );
+
+        if (null == $this->apiKey) {
+            return false;
         }
 
-        return false;
+        return $this->apiKey;
+    }
+
+    /**
+     * Get API Key.
+     *
+     * @return null|string
+     *
+     * @since 1.4.1
+     */
+    public function getApiKey()
+    {
+        return $this->apiKey;
     }
 
     /**
@@ -383,14 +409,18 @@ class PostNL implements LoggerAwareInterface
      * @return bool|UsernameToken
      *
      * @since 1.0.0
+     * @deprecated 1.4.1 Use `getApiKey` instead
      */
+    #[Deprecated]
     public function getToken()
     {
-        if ($this->apiKey instanceof UsernameToken) {
-            return $this->apiKey;
-        }
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            '`getToken` is deprecated, use `getApiKey` instead'
+        );
 
-        return false;
+        return new UsernameToken(null, $this->apiKey);
     }
 
     /**
@@ -494,7 +524,7 @@ class PostNL implements LoggerAwareInterface
         if ($mode === static::MODE_SOAP) {
             static::triggerDeprecation(
                 'firstred/postnl-api-php',
-                '2.0.0',
+                '1.4.0',
                 'Using the SOAP API is deprecated. Please use the REST API instead.'
             );
         }
@@ -1023,7 +1053,7 @@ class PostNL implements LoggerAwareInterface
         if ($eps) {
             static::triggerDeprecation(
                 'firstred/postnl-api-php',
-                '2.0.0',
+                '1.4.0',
                 'EPS is no longer supported. Please avoid.'
             );
         }
@@ -2267,7 +2297,7 @@ class PostNL implements LoggerAwareInterface
         } else {
             static::triggerDeprecation(
                 'firstred/postnl-api-php',
-                '2.0.0',
+                '1.4.0',
                 'EPS is no longer supported. Please avoid.'
             );
         }

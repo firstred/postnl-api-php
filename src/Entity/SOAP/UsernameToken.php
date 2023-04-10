@@ -39,7 +39,7 @@ use Sabre\Xml\Writer;
  * @method UsernameToken setPassword(string|null $Password = null)
  *
  * @since 1.0.0
- * @deprecated 1.4.0
+ * @deprecated 1.4.0 SOAP support is going to be removed
  */
 #[Deprecated]
 class UsernameToken extends AbstractEntity

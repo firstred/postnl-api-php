@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Entity\SOAP;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class Header.
@@ -34,7 +35,9 @@ use Firstred\PostNL\Entity\AbstractEntity;
  * NOTE: this class has been introduced for deserializing
  *
  * @since 1.0.0
+ * @deprecated 1.4.1 SOAP support is going to be removed
  */
+#[Deprecated]
 class Header extends AbstractEntity
 {
 }

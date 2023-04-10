@@ -27,6 +27,7 @@
 namespace Firstred\PostNL\Entity\SOAP;
 
 use Firstred\PostNL\Entity\AbstractEntity;
+use JetBrains\PhpStorm\Deprecated;
 
 /**
  * Class Security.
@@ -35,7 +36,9 @@ use Firstred\PostNL\Entity\AbstractEntity;
  * @method Security      setUserNameToken(UsernameToken $UserNameToken)
  *
  * @since 1.0.0
+ * @deprecated 1.4.1 SOAP support is going to be removed
  */
+#[Deprecated]
 class Security extends AbstractEntity
 {
     const SECURITY_NAMESPACE = 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd';
