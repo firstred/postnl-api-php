@@ -42,11 +42,12 @@ The PHP bindings can connect to both PostNL's SOAP and REST API.
 | Deliverydate webservice                     | ✓                         | ✓                         | 2.2     |
 | Location webservice                         | ✓                         | ✓                         | 2.1     |
 | Timeframe webservice                        | ✓                         | ✓                         | 2.1     |
-| Checkout webservice                         | Planned                   | Planned\*                 | 1.0     |
+| Checkout webservice                         | N/A \*\*                  | N/A \*\*                  | 1.0     |
 | **Mail**                                    |                           |                           |         |
 | Bulkmail webservice                         | N/A                       | N/A                       | N/A     |
 
-\* SOAP version not available. Falls back on the REST API.
+\* SOAP version not available. Falls back on the REST API.  
+\*\* `PostNL::getTimeframesAndNearestLocations` can be used as an alternative with more functionality: https://postnl-php.readthedocs.io/en/v1.4.x/quickstart.html#requesting-timeframes-location-and-delivery-date-at-once
 
 ## Instructions
 
