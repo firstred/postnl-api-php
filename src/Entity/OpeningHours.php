@@ -31,18 +31,16 @@ namespace Firstred\PostNL\Entity;
 
 use ArrayAccess;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Iterator;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use stdClass;
 use TypeError;
-
 use function is_numeric;
 use function is_string;
 
@@ -54,31 +52,31 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
     private int $currentDay = 0;
 
     /** @var string[]|null $Monday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Monday = null;
 
     /** @var string[]|null $Tuesday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Tuesday = null;
 
     /** @var string[]|null $Wednesday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Wednesday = null;
 
     /** @var string[]|null $Thursday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Thursday = null;
 
     /** @var string[]|null $Friday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Friday = null;
 
     /** @var string[]|null $Saturday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Saturday = null;
 
     /** @var string[]|null $Sunday */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected array|null $Sunday = null;
 
     /**
@@ -263,9 +261,8 @@ class OpeningHours extends AbstractEntity implements ArrayAccess, Iterator
      * @return OpeningHours
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws NotSupportedException
-     * @throws \ReflectionException
+     * @throws InvalidConfigurationException
      *
      * @since 1.0.0
      */

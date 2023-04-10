@@ -35,10 +35,8 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Psr\Http\Message\RequestInterface;
-
 use function http_build_query;
 use function json_encode;
-
 use const PHP_QUERY_RFC3986;
 
 /**

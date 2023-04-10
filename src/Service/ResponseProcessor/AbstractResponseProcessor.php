@@ -37,7 +37,6 @@ use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Sabre\Xml\Writer;
 
 /**
  * @since 2.0.0
@@ -95,16 +94,6 @@ abstract class AbstractResponseProcessor
         } else {
             throw new ResponseException(message: 'Unknown response type');
         }
-    }
-
-    /**
-     * Write default date format in XML.
-     *
-     * @since 2.0.0
-     */
-    protected static function defaultDateFormat(Writer $writer, DateTimeImmutable $value): void
-    {
-        $writer->write(value: $value->format(format: 'd-m-Y H:i:s'));
     }
 
     /**

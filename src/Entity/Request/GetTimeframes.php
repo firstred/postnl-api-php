@@ -33,10 +33,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Enum\SoapNamespace;
-use Firstred\PostNL\Exception\ServiceNotSetException;
 use http\Exception\InvalidArgumentException;
-use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
@@ -44,11 +41,11 @@ use Sabre\Xml\Writer;
 class GetTimeframes extends AbstractEntity
 {
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
+    #[SerializableProperty(type: Message::class)]
     protected ?Message $Message = null;
 
     /** @var Timeframe[]|null $Timeframe */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Timeframe::class, isArray: true)]
+    #[SerializableProperty(type: Timeframe::class, isArray: true)]
     protected ?array $Timeframe = null;
 
     /**
@@ -135,38 +132,5 @@ class GetTimeframes extends AbstractEntity
         $this->Message = $Message;
 
         return $this;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Timeframe' === $propertyName) {
-                $timeframes = [];
-                foreach ($this->Timeframe as $timeframe) {
-                    $timeframes[] = $timeframe;
-                }
-                $xml["{{$namespace}}Timeframe"] = $timeframes;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

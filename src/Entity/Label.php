@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -45,15 +44,15 @@ class Label extends AbstractEntity
      *
      * @var string|null $Content
      */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Content = null;
 
     /** @var string|null $Contenttype */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Contenttype = null;
 
     /** @var string|null $Labeltype */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Labeltype = null;
 
     /**

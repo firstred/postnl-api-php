@@ -44,7 +44,6 @@ use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
@@ -52,7 +51,6 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\ShippingStatusServiceRestResponseProcessor;
@@ -85,7 +83,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
@@ -95,7 +92,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
@@ -105,9 +101,21 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
+        );
+
+        $this->requestBuilder = new ShippingStatusServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->responseProcessor = new ShippingStatusServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
         );
     }
 
@@ -511,24 +519,5 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         throw new NotFoundException(message: 'Unable to retrieve updated shipments');
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        $this->requestBuilder = new ShippingStatusServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
-        $this->responseProcessor = new ShippingStatusServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
     }
 }

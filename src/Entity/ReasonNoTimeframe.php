@@ -34,16 +34,14 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
-
 use function array_merge;
 use function is_array;
 use function is_string;
@@ -54,27 +52,27 @@ use function is_string;
 class ReasonNoTimeframe extends AbstractEntity
 {
     /** @var string|null $Code */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Code = null;
 
     /** @var DateTimeInterface|null $Date */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $Date = null;
 
     /** @var string|null $Description */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Description = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $From */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $From = null;
 
     /** @var string|null $To */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $To = null;
 
     /**
@@ -232,10 +230,12 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
-     * @throws NotSupportedException
+     * @param stdClass $json
+     *
+     * @return ReasonNoTimeframe
      * @throws DeserializationException
-     * @throws EntityNotFoundException
-     * @throws \ReflectionException
+     * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */
@@ -267,42 +267,5 @@ class ReasonNoTimeframe extends AbstractEntity
         }
 
         return parent::jsonDeserialize(json: $json);
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Options' === $propertyName) {
-                if (isset($this->Options)) {
-                    $options = [];
-                    if (is_array(value: $this->Options)) {
-                        foreach ($this->Options as $option) {
-                            $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
-                        }
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

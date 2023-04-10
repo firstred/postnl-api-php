@@ -50,18 +50,6 @@ use ReflectionClass;
  */
 abstract class AbstractService
 {
-    // SOAP API specific
-    /** @deprecated 2.0.0 */
-    public const XML_SCHEMA_NAMESPACE = 'http://www.w3.org/2001/XMLSchema-instance';
-    /** @deprecated 2.0.0 */
-    public const COMMON_NAMESPACE = 'http://postnl.nl/cif/services/common/';
-    /** @deprecated 2.0.0 */
-    public const ENVELOPE_NAMESPACE = 'http://schemas.xmlsoap.org/soap/envelope/';
-    /** @deprecated 2.0.0 */
-    public const OLD_ENVELOPE_NAMESPACE = 'http://www.w3.org/2003/05/soap-envelope';
-    /** @deprecated 2.0.0 */
-    public const ARRAY_SERIALIZATION_NAMESPACE = 'http://schemas.microsoft.com/2003/10/Serialization/Arrays';
-
     /**
      * TTL for the cache.
      *
@@ -100,13 +88,11 @@ abstract class AbstractService
         private HttpClientInterface $httpClient,
         private RequestFactoryInterface $requestFactory,
         private StreamFactoryInterface $streamFactory,
-        private int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
         $this->cache = $cache;
         $this->ttl = $ttl;
-        $this->setAPIMode(mode: $apiMode);
     }
 
     /**
@@ -123,12 +109,7 @@ abstract class AbstractService
     public function retrieveCachedItem(string $uuid): ?CacheItemInterface
     {
         $reflection = new ReflectionClass(objectOrClass: $this);
-        $uuid .= (
-            PostNL::MODE_REST == $this->getAPIMode()
-            || $this instanceof ShippingServiceInterface
-            || $this instanceof ShippingStatusServiceInterface
-        ) ? 'rest' : 'soap';
-        $uuid .= strtolower(string: substr(string: $reflection->getShortName(), offset: 0, length: strlen(string: $reflection->getShortName()) - 7));
+        $uuid = strtolower(string: substr(string: $reflection->getShortName(), offset: 0, length: strlen(string: $reflection->getShortName()) - 7));
         $item = null;
         if ($this->cache instanceof CacheItemPoolInterface && !is_null(value: $this->ttl)) {
             $item = $this->cache->getItem(key: $uuid);
@@ -245,26 +226,6 @@ abstract class AbstractService
         $this->apiKey = $apiKey;
 
         return $this;
-    }
-
-    /**
-     * @param int $mode
-     *
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        $this->apiMode = $mode;
-    }
-
-    /**
-     * @return int
-     *
-     * @since 2.0.0
-     */
-    public function getAPIMode(): int
-    {
-        return $this->apiMode;
     }
 
     /**

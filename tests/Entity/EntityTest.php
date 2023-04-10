@@ -136,18 +136,4 @@ class EntityTest extends TestCase
 
         json_encode(value: new Address());
     }
-
-    /** @throws */
-    #[TestDox(text: 'should throw an `Error` when xml serializing without having a service')]
-    public function testNegativeThrowExceptionWhenServiceNotSetXml(): void
-    {
-        $this->expectException(exception: ServiceNotSetException::class);
-
-        $service = new XmlService();
-
-        $service->write(
-            rootElementName: '{test}a',
-            value: new Address()
-        );
-    }
 }

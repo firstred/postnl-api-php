@@ -33,7 +33,6 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -41,15 +40,15 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GetNearestLocations extends AbstractEntity
 {
     /** @var string|null $Countrycode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Countrycode = null;
 
     /** @var Location|null $Location */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Location::class)]
+    #[SerializableProperty(type: Location::class)]
     protected ?Location $Location = null;
 
     /** @var Message|null $Messages */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
+    #[SerializableProperty(type: Message::class)]
     protected ?Message $Message = null;
 
     /**

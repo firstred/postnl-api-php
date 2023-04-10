@@ -46,7 +46,6 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingStatusServiceResponseProcessorInterface;
 use Psr\Http\Message\ResponseInterface;
-
 use function json_decode;
 
 /**

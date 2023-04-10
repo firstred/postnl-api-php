@@ -35,7 +35,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Sabre\Xml\Writer;
 
 /**
  * @since 2.0.0
@@ -56,16 +55,6 @@ abstract class AbstractRequestBuilder
         private RequestFactoryInterface $requestFactory,
         private StreamFactoryInterface $streamFactory,
     ) {
-    }
-
-    /**
-     * Write default date format in XML.
-     *
-     * @since 2.0.0
-     */
-    public static function defaultDateFormat(Writer $writer, DateTimeImmutable $value): void
-    {
-        $writer->write(value: $value->format(format: 'd-m-Y H:i:s'));
     }
 
     /**

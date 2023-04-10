@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -39,11 +38,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Signature extends AbstractEntity
 {
     /** @var GetSignatureResponseSignature|null $GetSignatureResponseSignature */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: GetSignatureResponseSignature::class)]
+    #[SerializableProperty(type: GetSignatureResponseSignature::class)]
     protected ?GetSignatureResponseSignature $GetSignatureResponseSignature = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
+    #[SerializableProperty(type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**

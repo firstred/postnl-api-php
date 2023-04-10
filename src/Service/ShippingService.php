@@ -39,7 +39,6 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
@@ -73,7 +72,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      *
@@ -85,7 +83,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
@@ -95,9 +92,21 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
+        );
+
+        $this->requestBuilder = new ShippingServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->responseProcessor = new ShippingServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
         );
     }
 
@@ -154,24 +163,5 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         }
 
         throw new NotFoundException(message: 'Unable to create shipment');
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        $this->requestBuilder = new ShippingServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
-        $this->responseProcessor = new ShippingServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
     }
 }

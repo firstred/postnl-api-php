@@ -34,10 +34,8 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
@@ -45,155 +43,155 @@ use Sabre\Xml\Writer;
 class Shipment extends AbstractEntity
 {
     /** @var Address[]|null $Addresses */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Address::class, isArray: true)]
+    #[SerializableProperty(type: Address::class, isArray: true)]
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Amount::class, isArray: true)]
+    #[SerializableProperty(type: Amount::class, isArray: true)]
     protected ?array $Amounts = null;
 
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var DateTimeInterface|null $CollectionTimeStampEnd */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $CollectionTimeStampEnd = null;
 
     /** @var DateTimeInterface|null $CollectionTimeStampStart */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $CollectionTimeStampStart = null;
 
     /** @var Contact[]|null $Contacts */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Contact::class, isArray: true)]
+    #[SerializableProperty(type: Contact::class, isArray: true)]
     protected ?array $Contacts = null;
 
     /** @var string|null $Content */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Content = null;
 
     /** @var string|null $CostCenter */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CostCenter = null;
 
     /** @var string|null $CustomerOrderNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CustomerOrderNumber = null;
 
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
+    #[SerializableProperty(type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var Customs|null $Customs */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customs::class)]
+    #[SerializableProperty(type: Customs::class)]
     protected ?Customs $Customs = null;
 
     /** @var string|null $StatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $StatusCode = null;
 
     /** @var int|null $PhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'int')]
+    #[SerializableProperty(type: 'int')]
     protected ?int $PhaseCode = null;
 
     /** @var DateTimeInterface|null $DateFrom */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DateFrom = null;
 
     /** @var DateTimeInterface|null $DateTo */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DateTo = null;
 
     /** @var string|null $DeliveryAddress */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DeliveryAddress = null;
 
     /** @var DateTimeInterface|null $DeliveryTimeStampStart */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DeliveryTimeStampStart = null;
 
     /** @var DateTimeInterface|null $DeliveryTimeStampEnd */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DeliveryTimeStampEnd = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Dimension::class)]
+    #[SerializableProperty(type: Dimension::class)]
     protected ?Dimension $Dimension = null;
 
     /** @var string|null $DownPartnerBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerBarcode = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerLocation = null;
 
     /** @var Event[]|null $Events */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Event::class, isArray: true)]
+    #[SerializableProperty(type: Event::class, isArray: true)]
     protected ?array $Events = null;
 
     /** @var Group[]|null $Groups */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Group::class, isArray: true)]
+    #[SerializableProperty(type: Group::class, isArray: true)]
     protected ?array $Groups = null;
 
     /** @var string|null $IDExpiration */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $IDExpiration = null;
 
     /** @var string|null $IDNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $IDNumber = null;
 
     /** @var string|null $IDType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $IDType = null;
 
     /** @var string|null $OldStatuses */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $OldStatuses = null;
 
     /** @var string|null $ProductCodeCollect */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ProductCodeCollect = null;
 
     /** @var string|null $ProductCodeDelivery */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ProductCodeDelivery = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ProductOption::class, isArray: true)]
+    #[SerializableProperty(type: ProductOption::class, isArray: true)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $ReceiverDateOfBirth */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ReceiverDateOfBirth = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Reference = null;
 
     /** @var string|null $ReferenceCollect */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ReferenceCollect = null;
 
     /** @var string|null $Remark */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Remark = null;
 
     /** @var string|null $ReturnBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ReturnBarcode = null;
 
     /** @var string|null $ReturnReference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ReturnReference = null;
 
     /**
@@ -1086,84 +1084,5 @@ class Shipment extends AbstractEntity
         $this->DeliveryDate = $DeliveryDate;
 
         return $this;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Addresses' === $propertyName) {
-                if (is_array(value: $this->Addresses)) {
-                    $items = [];
-                    foreach ($this->Addresses as $address) {
-                        $items[] = ["{{$namespace}}Address" => $address];
-                    }
-                    $xml["{{$namespace}}Addresses"] = $items;
-                }
-            } elseif ('Amounts' === $propertyName) {
-                if (is_array(value: $this->Amounts)) {
-                    $items = [];
-                    foreach ($this->Amounts as $amount) {
-                        $items[] = ["{{$namespace}}Amount" => $amount];
-                    }
-                    $xml["{{$namespace}}Amounts"] = $items;
-                }
-            } elseif ('Contacts' === $propertyName) {
-                if (is_array(value: $this->Contacts)) {
-                    $items = [];
-                    foreach ($this->Contacts as $contact) {
-                        $items[] = ["{{$namespace}}Contact" => $contact];
-                    }
-                    $xml["{{$namespace}}Contacts"] = $items;
-                }
-            } elseif ('Events' === $propertyName) {
-                if (is_array(value: $this->Events)) {
-                    $items = [];
-                    foreach ($this->Events as $event) {
-                        $items[] = ["{{$namespace}}Event" => $event];
-                    }
-                    $xml["{{$namespace}}Events"] = $items;
-                }
-            } elseif ('Groups' === $propertyName) {
-                if (is_array(value: $this->Groups)) {
-                    $items = [];
-                    foreach ($this->Groups as $group) {
-                        $items[] = ["{{$namespace}}Group" => $group];
-                    }
-                    $xml["{{$namespace}}Groups"] = $items;
-                }
-            } elseif ('ProductOptions' === $propertyName) {
-                if (is_array(value: $this->ProductOptions)) {
-                    $items = [];
-                    foreach ($this->ProductOptions as $option) {
-                        $items[] = ["{{$namespace}}ProductOption" => $option];
-                    }
-                    $xml["{{$namespace}}ProductOptions"] = $items;
-                }
-            } else {
-                if ($this->$propertyName instanceof DateTimeInterface) {
-                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName->format('d-m-y');
-                } else {
-                    $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-                }
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

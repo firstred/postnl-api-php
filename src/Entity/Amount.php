@@ -30,10 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use InvalidArgumentException;
-use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
@@ -41,39 +39,39 @@ use Sabre\Xml\Writer;
 class Amount extends AbstractEntity
 {
     /** @var string|null $AccountName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $AccountName = null;
 
     /** @var string|null $AmountType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $AmountType = null;
 
     /** @var string|null $BIC */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $BIC = null;
 
     /** @var string|null $Currency */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Currency = null;
 
     /** @var string|null $IBAN */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $IBAN = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Reference = null;
 
     /** @var string|null $TransactionNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $TransactionNumber = null;
 
     /** @var string|null $Value */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Value = null;
 
     /** @var string|null $VerzekerdBedrag */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $VerzekerdBedrag = null;
 
     /**
@@ -293,31 +291,5 @@ class Amount extends AbstractEntity
         }
 
         return $this;
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Value' === $propertyName) {
-                $xml["{{$namespace}}Value"] = number_format(num: (float) $this->Value, decimals: 2, decimal_separator: '.', thousands_separator: '');
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-
-        $writer->write(value: $xml);
     }
 }

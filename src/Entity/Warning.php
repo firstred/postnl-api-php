@@ -30,9 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
 
@@ -42,11 +41,11 @@ use stdClass;
 class Warning extends AbstractEntity
 {
     /** @var string|null $Code */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Code = null;
 
     /** @var string|null $Description */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Description = null;
 
     /**
@@ -106,10 +105,9 @@ class Warning extends AbstractEntity
      *
      * @return Warning
      *
-     * @throws NotSupportedException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
-     * @throws \ReflectionException
+     * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -38,11 +37,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Area extends AbstractEntity
 {
     /** @var CoordinatesNorthWest|null $CoordinatesNorthWest */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CoordinatesNorthWest::class)]
+    #[SerializableProperty(type: CoordinatesNorthWest::class)]
     protected ?CoordinatesNorthWest $CoordinatesNorthWest = null;
 
     /** @var CoordinatesSouthEast|null $CoordinatesSouthEast */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CoordinatesSouthEast::class)]
+    #[SerializableProperty(type: CoordinatesSouthEast::class)]
     protected ?CoordinatesSouthEast $CoordinatesSouthEast = null;
 
     /**

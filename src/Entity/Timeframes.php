@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 
 /**
@@ -39,11 +38,11 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class Timeframes extends AbstractEntity
 {
     /** @var Timeframe[]|null $Timeframes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Timeframe::class, isArray: true)]
+    #[SerializableProperty(type: Timeframe::class, isArray: true)]
     protected ?array $Timeframes = null;
 
     /** @var TimeframeTimeFrame[]|null $TimeframeTimeFrames */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: TimeframeTimeFrame::class, isArray: true)]
+    #[SerializableProperty(type: TimeframeTimeFrame::class, isArray: true)]
     protected ?array $TimeframeTimeFrames = null;
 
     /**

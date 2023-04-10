@@ -39,7 +39,6 @@ use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
@@ -98,22 +97,6 @@ class PostNLRestTest extends TestCase
     public function testCustomer(): void
     {
         $this->assertInstanceOf(expected: Customer::class, actual: $this->postnl->getCustomer());
-    }
-
-    /** @throws */
-    #[TestDox(text: 'accepts a string token')]
-    public function testSetTokenString(): void
-    {
-        $this->postnl->setToken(apiKey: 'test');
-        $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
-    }
-
-    /** @throws */
-    #[TestDox(text: 'accepts a token object')]
-    public function testSetTokenObject(): void
-    {
-        $this->postnl->setToken(apiKey: new UsernameToken(Username: null, Password: 'test'));
-        $this->assertInstanceOf(expected: UsernameToken::class, actual: $this->postnl->getToken());
     }
 
     /** @throws */
@@ -372,15 +355,6 @@ class PostNLRestTest extends TestCase
     }
 
     /** @throws */
-    #[TestDox(text: 'does not accept an invalid token object')]
-    public function testNegativeInvalidToken(): void
-    {
-        $this->expectException(exception: \TypeError::class);
-        /* @noinspection PhpParamsInspection */
-        $this->postnl->setToken(apiKey: new Address());
-    }
-
-    /** @throws */
     #[TestDox(text: 'returns `false` when the API key is missing')]
     public function testNegativeKeyMissing(): void
     {
@@ -391,16 +365,6 @@ class PostNLRestTest extends TestCase
         $postnl = $reflection->newInstanceWithoutConstructor();
 
         $postnl->getApiKey();
-    }
-
-    /** @throws */
-    #[TestDox(text: 'throws an exception when setting an invalid mode')]
-    public function testNegativeInvalidMode(): void
-    {
-        $this->expectException(exception: \TypeError::class);
-
-        /* @noinspection PhpStrictTypeCheckingInspection */
-        $this->postnl->setApiMode(mode: 'invalid');
     }
 
     /** @throws */

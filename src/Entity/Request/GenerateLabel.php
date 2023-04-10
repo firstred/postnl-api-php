@@ -34,9 +34,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
@@ -44,19 +42,19 @@ use Sabre\Xml\Writer;
 class GenerateLabel extends AbstractEntity
 {
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
+    #[SerializableProperty(type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var LabellingMessage|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: LabellingMessage::class)]
+    #[SerializableProperty(type: LabellingMessage::class)]
     protected ?LabellingMessage $Message = null;
 
     /** @var Shipment[]|null */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Shipment::class, isArray: true)]
+    #[SerializableProperty(type: Shipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /** @var string|null $LabelSignature */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $LabelSignature = null;
 
     /**
@@ -186,38 +184,5 @@ class GenerateLabel extends AbstractEntity
         }
 
         return $json;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Shipments' === $propertyName) {
-                $shipments = [];
-                foreach ($this->Shipments as $shipment) {
-                    $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-                }
-                $xml["{{$namespace}}Shipments"] = $shipments;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\HttpClient;
 
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -40,13 +39,7 @@ use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
-
-use function is_array;
-use function user_error;
-
-use const E_USER_DEPRECATED;
 
 /**
  * Class MockClient.

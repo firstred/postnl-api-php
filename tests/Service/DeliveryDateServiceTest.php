@@ -61,7 +61,7 @@ use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The DeliveryDateService (REST)')]
-class DeliveryDateServiceRestTest extends ServiceTestCase
+class DeliveryDateServiceTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected DeliveryDateServiceInterface $service;

@@ -37,11 +37,8 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
-
 use function in_array;
 
 /**
@@ -50,59 +47,59 @@ use function in_array;
 class GetDeliveryDate extends AbstractEntity
 {
     /** @var bool|null $AllowSundaySorting */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'bool')]
+    #[SerializableProperty(type: 'bool')]
     protected ?bool $AllowSundaySorting = null;
 
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CountryCode = null;
 
     /** @var CutOffTime[]|null $CutOffTimes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CutOffTime::class)]
+    #[SerializableProperty(type: CutOffTime::class)]
     protected ?array $CutOffTimes = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $OriginCountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $OriginCountryCode = null;
 
     /** @var string|null $PostalCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PostalCode = null;
 
     /** @var DateTimeInterface|null $ShippingDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $ShippingDate = null;
 
     /** @var string|null $ShippingDuration */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ShippingDuration = null;
 
     /** @var string|null $Street */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Street = null;
 
     /** @var self|null $GetDeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: self::class)]
+    #[SerializableProperty(type: self::class)]
     protected ?self $GetDeliveryDate = null;
 
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
+    #[SerializableProperty(type: Message::class)]
     protected ?Message $Message = null;
 
     /**
@@ -435,56 +432,5 @@ class GetDeliveryDate extends AbstractEntity
         $this->AllowSundaySorting = $AllowSundaySorting;
 
         return $this;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('CutOffTimes' === $propertyName) {
-                if (isset($this->CutOffTimes)) {
-                    $cutOffTimes = [];
-                    foreach ($this->CutOffTimes as $cutOffTime) {
-                        $cutOffTimes[] = ["{{$namespace}}CutOffTime" => $cutOffTime];
-                    }
-                    $xml["{{$namespace}}CutOffTimes"] = $cutOffTimes;
-                }
-            } elseif ('Options' === $propertyName) {
-                if (isset($this->Options)) {
-                    $options = [];
-                    foreach ($this->Options as $option) {
-                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } elseif ('AllowSundaySorting' === $propertyName) {
-                if (isset($this->AllowSundaySorting)) {
-                    if (is_bool(value: $this->AllowSundaySorting)) {
-                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting ? 'true' : 'false';
-                    } else {
-                        $xml["{{$namespace}}AllowSundaySorting"] = $this->AllowSundaySorting;
-                    }
-                }
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

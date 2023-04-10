@@ -35,7 +35,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\TimeframeServiceInterface;
 use Psr\Http\Message\RequestInterface;
-
 use const PHP_QUERY_RFC3986;
 
 /**

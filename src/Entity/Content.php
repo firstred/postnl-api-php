@@ -30,7 +30,6 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -38,31 +37,31 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class Content extends AbstractEntity
 {
     /** @var string|null $CountryOfOrigin */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CountryOfOrigin = null;
 
     /** @var string|null $Description */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Description = null;
 
     /** @var string|null $HSTariffNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $HSTariffNr = null;
 
     /** @var string|null $Quantity */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Quantity = null;
 
     /** @var string|null $Value */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Value = null;
 
     /** @var string|null $Weight */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Weight = null;
 
     /** @var Content[]|null $Content */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Content::class, isArray: true)]
+    #[SerializableProperty(type: Content::class, isArray: true)]
     protected ?array $Content = null;
 
     /**

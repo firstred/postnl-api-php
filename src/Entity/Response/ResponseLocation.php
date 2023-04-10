@@ -34,9 +34,7 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
 
@@ -46,67 +44,67 @@ use stdClass;
 class ResponseLocation extends AbstractEntity
 {
     /** @var Address|null $Address */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Address::class)]
+    #[SerializableProperty(type: Address::class)]
     protected ?Address $Address = null;
 
     /** @var string[]|null $DeliveryOptions */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $DeliveryOptions = null;
 
     /** @var string|null $Distance */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Distance = null;
 
     /** @var string|null $Latitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Latitude = null;
 
     /** @var string|null $Longitude */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Longitude = null;
 
     /** @var string|null $Name */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Name = null;
 
     /** @var OpeningHours|null $OpeningHours */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: OpeningHours::class)]
+    #[SerializableProperty(type: OpeningHours::class)]
     protected ?OpeningHours $OpeningHours = null;
 
     /** @var string|null $PartnerName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PartnerName = null;
 
     /** @var string|null $PhoneNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PhoneNumber = null;
 
     /** @var string|null $LocationCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $LocationCode = null;
 
     /** @var string|null $RetailNetworkID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $RetailNetworkID = null;
 
     /** @var string|null $Saleschannel */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Saleschannel = null;
 
     /** @var string|null $TerminalType */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $TerminalType = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?array $Warnings = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerLocation = null;
 
     /**

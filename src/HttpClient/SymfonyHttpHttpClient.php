@@ -35,7 +35,6 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpClient\HttpClient as SymfonyHttpClient;

@@ -36,7 +36,6 @@ use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-
 use const PHP_QUERY_RFC3986;
 
 /**

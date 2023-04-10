@@ -34,7 +34,6 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
@@ -43,23 +42,23 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class Status extends AbstractEntity
 {
     /** @var string|null $PhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PhaseCode = null;
 
     /** @var string|null $PhaseDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PhaseDescription = null;
 
     /** @var string|null $StatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $StatusCode = null;
 
     /** @var string|null $StatusDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $StatusDescription = null;
 
     /** @var DateTimeInterface|null $TimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $TimeStamp = null;
 
     /**
@@ -187,175 +186,5 @@ class Status extends AbstractEntity
         $this->TimeStamp = $TimeStamp;
 
         return $this;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCurrentStatusPhaseCode(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseCode` instead',
-        );
-
-        return $this->PhaseCode;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCurrentStatusPhaseDescription(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCurrentStatusStatusCode(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCurrentStatusStatusDescription(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCurrentStatusTimeStamp(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCompleteStatusPhaseCode(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseCode` instead',
-        );
-
-        return $this->PhaseCode;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCompleteStatusPhaseDescription(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCompleteStatusStatusCode(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCompleteStatusStatusDescription(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
-    }
-
-    /**
-     * Backwards compatible with SOAP API.
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     */
-    public function getCompleteStatusTimeStamp(): ?string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'This is a SOAP API feature, about to be removed. Please use `getPhaseDescription` instead',
-        );
-
-        return $this->PhaseDescription;
     }
 }

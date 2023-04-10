@@ -40,14 +40,11 @@ use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentE
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\LabellingServiceRestRequestBuilder;
-use Firstred\PostNL\Service\RequestBuilder\Soap\LabellingServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\LabellingServiceRestResponseProcessor;
-use Firstred\PostNL\Service\ResponseProcessor\Soap\LabellingServiceSoapResponseProcessor;
 use GuzzleHttp\Psr7\Message as PsrMessage;
 use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
@@ -66,9 +63,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 class LabellingService extends AbstractService implements LabellingServiceInterface
 {
     use ResponseProcessorSettersTrait;
-    // SOAP API specific
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/LabellingWebService/';
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/LabellingWebService/';
 
     protected LabellingServiceRequestBuilderInterface $requestBuilder;
     protected LabellingServiceResponseProcessorInterface $responseProcessor;
@@ -81,7 +75,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
@@ -91,7 +84,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
@@ -101,9 +93,21 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
+        );
+
+        $this->requestBuilder = new LabellingServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->responseProcessor = new LabellingServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
         );
     }
 
@@ -207,39 +211,5 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         }
 
         return $labels;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        if (PostNL::MODE_REST === $mode) {
-            $this->requestBuilder = new LabellingServiceRestRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new LabellingServiceRestResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        } else {
-            $this->requestBuilder = new LabellingServiceSoapRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new LabellingServiceSoapResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        }
     }
 }

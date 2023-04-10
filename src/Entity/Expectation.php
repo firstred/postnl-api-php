@@ -34,9 +34,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-
 use function is_string;
 
 /**
@@ -45,11 +43,11 @@ use function is_string;
 class Expectation extends AbstractEntity
 {
     /** @var DateTimeInterface|null $ETAFrom */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $ETAFrom = null;
 
     /** @var DateTimeInterface|null $ETATo */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $ETATo = null;
 
     /**

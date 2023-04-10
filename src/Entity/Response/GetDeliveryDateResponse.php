@@ -35,14 +35,11 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
-
 use function is_array;
 
 /**
@@ -51,11 +48,11 @@ use function is_array;
 class GetDeliveryDateResponse extends AbstractEntity
 {
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected DateTimeInterface|null $DeliveryDate = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /**
@@ -126,41 +123,6 @@ class GetDeliveryDateResponse extends AbstractEntity
         $this->DeliveryDate = $DeliveryDate;
 
         return $this;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Shipments' === $propertyName) {
-                $options = [];
-                if (is_array(value: $this->Options)) {
-                    foreach ($this->Options as $option) {
-                        $options[] = ["{{$namespace}}string" => $option];
-                    }
-                }
-                $xml["{{$namespace}}Options"] = $options;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 
     /**

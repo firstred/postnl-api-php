@@ -38,14 +38,11 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\BarcodeServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\BarcodeServiceRestRequestBuilder;
-use Firstred\PostNL\Service\RequestBuilder\Soap\BarcodeServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\ResponseProcessor\BarcodeServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\BarcodeServiceRestResponseProcessor;
-use Firstred\PostNL\Service\ResponseProcessor\Soap\BarcodeServiceSoapResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -59,11 +56,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 class BarcodeService extends AbstractService implements BarcodeServiceInterface
 {
     use ResponseProcessorSettersTrait;
-    // SOAP API specific
-    /** @deprecated */
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/BarcodeWebService/';
-    /** @deprecated */
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/BarcodeWebService/';
 
     protected BarcodeServiceRequestBuilderInterface $requestBuilder;
     protected BarcodeServiceResponseProcessorInterface $responseProcessor;
@@ -74,7 +66,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
@@ -84,7 +75,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null,
     ) {
@@ -94,9 +84,21 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
+        );
+
+        $this->requestBuilder = new BarcodeServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->responseProcessor = new BarcodeServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
         );
     }
 
@@ -153,39 +155,5 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         }
 
         return $barcodes;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        if (PostNL::MODE_REST === $mode) {
-            $this->requestBuilder = new BarcodeServiceRestRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new BarcodeServiceRestResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        } else {
-            $this->requestBuilder = new BarcodeServiceSoapRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new BarcodeServiceSoapResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        }
     }
 }

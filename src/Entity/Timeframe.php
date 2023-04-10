@@ -34,12 +34,9 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use InvalidArgumentException;
-use Sabre\Xml\Writer;
-
 use function in_array;
 use function is_string;
 
@@ -49,59 +46,59 @@ use function is_string;
 class Timeframe extends AbstractEntity
 {
     /** @var string|null $City */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $City = null;
 
     /** @var string|null $CountryCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CountryCode = null;
 
     /** @var DateTimeInterface|null $Date */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $Date = null;
 
     /** @var DateTimeInterface|null $EndDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $EndDate = null;
 
     /** @var string|null $HouseNr */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $HouseNr = null;
 
     /** @var string|null $HouseNrExt */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $HouseNrExt = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /** @var string|null $PostalCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PostalCode = null;
 
     /** @var DateTimeInterface|null $StartDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?DateTimeInterface $StartDate = null;
 
     /** @var string|null $Street */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Street = null;
 
     /** @var bool|null $SundaySorting */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'bool')]
+    #[SerializableProperty(type: 'bool')]
     protected ?bool $SundaySorting = null;
 
     /** @var string|null $Interval */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Interval = null;
 
     /** @var string|null $TimeframeRange */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $TimeframeRange = null;
 
     /** @var TimeframeTimeFrame[]|Timeframe[]|null $Timeframes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: TimeframeTimeFrame::class, isArray: true)]
+    #[SerializableProperty(type: TimeframeTimeFrame::class, isArray: true)]
     protected ?array $Timeframes = null;
 
     /**
@@ -495,48 +492,5 @@ class Timeframe extends AbstractEntity
         }
 
         return $json;
-    }
-
-    /**
-     * @throws InvalidArgumentException|ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if ('StartDate' === $propertyName) {
-                if ($this->StartDate instanceof DateTimeInterface) {
-                    $xml["{{$namespace}}StartDate"] = $this->StartDate->format(format: 'd-m-Y');
-                }
-            } elseif ('EndDate' === $propertyName) {
-                if ($this->StartDate instanceof DateTimeInterface) {
-                    $xml["{{$namespace}}EndDate"] = $this->EndDate->format(format: 'd-m-Y');
-                }
-            } elseif ('SundaySorting' === $propertyName) {
-                if (isset($this->SundaySorting)) {
-                    if (is_bool(value: $this->SundaySorting)) {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting ? 'true' : 'false';
-                    } else {
-                        $xml["{{$namespace}}SundaySorting"] = $this->SundaySorting;
-                    }
-                }
-            } elseif ('Options' === $propertyName) {
-                if (isset($this->Options)) {
-                    $options = [];
-                    foreach ($this->Options as $option) {
-                        $options[] = ['{http://schemas.microsoft.com/2003/10/Serialization/Arrays}string' => $option];
-                    }
-                    $xml["{{$namespace}}Options"] = $options;
-                }
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-
-        $writer->write(value: $xml);
     }
 }

@@ -36,7 +36,6 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Status;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
@@ -45,23 +44,23 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class UpdatedShipmentsResponse extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var DateTimeInterface|null $CreationDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $CreationDate = null;
 
     /** @var string|null $CustomerNumber */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CustomerNumber = null;
 
     /** @var string|null $CustomerCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $CustomerCode = null;
 
     /** @var Status|null $Status */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Status::class)]
+    #[SerializableProperty(type: Status::class)]
     protected ?Status $Status = null;
 
     /**

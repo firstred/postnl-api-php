@@ -35,9 +35,7 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-
 use function is_string;
 
 /**
@@ -46,23 +44,23 @@ use function is_string;
 class CompleteStatusResponseOldStatus extends AbstractEntity
 {
     /** @var string|null $StatusCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $StatusCode = null;
 
     /** @var string|null $StatusDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $StatusDescription = null;
 
     /** @var string|null $PhaseCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PhaseCode = null;
 
     /** @var string|null $PhaseDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $PhaseDescription = null;
 
     /** @var DateTimeInterface|null $TimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $TimeStamp = null;
 
     /**

@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Entity;
 use DateTimeInterface;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
@@ -40,7 +39,6 @@ use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use Firstred\PostNL\Util\Util;
 use Firstred\PostNL\Util\UUID;
-use JetBrains\PhpStorm\Deprecated;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionException;
@@ -49,24 +47,18 @@ use ReflectionNamedType;
 use ReflectionObject;
 use ReflectionProperty;
 use ReflectionUnionType;
-use Sabre\Xml\Writer;
-use Sabre\Xml\XmlSerializable;
 use stdClass;
 use TypeError;
-
 use function array_keys;
 use function is_array;
 
-abstract class AbstractEntity implements JsonSerializable, XmlSerializable
+abstract class AbstractEntity implements JsonSerializable
 {
     /** @var string */
     protected string $id;
 
     /** @var class-string */
     protected string $currentService;
-
-    /** @var array<string, string> */
-    protected array $namespaces = [];
 
     public function __construct()
     {
@@ -137,30 +129,15 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @param class-string          $currentService
-     * @param array<string, string> $namespaces
+     * @param class-string $currentService
      *
      * @return static
      *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
      */
-    public function setCurrentService(string $currentService, array $namespaces = []): static
+    public function setCurrentService(string $currentService): static
     {
-        foreach ($namespaces as $namespacePrefix => $namespaceValue) {
-            if (!is_string(value: $namespacePrefix)) {
-                throw new InvalidArgumentException(message: 'Namespace prefix is not supported');
-            } elseif (!is_string(value: $namespaceValue)) {
-                throw new InvalidArgumentException(message: 'Namespace value should be a string');
-            }
-            try {
-                /* @noinspection PhpExpressionResultUnusedInspection */
-                SoapNamespace::from(value: $namespacePrefix);
-            } catch (TypeError) {
-                throw new InvalidArgumentException(message: 'Namespace prefix is not supported');
-            }
-        }
-
         try {
             $reflectionCurrentService = new ReflectionClass(objectOrClass: $currentService);
             if (!$reflectionCurrentService->isInterface()) {
@@ -168,7 +145,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             }
 
             $this->currentService = $currentService;
-            $this->namespaces = $namespaces;
 
             return $this;
         } catch (ReflectionException $e) {
@@ -185,15 +161,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
     }
 
     /**
-     * @return array<string, string>
-     */
-    public function getNamespaces(): array
-    {
-        return $this->namespaces;
-    }
-
-    /**
-     * @return array<string, string>
+     * @return array<string, class-string|'bool'|'int'|'float'|'string'>
      *
      * @since 2.0.0
      */
@@ -208,8 +176,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
                 if (empty($supportedServices)
                     || isset($this->currentService) && in_array(needle: $this->currentService, haystack: $supportedServices)
                 ) {
-                    $namespacePrefix = $attribute->getArguments()['namespace']->value                   ?? '';
-                    $serializableProperties[$property->getName()] = $this->namespaces[$namespacePrefix] ?? '';
+                    $serializableProperties[$property->getName()] = $attribute->getArguments()['type'] ?? '';
                 }
             }
         }
@@ -242,31 +209,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         return $json;
-    }
-
-    /**
-     * Return a serializable array for the XMLWriter.
-     *
-     * @param Writer $writer
-     *
-     * @throws ServiceNotSetException
-     *
-     * @since 1.0.0
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespacePrefix) {
-            if (isset($this->$propertyName)) {
-                $xml["{{$namespacePrefix}}$propertyName"] = $this->$propertyName;
-            }
-        }
-
-        $writer->write(value: $xml);
     }
 
     /**
@@ -345,144 +287,5 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
         }
 
         return $entity;
-    }
-
-    /**
-     * @param array $xml
-     *
-     * @return static
-     *
-     * @throws InvalidArgumentException
-     */
-    public static function xmlDeserialize(array $xml): static
-    {
-        if (self::class === static::class) {
-            throw new InvalidArgumentException(message: 'Calling `AbstractEntity::xmlDeserialize` is not supported.');
-        }
-
-        $object = new static();
-        $reflectionObject = new ReflectionObject(object: $object);
-        foreach ($reflectionObject->getProperties() as $reflectionProperty) {
-            $reflectionAttributes = $reflectionProperty->getAttributes();
-            foreach ($reflectionAttributes as $reflectionAttribute) {
-                $reflectionNamedTypes = static::getPropertyTypes(reflectionProperty: $reflectionProperty);
-                switch ($reflectionAttribute->getName()) {
-                    case SerializableProperty::class:
-                        break;
-                }
-            }
-        }
-
-        return $object;
-    }
-
-    /**
-     * @return non-empty-array<ReflectionNamedType>
-     *
-     * @since 2.0.0
-     *
-     * @internal
-     */
-    protected static function getPropertyTypes(
-        ReflectionProperty $reflectionProperty,
-        bool $serializableEntitiesOnly = false,
-    ): array {
-        $reflectionNamedTypes = [];
-        $rawReflectionType = $reflectionProperty->getType();
-        if ($rawReflectionType instanceof ReflectionIntersectionType) {
-            $reflectionNamedTypes = $rawReflectionType->getTypes();
-        } elseif ($rawReflectionType instanceof ReflectionUnionType) {
-            foreach ($rawReflectionType->getTypes() as $reflectionIntersectionOrNamedType) {
-                $reflectionNamedTypes[] = $reflectionIntersectionOrNamedType instanceof ReflectionIntersectionType ? $reflectionIntersectionOrNamedType->getTypes() : $reflectionIntersectionOrNamedType;
-            }
-        } elseif ($rawReflectionType instanceof ReflectionNamedType) {
-            $reflectionNamedTypes = [$rawReflectionType];
-        }
-        if ($serializableEntitiesOnly) {
-            foreach ($reflectionNamedTypes as $reflectionNamedType) {
-                if (is_a(object_or_class: AbstractEntity::class, class: $reflectionNamedType->getName())) {
-                    return [$reflectionNamedType];
-                }
-            }
-        }
-
-        return $reflectionNamedTypes;
-    }
-
-    /**
-     * Whether the given property should be an array.
-     *
-     * @param string $fqcn         Fully-qualified class name
-     * @param string $propertyName Property name
-     *
-     * @return string|false If found, singular name of property, else false
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     *
-     * @internal
-     */
-    #[Deprecated]
-    public static function shouldBeAnArray(string $fqcn, string $propertyName): string|false
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `AbstractEntity::shouldBeAnArray` is deprecated. It is an internal function about to be removed.',
-        );
-
-        try {
-            $reflection = new ReflectionClass(objectOrClass: $fqcn);
-            $reflectionProperty = $reflection->getProperty(name: $propertyName);
-            foreach ($reflectionProperty->getAttributes() as $attribute) {
-                if (SerializableProperty::class === $attribute->getName()) {
-                    if ($attribute->getArguments()['isArray'] ?? false) {
-                        return $reflectionProperty->getName();
-                    }
-                }
-            }
-        } catch (Exception) {
-            return false;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the fully qualified class name for the given entity name.
-     *
-     * @param string $shortName
-     *
-     * @return class-string
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.2.0
-     * @deprecated 2.0.0
-     *
-     * @internal
-     */
-    #[Deprecated]
-    public static function getFullyQualifiedEntityClassName(string $shortName): string
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `AbstractEntity::getFullQualifiedEntityClassName` is deprecated. Use the corresponding property attributes instead.',
-        );
-
-        foreach ([
-                     '\\Firstred\\PostNL\\Entity',
-                     '\\Firstred\\PostNL\\Entity\\Message',
-                     '\\Firstred\\PostNL\\Entity\\Request',
-                     '\\Firstred\\PostNL\\Entity\\Response',
-                     '\\Firstred\\PostNL\\Entity\\Soap',
-                 ] as $namespace) {
-            if (class_exists(class: "$namespace\\$shortName") && AbstractEntity::class !== "$namespace\\$shortName") {
-                return "$namespace\\$shortName";
-            }
-        }
-
-        throw new InvalidArgumentException(message: "Entity not found: $shortName");
     }
 }

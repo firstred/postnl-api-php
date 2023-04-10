@@ -35,7 +35,6 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
@@ -44,31 +43,31 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 class CompleteStatusResponseEvent extends AbstractEntity
 {
     /** @var string|null $Code */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Code = null;
 
     /** @var string|null $Description */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Description = null;
 
     /** @var string|null $DestinationLocationCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DestinationLocationCode = null;
 
     /** @var string|null $LocationCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $LocationCode = null;
 
     /** @var string|null $RouteCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $RouteCode = null;
 
     /** @var string|null $RouteName */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $RouteName = null;
 
     /** @var DateTimeInterface|null $TimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $TimeStamp = null;
 
     /**

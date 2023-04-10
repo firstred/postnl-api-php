@@ -33,62 +33,30 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
  */
 class GenerateBarcode extends AbstractEntity
 {
-    /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
-    protected ?Message $Message = null;
-
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
+    #[SerializableProperty(type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var Barcode|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Barcode::class)]
+    #[SerializableProperty(type: Barcode::class)]
     protected ?Barcode $Barcode = null;
 
     /**
      * @param Barcode|null  $Barcode
      * @param Customer|null $Customer
-     * @param Message|null  $Message
      */
-    public function __construct(?Barcode $Barcode = null, ?Customer $Customer = null, ?Message $Message = null)
+    public function __construct(?Barcode $Barcode = null, ?Customer $Customer = null)
     {
         parent::__construct();
 
         $this->setBarcode(Barcode: $Barcode);
         $this->setCustomer(Customer: $Customer);
-        $this->setMessage(Message: $Message ?: new Message());
-    }
-
-    /**
-     * @return Message|null
-     *
-     * @deprecated 2.0.0
-     */
-    public function getMessage(): ?Message
-    {
-        return $this->Message;
-    }
-
-    /**
-     * @param Message|null $Message
-     *
-     * @return static
-     *
-     * @deprecated 2.0.0
-     */
-    public function setMessage(?Message $Message): static
-    {
-        $this->Message = $Message;
-
-        return $this;
     }
 
     /**

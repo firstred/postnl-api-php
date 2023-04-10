@@ -57,7 +57,7 @@ use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The TimeframeService (REST)')]
-class TimeframeServiceRestTest extends ServiceTestCase
+class TimeframeServiceTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected TimeframeServiceInterface $service;

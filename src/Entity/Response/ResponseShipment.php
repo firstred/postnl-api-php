@@ -33,7 +33,6 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Label;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -41,31 +40,31 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class ResponseShipment extends AbstractEntity
 {
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var string|null $DownPartnerBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerBarcode = null;
 
     /** @var string|null $DownPartnerID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerID = null;
 
     /** @var string|null $DownPartnerLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerLocation = null;
 
     /** @var Label[]|null $Labels */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Label::class, isArray: true)]
+    #[SerializableProperty(type: Label::class, isArray: true)]
     protected ?array $Labels = null;
 
     /** @var string|null $ProductCodeDelivery */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ProductCodeDelivery = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
+    #[SerializableProperty(type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**

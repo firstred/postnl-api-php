@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -40,15 +39,15 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GetLocation extends AbstractEntity
 {
     /** @var string|null $LocationCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $LocationCode = null;
 
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
+    #[SerializableProperty(type: Message::class)]
     protected ?Message $Message = null;
 
     /** @var string|null $RetailNetworkID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $RetailNetworkID = null;
 
     /**

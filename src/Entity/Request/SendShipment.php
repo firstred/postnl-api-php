@@ -34,7 +34,6 @@ use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Message\LabellingMessage;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use TypeError;
 
@@ -44,15 +43,15 @@ use TypeError;
 class SendShipment extends AbstractEntity
 {
     /** @var Customer|null $Customer */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Customer::class)]
+    #[SerializableProperty(type: Customer::class)]
     protected ?Customer $Customer = null;
 
     /** @var LabellingMessage|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: LabellingMessage::class)]
+    #[SerializableProperty(type: LabellingMessage::class)]
     protected ?LabellingMessage $Message = null;
 
     /** @var Shipment[]|null $Shipments */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Shipment::class, isArray: true)]
+    #[SerializableProperty(type: Shipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /**

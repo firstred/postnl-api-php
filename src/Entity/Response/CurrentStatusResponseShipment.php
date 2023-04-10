@@ -43,16 +43,13 @@ use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
-
 use function is_array;
 use function is_string;
 
@@ -62,67 +59,67 @@ use function is_string;
 class CurrentStatusResponseShipment extends AbstractEntity
 {
     /** @var StatusAddress[]|null $Addresses */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: StatusAddress::class, isArray: true)]
+    #[SerializableProperty(type: StatusAddress::class, isArray: true)]
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Amount::class, isArray: true)]
+    #[SerializableProperty(type: Amount::class, isArray: true)]
     protected ?array $Amounts = null;
 
     /** @var string|null $Barcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Barcode = null;
 
     /** @var DateTimeInterface|null $DeliveryDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?DateTimeInterface $DeliveryDate = null;
 
     /** @var Dimension|null $Dimension */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Dimension::class)]
+    #[SerializableProperty(type: Dimension::class)]
     protected ?Dimension $Dimension = null;
 
     /** @var Expectation|null $Expectation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Expectation::class)]
+    #[SerializableProperty(type: Expectation::class)]
     protected ?Expectation $Expectation = null;
 
     /** @var Group[]|null $Groups */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Group::class, isArray: true)]
+    #[SerializableProperty(type: Group::class, isArray: true)]
     protected ?array $Groups = null;
 
     /** @var string|null $MainBarcode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $MainBarcode = null;
 
     /** @var string|null $ProductCode */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ProductCode = null;
 
     /** @var string|null $ProductDescription */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ProductDescription = null;
 
     /** @var ProductOption[]|null $ProductOptions */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ProductOption::class, isArray: true)]
+    #[SerializableProperty(type: ProductOption::class, isArray: true)]
     protected ?array $ProductOptions = null;
 
     /** @var string|null $Reference */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Reference = null;
 
     /** @var string|null $ShipmentAmount */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ShipmentAmount = null;
 
     /** @var string|null $ShipmentCounter */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $ShipmentCounter = null;
 
     /** @var Status|null $Status */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Status::class)]
+    #[SerializableProperty(type: Status::class)]
     protected ?Status $Status = null;
 
     /** @var Warning[]|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
+    #[SerializableProperty(type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
     /**
@@ -537,9 +534,8 @@ class CurrentStatusResponseShipment extends AbstractEntity
      * @return CurrentStatusResponseShipment
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws NotSupportedException
-     * @throws \ReflectionException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */
@@ -555,62 +551,5 @@ class CurrentStatusResponseShipment extends AbstractEntity
         }
 
         return parent::jsonDeserialize(json: $json);
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Addresses' === $propertyName) {
-                $addresses = [];
-                foreach ($this->Addresses as $address) {
-                    $addresses[] = ["{{$namespace}}StatusAddress" => $address];
-                }
-                $xml["{{$namespace}}Addresses"] = $addresses;
-            } elseif ('Amounts' === $propertyName) {
-                $amounts = [];
-                foreach ($this->Amounts as $amount) {
-                    $amounts[] = ["{{$namespace}}Amount" => $amount];
-                }
-                $xml["{{$namespace}}Amounts"] = $amounts;
-            } elseif ('Groups' === $propertyName) {
-                $groups = [];
-                foreach ($this->Groups as $group) {
-                    $groups[] = ["{{$namespace}}Group" => $group];
-                }
-                $xml["{{$namespace}}Groups"] = $groups;
-            } elseif ('ProductOption' === $propertyName) {
-                $productOptions = [];
-                foreach ($this->ProductOptions as $productOption) {
-                    $productOptions[] = ["{{$namespace}}ProductOptions" => $productOption];
-                }
-                $xml["{{$namespace}}ProductOptions"] = $productOptions;
-            } elseif ('Warnings' === $propertyName) {
-                $warnings = [];
-                foreach ($this->Warnings as $warning) {
-                    $warnings[] = ["{{$namespace}}Warning" => $warning];
-                }
-                $xml["{{$namespace}}Warnings"] = $warnings;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

@@ -46,15 +46,10 @@ use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Utils;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-
 use function is_array;
 use function method_exists;
-use function user_error;
-
-use const E_USER_DEPRECATED;
 
 /**
  * Class GuzzleClient.

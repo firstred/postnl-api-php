@@ -71,7 +71,7 @@ use const _RESPONSES_DIR_;
 /**
  * @testdox The ShippingStatusService (REST)
  */
-class ShippingStatusServiceRestTest extends ServiceTestCase
+class ShippingStatusServiceTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected ShippingStatusServiceInterface $service;

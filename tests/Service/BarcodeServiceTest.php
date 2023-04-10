@@ -54,7 +54,7 @@ use function file_get_contents;
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The BarcodeService (REST)')]
-class BarcodeServiceRestTest extends ServiceTestCase
+class BarcodeServiceTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected BarcodeServiceInterface $service;
@@ -117,7 +117,6 @@ class BarcodeServiceRestTest extends ServiceTestCase
                         ->setSerie(Serie: $serie)
                         ->setType(Type: $type)
                 )
-                ->setMessage(Message: new Message())
                 ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 
@@ -155,7 +154,6 @@ class BarcodeServiceRestTest extends ServiceTestCase
                         ->setSerie(Serie: $serie)
                         ->setType(Type: $type)
                 )
-                ->setMessage(Message: new Message())
                 ->setCustomer(Customer: $this->postnl->getCustomer())
         );
 

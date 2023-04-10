@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Entity\Request;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
-use Firstred\PostNL\Enum\SoapNamespace;
 
 /**
  * @since 1.0.0
@@ -40,11 +39,11 @@ use Firstred\PostNL\Enum\SoapNamespace;
 class GetSentDateRequest extends AbstractEntity
 {
     /** @var GetSentDate|null $GetSentDate */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: GetSentDate::class)]
+    #[SerializableProperty(type: GetSentDate::class)]
     protected ?GetSentDate $GetSentDate = null;
 
     /** @var Message|null $Message */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Message::class)]
+    #[SerializableProperty(type: Message::class)]
     protected ?Message $Message = null;
 
     /**

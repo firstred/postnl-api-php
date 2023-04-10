@@ -31,17 +31,15 @@ namespace Firstred\PostNL\Entity\Message;
 
 use DateTimeInterface;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @since 1.0.0
- * @deprecated 2.0.0
  */
 class LabellingMessage extends Message
 {
     /** @var string|null $Printertype */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Printertype = null;
 
     /**

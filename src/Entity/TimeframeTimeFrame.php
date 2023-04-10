@@ -34,13 +34,11 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use stdClass;
-
 use function array_merge;
 use function is_array;
 use function is_string;
@@ -51,19 +49,19 @@ use function is_string;
 class TimeframeTimeFrame extends AbstractEntity
 {
     /** @var string|null $Date */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $Date = null;
 
     /** @var string|null $From */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $From = null;
 
     /** @var string|null $To */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $To = null;
 
     /** @var string[]|null $Options */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string', isArray: true)]
+    #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
     /**
@@ -177,10 +175,9 @@ class TimeframeTimeFrame extends AbstractEntity
      *
      * @return TimeframeTimeFrame
      *
-     * @throws NotSupportedException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
-     * @throws \ReflectionException
+     * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      *
      * @since 1.2.0
      */

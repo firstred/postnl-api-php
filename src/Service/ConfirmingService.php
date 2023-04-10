@@ -35,21 +35,23 @@ use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\ConfirmingServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ConfirmingServiceRestRequestBuilder;
-use Firstred\PostNL\Service\RequestBuilder\Soap\ConfirmingServiceSoapRequestBuilder;
 use Firstred\PostNL\Service\ResponseProcessor\ConfirmingServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\ConfirmingServiceRestResponseProcessor;
-use Firstred\PostNL\Service\ResponseProcessor\Soap\ConfirmingServiceSoapResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use ReflectionException;
 
 /**
  * @since 2.0.0
@@ -59,9 +61,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 class ConfirmingService extends AbstractService implements ConfirmingServiceInterface
 {
     use ResponseProcessorSettersTrait;
-    // SOAP API specific
-    public const SERVICES_NAMESPACE = 'http://postnl.nl/cif/services/ConfirmingWebService/';
-    public const DOMAIN_NAMESPACE = 'http://postnl.nl/cif/domain/ConfirmingWebService/';
 
     protected ConfirmingServiceRequestBuilderInterface $requestBuilder;
     protected ConfirmingServiceResponseProcessorInterface $responseProcessor;
@@ -72,7 +71,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param int                                     $apiMode
      * @param CacheItemPoolInterface|null             $cache
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
@@ -82,7 +80,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        int $apiMode = PostNL::MODE_REST,
         CacheItemPoolInterface $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
@@ -92,19 +89,40 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            apiMode: $apiMode,
             cache: $cache,
             ttl: $ttl,
+        );
+
+        $this->requestBuilder = new ConfirmingServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->responseProcessor = new ConfirmingServiceRestResponseProcessor(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->isSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
         );
     }
 
     /**
      * Confirm a single shipment via REST.
      *
+     * @param Confirming $confirming
+     *
+     * @return ConfirmingResponseShipment
+     *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
      * @throws HttpClientException
+     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws NotSupportedException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -126,8 +144,13 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      *
      * @throws CifDownException
      * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws NotSupportedException
      * @throws ResponseException
+     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -158,39 +181,5 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         }
 
         return $confirmingResponses;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setAPIMode(int $mode): void
-    {
-        if (PostNL::MODE_REST === $mode) {
-            $this->requestBuilder = new ConfirmingServiceRestRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new ConfirmingServiceRestResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        } else {
-            $this->requestBuilder = new ConfirmingServiceSoapRequestBuilder(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-            $this->responseProcessor = new ConfirmingServiceSoapResponseProcessor(
-                apiKey: $this->getApiKey(),
-                sandbox: $this->isSandbox(),
-                requestFactory: $this->getRequestFactory(),
-                streamFactory: $this->getStreamFactory(),
-            );
-        }
     }
 }

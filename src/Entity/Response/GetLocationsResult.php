@@ -31,9 +31,6 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
-use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 
 /**
  * @since 1.0.0
@@ -41,7 +38,7 @@ use Sabre\Xml\Writer;
 class GetLocationsResult extends AbstractEntity
 {
     /** @var ResponseLocation[]|null $ResponseLocation */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ResponseLocation::class, isArray: true)]
+    #[SerializableProperty(type: ResponseLocation::class, isArray: true)]
     protected ?array $ResponseLocation = null;
 
     /**
@@ -82,38 +79,5 @@ class GetLocationsResult extends AbstractEntity
         $this->ResponseLocation = $ResponseLocation;
 
         return $this;
-    }
-
-    /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('ResponseLocation' === $propertyName) {
-                $locations = [];
-                foreach ($this->ResponseLocation as $location) {
-                    $locations[] = $location;
-                }
-                $xml["{{$namespace}}ResponseLocation"] = $locations;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
     }
 }

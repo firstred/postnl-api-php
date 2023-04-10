@@ -35,10 +35,7 @@ use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ResponseProcessor\AbstractResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\BarcodeServiceRestResponseProcessor;
-use Firstred\PostNL\Service\ResponseProcessor\Soap\BarcodeServiceSoapResponseProcessor;
 use GuzzleHttp\Psr7\Response;
-use Http\Discovery\Psr17FactoryDiscovery;
-use ParagonIE\HiddenString\HiddenString;
 use PHPUnit\Framework\Attributes\TestDox;
 
 #[TestDox(text: 'The `AbstractService` class')]
@@ -109,80 +106,6 @@ class AbstractServiceTest extends ServiceTestCase
         $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
         $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
         $responseProcessor = $this->createMock(originalClassName: BarcodeServiceRestResponseProcessor::class);
-        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
-        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
-        $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
-        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
-    }
-
-    /** @throws */
-    #[TestDox(text: 'can detect and throw a CifDownException (SOAP)')]
-    public function testCifDownExceptionSoap(): void
-    {
-        $this->expectException(exception: CifDownException::class);
-
-        $response = new Response(
-            status: 500,
-            body: <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
-  <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
-  <env:Body>
-    <env:Fault>
-      <faultcode>soap:Server</faultcode>
-      <faultstring>Failed to execute the ExtractVariables: payloadExtractVariables</faultstring>
-      <faultactor/>
-      <env:Reason>
-        <env:Text>steps.extractvariables.ExecutionFailed</env:Text>
-      </env:Reason>
-    </env:Fault>
-  </env:Body>
-</Envelope>
-XML
-        );
-        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
-        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $responseProcessor = new BarcodeServiceSoapResponseProcessor(
-            apiKey: new HiddenString(value: 'test'),
-            sandbox: true,
-            requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
-            streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
-        );
-        $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
-        $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
-        $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);
-        $validateResponseMethod = $responseProcessorReflection->getMethod(name: 'validateResponse');
-        $validateResponseMethod->invokeArgs(object: $responseProcessor, args: [$response]);
-    }
-
-    /** @throws */
-    #[TestDox(text: 'can detect and throw a CifException (SOAP)')]
-    public function testCifExceptionSoap(): void
-    {
-        $this->expectException(exception: CifException::class);
-
-        $response = new Response(
-            status: 500,
-            body: <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<Envelope xmlns:common="http://postnl.nl/cif/services/common/">
-  <encodingStyle>http://schemas.xmlsoap.org/soap/encoding/</encodingStyle>
-  <common:CifException>
-    <common:Errors>
-      <common:ExceptionData>
-        <common:Description>ExecutionFailed</common:Description>
-        <common:ErrorMsg>steps.extractvariables.ExecutionFailed</common:ErrorMsg>
-        <common:ErrorNumber>1</common:ErrorNumber>
-      </common:ExceptionData>
-    </common:Errors>
-  </common:CifException>
-</Envelope>
-XML
-        );
-        $barcodeService = $this->createMock(originalClassName: BarcodeService::class);
-        $barcodeServiceReflection = new \ReflectionObject(object: $barcodeService);
-        $responseProcessor = $this->createMock(originalClassName: BarcodeServiceSoapResponseProcessor::class);
         $responseProcessorReflection = $barcodeServiceReflection->getProperty(name: 'responseProcessor');
         $responseProcessorReflection->setValue(objectOrValue: $barcodeService, value: $responseProcessor);
         $responseProcessorReflection = new \ReflectionObject(object: $responseProcessor);

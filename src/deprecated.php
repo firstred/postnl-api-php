@@ -92,11 +92,6 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SignatureResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\Signature;
-use Firstred\PostNL\Entity\Soap\Body;
-use Firstred\PostNL\Entity\Soap\Envelope;
-use Firstred\PostNL\Entity\Soap\Header;
-use Firstred\PostNL\Entity\Soap\Security;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Entity\Status;
 use Firstred\PostNL\Entity\Timeframe;
 use Firstred\PostNL\Entity\Timeframes;
@@ -209,16 +204,6 @@ spl_autoload_register(callback: function ($deprecatedClass) {
         'ThirtyBees\\PostNL\\Entity\\Response\\ResponseShipment'                => ResponseShipment::class,
         'ThirtyBees\\PostNL\\Entity\\Response\\ResponseTimeframes'              => ResponseTimeframes::class,
         'ThirtyBees\\PostNL\\Entity\\Response\\SignatureResponse'               => SignatureResponse::class,
-        'ThirtyBees\\PostNL\\Entity\\SOAP\\Body'                                => Body::class,
-        'ThirtyBees\\PostNL\\Entity\\SOAP\\Envelope'                            => Envelope::class,
-        'ThirtyBees\\PostNL\\Entity\\SOAP\\Header'                              => Header::class,
-        'ThirtyBees\\PostNL\\Entity\\SOAP\\Security'                            => Security::class,
-        'ThirtyBees\\PostNL\\Entity\\SOAP\\UsernameToken'                       => UsernameToken::class,
-        'Firstred\\PostNL\\Entity\\SOAP\\Body'                                  => Body::class,
-        'Firstred\\PostNL\\Entity\\SOAP\\Envelope'                              => Envelope::class,
-        'Firstred\\PostNL\\Entity\\SOAP\\Header'                                => Header::class,
-        'Firstred\\PostNL\\Entity\\SOAP\\Security'                              => Security::class,
-        'Firstred\\PostNL\\Entity\\SOAP\\UsernameToken'                         => UsernameToken::class,
         'ThirtyBees\\PostNL\\Entity\\Shipment'                                  => Shipment::class,
         'ThirtyBees\\PostNL\\Entity\\Signature'                                 => Signature::class,
         'ThirtyBees\\PostNL\\Entity\\Status'                                    => Status::class,

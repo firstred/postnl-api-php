@@ -37,9 +37,7 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\DeliveryDateServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-
 use function strcasecmp;
-
 use const PHP_QUERY_RFC3986;
 
 /**

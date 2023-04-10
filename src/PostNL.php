@@ -62,7 +62,6 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
@@ -150,34 +149,6 @@ use function is_array;
 class PostNL implements LoggerAwareInterface
 {
     /**
-     * REST API.
-     *
-     * @deprecated 2.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public const MODE_REST = 1;
-    /**
-     * SOAP API.
-     *
-     * @deprecated 2.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public const MODE_SOAP = 2;
-    /**
-     * Legacy SOAP API.
-     *
-     * @deprecated 2.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public const MODE_LEGACY = 2;
-
-    /**
      * 3S (or EU Pack Special) countries.
      *
      * @var list<string>
@@ -246,9 +217,6 @@ class PostNL implements LoggerAwareInterface
     /** @var StreamFactoryInterface */
     protected StreamFactoryInterface $streamFactory;
 
-    /** @var int */
-    protected int $apiMode = self::MODE_REST;
-
     /** @var BarcodeServiceInterface */
     protected BarcodeServiceInterface $barcodeService;
     /** @var LabellingServiceInterface */
@@ -269,82 +237,20 @@ class PostNL implements LoggerAwareInterface
     /**
      * PostNL constructor.
      *
-     * @param Customer             $customer customer object
-     * @param string|UsernameToken $apiKey   API key or UsernameToken object
-     * @param bool                 $sandbox  whether the testing environment should be used
-     * @param int<1,2>             $mode     Avoid setting the API mode, this feature is deprecated.
-     *                                       Valid options are:
-     *                                       - `1` / `self::MODE_REST`: New REST API
-     *                                       - `2` / `self::MODE_SOAP`: New SOAP API
+     * @param Customer            $customer customer object
+     * @param string|HiddenString $apiKey   API key or UsernameToken object
+     * @param bool                $sandbox  whether the testing environment should be used
      *
      * @throws PostNLInvalidArgumentException
      */
     public function __construct(
         Customer $customer,
-        string|UsernameToken $apiKey,
+        string|HiddenString $apiKey,
         bool $sandbox,
-        #[Deprecated(
-            reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-        )]
-        int $mode = 3,
     ) {
-        /* @noinspection PhpConditionAlreadyCheckedInspection */
-        if (3 !== $mode) {
-            trigger_deprecation(
-                package: 'firstred/postnl-api-php',
-                version: '1.4.0',
-                message: 'Setting an API mode is deprecated. Do not set an API mode for a seamless switch to the recommended mode.'
-            );
-        } else {
-            $mode = static::MODE_REST;
-        }
-
         $this->setCustomer(customer: $customer);
-        $this->setApiKey(apiKey: $apiKey instanceof UsernameToken ? $apiKey->getPassword() : $apiKey);
+        $this->setApiKey(apiKey: $apiKey);
         $this->setSandbox(sandbox: $sandbox);
-        $this->setApiMode(mode: $mode);
-    }
-
-    /**
-     * Set the token.
-     *
-     * @since 1.0.0
-     * @since 2.0.0 Support `HiddenString`
-     * @deprecated
-     */
-    public function setToken(string|HiddenString|UsernameToken $apiKey): static
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `setToken` is deprecated, use `setApiKey` instead.',
-        );
-
-        if ($apiKey instanceof UsernameToken) {
-            $this->apiKey = $apiKey->getPassword();
-
-            return $this;
-        }
-
-        $this->apiKey = $apiKey instanceof HiddenString ? $apiKey : new HiddenString(value: $apiKey);
-
-        return $this;
-    }
-
-    /**
-     * @throws PostNLInvalidArgumentException
-     *
-     * @deprecated
-     */
-    public function getToken(): UsernameToken
-    {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using `getToken` is deprecated, use `getApiKey` instead.',
-        );
-
-        return new UsernameToken(Password: $this->getApiKey());
     }
 
     /**
@@ -352,7 +258,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws PostNLInvalidArgumentException
      *
-     * @since 1.0.0
+     * @since 1.4.1
      */
     public function getApiKey(): HiddenString
     {
@@ -468,57 +374,6 @@ class PostNL implements LoggerAwareInterface
         );
 
         return $this->getApiMode();
-    }
-
-    /**
-     * Get the current mode.
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public function getApiMode(): int
-    {
-        return $this->apiMode;
-    }
-
-    /**
-     * Set current mode.
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    #[Deprecated(
-        reason: 'from version 3.0.0 support for API modes will be removed; there is no need to set a mode explicitly',
-    )]
-    public function setApiMode(int $mode): static
-    {
-        if (in_array(needle: $mode, haystack: [self::MODE_SOAP, self::MODE_LEGACY])) {
-            trigger_deprecation(
-                package: 'firstred/postnl-api-php',
-                version: '2.0.0',
-                message: 'Using the SOAP API is deprecated. Do not set an API mode to use the recommended API.',
-            );
-        } elseif (self::MODE_REST !== $mode) {
-            throw new InvalidApiModeException(message: 'Mode not supported');
-        }
-
-        $this->getBarcodeService()->setApiMode(mode: $mode);
-        $this->getConfirmingService()->setApiMode(mode: $mode);
-        $this->getDeliveryDateService()->setApiMode(mode: $mode);
-        $this->getLabellingService()->setApiMode(mode: $mode);
-        $this->getLocationService()->setApiMode(mode: $mode);
-        $this->getShippingService()->setApiMode(mode: $mode);
-        $this->getShippingStatusService()->setApiMode(mode: $mode);
-        $this->getTimeframeService()->setApiMode(mode: $mode);
-
-        $this->apiMode = $mode;
-
-        return $this;
     }
 
     /**
@@ -772,7 +627,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->barcodeService)) {
             $this->setBarcodeService(service: new BarcodeService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -807,7 +661,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->labellingService)) {
             $this->setLabellingService(service: new LabellingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -842,7 +695,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->confirmingService)) {
             $this->setConfirmingService(service: new ConfirmingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -881,7 +733,6 @@ class PostNL implements LoggerAwareInterface
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
                 streamFactory: $this->getStreamFactory(),
-                apiMode: $this->getApiMode(),
             ));
         }
 
@@ -916,7 +767,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->deliveryDateService)) {
             $this->setDeliveryDateService(service: new DeliveryDateService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -955,7 +805,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->timeframeService)) {
             $this->setTimeframeService(service: new TimeframeService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -990,7 +839,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->locationService)) {
             $this->setLocationService(service: new LocationService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -1023,7 +871,6 @@ class PostNL implements LoggerAwareInterface
         if (!isset($this->shippingService)) {
             $this->setShippingService(service: new ShippingService(
                 apiKey: $this->getApiKey(),
-                apiMode: $this->getApiMode(),
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -2230,12 +2077,10 @@ class PostNL implements LoggerAwareInterface
             } else {
                 switch ($type) {
                     case 'timeframes':
-                        if (self::MODE_REST === $this->getApiMode()) {
-                            $reflectionTimeframeServiceResponseValidator->invokeArgs(
-                                object: $timeframeServiceResponseProcessor,
-                                args: [$response],
-                            );
-                        }
+                        $reflectionTimeframeServiceResponseValidator->invokeArgs(
+                            object: $timeframeServiceResponseProcessor,
+                            args: [$response],
+                        );
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemTimeframe->set(value: PsrMessage::toString(message: $response));
@@ -2244,12 +2089,10 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
-                        if (self::MODE_REST === $this->getApiMode()) {
-                            $reflectionLocationServiceResponseValidator->invokeArgs(
-                                object: $locationServiceResponseProcessor,
-                                args: [$response],
-                            );
-                        }
+                        $reflectionLocationServiceResponseValidator->invokeArgs(
+                            object: $locationServiceResponseProcessor,
+                            args: [$response],
+                        );
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemLocation->set(value: PsrMessage::toString(message: $response));
@@ -2258,12 +2101,10 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
-                        if (self::MODE_REST === $this->getApiMode()) {
-                            $reflectionDeliveryDateServiceResponseValidator->invokeArgs(
-                                object: $deliveryDateServiceResponseProcessor,
-                                args: [$response],
-                            );
-                        }
+                        $reflectionDeliveryDateServiceResponseValidator->invokeArgs(
+                            object: $deliveryDateServiceResponseProcessor,
+                            args: [$response],
+                        );
 
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemDeliveryDate->set(value: PsrMessage::toString(message: $response));

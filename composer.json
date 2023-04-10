@@ -39,7 +39,6 @@
         "monolog/monolog": "^3.0",
         "php-http/mock-client": "^1.3",
         "phpunit/phpunit": "^10.0",
-        "sabre/xml": "^4.0",
         "symfony/dotenv": "^6.0"
     },
     "suggest": {
@@ -50,7 +49,6 @@
         "php-http/httplug": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "php-http/message-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
         "psr/http-factory": "Required if you want to use an alternative PSR-18, async or HTTPlug Client",
-        "sabre/xml": "To use the SOAP API -- supports ^4.0",
         "symfony/http-client": "Another popular HTTP client you can use natively -- supports ^5.4"
     },
     "autoload": {

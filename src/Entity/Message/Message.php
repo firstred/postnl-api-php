@@ -35,21 +35,19 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 
 /**
  * @since 1.0.0
- * @deprecated 2.0.0
  */
 class Message extends AbstractEntity
 {
     /** @var string|null $MessageID */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: 'string')]
+    #[SerializableProperty(type: 'string')]
     protected ?string $MessageID = null;
 
     /** @var DateTimeInterface|null $MessageTimeStamp */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: DateTimeInterface::class)]
+    #[SerializableProperty(type: DateTimeInterface::class)]
     protected ?DateTimeInterface $MessageTimeStamp = null;
 
     /**

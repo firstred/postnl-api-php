@@ -39,7 +39,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-
 use function max;
 
 abstract class BaseHttpClient implements LoggerAwareInterface

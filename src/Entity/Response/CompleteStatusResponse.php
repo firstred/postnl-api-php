@@ -32,12 +32,11 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Warning;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
-use Sabre\Xml\Writer;
 use stdClass;
 use TypeError;
 
@@ -47,11 +46,11 @@ use TypeError;
 class CompleteStatusResponse extends AbstractEntity
 {
     /** @var CompleteStatusResponseShipment[]|null $Shipments */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: CompleteStatusResponseShipment::class, isArray: true)]
+    #[SerializableProperty(type: CompleteStatusResponseShipment::class, isArray: true)]
     protected ?array $Shipments = null;
 
     /** @var Warning|null $Warnings */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Warning::class, isArray: true)]
+    #[SerializableProperty(type: Warning::class, isArray: true)]
     protected ?Warning $Warnings = null;
 
     /**
@@ -117,48 +116,13 @@ class CompleteStatusResponse extends AbstractEntity
     }
 
     /**
-     * @param Writer $writer
-     *
-     * @return void
-     *
-     * @throws ServiceNotSetException
-     */
-    public function xmlSerialize(Writer $writer): void
-    {
-        $xml = [];
-        if (!isset($this->currentService)) {
-            throw new ServiceNotSetException(message: 'Service not set before serialization');
-        }
-
-        foreach ($this->getSerializableProperties() as $propertyName => $namespace) {
-            if (!isset($this->$propertyName)) {
-                continue;
-            }
-
-            if ('Shipments' === $propertyName) {
-                $shipments = [];
-                if (is_array(value: $this->Shipments)) {
-                    foreach ($this->Shipments as $shipment) {
-                        $shipments[] = ["{{$namespace}}Shipment" => $shipment];
-                    }
-                }
-                $xml["{{$namespace}}Shipments"] = $shipments;
-            } else {
-                $xml["{{$namespace}}{$propertyName}"] = $this->$propertyName;
-            }
-        }
-        // Auto extending this object with other properties is not supported with SOAP
-        $writer->write(value: $xml);
-    }
-
-    /**
      * @param stdClass $json
      *
      * @return static
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws NotSupportedException
+     * @throws InvalidConfigurationException
      */
     public static function jsonDeserialize(stdClass $json): static
     {

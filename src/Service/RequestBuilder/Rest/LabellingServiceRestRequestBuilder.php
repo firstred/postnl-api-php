@@ -35,12 +35,10 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LabellingServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-
 use function http_build_query;
 use function in_array;
 use function json_encode;
 use function str_replace;
-
 use const PHP_QUERY_RFC3986;
 
 /**

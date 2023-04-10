@@ -31,13 +31,11 @@ namespace Firstred\PostNL\Entity\Response;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use stdClass;
-
 use function is_array;
 
 /**
@@ -46,7 +44,7 @@ use function is_array;
 class GetNearestLocationsResponse extends AbstractEntity
 {
     /** @var GetLocationsResult|null $GetLocationsResult */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: GetLocationsResult::class)]
+    #[SerializableProperty(type: GetLocationsResult::class)]
     protected ?GetLocationsResult $GetLocationsResult = null;
 
     /**

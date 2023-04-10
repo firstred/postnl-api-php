@@ -33,7 +33,6 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\ReasonNoTimeframe;
 use Firstred\PostNL\Entity\Timeframe;
-use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 
 /**
@@ -42,11 +41,11 @@ use Firstred\PostNL\Exception\ServiceNotSetException;
 class ResponseTimeframes extends AbstractEntity
 {
     /** @var ReasonNoTimeframe[]|null $ReasonNoTimeframes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: ReasonNoTimeframe::class, isArray: true)]
+    #[SerializableProperty(type: ReasonNoTimeframe::class, isArray: true)]
     protected ?array $ReasonNoTimeframes = null;
 
     /** @var Timeframe[]|null $Timeframes */
-    #[SerializableProperty(namespace: SoapNamespace::Domain, type: Timeframe::class, isArray: true)]
+    #[SerializableProperty(type: Timeframe::class, isArray: true)]
     protected ?array $Timeframes = null;
 
     /**

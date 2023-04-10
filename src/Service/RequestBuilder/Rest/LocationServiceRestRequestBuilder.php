@@ -38,7 +38,6 @@ use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\LocationServiceInterface;
 use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Psr\Http\Message\RequestInterface;
-
 use const PHP_QUERY_RFC3986;
 
 /**

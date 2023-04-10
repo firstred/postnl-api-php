@@ -64,7 +64,7 @@ use function json_decode;
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The LabellingService (REST)')]
-class LabellingServiceRestTest extends ServiceTestCase
+class LabellingServiceTest extends ServiceTestCase
 {
     protected PostNL $postnl;
     protected LabellingServiceInterface $service;
