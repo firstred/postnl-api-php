@@ -90,6 +90,7 @@ Properties
 		
 	
 	:Type: int | :any:`\\DateTimeInterface <DateTimeInterface>` | :any:`\\DateInterval <DateInterval>` | null 
+	:Deprecated: 1.4.0 
 
 
 .. php:attr:: public static cache
@@ -103,6 +104,7 @@ Properties
 		
 	
 	:Type: :any:`\\Psr\\Cache\\CacheItemPoolInterface <Psr\\Cache\\CacheItemPoolInterface>` | null 
+	:Deprecated: 1.4.0 
 
 
 Methods
@@ -343,17 +345,18 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getCache()
 	
 		
 		:Returns: :any:`\\Psr\\Cache\\CacheItemPoolInterface <Psr\\Cache\\CacheItemPoolInterface>` | null 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public setCache( $cache=null)
 	
@@ -364,6 +367,7 @@ Methods
 		
 		:Returns: static 
 		:Since: 1.2.0 
+		:Deprecated: 1.4.0 
 	
 	
 

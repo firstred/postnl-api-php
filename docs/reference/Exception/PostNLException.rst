@@ -19,6 +19,8 @@ PostNLException
 	
 		| Class AbstractException
 		
+		| Group of exceptions that can be thrown by this library\.
+		
 	
 	:Parent:
 		:php:class:`Exception`

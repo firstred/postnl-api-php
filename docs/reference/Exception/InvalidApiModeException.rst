@@ -17,6 +17,8 @@ InvalidApiModeException
 	
 		| Class InvalidApiModeException\.
 		
+		| Thrown when an invalid API mode has been selected\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`

@@ -15,7 +15,9 @@ HttpClientException
 
 	.. rst-class:: phpdoc-description
 	
-		| Class HttpClientException
+		| Class HttpClientException\.
+		
+		| Thrown when the HTTP Client has an error\.
 		
 	
 	:Parent:

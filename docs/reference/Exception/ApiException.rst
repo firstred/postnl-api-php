@@ -17,6 +17,8 @@ ApiException
 	
 		| Class ApiException\.
 		
+		| Group of API exceptions\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\PostNLException`

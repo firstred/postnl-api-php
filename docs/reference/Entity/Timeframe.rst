@@ -258,7 +258,7 @@ Methods
 
 		
 		:Returns: void 
-		:Throws: :any:`\\InvalidArgumentException <InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
 	
 

@@ -17,6 +17,8 @@ NotSupportedException
 	
 		| Class NotSupportedException
 		
+		| Thrown when a feature is not supported \(anymore\)\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`

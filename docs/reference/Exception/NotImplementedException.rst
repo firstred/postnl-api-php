@@ -17,6 +17,8 @@ NotImplementedException
 	
 		| Class NotImplementedException\.
 		
+		| Thrown when a feature is not implemented \(yet\)\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`

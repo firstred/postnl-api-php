@@ -17,6 +17,8 @@ NotFoundException
 	
 		| Class NotFoundException\.
 		
+		| Thrown when \(a\) requested object\(s\) could not be found\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\ApiException`

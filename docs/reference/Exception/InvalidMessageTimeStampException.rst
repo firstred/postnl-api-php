@@ -17,6 +17,8 @@ InvalidMessageTimeStampException
 	
 		| Class InvalidMessageTimestampException\.
 		
+		| Thrown when the timestamp of a \`Message\` entity is invalid\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`

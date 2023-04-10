@@ -81,7 +81,7 @@ Methods
 			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
-		:Returns: mixed | :any:`\\stdClass <stdClass>` | null 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse <Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse>` | :any:`\\stdClass <stdClass>` | null 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 

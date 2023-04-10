@@ -17,6 +17,8 @@ InvalidArgumentException
 	
 		| Class InvalidArgumentException\.
 		
+		| Group of exceptions that are the result of an invalid passed argument\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\PostNLException`
