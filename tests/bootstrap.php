@@ -32,7 +32,7 @@ use Monolog\Logger;
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-error_reporting(error_level: E_ALL ^ E_DEPRECATED);
+error_reporting(error_level: E_ALL);
 
 const _RESPONSES_DIR_ = __DIR__.'/Resources/responses';
 

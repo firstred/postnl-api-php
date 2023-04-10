@@ -30,6 +30,9 @@
         testdox="true"
         bootstrap="tests/bootstrap.php"
         cacheDirectory=".phpunit.cache"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerWarnings="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
 >
   <testsuites>
     <testsuite name="default">
