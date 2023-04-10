@@ -1,4 +1,4 @@
-# PostNL REST/SOAP API PHP Bindings
+# PostNL REST API PHP Bindings
 
 [![Latest Stable Version](https://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
 [![Total Downloads](https://poser.pugx.org/firstred/postnl-api-php/downloads)](https://packagist.org/packages/firstred/postnl-api-php)
@@ -10,44 +10,39 @@
 
 ## About
 
-This PHP library for both PostNL's REST and SOAP API aims to provide a simple way to connect your 
+This PHP library for both PostNL's REST API aims to provide a simple way to connect your 
 application with PostNL. By abstracting away needless complexity when processing shipment 
 information and increased fault-tolerance, you can get up and running with PostNL in minutes.  
 At the lower level this library uses asynchronous communication and payload splitting for 
 improved performance.
 
-## Important notice
-
-The PHP bindings can connect to both PostNL's SOAP and REST API.  
-
 ### Status
 
-| Service                                     | Status REST | Status SOAP | Version |
-| ------------------------------------------- |-------------|-------------| ------- |
-| **Addresses**                               |             |             |         |
-| Adrescheck Nationaal                        | N/A         | N/A         | N/A     |
-| Adrescheck Basis Nationaal                  | N/A         | N/A         | N/A     |
-| Adrescheck Internationaal                   | N/A         | N/A         | N/A     |
-| Geo Adrescheck Nationaal                    | N/A         | N/A         | N/A     |
-| **Creditworthiness & Business information** |             |             |         |
-| Bedrijfscheck Nationaal                     | N/A         | N/A         | N/A     |
-| Kredietcheck Zakelijk                       | N/A         | N/A         | N/A     |
-| **Send & Track**                            |             |             |         |
-| Barcode webservice                          | ✓           | ✓           | 1.1     |
-| Labelling webservice                        | ✓           | ✓           | 2.2     |
-| Confirming webservice                       | ✓           | ✓           | 2.0     |
-| Shippingstatus webservice                   | ✓           | ✓           | 2.0     |
-| Shipping webservice                         | ✓           | ✓\*         | 2.0     |
-| **Delivery Options**                        |             |             |         |
-| Deliverydate webservice                     | ✓           | ✓           | 2.2     |
-| Location webservice                         | ✓           | ✓           | 2.1     |
-| Timeframe webservice                        | ✓           | ✓           | 2.1     |
-| Checkout webservice                         | N/A \*\*    | N/A \*\*    | 1.0     |
-| **Mail**                                    |             |             |         |
-| Bulkmail webservice                         | N/A         | N/A         | N/A     |
+| Service                                     | Status | Version |
+| ------------------------------------------- |--------| ------- |
+| **Addresses**                               |        |         |
+| Adrescheck Nationaal                        | N/A    | N/A     |
+| Adrescheck Basis Nationaal                  | N/A    | N/A     |
+| Adrescheck Internationaal                   | N/A    | N/A     |
+| Geo Adrescheck Nationaal                    | N/A    | N/A     |
+| **Creditworthiness & Business information** |        |         |
+| Bedrijfscheck Nationaal                     | N/A    | N/A     |
+| Kredietcheck Zakelijk                       | N/A    | N/A     |
+| **Send & Track**                            |        |         |
+| Barcode webservice                          | ✓      | 1.1     |
+| Labelling webservice                        | ✓      | 2.2     |
+| Confirming webservice                       | ✓      | 2.0     |
+| Shippingstatus webservice                   | ✓      | 2.0     |
+| Shipping webservice                         | ✓      | 2.0     |
+| **Delivery Options**                        |        |         |
+| Deliverydate webservice                     | ✓      | 2.2     |
+| Location webservice                         | ✓      | 2.1     |
+| Timeframe webservice                        | ✓      | 2.1     |
+| Checkout webservice                         | N/A \* | 1.0     |
+| **Mail**                                    |        |         |
+| Bulkmail webservice                         | N/A    | N/A     |
 
-\* SOAP version not available. Falls back on the REST API.  
-\*\* `PostNL::getTimeframesAndNearestLocations` can be used as an alternative with more functionality: https://postnl-php.readthedocs.io/en/v1.4.x/quickstart.html#requesting-timeframes-location-and-delivery-date-at-once
+\* `PostNL::getTimeframesAndNearestLocations` can be used as an alternative with more functionality: https://postnl-php.readthedocs.io/en/v1.4.x/quickstart.html#requesting-timeframes-location-and-delivery-date-at-once
 
 ## Instructions
 
