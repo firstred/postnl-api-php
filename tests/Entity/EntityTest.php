@@ -35,7 +35,6 @@ use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Exception\ServiceNotSetException;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Sabre\Xml\Service as XmlService;
 use TypeError;
 
 #[TestDox(text: 'The Entities')]
@@ -135,5 +134,22 @@ class EntityTest extends TestCase
         $this->expectException(exception: ServiceNotSetException::class);
 
         json_encode(value: new Address());
+    }
+
+    /** @throws */
+    #[TestDox(text: 'should trigger a warning when json deserializing an unknown property')]
+    public function testShouldTriggerAWarningWhenAnUnknownPropertyIsDeserialized(): void
+    {
+        $this->expectExceptionMessage(message: "Deserializable entity `Address` contains unknown properties: `['UnknownProperty']`");
+
+        set_error_handler(
+            callback: static function ($message, $code) {
+                restore_error_handler();
+                throw new \Exception(message: $code, code: $message);
+            },
+            error_levels: E_WARNING | E_USER_WARNING,
+        );
+
+        Address::jsonDeserialize(json: (object) ['Address' => (object) ['UnknownProperty' => true]]);
     }
 }
