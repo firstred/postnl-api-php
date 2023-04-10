@@ -30,9 +30,9 @@ namespace Firstred\PostNL\Tests\Compatibility;
  use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
- * Class EnvelopeTest.
+ * Class DeprecatedClassesTest.
  *
- * @testdox The Envelope class
+ * @testdox Compatibility
  */
 class DeprecatedClassesTest extends TestCase
 {
