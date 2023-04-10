@@ -241,7 +241,7 @@ class ShippingServiceSoapTest extends ServiceTestCase
             shipment: (new Shipment())
                 ->setAddresses(Addresses: [
                     new Address(
-                       AddressType: '01',
+                        AddressType: '01',
                         FirstName: 'Peter',
                         Name: 'de Ruijter',
                         Street: 'Bilderdijkstraat',

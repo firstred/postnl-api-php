@@ -66,6 +66,7 @@ use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidApiModeException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
@@ -502,6 +503,8 @@ class PostNL implements LoggerAwareInterface
                 version: '2.0.0',
                 message: 'Using the SOAP API is deprecated. Do not set an API mode to use the recommended API.',
             );
+        } else {
+            throw new InvalidApiModeException(message: 'Mode not supported');
         }
 
         $this->getBarcodeService()->setApiMode(mode: $mode);

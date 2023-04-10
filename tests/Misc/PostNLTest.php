@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Tests\Misc;
 
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Soap\UsernameToken;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\PostNL;
 use PHPUnit\Framework\Attributes\Before;

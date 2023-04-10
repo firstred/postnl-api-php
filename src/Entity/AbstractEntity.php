@@ -34,7 +34,6 @@ use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Enum\SoapNamespace;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -276,7 +275,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      * @return static
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws NotSupportedException
      * @throws InvalidConfigurationException
      *
@@ -457,7 +455,7 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
      *
      * @return class-string
      *
-     * @throws EntityNotFoundException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      * @deprecated 2.0.0
@@ -485,6 +483,6 @@ abstract class AbstractEntity implements JsonSerializable, XmlSerializable
             }
         }
 
-        throw new EntityNotFoundException(message: "Entity not found: $shortName");
+        throw new InvalidArgumentException(message: "Entity not found: $shortName");
     }
 }
