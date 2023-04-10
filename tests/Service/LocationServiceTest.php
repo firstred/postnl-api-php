@@ -341,7 +341,7 @@ class LocationServiceTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function locationsInAreaProvider(): array
+    public static function locationsInAreaProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/locationsinarea.http'))],
@@ -351,7 +351,7 @@ class LocationServiceTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function singleLocationProvider(): array
+    public static function singleLocationProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/singlelocation.http'))],
