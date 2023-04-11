@@ -48,7 +48,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 interface DeliveryDateServiceInterface extends ServiceInterface
 {
     /**
-     * Get a delivery date via REST.
+     * Get the delivery date.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -67,7 +67,7 @@ interface DeliveryDateServiceInterface extends ServiceInterface
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse;
 
     /**
-     * Get the sent date via REST.
+     * Get the shipping date.
      *
      * @param GetSentDateRequest $getSentDate
      *
