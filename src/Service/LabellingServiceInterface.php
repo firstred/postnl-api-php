@@ -65,7 +65,7 @@ interface LabellingServiceInterface extends ServiceInterface
     /**
      * Generate multiple labels at once.
      *
-     * @param array<int|string, array<GenerateBarcode, bool>> $generateLabels
+     * @param array<int|string, array{0: GenerateBarcode, 1: bool}> $generateLabels
      *
      * @return array<int|string, GenerateLabelResponse>
      *

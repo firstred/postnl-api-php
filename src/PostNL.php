@@ -1709,7 +1709,9 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $barcodes Pass multiple barcodes
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
-     * @return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @return array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @psalm-return non-emptyarray<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @phpstan-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
      * @throws HttpClientException
      * @throws NotSupportedException
@@ -1797,7 +1799,9 @@ class PostNL implements LoggerAwareInterface
      * @param string[] $references Pass multiple references
      * @param bool     $complete   Return the complete status (incl. shipment history)
      *
-     * @return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @return array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @phpstan-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
      * @throws HttpClientException
      * @throws NotSupportedException
