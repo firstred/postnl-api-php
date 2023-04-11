@@ -88,12 +88,18 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\LocationServiceInterface;
+use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\RequestBuilder\Rest\DeliveryDateServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Rest\LocationServiceRestRequestBuilder;
 use Firstred\PostNL\Service\RequestBuilder\Rest\TimeframeServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
+use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\DeliveryDateServiceRestResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\LocationServiceRestResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\TimeframeServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -127,6 +133,7 @@ use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
+
 use function array_map;
 use function base64_decode;
 use function class_exists;
@@ -229,6 +236,13 @@ class PostNL implements LoggerAwareInterface
     /** @var ShippingServiceInterface */
     protected ShippingServiceInterface $shippingService;
 
+    protected TimeframeServiceRequestBuilderInterface $timeframeServiceRequestBuilder;
+    protected LocationServiceRequestBuilderInterface $locationServiceRequestBuilder;
+    protected DeliveryDateServiceRequestBuilderInterface $deliveryDateServiceRequestBuilder;
+    protected TimeframeServiceResponseProcessorInterface $timeframeServiceResponseProcessor;
+    protected LocationServiceResponseProcessorInterface $locationServiceResponseProcessor;
+    protected DeliveryDateServiceResponseProcessorInterface $deliveryDateServiceResponseProcessor;
+
     /**
      * PostNL constructor.
      *
@@ -243,9 +257,33 @@ class PostNL implements LoggerAwareInterface
         string|HiddenString $apiKey,
         bool $sandbox,
     ) {
+        $apiKey = is_string(value: $apiKey) ? new HiddenString(value: $apiKey) : $apiKey;
+
         $this->setCustomer(customer: $customer);
         $this->setApiKey(apiKey: $apiKey);
         $this->setSandbox(sandbox: $sandbox);
+
+        $this->timeframeServiceRequestBuilder = new TimeframeServiceRestRequestBuilder(
+            apiKey: $apiKey,
+            sandbox: $sandbox,
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->timeframeServiceResponseProcessor = new TimeframeServiceRestResponseProcessor();
+        $this->locationServiceRequestBuilder = new LocationServiceRestRequestBuilder(
+            apiKey: $apiKey,
+            sandbox: $sandbox,
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->locationServiceResponseProcessor = new LocationServiceRestResponseProcessor();
+        $this->deliveryDateServiceRequestBuilder = new DeliveryDateServiceRestRequestBuilder(
+            apiKey: $apiKey,
+            sandbox: $sandbox,
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        $this->deliveryDateServiceResponseProcessor = new DeliveryDateServiceRestResponseProcessor();
     }
 
     /**
@@ -271,11 +309,32 @@ class PostNL implements LoggerAwareInterface
      *
      * @return static
      *
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function setApiKey(HiddenString|string $apiKey): static
     {
         $this->apiKey = is_string(value: $apiKey) ? new HiddenString(value: $apiKey) : $apiKey;
+
+        $this->getBarcodeService()->setApiKey(apiKey: $this->apiKey);
+        $this->getConfirmingService()->setApiKey(apiKey: $this->apiKey);
+        $this->getDeliveryDateService()->setApiKey(apiKey: $this->apiKey);
+        $this->getLabellingService()->setApiKey(apiKey: $this->apiKey);
+        $this->getLocationService()->setApiKey(apiKey: $this->apiKey);
+        $this->getShippingService()->setApiKey(apiKey: $this->apiKey);
+        $this->getShippingStatusService()->setApiKey(apiKey: $this->apiKey);
+        $this->getTimeframeService()->setApiKey(apiKey: $this->apiKey);
+
+        if (isset($this->timeframeServiceRequestBuilder)) {
+            $this->timeframeServiceRequestBuilder->setApiKey(apiKey: $this->apiKey);
+        }
+        if (isset($this->locationServiceRequestBuilder)) {
+            $this->locationServiceRequestBuilder->setApiKey(apiKey: $this->apiKey);
+        }
+        if (isset($this->deliveryDateServiceRequestBuilder)) {
+            $this->deliveryDateServiceRequestBuilder->setApiKey(apiKey: $this->apiKey);
+        }
 
         return $this;
     }
@@ -343,6 +402,16 @@ class PostNL implements LoggerAwareInterface
         $this->getShippingService()->setSandbox(sandbox: $sandbox);
         $this->getShippingStatusService()->setSandbox(sandbox: $sandbox);
         $this->getTimeframeService()->setSandbox(sandbox: $sandbox);
+
+        if (isset($this->timeframeServiceRequestBuilder)) {
+            $this->timeframeServiceRequestBuilder->setSandbox(sandbox: $sandbox);
+        }
+        if (isset($this->locationServiceRequestBuilder)) {
+            $this->locationServiceRequestBuilder->setSandbox(sandbox: $sandbox);
+        }
+        if (isset($this->deliveryDateServiceRequestBuilder)) {
+            $this->deliveryDateServiceRequestBuilder->setSandbox(sandbox: $sandbox);
+        }
 
         return $this;
     }
@@ -539,6 +608,16 @@ class PostNL implements LoggerAwareInterface
         $this->getShippingStatusService()->setRequestFactory(requestFactory: $requestFactory);
         $this->getTimeframeService()->setRequestFactory(requestFactory: $requestFactory);
 
+        if (isset($this->timeframeServiceRequestBuilder)) {
+            $this->timeframeServiceRequestBuilder->setRequestFactory(requestFactory: $requestFactory);
+        }
+        if (isset($this->locationServiceRequestBuilder)) {
+            $this->locationServiceRequestBuilder->setRequestFactory(requestFactory: $requestFactory);
+        }
+        if (isset($this->deliveryDateServiceRequestBuilder)) {
+            $this->deliveryDateServiceRequestBuilder->setRequestFactory(requestFactory: $requestFactory);
+        }
+
         $this->getHttpClient()->setRequestFactory(requestFactory: $requestFactory);
 
         return $this;
@@ -622,6 +701,10 @@ class PostNL implements LoggerAwareInterface
         $this->shippingService->setStreamFactory(streamFactory: $streamFactory);
         $this->shippingStatusService->setStreamFactory(streamFactory: $streamFactory);
         $this->timeframeService->setStreamFactory(streamFactory: $streamFactory);
+
+        $this->timeframeServiceRequestBuilder->setStreamFactory(streamFactory: $streamFactory);
+        $this->locationServiceRequestBuilder->setStreamFactory(streamFactory: $streamFactory);
+        $this->deliveryDateServiceRequestBuilder->setStreamFactory(streamFactory: $streamFactory);
 
         $this->getHttpClient()->setStreamFactory(streamFactory: $streamFactory);
 
@@ -1711,7 +1794,9 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
      * @return array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     *
      * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     *
      * @phpstan-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
      * @throws HttpClientException
@@ -1801,7 +1886,9 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $complete   Return the complete status (incl. shipment history)
      *
      * @return array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     *
      * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     *
      * @phpstan-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
      * @throws HttpClientException
@@ -2069,41 +2156,17 @@ class PostNL implements LoggerAwareInterface
             $results['delivery_date'] = PsrMessage::parseResponse(message: $itemDeliveryDate->get());
         }
 
-        $timeframeServiceRequestBuilder = new TimeframeServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->getSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
-        static $timeframeServiceResponseProcessor = new TimeframeServiceRestResponseProcessor();
-
-        $locationServiceRequestBuilder = new LocationServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->getSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
-        static $locationServiceResponseProcessor = new LocationServiceRestResponseProcessor();
-
-        $deliveryDateServiceRequestBuilder = new DeliveryDateServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->getSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
-        static $deliveryDateServiceResponseProcessor = new DeliveryDateServiceRestResponseProcessor();
-
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'timeframes',
-            request: $timeframeServiceRequestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes)
+            request: $this->timeframeServiceRequestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes)
         );
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'locations',
-            request: $locationServiceRequestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
+            request: $this->locationServiceRequestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
         );
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'delivery_date',
-            request: $deliveryDateServiceRequestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate)
+            request: $this->deliveryDateServiceRequestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate)
         );
 
         $responses = $this->getHttpClient()->doRequests();
@@ -2152,9 +2215,9 @@ class PostNL implements LoggerAwareInterface
         }
 
         return [
-            'timeframes'    => $timeframeServiceResponseProcessor->processGetTimeframesResponse(response: $results['timeframes']),
-            'locations'     => $locationServiceResponseProcessor->processGetNearestLocationsResponse(response: $results['locations']),
-            'delivery_date' => $deliveryDateServiceResponseProcessor->processGetDeliveryDateResponse(response: $results['delivery_date']),
+            'timeframes'    => $this->timeframeServiceResponseProcessor->processGetTimeframesResponse(response: $results['timeframes']),
+            'locations'     => $this->locationServiceResponseProcessor->processGetNearestLocationsResponse(response: $results['locations']),
+            'delivery_date' => $this->deliveryDateServiceResponseProcessor->processGetDeliveryDateResponse(response: $results['delivery_date']),
         ];
     }
 
