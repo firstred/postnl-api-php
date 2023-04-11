@@ -13,11 +13,6 @@ Amount
 .. php:class:: Amount
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Amount\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,17 +25,28 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($AccountName, $AmountType, $BIC, $Currency, $IBAN, $Reference, $TransactionNumber, $Value, $VerzekerdBedrag\)<Firstred\\PostNL\\Entity\\Amount::\_\_construct\(\)>`
+* :php:meth:`public getAccountName\(\)<Firstred\\PostNL\\Entity\\Amount::getAccountName\(\)>`
+* :php:meth:`public setAccountName\($AccountName\)<Firstred\\PostNL\\Entity\\Amount::setAccountName\(\)>`
+* :php:meth:`public getBIC\(\)<Firstred\\PostNL\\Entity\\Amount::getBIC\(\)>`
+* :php:meth:`public setBIC\($BIC\)<Firstred\\PostNL\\Entity\\Amount::setBIC\(\)>`
+* :php:meth:`public getCurrency\(\)<Firstred\\PostNL\\Entity\\Amount::getCurrency\(\)>`
+* :php:meth:`public setCurrency\($Currency\)<Firstred\\PostNL\\Entity\\Amount::setCurrency\(\)>`
+* :php:meth:`public getIBAN\(\)<Firstred\\PostNL\\Entity\\Amount::getIBAN\(\)>`
+* :php:meth:`public setIBAN\($IBAN\)<Firstred\\PostNL\\Entity\\Amount::setIBAN\(\)>`
+* :php:meth:`public getReference\(\)<Firstred\\PostNL\\Entity\\Amount::getReference\(\)>`
+* :php:meth:`public setReference\($Reference\)<Firstred\\PostNL\\Entity\\Amount::setReference\(\)>`
+* :php:meth:`public getTransactionNumber\(\)<Firstred\\PostNL\\Entity\\Amount::getTransactionNumber\(\)>`
+* :php:meth:`public setTransactionNumber\($TransactionNumber\)<Firstred\\PostNL\\Entity\\Amount::setTransactionNumber\(\)>`
+* :php:meth:`public getValue\(\)<Firstred\\PostNL\\Entity\\Amount::getValue\(\)>`
+* :php:meth:`public setValue\($Value\)<Firstred\\PostNL\\Entity\\Amount::setValue\(\)>`
+* :php:meth:`public getVerzekerdBedrag\(\)<Firstred\\PostNL\\Entity\\Amount::getVerzekerdBedrag\(\)>`
+* :php:meth:`public setVerzekerdBedrag\($VerzekerdBedrag\)<Firstred\\PostNL\\Entity\\Amount::setVerzekerdBedrag\(\)>`
+* :php:meth:`public getAmountType\(\)<Firstred\\PostNL\\Entity\\Amount::getAmountType\(\)>`
 * :php:meth:`public setAmountType\($AmountType\)<Firstred\\PostNL\\Entity\\Amount::setAmountType\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Amount::xmlSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static AccountName
 
@@ -104,6 +110,7 @@ Methods
 			* **$Reference** (string | null)  
 			* **$TransactionNumber** (string | null)  
 			* **$Value** (string | null)  
+			* **$VerzekerdBedrag** (string | null)  
 
 		
 	
@@ -111,16 +118,20 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setAmountType( $AmountType=null)
+	.. php:method:: public getAccountName()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Set amount type\.
-			
-		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setAccountName( $AccountName)
+	
 		
 		:Parameters:
-			* **$AmountType** (string | int | null)  
+			* **$AccountName** (string | null)  
 
 		
 		:Returns: static 
@@ -129,20 +140,177 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public getBIC()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for the XMLWriter\.
-			
-		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setBIC( $BIC)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$BIC** (string | null)  
 
 		
-		:Returns: void 
-		:Throws: :any:`\\InvalidArgumentException <InvalidArgumentException>` 
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCurrency()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCurrency( $Currency)
+	
+		
+		:Parameters:
+			* **$Currency** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getIBAN()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setIBAN( $IBAN)
+	
+		
+		:Parameters:
+			* **$IBAN** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getReference()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setReference( $Reference)
+	
+		
+		:Parameters:
+			* **$Reference** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTransactionNumber()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTransactionNumber( $TransactionNumber)
+	
+		
+		:Parameters:
+			* **$TransactionNumber** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getValue()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setValue( $Value)
+	
+		
+		:Parameters:
+			* **$Value** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getVerzekerdBedrag()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setVerzekerdBedrag( $VerzekerdBedrag)
+	
+		
+		:Parameters:
+			* **$VerzekerdBedrag** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getAmountType()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setAmountType(string|int|null $AmountType=null)
+	
+		
+		:Parameters:
+			* **$AmountType** (string | int | null)  
+
+		
+		:Returns: static 
 	
 	
 

@@ -17,6 +17,8 @@ CifException
 	
 		| Class CifException\.
 		
+		| Thrown when the CIF API has a fatal error\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\ApiException`

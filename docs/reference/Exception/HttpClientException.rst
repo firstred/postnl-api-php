@@ -15,7 +15,9 @@ HttpClientException
 
 	.. rst-class:: phpdoc-description
 	
-		| Class HttpClientException
+		| Class HttpClientException\.
+		
+		| Thrown when the HTTP Client has an error\.
 		
 	
 	:Parent:
@@ -39,7 +41,6 @@ Properties
 
 .. php:attr:: private static response
 
-	:Type: :any:`\\Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` 
 
 
 Methods
@@ -49,18 +50,6 @@ Methods
 
 	.. php:method:: public __construct( $message=\'\', $code=0, $previous=null, $response=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| ResponseException constructor\.
-			
-		
-		
-		:Parameters:
-			* **$message** (string)  
-			* **$code** (int)  
-			* **$previous** (:any:`Exception <Exception>` | null)  
-			* **$response** (:any:`Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` | null)  
-
 		
 	
 	
@@ -70,10 +59,6 @@ Methods
 	.. php:method:: public setResponse( $response)
 	
 		
-		:Parameters:
-			* **$response** (:any:`Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>`)  
-
-		
 	
 	
 
@@ -82,7 +67,6 @@ Methods
 	.. php:method:: public getResponse()
 	
 		
-		:Returns: :any:`\\Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` 
 	
 	
 

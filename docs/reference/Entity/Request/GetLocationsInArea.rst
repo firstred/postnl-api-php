@@ -13,13 +13,6 @@ GetLocationsInArea
 .. php:class:: GetLocationsInArea
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GetLocationsInArea\.
-		
-		| This class is both the container and can be the actual GetLocationsInArea object itself\!
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -32,20 +25,16 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Countrycode, $Location, $Message\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::\_\_construct\(\)>`
+* :php:meth:`public getCountrycode\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::getCountrycode\(\)>`
+* :php:meth:`public setCountrycode\($Countrycode\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::setCountrycode\(\)>`
+* :php:meth:`public getLocation\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::getLocation\(\)>`
+* :php:meth:`public setLocation\($Location\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::setLocation\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::setMessage\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Countrycode
 
@@ -69,11 +58,6 @@ Methods
 
 	.. php:method:: public __construct( $Countrycode=null, $Location=null, $Message=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GetLocationsInArea constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Countrycode** (string | null)  
@@ -81,6 +65,72 @@ Methods
 			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCountrycode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCountrycode( $Countrycode)
+	
+		
+		:Parameters:
+			* **$Countrycode** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLocation()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Location <Firstred\\PostNL\\Entity\\Location>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLocation( $Location)
+	
+		
+		:Parameters:
+			* **$Location** (:any:`Firstred\\PostNL\\Entity\\Location <Firstred\\PostNL\\Entity\\Location>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
 	
 	
 

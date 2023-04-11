@@ -18,7 +18,7 @@ Interfaces
 .. toctree::
 	:maxdepth: 1
 	
-	ClientInterface <ClientInterface>
+	HttpClientInterface <HttpClientInterface>
 
 
 Classes
@@ -27,11 +27,11 @@ Classes
 .. toctree::
 	:maxdepth: 1
 	
+	CurlHttpClient <CurlHttpClient>
 	BaseHttpClient <BaseHttpClient>
-	HTTPlugClient <HTTPlugClient>
-	CurlClient <CurlClient>
-	SymfonyHttpClient <SymfonyHttpClient>
-	MockClient <MockClient>
-	GuzzleClient <GuzzleClient>
+	GuzzleHttpClient <GuzzleHttpClient>
+	SymfonyHttpHttpClient <SymfonyHttpHttpClient>
+	HTTPlugHttpClient <HTTPlugHttpClient>
+	MockHttpClient <MockHttpClient>
 
 

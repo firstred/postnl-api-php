@@ -13,11 +13,6 @@ Dimension
 .. php:class:: Dimension
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Dimension\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,20 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Weight, $Height, $Length, $Volume, $Width\)<Firstred\\PostNL\\Entity\\Dimension::\_\_construct\(\)>`
+* :php:meth:`public getHeight\(\)<Firstred\\PostNL\\Entity\\Dimension::getHeight\(\)>`
+* :php:meth:`public setHeight\($Height\)<Firstred\\PostNL\\Entity\\Dimension::setHeight\(\)>`
+* :php:meth:`public getLength\(\)<Firstred\\PostNL\\Entity\\Dimension::getLength\(\)>`
+* :php:meth:`public setLength\($Length\)<Firstred\\PostNL\\Entity\\Dimension::setLength\(\)>`
+* :php:meth:`public getVolume\(\)<Firstred\\PostNL\\Entity\\Dimension::getVolume\(\)>`
+* :php:meth:`public setVolume\($Volume\)<Firstred\\PostNL\\Entity\\Dimension::setVolume\(\)>`
+* :php:meth:`public getWeight\(\)<Firstred\\PostNL\\Entity\\Dimension::getWeight\(\)>`
+* :php:meth:`public setWeight\($Weight\)<Firstred\\PostNL\\Entity\\Dimension::setWeight\(\)>`
+* :php:meth:`public getWidth\(\)<Firstred\\PostNL\\Entity\\Dimension::getWidth\(\)>`
+* :php:meth:`public setWidth\($Width\)<Firstred\\PostNL\\Entity\\Dimension::setWidth\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Height
 
@@ -81,6 +81,116 @@ Methods
 			* **$Width** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getHeight()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setHeight( $Height)
+	
+		
+		:Parameters:
+			* **$Height** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLength()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLength( $Length)
+	
+		
+		:Parameters:
+			* **$Length** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getVolume()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setVolume( $Volume)
+	
+		
+		:Parameters:
+			* **$Volume** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getWeight()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setWeight( $Weight)
+	
+		
+		:Parameters:
+			* **$Weight** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getWidth()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setWidth( $Width)
+	
+		
+		:Parameters:
+			* **$Width** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

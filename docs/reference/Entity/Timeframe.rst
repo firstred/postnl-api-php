@@ -13,11 +13,6 @@ Timeframe
 .. php:class:: Timeframe
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Timeframe\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -34,18 +29,35 @@ Methods
 * :php:meth:`public setStartDate\($StartDate\)<Firstred\\PostNL\\Entity\\Timeframe::setStartDate\(\)>`
 * :php:meth:`public setEndDate\($EndDate\)<Firstred\\PostNL\\Entity\\Timeframe::setEndDate\(\)>`
 * :php:meth:`public setPostalCode\($PostalCode\)<Firstred\\PostNL\\Entity\\Timeframe::setPostalCode\(\)>`
+* :php:meth:`public getCity\(\)<Firstred\\PostNL\\Entity\\Timeframe::getCity\(\)>`
+* :php:meth:`public setCity\($City\)<Firstred\\PostNL\\Entity\\Timeframe::setCity\(\)>`
+* :php:meth:`public getCountryCode\(\)<Firstred\\PostNL\\Entity\\Timeframe::getCountryCode\(\)>`
+* :php:meth:`public setCountryCode\($CountryCode\)<Firstred\\PostNL\\Entity\\Timeframe::setCountryCode\(\)>`
+* :php:meth:`public getHouseNr\(\)<Firstred\\PostNL\\Entity\\Timeframe::getHouseNr\(\)>`
+* :php:meth:`public setHouseNr\($HouseNr\)<Firstred\\PostNL\\Entity\\Timeframe::setHouseNr\(\)>`
+* :php:meth:`public getHouseNrExt\(\)<Firstred\\PostNL\\Entity\\Timeframe::getHouseNrExt\(\)>`
+* :php:meth:`public setHouseNrExt\($HouseNrExt\)<Firstred\\PostNL\\Entity\\Timeframe::setHouseNrExt\(\)>`
+* :php:meth:`public getOptions\(\)<Firstred\\PostNL\\Entity\\Timeframe::getOptions\(\)>`
+* :php:meth:`public setOptions\($Options\)<Firstred\\PostNL\\Entity\\Timeframe::setOptions\(\)>`
+* :php:meth:`public getStreet\(\)<Firstred\\PostNL\\Entity\\Timeframe::getStreet\(\)>`
+* :php:meth:`public setStreet\($Street\)<Firstred\\PostNL\\Entity\\Timeframe::setStreet\(\)>`
+* :php:meth:`public getInterval\(\)<Firstred\\PostNL\\Entity\\Timeframe::getInterval\(\)>`
+* :php:meth:`public setInterval\($Interval\)<Firstred\\PostNL\\Entity\\Timeframe::setInterval\(\)>`
+* :php:meth:`public getTimeframeRange\(\)<Firstred\\PostNL\\Entity\\Timeframe::getTimeframeRange\(\)>`
+* :php:meth:`public setTimeframeRange\($TimeframeRange\)<Firstred\\PostNL\\Entity\\Timeframe::setTimeframeRange\(\)>`
+* :php:meth:`public getTimeframes\(\)<Firstred\\PostNL\\Entity\\Timeframe::getTimeframes\(\)>`
+* :php:meth:`public setTimeframes\($Timeframes\)<Firstred\\PostNL\\Entity\\Timeframe::setTimeframes\(\)>`
+* :php:meth:`public getDate\(\)<Firstred\\PostNL\\Entity\\Timeframe::getDate\(\)>`
+* :php:meth:`public getEndDate\(\)<Firstred\\PostNL\\Entity\\Timeframe::getEndDate\(\)>`
+* :php:meth:`public getPostalCode\(\)<Firstred\\PostNL\\Entity\\Timeframe::getPostalCode\(\)>`
+* :php:meth:`public getStartDate\(\)<Firstred\\PostNL\\Entity\\Timeframe::getStartDate\(\)>`
+* :php:meth:`public getSundaySorting\(\)<Firstred\\PostNL\\Entity\\Timeframe::getSundaySorting\(\)>`
 * :php:meth:`public setSundaySorting\($SundaySorting\)<Firstred\\PostNL\\Entity\\Timeframe::setSundaySorting\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Timeframe::jsonSerialize\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Timeframe::xmlSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static City
 
@@ -89,7 +101,7 @@ Properties
 
 .. php:attr:: protected static StartDate
 
-	:Type: string | null 
+	:Type: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
 
 
 .. php:attr:: protected static Street
@@ -122,30 +134,8 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $City=null, $CountryCode=null, $Date=null, $EndDate=null, $HouseNr=null, $HouseNrExt=null, $Options=\[\], $PostalCode=null, $Street=null, $SundaySorting=\'false\', $Interval=null, $Range=null, $Timeframes=null, $StartDate=null)
+	.. php:method:: public __construct( $City=null, $CountryCode=null, string|\\DateTimeInterface|null $Date=null, string|\\DateTimeInterface|null $EndDate=null, $HouseNr=null, $HouseNrExt=null, $Options=\[\], $PostalCode=null, $Street=null, $SundaySorting=\'false\', $Interval=null, $Range=null, $Timeframes=null, string|\\DateTimeInterface|null $StartDate=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Timeframe constructor\.
-			
-		
-		
-		:Parameters:
-			* **$City** (string | null)  
-			* **$CountryCode** (string | null)  
-			* **$Date** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-			* **$EndDate** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-			* **$HouseNr** (string | null)  
-			* **$HouseNrExt** (string | null)  
-			* **$Options** (array | null)  
-			* **$PostalCode** (string | null)  
-			* **$Street** (string | null)  
-			* **$SundaySorting** (string | null)  
-			* **$Interval** (string | null)  
-			* **$Range** (string | null)  
-			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
-			* **$StartDate** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
@@ -153,14 +143,9 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setDate( $Date=null)
+	.. php:method:: public setDate(string|\\DateTimeInterface|null $Date=null)
 	
 		
-		:Parameters:
-			* **$Date** (null)  
-
-		
-		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -168,14 +153,9 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setStartDate( $StartDate=null)
+	.. php:method:: public setStartDate(string|\\DateTimeInterface|null $StartDate=null)
 	
 		
-		:Parameters:
-			* **$StartDate** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-
-		
-		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -183,14 +163,9 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setEndDate( $EndDate=null)
+	.. php:method:: public setEndDate(string|\\DateTimeInterface|null $EndDate=null)
 	
 		
-		:Parameters:
-			* **$EndDate** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-
-		
-		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -200,11 +175,6 @@ Methods
 
 	.. php:method:: public setPostalCode( $PostalCode=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Set the postcode\.
-			
-		
 		
 		:Parameters:
 			* **$PostalCode** (string | null)  
@@ -216,14 +186,252 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setSundaySorting( $SundaySorting=null)
+	.. php:method:: public getCity()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCity( $City)
 	
 		
 		:Parameters:
-			* **$SundaySorting** (string | bool | int | null)  
+			* **$City** (string | null)  
 
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCountryCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCountryCode( $CountryCode)
+	
+		
+		:Parameters:
+			* **$CountryCode** (string | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getHouseNr()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setHouseNr( $HouseNr)
+	
+		
+		:Parameters:
+			* **$HouseNr** (string | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getHouseNrExt()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setHouseNrExt( $HouseNrExt)
+	
+		
+		:Parameters:
+			* **$HouseNrExt** (string | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getOptions()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setOptions( $Options)
+	
+		
+		:Parameters:
+			* **$Options** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getStreet()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStreet( $Street)
+	
+		
+		:Parameters:
+			* **$Street** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getInterval()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setInterval( $Interval)
+	
+		
+		:Parameters:
+			* **$Interval** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTimeframeRange()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeframeRange( $TimeframeRange)
+	
+		
+		:Parameters:
+			* **$TimeframeRange** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTimeframes()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\TimeframeTimeFrame\[\] <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` | :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeframes( $Timeframes)
+	
+		
+		:Parameters:
+			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\TimeframeTimeFrame\[\] <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` | :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDate()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getEndDate()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getPostalCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getStartDate()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSundaySorting()
+	
+		
+		:Returns: bool | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSundaySorting(string|bool|int|null $SundaySorting=null)
+	
+		
 		:Since: 1.0.0 
 		:Since: 1.0.0 
 	
@@ -233,32 +441,9 @@ Methods
 
 	.. php:method:: public jsonSerialize()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for \`json\_encode\`\.
-			
-		
 		
 		:Returns: array 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public xmlSerialize( $writer)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for the XMLWriter\.
-			
-		
-		
-		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
-
-		
-		:Returns: void 
-		:Throws: :any:`\\InvalidArgumentException <InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 

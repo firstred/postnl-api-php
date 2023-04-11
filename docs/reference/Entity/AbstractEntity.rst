@@ -15,13 +15,8 @@ AbstractEntity
 .. php:class:: AbstractEntity
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Entity\.
-		
-	
 	:Implements:
-		:php:interface:`JsonSerializable` :php:interface:`Firstred\\PostNL\\Util\\XmlSerializable` 
+		:php:interface:`JsonSerializable` 
 	
 
 
@@ -33,22 +28,17 @@ Methods
 
 * :php:meth:`public \_\_construct\(\)<Firstred\\PostNL\\Entity\\AbstractEntity::\_\_construct\(\)>`
 * :php:meth:`public static create\($properties\)<Firstred\\PostNL\\Entity\\AbstractEntity::create\(\)>`
-* :php:meth:`public \_\_call\($name, $value\)<Firstred\\PostNL\\Entity\\AbstractEntity::\_\_call\(\)>`
+* :php:meth:`public getId\(\)<Firstred\\PostNL\\Entity\\AbstractEntity::getId\(\)>`
+* :php:meth:`public setId\($id\)<Firstred\\PostNL\\Entity\\AbstractEntity::setId\(\)>`
+* :php:meth:`public setCurrentService\($currentService\)<Firstred\\PostNL\\Entity\\AbstractEntity::setCurrentService\(\)>`
+* :php:meth:`public getCurrentService\(\)<Firstred\\PostNL\\Entity\\AbstractEntity::getCurrentService\(\)>`
+* :php:meth:`public getSerializableProperties\($withAliases\)<Firstred\\PostNL\\Entity\\AbstractEntity::getSerializableProperties\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\AbstractEntity::jsonSerialize\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\AbstractEntity::xmlSerialize\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\AbstractEntity::jsonDeserialize\(\)>`
-* :php:meth:`public static xmlDeserialize\($xml\)<Firstred\\PostNL\\Entity\\AbstractEntity::xmlDeserialize\(\)>`
-* :php:meth:`public static shouldBeAnArray\($fqcn, $propertyName\)<Firstred\\PostNL\\Entity\\AbstractEntity::shouldBeAnArray\(\)>`
-* :php:meth:`public static getFullyQualifiedEntityClassName\($shortName\)<Firstred\\PostNL\\Entity\\AbstractEntity::getFullyQualifiedEntityClassName\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: array 
-
 
 .. php:attr:: protected static id
 
@@ -57,7 +47,7 @@ Properties
 
 .. php:attr:: protected static currentService
 
-	:Type: string 
+	:Type: :any:`class\-string <class\-string>` 
 
 
 Methods
@@ -67,16 +57,11 @@ Methods
 
 	.. php:method:: public __construct()
 	
-		.. rst-class:: phpdoc-description
-		
-			| AbstractEntity constructor\.
-			
-		
 		
 	
 	
 
-.. rst-class:: public static
+.. rst-class:: public static deprecated
 
 	.. php:method:: public static create( $properties=\[\])
 	
@@ -90,24 +75,67 @@ Methods
 			* **$properties** (array)  
 
 		
-		:Returns: static 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>` 
 		:Since: 1.0.0 
+		:Deprecated: 2.0.0 Use the constructor instead with named arguments
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public __call( $name, $value)
+	.. php:method:: public getId()
+	
+		
+		:Returns: string 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setId(string|int $id)
 	
 		
 		:Parameters:
-			* **$name** (string)  
-			* **$value** (mixed)  
+			* **$id** (string | int)  
 
 		
-		:Returns: object | null 
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCurrentService( $currentService)
+	
+		
+		:Parameters:
+			* **$currentService** (:any:`class\-string <class\-string>`)  
+
+		
+		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCurrentService()
+	
+		
+		:Returns: :any:`class\-string <class\-string>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSerializableProperties( $withAliases=false)
+	
+		
+		:Returns: :any:`array<string,string\> <array<string,string\>>` 
+		:Since: 2.0.0 
 	
 	
 
@@ -122,26 +150,7 @@ Methods
 		
 		
 		:Returns: array 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public xmlSerialize( $writer)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for the XMLWriter\.
-			
-		
-		
-		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
-
-		
-		:Returns: void 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 
@@ -149,79 +158,22 @@ Methods
 
 	.. php:method:: public static jsonDeserialize( $json)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Deserialize JSON\.
-			
-		
 		
 		:Parameters:
-			* **$json** (:any:`stdClass <stdClass>`)  JSON object `{"EntityName": object}`
+			* **$json** (:any:`stdClass <stdClass>`)  {"EntityName": object}
 
 		
 		:Returns: static 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static xmlDeserialize( $xml)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Deserialize XML\.
-			
-		
-		
-		:Parameters:
-			* **$xml** (array)  Associative array representation of XML response, using Clark notation for namespaces
-
-		
-		:Returns: :any:`\\Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>` 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static shouldBeAnArray( $fqcn, $propertyName)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Whether the given property should bbe an array
-			
-		
-		
-		:Parameters:
-			* **$fqcn** (string)  
-			* **$propertyName** (string)  
-
-		
-		:Returns: false | string If found, singular name of property
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static getFullyQualifiedEntityClassName( $shortName)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Get the fully qualified class name for the given entity name\.
-			
-		
-		
-		:Parameters:
-			* **$shortName** (string)  
-
-		
-		:Returns: string The FQCN
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-		:Since: 1.2.0 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Since: 1.0.0 
 	
 	
 

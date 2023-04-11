@@ -39,7 +39,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Cache an item
+			| Cache an item\.
 			
 		
 		
@@ -77,7 +77,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Delete an item from cache
+			| Delete an item from cache\.
 			
 		
 		
@@ -101,11 +101,11 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setTtl( $ttl=null)
+	.. php:method:: public setTtl(\\DateInterval|\\DateTimeInterface|int $ttl=null)
 	
 		
 		:Parameters:
-			* **$ttl** (int | :any:`\\DateTimeInterface <DateTimeInterface>` | :any:`\\DateInterval <DateInterval>` | null)  
+			* **$ttl** (:any:`DateInterval <DateInterval>` | :any:`\\DateTimeInterface <DateTimeInterface>` | int | null)  
 
 		
 		:Returns: static 

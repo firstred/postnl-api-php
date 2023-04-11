@@ -18,9 +18,10 @@ Namespaces
 .. toctree::
 	:maxdepth: 1
 	
+	Attribute <Attribute/index>
 	Entity <Entity/index>
+	Enum <Enum/index>
 	Exception <Exception/index>
-	Factory <Factory/index>
 	HttpClient <HttpClient/index>
 	Service <Service/index>
 	Util <Util/index>

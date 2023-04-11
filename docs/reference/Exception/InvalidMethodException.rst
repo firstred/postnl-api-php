@@ -17,6 +17,8 @@ InvalidMethodException
 	
 		| Class InvalidMethodException\.
 		
+		| Thrown when an invalid method is called\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\HttpClientException`

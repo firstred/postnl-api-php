@@ -13,11 +13,6 @@ Status
 .. php:class:: Status
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Status\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,26 +25,20 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($PhaseCode, $PhaseDescription, $StatusCode, $StatusDescription, $TimeStamp\)<Firstred\\PostNL\\Entity\\Status::\_\_construct\(\)>`
+* :php:meth:`public getPhaseCode\(\)<Firstred\\PostNL\\Entity\\Status::getPhaseCode\(\)>`
+* :php:meth:`public setPhaseCode\($PhaseCode\)<Firstred\\PostNL\\Entity\\Status::setPhaseCode\(\)>`
+* :php:meth:`public getPhaseDescription\(\)<Firstred\\PostNL\\Entity\\Status::getPhaseDescription\(\)>`
+* :php:meth:`public setPhaseDescription\($PhaseDescription\)<Firstred\\PostNL\\Entity\\Status::setPhaseDescription\(\)>`
+* :php:meth:`public getStatusCode\(\)<Firstred\\PostNL\\Entity\\Status::getStatusCode\(\)>`
+* :php:meth:`public setStatusCode\($StatusCode\)<Firstred\\PostNL\\Entity\\Status::setStatusCode\(\)>`
+* :php:meth:`public getStatusDescription\(\)<Firstred\\PostNL\\Entity\\Status::getStatusDescription\(\)>`
+* :php:meth:`public setStatusDescription\($StatusDescription\)<Firstred\\PostNL\\Entity\\Status::setStatusDescription\(\)>`
+* :php:meth:`public getTimeStamp\(\)<Firstred\\PostNL\\Entity\\Status::getTimeStamp\(\)>`
 * :php:meth:`public setTimeStamp\($TimeStamp\)<Firstred\\PostNL\\Entity\\Status::setTimeStamp\(\)>`
-* :php:meth:`public getCurrentStatusPhaseCode\(\)<Firstred\\PostNL\\Entity\\Status::getCurrentStatusPhaseCode\(\)>`
-* :php:meth:`public getCurrentStatusPhaseDescription\(\)<Firstred\\PostNL\\Entity\\Status::getCurrentStatusPhaseDescription\(\)>`
-* :php:meth:`public getCurrentStatusStatusCode\(\)<Firstred\\PostNL\\Entity\\Status::getCurrentStatusStatusCode\(\)>`
-* :php:meth:`public getCurrentStatusStatusDescription\(\)<Firstred\\PostNL\\Entity\\Status::getCurrentStatusStatusDescription\(\)>`
-* :php:meth:`public getCurrentStatusTimeStamp\(\)<Firstred\\PostNL\\Entity\\Status::getCurrentStatusTimeStamp\(\)>`
-* :php:meth:`public getCompleteStatusPhaseCode\(\)<Firstred\\PostNL\\Entity\\Status::getCompleteStatusPhaseCode\(\)>`
-* :php:meth:`public getCompleteStatusPhaseDescription\(\)<Firstred\\PostNL\\Entity\\Status::getCompleteStatusPhaseDescription\(\)>`
-* :php:meth:`public getCompleteStatusStatusCode\(\)<Firstred\\PostNL\\Entity\\Status::getCompleteStatusStatusCode\(\)>`
-* :php:meth:`public getCompleteStatusStatusDescription\(\)<Firstred\\PostNL\\Entity\\Status::getCompleteStatusStatusDescription\(\)>`
-* :php:meth:`public getCompleteStatusTimeStamp\(\)<Firstred\\PostNL\\Entity\\Status::getCompleteStatusTimeStamp\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static PhaseCode
 
@@ -81,187 +70,116 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $PhaseCode=null, $PhaseDescription=null, $StatusCode=null, $StatusDescription=null, $TimeStamp=null)
+	.. php:method:: public __construct( $PhaseCode=null, $PhaseDescription=null, $StatusCode=null, $StatusDescription=null, string|\\DateTimeInterface|null $TimeStamp=null)
 	
-		.. rst-class:: phpdoc-description
 		
-			| Status constructor\.
-			
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getPhaseCode()
+	
 		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setPhaseCode( $PhaseCode)
+	
 		
 		:Parameters:
 			* **$PhaseCode** (string | null)  
-			* **$PhaseDescription** (string | null)  
-			* **$StatusCode** (string | null)  
-			* **$StatusDescription** (string | null)  
-			* **$TimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
 
 		
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Status <Firstred\\PostNL\\Entity\\Status>` 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public setTimeStamp( $TimeStamp=null)
+	.. php:method:: public getPhaseDescription()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setPhaseDescription( $PhaseDescription)
 	
 		
 		:Parameters:
-			* **$TimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
+			* **$PhaseDescription** (string | null)  
 
 		
-		:Returns: static 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Status <Firstred\\PostNL\\Entity\\Status>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getStatusCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStatusCode( $StatusCode)
+	
+		
+		:Parameters:
+			* **$StatusCode** (string | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Status <Firstred\\PostNL\\Entity\\Status>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getStatusDescription()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStatusDescription( $StatusDescription)
+	
+		
+		:Parameters:
+			* **$StatusDescription** (string | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Status <Firstred\\PostNL\\Entity\\Status>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTimeStamp()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeStamp(string|\\DateTimeInterface|null $TimeStamp=null)
+	
+		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCurrentStatusPhaseCode()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCurrentStatusPhaseDescription()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCurrentStatusStatusCode()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCurrentStatusStatusDescription()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCurrentStatusTimeStamp()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCompleteStatusPhaseCode()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCompleteStatusPhaseDescription()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCompleteStatusStatusCode()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCompleteStatusStatusDescription()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
-		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getCompleteStatusTimeStamp()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Backward compatible with SOAP API
-			
-		
-		
-		:Returns: string | null 
 		:Since: 1.2.0 
 	
 	

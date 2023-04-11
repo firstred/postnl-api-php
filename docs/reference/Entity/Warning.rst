@@ -13,11 +13,6 @@ Warning
 .. php:class:: Warning
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Warning\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,16 +25,15 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Code, $Description\)<Firstred\\PostNL\\Entity\\Warning::\_\_construct\(\)>`
+* :php:meth:`public getCode\(\)<Firstred\\PostNL\\Entity\\Warning::getCode\(\)>`
+* :php:meth:`public setCode\($Code\)<Firstred\\PostNL\\Entity\\Warning::setCode\(\)>`
+* :php:meth:`public getDescription\(\)<Firstred\\PostNL\\Entity\\Warning::getDescription\(\)>`
+* :php:meth:`public setDescription\($Description\)<Firstred\\PostNL\\Entity\\Warning::setDescription\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Warning::jsonDeserialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Code
 
@@ -67,25 +61,69 @@ Methods
 	
 	
 
+.. rst-class:: public
+
+	.. php:method:: public getCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCode( $Code)
+	
+		
+		:Parameters:
+			* **$Code** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDescription()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDescription( $Description)
+	
+		
+		:Parameters:
+			* **$Description** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
 .. rst-class:: public static
 
 	.. php:method:: public static jsonDeserialize( $json)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Deserialize JSON\.
-			
-		
 		
 		:Parameters:
-			* **$json** (:any:`stdClass <stdClass>`)  JSON object `{"EntityName": object}`
+			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
-		:Returns: static 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Warning <Firstred\\PostNL\\Entity\\Warning>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 	
 	
 

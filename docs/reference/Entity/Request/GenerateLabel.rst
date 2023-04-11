@@ -13,11 +13,6 @@ GenerateLabel
 .. php:class:: GenerateLabel
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GenerateLabel\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,22 +25,19 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Shipments, $Message, $Customer, $LabelSignature\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::\_\_construct\(\)>`
+* :php:meth:`public getCustomer\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::getCustomer\(\)>`
+* :php:meth:`public setCustomer\($Customer\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::setCustomer\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::setMessage\(\)>`
+* :php:meth:`public getShipments\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::getShipments\(\)>`
+* :php:meth:`public setShipments\($Shipments\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::setShipments\(\)>`
+* :php:meth:`public getLabelSignature\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::getLabelSignature\(\)>`
+* :php:meth:`public setLabelSignature\($LabelSignature\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::setLabelSignature\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::jsonSerialize\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GenerateLabel::xmlSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Customer
 
@@ -74,14 +66,9 @@ Methods
 
 	.. php:method:: public __construct( $Shipments=null, $Message=null, $Customer=null, $LabelSignature=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GenerateLabel constructor\.
-			
-		
 		
 		:Parameters:
-			* **$Shipments** (:any:`Firstred\\PostNL\\Entity\\Shipment\[\] <Firstred\\PostNL\\Entity\\Shipment>` | null)  
+			* **$Shipments** (array | null)  
 			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\LabellingMessage <Firstred\\PostNL\\Entity\\Message\\LabellingMessage>` | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
 			* **$LabelSignature** (string | null)  
@@ -92,33 +79,99 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public jsonSerialize()
+	.. php:method:: public getCustomer()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for \`json\_encode\`\.
-			
-		
-		
-		:Returns: array 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public setCustomer( $Customer)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for the XMLWriter\.
-			
-		
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
 
 		
-		:Returns: void 
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\LabellingMessage <Firstred\\PostNL\\Entity\\Message\\LabellingMessage>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\LabellingMessage <Firstred\\PostNL\\Entity\\Message\\LabellingMessage>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getShipments()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Shipment\[\] <Firstred\\PostNL\\Entity\\Shipment>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setShipments( $Shipments)
+	
+		
+		:Parameters:
+			* **$Shipments** (:any:`Firstred\\PostNL\\Entity\\Shipment\[\] <Firstred\\PostNL\\Entity\\Shipment>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLabelSignature()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLabelSignature( $LabelSignature)
+	
+		
+		:Parameters:
+			* **$LabelSignature** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public jsonSerialize()
+	
+		
+		:Returns: array 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 

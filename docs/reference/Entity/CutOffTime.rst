@@ -13,11 +13,6 @@ CutOffTime
 .. php:class:: CutOffTime
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class CutOffTime\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,16 +25,16 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Day, $Time, $Available\)<Firstred\\PostNL\\Entity\\CutOffTime::\_\_construct\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\CutOffTime::xmlSerialize\(\)>`
+* :php:meth:`public getDay\(\)<Firstred\\PostNL\\Entity\\CutOffTime::getDay\(\)>`
+* :php:meth:`public setDay\($Day\)<Firstred\\PostNL\\Entity\\CutOffTime::setDay\(\)>`
+* :php:meth:`public getTime\(\)<Firstred\\PostNL\\Entity\\CutOffTime::getTime\(\)>`
+* :php:meth:`public setTime\($Time\)<Firstred\\PostNL\\Entity\\CutOffTime::setTime\(\)>`
+* :php:meth:`public getAvailable\(\)<Firstred\\PostNL\\Entity\\CutOffTime::getAvailable\(\)>`
+* :php:meth:`public setAvailable\($Available\)<Firstred\\PostNL\\Entity\\CutOffTime::setAvailable\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Day
 
@@ -65,9 +60,9 @@ Methods
 	
 		
 		:Parameters:
-			* **$Day** (string)  
-			* **$Time** (string)  
-			* **$Available** (bool)  
+			* **$Day** (string | null)  
+			* **$Time** (string | null)  
+			* **$Available** (bool | null)  
 
 		
 	
@@ -75,19 +70,67 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public getDay()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for the XMLWriter\.
-			
-		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDay( $Day)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$Day** (string | null)  
 
 		
-		:Returns: void 
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTime()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTime( $Time)
+	
+		
+		:Parameters:
+			* **$Time** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getAvailable()
+	
+		
+		:Returns: bool | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setAvailable( $Available)
+	
+		
+		:Parameters:
+			* **$Available** (bool | null)  
+
+		
+		:Returns: static 
 	
 	
 

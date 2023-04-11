@@ -13,11 +13,6 @@ GetTimeframes
 .. php:class:: GetTimeframes
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GetTimeframes\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -34,21 +29,12 @@ Methods
 * :php:meth:`public setTimeframes\($timeframes\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::setTimeframes\(\)>`
 * :php:meth:`public getTimeframe\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getTimeframe\(\)>`
 * :php:meth:`public getTimeframes\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getTimeframes\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::xmlSerialize\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetTimeframes::setMessage\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Message
 
@@ -67,15 +53,10 @@ Methods
 
 	.. php:method:: public __construct( $Message=null, $Timeframes=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GetTimeframes constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
-			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+			* **$Timeframes** (array | null)  
 
 		
 	
@@ -85,17 +66,7 @@ Methods
 
 	.. php:method:: public setTimeframe( $timeframes)
 	
-		.. rst-class:: phpdoc-description
 		
-			| Set timeframes
-			
-		
-		
-		:Parameters:
-			* **$timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` | :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
-
-		
-		:Returns: $this 
 		:Since: 1.0.0 
 		:Since: 1.0.0 
 	
@@ -103,19 +74,13 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setTimeframes( $timeframes)
+	.. php:method:: public setTimeframes(\\Firstred\\PostNL\\Entity\\Timeframe|array|null $timeframes)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Set timeframes
-			
-		
 		
 		:Parameters:
-			* **$timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe <Firstred\\PostNL\\Entity\\Timeframe>` | :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+			* **$timeframes**  TimeFrame|Timeframe[]|null
 
 		
-		:Returns: $this 
 		:Since: 1.2.0 
 	
 	
@@ -124,13 +89,9 @@ Methods
 
 	.. php:method:: public getTimeframe()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Get timeframes
-			
-		
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
+		:Since: 1.0.0 
 	
 	
 
@@ -138,11 +99,6 @@ Methods
 
 	.. php:method:: public getTimeframes()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Get timeframes
-			
-		
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
 		:Since: 1.2.0 
@@ -151,19 +107,23 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public getMessage()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for the XMLWriter\.
-			
-		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessage( $Message)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
-		:Returns: void 
+		:Returns: static 
 	
 	
 

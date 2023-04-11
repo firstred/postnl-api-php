@@ -13,11 +13,6 @@ Area
 .. php:class:: Area
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Area\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,24 +25,23 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($CoordinatesNorthWest, $CoordinatesSouthEast\)<Firstred\\PostNL\\Entity\\Area::\_\_construct\(\)>`
+* :php:meth:`public getCoordinatesNorthWest\(\)<Firstred\\PostNL\\Entity\\Area::getCoordinatesNorthWest\(\)>`
+* :php:meth:`public setCoordinatesNorthWest\($CoordinatesNorthWest\)<Firstred\\PostNL\\Entity\\Area::setCoordinatesNorthWest\(\)>`
+* :php:meth:`public getCoordinatesSouthEast\(\)<Firstred\\PostNL\\Entity\\Area::getCoordinatesSouthEast\(\)>`
+* :php:meth:`public setCoordinatesSouthEast\($CoordinatesSouthEast\)<Firstred\\PostNL\\Entity\\Area::setCoordinatesSouthEast\(\)>`
 
 
 Properties
 ----------
 
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
-
 .. php:attr:: protected static CoordinatesNorthWest
 
-	:Type: :any:`\\Firstred\\PostNL\\Entity\\Coordinates <Firstred\\PostNL\\Entity\\Coordinates>` | null 
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\CoordinatesNorthWest <Firstred\\PostNL\\Entity\\CoordinatesNorthWest>` | null 
 
 
 .. php:attr:: protected static CoordinatesSouthEast
 
-	:Type: :any:`\\Firstred\\PostNL\\Entity\\Coordinates <Firstred\\PostNL\\Entity\\Coordinates>` | null 
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\CoordinatesSouthEast <Firstred\\PostNL\\Entity\\CoordinatesSouthEast>` | null 
 
 
 Methods
@@ -59,10 +53,54 @@ Methods
 	
 		
 		:Parameters:
-			* **$CoordinatesNorthWest** (:any:`Firstred\\PostNL\\Entity\\Coordinates <Firstred\\PostNL\\Entity\\Coordinates>` | null)  
-			* **$CoordinatesSouthEast** (:any:`Firstred\\PostNL\\Entity\\Coordinates <Firstred\\PostNL\\Entity\\Coordinates>` | null)  
+			* **$CoordinatesNorthWest** (:any:`Firstred\\PostNL\\Entity\\CoordinatesNorthWest <Firstred\\PostNL\\Entity\\CoordinatesNorthWest>` | null)  
+			* **$CoordinatesSouthEast** (:any:`Firstred\\PostNL\\Entity\\CoordinatesSouthEast <Firstred\\PostNL\\Entity\\CoordinatesSouthEast>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCoordinatesNorthWest()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\CoordinatesNorthWest <Firstred\\PostNL\\Entity\\CoordinatesNorthWest>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCoordinatesNorthWest( $CoordinatesNorthWest)
+	
+		
+		:Parameters:
+			* **$CoordinatesNorthWest** (:any:`Firstred\\PostNL\\Entity\\CoordinatesNorthWest <Firstred\\PostNL\\Entity\\CoordinatesNorthWest>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCoordinatesSouthEast()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\CoordinatesSouthEast <Firstred\\PostNL\\Entity\\CoordinatesSouthEast>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCoordinatesSouthEast( $CoordinatesSouthEast)
+	
+		
+		:Parameters:
+			* **$CoordinatesSouthEast** (:any:`Firstred\\PostNL\\Entity\\CoordinatesSouthEast <Firstred\\PostNL\\Entity\\CoordinatesSouthEast>` | null)  
+
+		
+		:Returns: static 
 	
 	
 

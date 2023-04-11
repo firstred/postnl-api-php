@@ -13,11 +13,6 @@ Event
 .. php:class:: Event
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Event\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,12 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($CompleteStatusResponseEvent\)<Firstred\\PostNL\\Entity\\Event::\_\_construct\(\)>`
+* :php:meth:`public getCompleteStatusResponseEvent\(\)<Firstred\\PostNL\\Entity\\Event::getCompleteStatusResponseEvent\(\)>`
+* :php:meth:`public setCompleteStatusResponseEvent\($CompleteStatusResponseEvent\)<Firstred\\PostNL\\Entity\\Event::setCompleteStatusResponseEvent\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static CompleteStatusResponseEvent
 
@@ -57,6 +49,28 @@ Methods
 			* **$CompleteStatusResponseEvent** (:any:`Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent <Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCompleteStatusResponseEvent()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent <Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCompleteStatusResponseEvent( $CompleteStatusResponseEvent)
+	
+		
+		:Parameters:
+			* **$CompleteStatusResponseEvent** (:any:`Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent <Firstred\\PostNL\\Entity\\Response\\CompleteStatusResponseEvent>` | null)  
+
+		
+		:Returns: static 
 	
 	
 

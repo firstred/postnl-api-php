@@ -21,7 +21,6 @@ Namespaces
 	Message <Message/index>
 	Request <Request/index>
 	Response <Response/index>
-	SOAP <SOAP/index>
 
 
 Classes

@@ -17,6 +17,8 @@ CifDownException
 	
 		| Class CifDownException\.
 		
+		| Thrown when the CIF API is down\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\ApiException`

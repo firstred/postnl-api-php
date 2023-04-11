@@ -17,9 +17,11 @@ ShipmentNotFoundException
 	
 		| Class InvalidArgumentException\.
 		
+		| Thrown when a \`Shipment\` object could not be found\.
+		
 	
 	:Parent:
-		:php:class:`Firstred\\PostNL\\Exception\\ApiException`
+		:php:class:`Firstred\\PostNL\\Exception\\NotFoundException`
 	
 
 

@@ -13,11 +13,6 @@ OpeningHours
 .. php:class:: OpeningHours
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class OpeningHours\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -33,6 +28,20 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Monday, $Tuesday, $Wednesday, $Thursday, $Friday, $Saturday, $Sunday\)<Firstred\\PostNL\\Entity\\OpeningHours::\_\_construct\(\)>`
+* :php:meth:`public getMonday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getMonday\(\)>`
+* :php:meth:`public setMonday\($Monday\)<Firstred\\PostNL\\Entity\\OpeningHours::setMonday\(\)>`
+* :php:meth:`public getTuesday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getTuesday\(\)>`
+* :php:meth:`public setTuesday\($Tuesday\)<Firstred\\PostNL\\Entity\\OpeningHours::setTuesday\(\)>`
+* :php:meth:`public getWednesday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getWednesday\(\)>`
+* :php:meth:`public setWednesday\($Wednesday\)<Firstred\\PostNL\\Entity\\OpeningHours::setWednesday\(\)>`
+* :php:meth:`public getThursday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getThursday\(\)>`
+* :php:meth:`public setThursday\($Thursday\)<Firstred\\PostNL\\Entity\\OpeningHours::setThursday\(\)>`
+* :php:meth:`public getFriday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getFriday\(\)>`
+* :php:meth:`public setFriday\($Friday\)<Firstred\\PostNL\\Entity\\OpeningHours::setFriday\(\)>`
+* :php:meth:`public getSaturday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getSaturday\(\)>`
+* :php:meth:`public setSaturday\($Saturday\)<Firstred\\PostNL\\Entity\\OpeningHours::setSaturday\(\)>`
+* :php:meth:`public getSunday\(\)<Firstred\\PostNL\\Entity\\OpeningHours::getSunday\(\)>`
+* :php:meth:`public setSunday\($Sunday\)<Firstred\\PostNL\\Entity\\OpeningHours::setSunday\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\OpeningHours::jsonDeserialize\(\)>`
 * :php:meth:`public toArray\(\)<Firstred\\PostNL\\Entity\\OpeningHours::toArray\(\)>`
 * :php:meth:`public offsetExists\($offset\)<Firstred\\PostNL\\Entity\\OpeningHours::offsetExists\(\)>`
@@ -54,44 +63,39 @@ Properties
 
 
 
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
-
 .. php:attr:: protected static Monday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Tuesday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Wednesday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Thursday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Friday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Saturday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 .. php:attr:: protected static Sunday
 
-	:Type: string | array | null 
+	:Type: string[] | null 
 
 
 Methods
@@ -99,24 +103,173 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Monday=null, $Tuesday=null, $Wednesday=null, $Thursday=null, $Friday=null, $Saturday=null, $Sunday=null)
+	.. php:method:: public __construct(array|null $Monday=null, array|null $Tuesday=null, array|null $Wednesday=null, array|null $Thursday=null, array|null $Friday=null, array|null $Saturday=null, array|null $Sunday=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| OpeningHours constructor\.
-			
-		
 		
 		:Parameters:
-			* **$Monday** (string | array | null)  
-			* **$Tuesday** (string | array | null)  
-			* **$Wednesday** (string | array | null)  
-			* **$Thursday** (string | array | null)  
-			* **$Friday** (string | array | null)  
-			* **$Saturday** (string | array | null)  
-			* **$Sunday** (string | array | null)  
+			* **$Monday** (array | null)  
+			* **$Tuesday** (array | null)  
+			* **$Wednesday** (array | null)  
+			* **$Thursday** (array | null)  
+			* **$Friday** (array | null)  
+			* **$Saturday** (array | null)  
+			* **$Sunday** (array | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMonday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMonday(array|null $Monday)
+	
+		
+		:Parameters:
+			* **$Monday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTuesday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTuesday(array|null $Tuesday)
+	
+		
+		:Parameters:
+			* **$Tuesday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getWednesday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setWednesday(array|null $Wednesday)
+	
+		
+		:Parameters:
+			* **$Wednesday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getThursday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setThursday(array|null $Thursday)
+	
+		
+		:Parameters:
+			* **$Thursday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getFriday()
+	
+		
+		:Returns: array | string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setFriday(array|null $Friday)
+	
+		
+		:Parameters:
+			* **$Friday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSaturday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSaturday(array|null $Saturday)
+	
+		
+		:Parameters:
+			* **$Saturday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSunday()
+	
+		
+		:Returns: array | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSunday(array|null $Sunday)
+	
+		
+		:Parameters:
+			* **$Sunday** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
 	
 	
 
@@ -124,21 +277,21 @@ Methods
 
 	.. php:method:: public static jsonDeserialize( $json)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Deserialize opening hours
-			
-		
 		
 		:Parameters:
 			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
 		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.0.0 
 	
 	
@@ -148,7 +301,7 @@ Methods
 	.. php:method:: public toArray()
 	
 		
-		:Returns: array 
+		:Returns: :any:`array\{Monday: string\[\], Tuesday: string\[\], Wednesday: string\[\], Thursday: string\[\], Friday: string\[\], Saturday: string\[\], Sunday: string\[\]\} <array\{Monday: string, Tuesday: string, Wednesday: string, Thursday: string, Friday: string, Saturday: string, Sunday: string\}>` 
 	
 	
 
@@ -157,11 +310,6 @@ Methods
 	.. php:method:: public offsetExists( $offset)
 	
 		
-		:Parameters:
-			* **$offset** (mixed)  
-
-		
-		:Returns: bool 
 		:Since: 1.2.0 
 	
 	
@@ -171,11 +319,6 @@ Methods
 	.. php:method:: public offsetGet( $offset)
 	
 		
-		:Parameters:
-			* **$offset** (mixed)  
-
-		
-		:Returns: mixed 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -186,11 +329,6 @@ Methods
 	.. php:method:: public offsetSet( $offset, $value)
 	
 		
-		:Parameters:
-			* **$offset** (mixed)  
-			* **$value** (mixed)  
-
-		
 		:Since: 1.2.0 
 	
 	
@@ -199,10 +337,6 @@ Methods
 
 	.. php:method:: public offsetUnset( $offset)
 	
-		
-		:Parameters:
-			* **$offset** (mixed)  
-
 		
 		:Since: 1.2.0 
 	
@@ -236,7 +370,6 @@ Methods
 	.. php:method:: public key()
 	
 		
-		:Returns: string 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
@@ -266,14 +399,9 @@ Methods
 
 .. rst-class:: private static
 
-	.. php:method:: private static findCurrentDayString( $currentDay)
+	.. php:method:: private static findCurrentDayString(string|int $currentDay)
 	
 		
-		:Parameters:
-			* **$currentDay** (mixed)  
-
-		
-		:Returns: string 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 

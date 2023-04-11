@@ -13,11 +13,6 @@ GetLocationsResult
 .. php:class:: GetLocationsResult
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GetLocationsResult\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,21 +25,12 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($ResponseLocation\)<Firstred\\PostNL\\Entity\\Response\\GetLocationsResult::\_\_construct\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Response\\GetLocationsResult::xmlSerialize\(\)>`
+* :php:meth:`public getResponseLocation\(\)<Firstred\\PostNL\\Entity\\Response\\GetLocationsResult::getResponseLocation\(\)>`
+* :php:meth:`public setResponseLocation\($ResponseLocation\)<Firstred\\PostNL\\Entity\\Response\\GetLocationsResult::setResponseLocation\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static ResponseLocation
 
@@ -58,14 +44,9 @@ Methods
 
 	.. php:method:: public __construct( $ResponseLocation=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GetLocationsResult constructor\.
-			
-		
 		
 		:Parameters:
-			* **$ResponseLocation** (:any:`Firstred\\PostNL\\Entity\\Response\\ResponseLocation\[\] <Firstred\\PostNL\\Entity\\Response\\ResponseLocation>` | null)  
+			* **$ResponseLocation** (array | null)  
 
 		
 	
@@ -73,19 +54,23 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public getResponseLocation()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for the XMLWriter\.
-			
-		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\ResponseLocation\[\] <Firstred\\PostNL\\Entity\\Response\\ResponseLocation>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setResponseLocation( $ResponseLocation)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$ResponseLocation** (:any:`Firstred\\PostNL\\Entity\\Response\\ResponseLocation\[\] <Firstred\\PostNL\\Entity\\Response\\ResponseLocation>` | null)  
 
 		
-		:Returns: void 
+		:Returns: static 
 	
 	
 

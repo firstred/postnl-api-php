@@ -13,11 +13,6 @@ Barcode
 .. php:class:: Barcode
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Barcode\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,16 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Type, $Range, $Serie\)<Firstred\\PostNL\\Entity\\Barcode::\_\_construct\(\)>`
+* :php:meth:`public getType\(\)<Firstred\\PostNL\\Entity\\Barcode::getType\(\)>`
+* :php:meth:`public setType\($Type\)<Firstred\\PostNL\\Entity\\Barcode::setType\(\)>`
+* :php:meth:`public getRange\(\)<Firstred\\PostNL\\Entity\\Barcode::getRange\(\)>`
+* :php:meth:`public setRange\($Range\)<Firstred\\PostNL\\Entity\\Barcode::setRange\(\)>`
+* :php:meth:`public getSerie\(\)<Firstred\\PostNL\\Entity\\Barcode::getSerie\(\)>`
+* :php:meth:`public setSerie\($Serie\)<Firstred\\PostNL\\Entity\\Barcode::setSerie\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Type
 
@@ -69,6 +65,72 @@ Methods
 			* **$Serie** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getType()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setType( $Type)
+	
+		
+		:Parameters:
+			* **$Type** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getRange()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRange( $Range)
+	
+		
+		:Parameters:
+			* **$Range** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSerie()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSerie( $Serie)
+	
+		
+		:Parameters:
+			* **$Serie** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

@@ -13,11 +13,6 @@ LabellingMessage
 .. php:class:: LabellingMessage
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class LabellingMessage\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\Message\\Message`
 	
@@ -30,15 +25,12 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Printertype, $MessageID, $MessageTimeStamp\)<Firstred\\PostNL\\Entity\\Message\\LabellingMessage::\_\_construct\(\)>`
+* :php:meth:`public getPrintertype\(\)<Firstred\\PostNL\\Entity\\Message\\LabellingMessage::getPrintertype\(\)>`
+* :php:meth:`public setPrintertype\($Printertype\)<Firstred\\PostNL\\Entity\\Message\\LabellingMessage::setPrintertype\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Printertype
 
@@ -50,21 +42,32 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Printertype=\'GraphicFile\|PDF\', $MessageID=null, $MessageTimeStamp=null)
+	.. php:method:: public __construct( $Printertype=\'GraphicFile\|PDF\', $MessageID=null, string|\\DateTimeInterface|null $MessageTimeStamp=null)
 	
-		.. rst-class:: phpdoc-description
 		
-			| LabellingMessage constructor\.
-			
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getPrintertype()
+	
 		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setPrintertype( $Printertype)
+	
 		
 		:Parameters:
 			* **$Printertype** (string | null)  
-			* **$MessageID** (string | null)  
-			* **$MessageTimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
 
 		
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: static 
 	
 	
 

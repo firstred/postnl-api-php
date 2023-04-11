@@ -28,13 +28,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($postnl, $cache, $ttl\)<Firstred\\PostNL\\Service\\AbstractService::\_\_construct\(\)>`
-* :php:meth:`public \_\_call\($name, $args\)<Firstred\\PostNL\\Service\\AbstractService::\_\_call\(\)>`
-* :php:meth:`public setService\($object\)<Firstred\\PostNL\\Service\\AbstractService::setService\(\)>`
-* :php:meth:`public static registerNamespaces\($element\)<Firstred\\PostNL\\Service\\AbstractService::registerNamespaces\(\)>`
-* :php:meth:`public static validateRESTResponse\($response\)<Firstred\\PostNL\\Service\\AbstractService::validateRESTResponse\(\)>`
-* :php:meth:`public static validateSOAPResponse\($xml\)<Firstred\\PostNL\\Service\\AbstractService::validateSOAPResponse\(\)>`
-* :php:meth:`public static getResponseText\($response\)<Firstred\\PostNL\\Service\\AbstractService::getResponseText\(\)>`
+* :php:meth:`public \_\_construct\($apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory, $cache, $ttl\)<Firstred\\PostNL\\Service\\AbstractService::\_\_construct\(\)>`
 * :php:meth:`public retrieveCachedItem\($uuid\)<Firstred\\PostNL\\Service\\AbstractService::retrieveCachedItem\(\)>`
 * :php:meth:`public cacheItem\($item\)<Firstred\\PostNL\\Service\\AbstractService::cacheItem\(\)>`
 * :php:meth:`public removeCachedItem\($item\)<Firstred\\PostNL\\Service\\AbstractService::removeCachedItem\(\)>`
@@ -42,42 +36,22 @@ Methods
 * :php:meth:`public setTtl\($ttl\)<Firstred\\PostNL\\Service\\AbstractService::setTtl\(\)>`
 * :php:meth:`public getCache\(\)<Firstred\\PostNL\\Service\\AbstractService::getCache\(\)>`
 * :php:meth:`public setCache\($cache\)<Firstred\\PostNL\\Service\\AbstractService::setCache\(\)>`
-* :php:meth:`public static defaultDateFormat\($writer, $value\)<Firstred\\PostNL\\Service\\AbstractService::defaultDateFormat\(\)>`
-
-
-Constants
----------
-
-.. php:const:: COMMON_NAMESPACE = \'http://postnl\.nl/cif/services/common/\'
-
-
-
-.. php:const:: XML_SCHEMA_NAMESPACE = \'http://www\.w3\.org/2001/XMLSchema\-instance\'
-
-
-
-.. php:const:: ENVELOPE_NAMESPACE = \'http://schemas\.xmlsoap\.org/soap/envelope/\'
-
-
-
-.. php:const:: OLD_ENVELOPE_NAMESPACE = \'http://www\.w3\.org/2003/05/soap\-envelope\'
-
+* :php:meth:`public getApiKey\(\)<Firstred\\PostNL\\Service\\AbstractService::getApiKey\(\)>`
+* :php:meth:`public setApiKey\($apiKey\)<Firstred\\PostNL\\Service\\AbstractService::setApiKey\(\)>`
+* :php:meth:`public isSandbox\(\)<Firstred\\PostNL\\Service\\AbstractService::isSandbox\(\)>`
+* :php:meth:`public setSandbox\($sandbox\)<Firstred\\PostNL\\Service\\AbstractService::setSandbox\(\)>`
+* :php:meth:`public getHttpClient\(\)<Firstred\\PostNL\\Service\\AbstractService::getHttpClient\(\)>`
+* :php:meth:`public setHttpClient\($httpClient\)<Firstred\\PostNL\\Service\\AbstractService::setHttpClient\(\)>`
+* :php:meth:`public getRequestFactory\(\)<Firstred\\PostNL\\Service\\AbstractService::getRequestFactory\(\)>`
+* :php:meth:`public setRequestFactory\($requestFactory\)<Firstred\\PostNL\\Service\\AbstractService::setRequestFactory\(\)>`
+* :php:meth:`public getStreamFactory\(\)<Firstred\\PostNL\\Service\\AbstractService::getStreamFactory\(\)>`
+* :php:meth:`public setStreamFactory\($streamFactory\)<Firstred\\PostNL\\Service\\AbstractService::setStreamFactory\(\)>`
 
 
 Properties
 ----------
 
-.. php:attr:: public namespaces
-
-	:Type: array 
-
-
-.. php:attr:: protected static postnl
-
-	:Type: :any:`\\Firstred\\PostNL\\PostNL <Firstred\\PostNL\\PostNL>` 
-
-
-.. php:attr:: public static ttl
+.. php:attr:: private static ttl
 
 	.. rst-class:: phpdoc-description
 	
@@ -92,7 +66,7 @@ Properties
 	:Type: int | :any:`\\DateTimeInterface <DateTimeInterface>` | :any:`\\DateInterval <DateInterval>` | null 
 
 
-.. php:attr:: public static cache
+.. php:attr:: private static cache
 
 	.. rst-class:: phpdoc-description
 	
@@ -110,155 +84,19 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $postnl, $cache=null, $ttl=null)
+	.. php:method:: public __construct( $apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory, $cache=null, \\DateInterval|\\DateTimeInterface|int $ttl=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| AbstractService constructor\.
-			
-		
 		
 		:Parameters:
-			* **$postnl** (:any:`Firstred\\PostNL\\PostNL <Firstred\\PostNL\\PostNL>`)  PostNL instance
+			* **$apiKey** (:any:`ParagonIE\\HiddenString\\HiddenString <ParagonIE\\HiddenString\\HiddenString>`)  
+			* **$sandbox** (bool)  
+			* **$httpClient** (:any:`Firstred\\PostNL\\HttpClient\\HttpClientInterface <Firstred\\PostNL\\HttpClient\\HttpClientInterface>`)  
+			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>`)  
+			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
 			* **$cache** (:any:`Psr\\Cache\\CacheItemPoolInterface <Psr\\Cache\\CacheItemPoolInterface>` | null)  
-			* **$ttl** (int | :any:`\\DateTimeInterface <DateTimeInterface>` | :any:`\\DateInterval <DateInterval>` | null)  
+			* **$ttl** (:any:`DateInterval <DateInterval>` | :any:`\\DateTimeInterface <DateTimeInterface>` | int | null)  
 
 		
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public __call( $name, $args)
-	
-		
-		:Parameters:
-			* **$name** (string)  
-			* **$args** (mixed)  
-
-		
-		:Returns: mixed 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidMethodException <Firstred\\PostNL\\Exception\\InvalidMethodException>` 
-		:Since: 1.0.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public setService( $object)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the webservice on the object\.
-			
-			| This lets the object know for which service it should serialize
-			
-		
-		
-		:Parameters:
-			* **$object** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  
-
-		
-		:Returns: bool 
-		:Since: 1.0.0 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static registerNamespaces( $element)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Register namespaces\.
-			
-		
-		
-		:Parameters:
-			* **$element** (:any:`SimpleXMLElement <SimpleXMLElement>`)  
-
-		
-		:Since: 1.0.0 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static validateRESTResponse( $response)
-	
-		
-		:Parameters:
-			* **$response** (:any:`Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>` | :any:`\\Exception <Exception>`)  
-
-		
-		:Returns: bool 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
-		:Since: 1.0.0 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static validateSOAPResponse( $xml)
-	
-		
-		:Parameters:
-			* **$xml** (:any:`SimpleXMLElement <SimpleXMLElement>`)  
-
-		
-		:Returns: bool 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
-		:Since: 1.0.0 
-	
-	
-
-.. rst-class:: public static
-
-	.. php:method:: public static getResponseText( $response)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Get the response\.
-			
-		
-		
-		:Parameters:
-			* **$response**  
-
-		
-		:Returns: string 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ResponseException <Firstred\\PostNL\\Exception\\ResponseException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
-		:Since: 1.0.0 
 	
 	
 
@@ -288,7 +126,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Cache an item
+			| Cache an item\.
 			
 		
 		
@@ -306,7 +144,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Delete an item from cache
+			| Delete an item from cache\.
 			
 		
 		
@@ -331,11 +169,11 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setTtl( $ttl=null)
+	.. php:method:: public setTtl(\\DateInterval|\\DateTimeInterface|int|null $ttl=null)
 	
 		
 		:Parameters:
-			* **$ttl** (int | :any:`\\DateTimeInterface <DateTimeInterface>` | :any:`\\DateInterval <DateInterval>` | null)  
+			* **$ttl** (:any:`DateInterval <DateInterval>` | :any:`\\DateTimeInterface <DateTimeInterface>` | int | null)  
 
 		
 		:Returns: static 
@@ -367,22 +205,121 @@ Methods
 	
 	
 
-.. rst-class:: public static
+.. rst-class:: public
 
-	.. php:method:: public static defaultDateFormat( $writer, $value)
+	.. php:method:: public getApiKey()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Write default date format in XML
-			
-		
+		:Returns: :any:`\\ParagonIE\\HiddenString\\HiddenString <ParagonIE\\HiddenString\\HiddenString>` 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setApiKey( $apiKey)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
-			* **$value** (:any:`DateTimeImmutable <DateTimeImmutable>`)  
+			* **$apiKey** (:any:`ParagonIE\\HiddenString\\HiddenString <ParagonIE\\HiddenString\\HiddenString>`)  
 
 		
-		:Since: 1.2.0 
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public isSandbox()
+	
+		
+		:Returns: bool 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSandbox( $sandbox)
+	
+		
+		:Parameters:
+			* **$sandbox** (bool)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getHttpClient()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\HttpClient\\HttpClientInterface <Firstred\\PostNL\\HttpClient\\HttpClientInterface>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setHttpClient( $httpClient)
+	
+		
+		:Parameters:
+			* **$httpClient** (:any:`Firstred\\PostNL\\HttpClient\\HttpClientInterface <Firstred\\PostNL\\HttpClient\\HttpClientInterface>`)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Service\\AbstractService <Firstred\\PostNL\\Service\\AbstractService>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getRequestFactory()
+	
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRequestFactory( $requestFactory)
+	
+		
+		:Parameters:
+			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getStreamFactory()
+	
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStreamFactory( $streamFactory)
+	
+		
+		:Parameters:
+			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
 	
 	
 

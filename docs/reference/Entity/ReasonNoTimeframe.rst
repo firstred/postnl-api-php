@@ -13,11 +13,6 @@ ReasonNoTimeframe
 .. php:class:: ReasonNoTimeframe
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class ReasonNoTimeframe\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,18 +25,22 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Code, $Date, $Description, $Options, $From, $To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::\_\_construct\(\)>`
+* :php:meth:`public getCode\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getCode\(\)>`
+* :php:meth:`public setCode\($Code\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setCode\(\)>`
+* :php:meth:`public getDescription\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getDescription\(\)>`
+* :php:meth:`public setDescription\($Description\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setDescription\(\)>`
+* :php:meth:`public getOptions\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getOptions\(\)>`
+* :php:meth:`public setOptions\($Options\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setOptions\(\)>`
+* :php:meth:`public getFrom\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getFrom\(\)>`
+* :php:meth:`public setFrom\($From\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setFrom\(\)>`
+* :php:meth:`public getTo\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getTo\(\)>`
+* :php:meth:`public setTo\($To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setTo\(\)>`
 * :php:meth:`public setDate\($date\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setDate\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::jsonDeserialize\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::xmlSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Code
 
@@ -78,22 +77,8 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null)
+	.. php:method:: public __construct(int|string|null $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| ReasonNoTimeframe constructor\.
-			
-		
-		
-		:Parameters:
-			* **$Code** (string | null)  
-			* **$Date** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-			* **$Description** (string | null)  
-			* **$Options** (string[] | null)  
-			* **$From** (string | null)  
-			* **$To** (string | null)  
-
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
@@ -101,19 +86,119 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setDate( $date=null)
+	.. php:method:: public getCode()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Set date
-			
-		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCode(string|int|null $Code)
+	
 		
 		:Parameters:
-			* **$date** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
+			* **$Code** (string | int | null)  
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDescription()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDescription( $Description)
+	
+		
+		:Parameters:
+			* **$Description** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getOptions()
+	
+		
+		:Returns: string[] | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setOptions( $Options)
+	
+		
+		:Parameters:
+			* **$Options** (array | null)  
+
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\ReasonNoTimeframe <Firstred\\PostNL\\Entity\\ReasonNoTimeframe>` 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getFrom()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setFrom( $From)
+	
+		
+		:Parameters:
+			* **$From** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTo()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTo( $To)
+	
+		
+		:Parameters:
+			* **$To** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDate(string|\\DateTimeInterface|null $date=null)
+	
+		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -128,30 +213,17 @@ Methods
 			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
-		:Returns: mixed | :any:`\\stdClass <stdClass>` | null 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\ReasonNoTimeframe <Firstred\\PostNL\\Entity\\ReasonNoTimeframe>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.2.0 
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public xmlSerialize( $writer)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for the XMLWriter\.
-			
-		
-		
-		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
-
-		
-		:Returns: void 
 	
 	
 

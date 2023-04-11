@@ -13,11 +13,6 @@ GenerateBarcodeResponse
 .. php:class:: GenerateBarcodeResponse
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GenerateBarcodeResponse\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,20 +25,12 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Barcode\)<Firstred\\PostNL\\Entity\\Response\\GenerateBarcodeResponse::\_\_construct\(\)>`
+* :php:meth:`public getBarcode\(\)<Firstred\\PostNL\\Entity\\Response\\GenerateBarcodeResponse::getBarcode\(\)>`
+* :php:meth:`public setBarcode\($Barcode\)<Firstred\\PostNL\\Entity\\Response\\GenerateBarcodeResponse::setBarcode\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Barcode
 
@@ -57,16 +44,33 @@ Methods
 
 	.. php:method:: public __construct( $Barcode=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GenerateBarcodeResponse constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Barcode** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getBarcode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setBarcode( $Barcode)
+	
+		
+		:Parameters:
+			* **$Barcode** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

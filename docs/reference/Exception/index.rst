@@ -12,15 +12,6 @@ Exception
 \\Firstred\\PostNL\\Exception
 
 
-Namespaces
-----------
-
-.. toctree::
-	:maxdepth: 1
-	
-	Promise <Promise/index>
-
-
 Classes
 -------
 
@@ -30,9 +21,13 @@ Classes
 	ApiConnectionException <ApiConnectionException>
 	NotSupportedException <NotSupportedException>
 	ApiException <ApiException>
+	InvalidMessageTimeStampException <InvalidMessageTimeStampException>
+	InvalidApiModeException <InvalidApiModeException>
 	InvalidMethodException <InvalidMethodException>
+	DeserializationException <DeserializationException>
 	ResponseException <ResponseException>
 	InvalidBarcodeException <InvalidBarcodeException>
+	ServiceNotSetException <ServiceNotSetException>
 	CifException <CifException>
 	CifDownException <CifDownException>
 	PostNLException <PostNLException>

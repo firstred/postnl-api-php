@@ -13,11 +13,6 @@ CompleteStatus
 .. php:class:: CompleteStatus
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class CompleteStatus\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -29,22 +24,17 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Shipment, $Customer, $Message\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::\_\_construct\(\)>`
-* :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::xmlSerialize\(\)>`
+* :php:meth:`public \_\_construct\($Shipment, $Customer\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::\_\_construct\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::setMessage\(\)>`
+* :php:meth:`public getCustomer\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::getCustomer\(\)>`
+* :php:meth:`public setCustomer\($Customer\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::setCustomer\(\)>`
+* :php:meth:`public getShipment\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::getShipment\(\)>`
+* :php:meth:`public setShipment\($Shipment\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::setShipment\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Message
 
@@ -66,18 +56,12 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Shipment=null, $Customer=null, $Message=null)
+	.. php:method:: public __construct( $Shipment=null, $Customer=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| CompleteStatus constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Shipment** (:any:`Firstred\\PostNL\\Entity\\Shipment <Firstred\\PostNL\\Entity\\Shipment>` | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
-			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
 	
@@ -85,19 +69,67 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public xmlSerialize( $writer)
+	.. php:method:: public getMessage()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Return a serializable array for the XMLWriter\.
-			
-		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessage( $Message)
+	
 		
 		:Parameters:
-			* **$writer** (:any:`Sabre\\Xml\\Writer <Sabre\\Xml\\Writer>`)  
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
-		:Returns: void 
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCustomer()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCustomer( $Customer)
+	
+		
+		:Parameters:
+			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getShipment()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Shipment <Firstred\\PostNL\\Entity\\Shipment>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setShipment( $Shipment)
+	
+		
+		:Parameters:
+			* **$Shipment** (:any:`Firstred\\PostNL\\Entity\\Shipment <Firstred\\PostNL\\Entity\\Shipment>` | null)  
+
+		
+		:Returns: static 
 	
 	
 

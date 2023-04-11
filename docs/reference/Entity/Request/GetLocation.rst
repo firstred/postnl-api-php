@@ -13,13 +13,6 @@ GetLocation
 .. php:class:: GetLocation
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GetLocation\.
-		
-		| This class is both the container and can be the actual GetLocation object itself\!
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -32,20 +25,16 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($LocationCode, $Message, $RetailNetworkID\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::\_\_construct\(\)>`
+* :php:meth:`public getLocationCode\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::getLocationCode\(\)>`
+* :php:meth:`public setLocationCode\($LocationCode\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::setLocationCode\(\)>`
+* :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::getMessage\(\)>`
+* :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::setMessage\(\)>`
+* :php:meth:`public getRetailNetworkID\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::getRetailNetworkID\(\)>`
+* :php:meth:`public setRetailNetworkID\($RetailNetworkID\)<Firstred\\PostNL\\Entity\\Request\\GetLocation::setRetailNetworkID\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static LocationCode
 
@@ -69,11 +58,6 @@ Methods
 
 	.. php:method:: public __construct( $LocationCode=null, $Message=null, $RetailNetworkID=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GetLocation constructor\.
-			
-		
 		
 		:Parameters:
 			* **$LocationCode** (string | null)  
@@ -81,6 +65,72 @@ Methods
 			* **$RetailNetworkID** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLocationCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLocationCode( $LocationCode)
+	
+		
+		:Parameters:
+			* **$LocationCode** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMessage()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessage( $Message)
+	
+		
+		:Parameters:
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getRetailNetworkID()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRetailNetworkID( $RetailNetworkID)
+	
+		
+		:Parameters:
+			* **$RetailNetworkID** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

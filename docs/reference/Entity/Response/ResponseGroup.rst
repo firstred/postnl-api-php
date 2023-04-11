@@ -13,11 +13,6 @@ ResponseGroup
 .. php:class:: ResponseGroup
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class ResponseGroup\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,18 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($GroupCount, $GroupSequence, $GroupType, $MainBarcode\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::\_\_construct\(\)>`
+* :php:meth:`public getGroupCount\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::getGroupCount\(\)>`
+* :php:meth:`public setGroupCount\($GroupCount\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::setGroupCount\(\)>`
+* :php:meth:`public getGroupSequence\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::getGroupSequence\(\)>`
+* :php:meth:`public setGroupSequence\($GroupSequence\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::setGroupSequence\(\)>`
+* :php:meth:`public getGroupType\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::getGroupType\(\)>`
+* :php:meth:`public setGroupType\($GroupType\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::setGroupType\(\)>`
+* :php:meth:`public getMainBarcode\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::getMainBarcode\(\)>`
+* :php:meth:`public setMainBarcode\($MainBarcode\)<Firstred\\PostNL\\Entity\\Response\\ResponseGroup::setMainBarcode\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static GroupCount
 
@@ -93,11 +91,6 @@ Methods
 
 	.. php:method:: public __construct( $GroupCount=null, $GroupSequence=null, $GroupType=null, $MainBarcode=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| ResponseGroup Constructor\.
-			
-		
 		
 		:Parameters:
 			* **$GroupCount** (string | null)  
@@ -106,6 +99,94 @@ Methods
 			* **$MainBarcode** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getGroupCount()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setGroupCount( $GroupCount)
+	
+		
+		:Parameters:
+			* **$GroupCount** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getGroupSequence()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setGroupSequence( $GroupSequence)
+	
+		
+		:Parameters:
+			* **$GroupSequence** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getGroupType()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setGroupType( $GroupType)
+	
+		
+		:Parameters:
+			* **$GroupType** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMainBarcode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMainBarcode( $MainBarcode)
+	
+		
+		:Parameters:
+			* **$MainBarcode** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

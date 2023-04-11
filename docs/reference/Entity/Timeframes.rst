@@ -13,11 +13,6 @@ Timeframes
 .. php:class:: Timeframes
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Timeframes\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,16 +25,15 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($timeframes, $timeframetimeframes\)<Firstred\\PostNL\\Entity\\Timeframes::\_\_construct\(\)>`
+* :php:meth:`public getTimeframes\(\)<Firstred\\PostNL\\Entity\\Timeframes::getTimeframes\(\)>`
+* :php:meth:`public setTimeframes\($Timeframes\)<Firstred\\PostNL\\Entity\\Timeframes::setTimeframes\(\)>`
+* :php:meth:`public getTimeframeTimeFrames\(\)<Firstred\\PostNL\\Entity\\Timeframes::getTimeframeTimeFrames\(\)>`
+* :php:meth:`public setTimeframeTimeFrames\($TimeframeTimeFrames\)<Firstred\\PostNL\\Entity\\Timeframes::setTimeframeTimeFrames\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Timeframes::jsonSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Timeframes
 
@@ -58,15 +52,10 @@ Methods
 
 	.. php:method:: public __construct( $timeframes=null, $timeframetimeframes=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| Timeframes constructor\.
-			
-		
 		
 		:Parameters:
 			* **$timeframes** (array | null)  
-			* **$timeframetimeframes** (:any:`Firstred\\PostNL\\Entity\\TimeframeTimeFrame\[\] <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` | null)  
+			* **$timeframetimeframes** (array | null)  
 
 		
 	
@@ -74,15 +63,55 @@ Methods
 
 .. rst-class:: public
 
+	.. php:method:: public getTimeframes()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeframes( $Timeframes)
+	
+		
+		:Parameters:
+			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTimeframeTimeFrames()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\TimeframeTimeFrame\[\] <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeframeTimeFrames( $TimeframeTimeFrames)
+	
+		
+		:Parameters:
+			* **$TimeframeTimeFrames** (:any:`Firstred\\PostNL\\Entity\\TimeframeTimeFrame\[\] <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
 	.. php:method:: public jsonSerialize()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for \`json\_encode\`\.
-			
-		
 		
 		:Returns: array 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 

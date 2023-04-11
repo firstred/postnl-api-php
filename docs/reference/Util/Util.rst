@@ -33,6 +33,7 @@ Methods
 * :php:meth:`public static getShippingDaysRemaining\($shippingDate, $preferredDeliveryDate\)<Firstred\\PostNL\\Util\\Util::getShippingDaysRemaining\(\)>`
 * :php:meth:`protected static getHolidaysForYear\($year\)<Firstred\\PostNL\\Util\\Util::getHolidaysForYear\(\)>`
 * :php:meth:`public static compareGuzzleVersion\($a, $b\)<Firstred\\PostNL\\Util\\Util::compareGuzzleVersion\(\)>`
+* :php:meth:`public static isAssociativeArray\($array\)<Firstred\\PostNL\\Util\\Util::isAssociativeArray\(\)>`
 
 
 Constants
@@ -45,7 +46,7 @@ Constants
 Methods
 -------
 
-.. rst-class:: public static
+.. rst-class:: public static deprecated
 
 	.. php:method:: public static urlEncode( $arr, $prefix=null)
 	
@@ -56,6 +57,8 @@ Methods
 
 		
 		:Returns: string a querystring, essentially
+		:Since: 1.0.0 
+		:Deprecated: 2.0.0 
 	
 	
 
@@ -72,6 +75,7 @@ Methods
 			The orientation is in FPDF format, so L for Landscape and P for Portrait
 			Sizes are in mm
 		
+		:Since: 1.0.0 
 	
 	
 
@@ -93,6 +97,7 @@ Methods
 		
 		:Returns: string \(format: \`Y\-m\-d H:i:s\`\)
 		:Throws: :any:`\\Exception <Exception>` 
+		:Since: 1.0.0 
 	
 	
 
@@ -113,6 +118,7 @@ Methods
 		
 		:Returns: string 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Since: 1.0.0 
 	
 	
 
@@ -140,6 +146,7 @@ Methods
 		
 		:Returns: int 
 		:Throws: :any:`\\Exception <Exception>` 
+		:Since: 1.0.0 
 	
 	
 
@@ -158,14 +165,41 @@ Methods
 
 		
 		:Returns: array Credits to @tvlooy \(https://gist\.github\.com/tvlooy/1894247\)
+		:Since: 1.0.0 
 	
 	
 
 .. rst-class:: public static
 
-	.. php:method:: public static compareGuzzleVersion( $a, $b)
+	.. php:method:: public static compareGuzzleVersion(int|float|string $a, int|float|string $b)
 	
 		
+		:Parameters:
+			* **$a** (int | float | string)  
+			* **$b** (int | float | string)  
+
+		
+		:Returns: int 
+		:Since: 1.0.0 
+	
+	
+
+.. rst-class:: public static
+
+	.. php:method:: public static isAssociativeArray( $array)
+	
+		.. rst-class:: phpdoc-description
+		
+			| Check if the given array is associative\.
+			
+		
+		
+		:Parameters:
+			* **$array** (array)  
+
+		
+		:Returns: bool 
+		:Since: 2.0.0 
 	
 	
 

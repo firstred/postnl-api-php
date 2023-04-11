@@ -13,11 +13,6 @@ ResponseTimeframes
 .. php:class:: ResponseTimeframes
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class ResponseTimeframes\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,16 +25,15 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($ReasonNoTimeframes, $Timeframes\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::\_\_construct\(\)>`
+* :php:meth:`public getReasonNoTimeframes\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::getReasonNoTimeframes\(\)>`
+* :php:meth:`public setReasonNoTimeframes\($ReasonNoTimeframes\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::setReasonNoTimeframes\(\)>`
+* :php:meth:`public getTimeframes\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::getTimeframes\(\)>`
+* :php:meth:`public setTimeframes\($Timeframes\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::setTimeframes\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseTimeframes::jsonSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: array 
-
 
 .. php:attr:: protected static ReasonNoTimeframes
 
@@ -60,8 +54,8 @@ Methods
 	
 		
 		:Parameters:
-			* **$ReasonNoTimeframes** (:any:`Firstred\\PostNL\\Entity\\ReasonNoTimeframe\[\] <Firstred\\PostNL\\Entity\\ReasonNoTimeframe>` | null)  
-			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+			* **$ReasonNoTimeframes** (array | null)  
+			* **$Timeframes** (array | null)  
 
 		
 	
@@ -69,15 +63,55 @@ Methods
 
 .. rst-class:: public
 
+	.. php:method:: public getReasonNoTimeframes()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\ReasonNoTimeframe\[\] <Firstred\\PostNL\\Entity\\ReasonNoTimeframe>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setReasonNoTimeframes( $ReasonNoTimeframes)
+	
+		
+		:Parameters:
+			* **$ReasonNoTimeframes** (:any:`Firstred\\PostNL\\Entity\\ReasonNoTimeframe\[\] <Firstred\\PostNL\\Entity\\ReasonNoTimeframe>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTimeframes()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTimeframes( $Timeframes)
+	
+		
+		:Parameters:
+			* **$Timeframes** (:any:`Firstred\\PostNL\\Entity\\Timeframe\[\] <Firstred\\PostNL\\Entity\\Timeframe>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
 	.. php:method:: public jsonSerialize()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for \`json\_encode\`\.
-			
-		
 		
 		:Returns: array 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 

@@ -17,7 +17,9 @@ PostNLException
 
 	.. rst-class:: phpdoc-description
 	
-		| Class AbstractException
+		| Class AbstractException\.
+		
+		| Group of exceptions that can be thrown by this library\.
 		
 	
 	:Parent:

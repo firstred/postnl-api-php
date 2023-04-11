@@ -13,11 +13,6 @@ ResponseLocation
 .. php:class:: ResponseLocation
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class ResponseLocation\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,21 +25,43 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Address, $DeliveryOptions, $Distance, $Latitude, $Longitude, $Name, $OpeningHours, $PartnerName, $PhoneNumber, $LocationCode, $RetailNetworkID, $Saleschannel, $TerminalType, $Warnings, $DownPartnerID, $DownPartnerLocation\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::\_\_construct\(\)>`
+* :php:meth:`public getAddress\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getAddress\(\)>`
+* :php:meth:`public setAddress\($Address\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setAddress\(\)>`
+* :php:meth:`public getDeliveryOptions\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDeliveryOptions\(\)>`
+* :php:meth:`public setDeliveryOptions\($DeliveryOptions\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDeliveryOptions\(\)>`
+* :php:meth:`public getDistance\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDistance\(\)>`
+* :php:meth:`public setDistance\($Distance\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDistance\(\)>`
+* :php:meth:`public getLatitude\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getLatitude\(\)>`
+* :php:meth:`public setLatitude\($Latitude\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setLatitude\(\)>`
+* :php:meth:`public getLongitude\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getLongitude\(\)>`
+* :php:meth:`public setLongitude\($Longitude\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setLongitude\(\)>`
+* :php:meth:`public getName\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getName\(\)>`
+* :php:meth:`public setName\($Name\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setName\(\)>`
+* :php:meth:`public getOpeningHours\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getOpeningHours\(\)>`
+* :php:meth:`public setOpeningHours\($OpeningHours\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setOpeningHours\(\)>`
+* :php:meth:`public getPartnerName\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getPartnerName\(\)>`
+* :php:meth:`public setPartnerName\($PartnerName\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setPartnerName\(\)>`
+* :php:meth:`public getPhoneNumber\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getPhoneNumber\(\)>`
+* :php:meth:`public setPhoneNumber\($PhoneNumber\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setPhoneNumber\(\)>`
+* :php:meth:`public getLocationCode\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getLocationCode\(\)>`
+* :php:meth:`public setLocationCode\($LocationCode\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setLocationCode\(\)>`
+* :php:meth:`public getRetailNetworkID\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getRetailNetworkID\(\)>`
+* :php:meth:`public setRetailNetworkID\($RetailNetworkID\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setRetailNetworkID\(\)>`
+* :php:meth:`public getSaleschannel\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getSaleschannel\(\)>`
+* :php:meth:`public setSaleschannel\($Saleschannel\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setSaleschannel\(\)>`
+* :php:meth:`public getTerminalType\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getTerminalType\(\)>`
+* :php:meth:`public setTerminalType\($TerminalType\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setTerminalType\(\)>`
+* :php:meth:`public getWarnings\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getWarnings\(\)>`
+* :php:meth:`public setWarnings\($Warnings\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setWarnings\(\)>`
+* :php:meth:`public getDownPartnerID\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDownPartnerID\(\)>`
+* :php:meth:`public setDownPartnerID\($DownPartnerID\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDownPartnerID\(\)>`
+* :php:meth:`public getDownPartnerLocation\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDownPartnerLocation\(\)>`
+* :php:meth:`public setDownPartnerLocation\($DownPartnerLocation\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDownPartnerLocation\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::jsonDeserialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static Address
 
@@ -133,31 +150,378 @@ Methods
 
 	.. php:method:: public __construct( $Address=null, $DeliveryOptions=null, $Distance=null, $Latitude=null, $Longitude=null, $Name=null, $OpeningHours=null, $PartnerName=null, $PhoneNumber=null, $LocationCode=null, $RetailNetworkID=null, $Saleschannel=null, $TerminalType=null, $Warnings=null, $DownPartnerID=null, $DownPartnerLocation=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| ResponseLocation constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Address** (:any:`Firstred\\PostNL\\Entity\\Address <Firstred\\PostNL\\Entity\\Address>` | null)  
-			* **$DeliveryOptions** (string[] | null)  
+			* **$DeliveryOptions** (array | null)  
 			* **$Distance** (string | null)  
 			* **$Latitude** (string | null)  
 			* **$Longitude** (string | null)  
 			* **$Name** (string | null)  
-			* **$OpeningHours** (string[] | null)  
+			* **$OpeningHours** (:any:`Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` | null)  
 			* **$PartnerName** (string | null)  
 			* **$PhoneNumber** (string | null)  
 			* **$LocationCode** (string | null)  
 			* **$RetailNetworkID** (string | null)  
 			* **$Saleschannel** (string | null)  
 			* **$TerminalType** (string | null)  
-			* **$Warnings** (:any:`Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null)  
+			* **$Warnings** (array | null)  
 			* **$DownPartnerID** (string | null)  
 			* **$DownPartnerLocation** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getAddress()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Address <Firstred\\PostNL\\Entity\\Address>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setAddress( $Address)
+	
+		
+		:Parameters:
+			* **$Address** (:any:`Firstred\\PostNL\\Entity\\Address <Firstred\\PostNL\\Entity\\Address>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDeliveryOptions()
+	
+		
+		:Returns: string[] | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDeliveryOptions( $DeliveryOptions)
+	
+		
+		:Parameters:
+			* **$DeliveryOptions** (array | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDistance()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDistance(int|float|string|null $Distance)
+	
+		
+		:Parameters:
+			* **$Distance** (int | float | string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLatitude()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLatitude(float|string|null $Latitude)
+	
+		
+		:Parameters:
+			* **$Latitude** (float | string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLongitude()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLongitude(float|string|null $Longitude)
+	
+		
+		:Parameters:
+			* **$Longitude** (float | string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getName()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setName( $Name)
+	
+		
+		:Parameters:
+			* **$Name** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getOpeningHours()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setOpeningHours( $OpeningHours)
+	
+		
+		:Parameters:
+			* **$OpeningHours** (:any:`Firstred\\PostNL\\Entity\\OpeningHours <Firstred\\PostNL\\Entity\\OpeningHours>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getPartnerName()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setPartnerName( $PartnerName)
+	
+		
+		:Parameters:
+			* **$PartnerName** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getPhoneNumber()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setPhoneNumber( $PhoneNumber)
+	
+		
+		:Parameters:
+			* **$PhoneNumber** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLocationCode()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLocationCode(int|string|null $LocationCode)
+	
+		
+		:Parameters:
+			* **$LocationCode** (int | string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getRetailNetworkID()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRetailNetworkID( $RetailNetworkID)
+	
+		
+		:Parameters:
+			* **$RetailNetworkID** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSaleschannel()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSaleschannel( $Saleschannel)
+	
+		
+		:Parameters:
+			* **$Saleschannel** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTerminalType()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTerminalType( $TerminalType)
+	
+		
+		:Parameters:
+			* **$TerminalType** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getWarnings()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setWarnings( $Warnings)
+	
+		
+		:Parameters:
+			* **$Warnings** (:any:`Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDownPartnerID()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDownPartnerID( $DownPartnerID)
+	
+		
+		:Parameters:
+			* **$DownPartnerID** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDownPartnerLocation()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDownPartnerLocation( $DownPartnerLocation)
+	
+		
+		:Parameters:
+			* **$DownPartnerLocation** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 
@@ -166,6 +530,27 @@ Methods
 	.. php:method:: public static jsonDeserialize( $json)
 	
 		
+		:Parameters:
+			* **$json** (:any:`stdClass <stdClass>`)  
+
+		
+		:Returns: static 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException <Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException <Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException <Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException <Firstred\\PostNL\\Entity\\Response\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 	
 	
 

@@ -13,11 +13,6 @@ GetNearestLocationsResponse
 .. php:class:: GetNearestLocationsResponse
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GetNearestLocationsResponse\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,22 +25,14 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($GetLocationsResult\)<Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse::\_\_construct\(\)>`
+* :php:meth:`public getGetLocationsResult\(\)<Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse::getGetLocationsResult\(\)>`
+* :php:meth:`public setGetLocationsResult\($GetLocationsResult\)<Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse::setGetLocationsResult\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse::jsonDeserialize\(\)>`
 * :php:meth:`public jsonSerialize\(\)<Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse::jsonSerialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
 
 .. php:attr:: protected static GetLocationsResult
 
@@ -59,16 +46,33 @@ Methods
 
 	.. php:method:: public __construct( $GetLocationsResult=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GetNearestLocationsResponse constructor\.
-			
-		
 		
 		:Parameters:
 			* **$GetLocationsResult** (:any:`Firstred\\PostNL\\Entity\\Response\\GetLocationsResult <Firstred\\PostNL\\Entity\\Response\\GetLocationsResult>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getGetLocationsResult()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\GetLocationsResult <Firstred\\PostNL\\Entity\\Response\\GetLocationsResult>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setGetLocationsResult( $GetLocationsResult)
+	
+		
+		:Parameters:
+			* **$GetLocationsResult** (:any:`Firstred\\PostNL\\Entity\\Response\\GetLocationsResult <Firstred\\PostNL\\Entity\\Response\\GetLocationsResult>` | null)  
+
+		
+		:Returns: static 
 	
 	
 
@@ -81,11 +85,23 @@ Methods
 			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
-		:Returns: mixed | :any:`\\stdClass <stdClass>` | null 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse <Firstred\\PostNL\\Entity\\Response\\GetNearestLocationsResponse>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\EntityNotFoundException <Firstred\\PostNL\\Exception\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\EntityNotFoundException <Firstred\\PostNL\\Exception\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\EntityNotFoundException <Firstred\\PostNL\\Exception\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\EntityNotFoundException <Firstred\\PostNL\\Exception\\EntityNotFoundException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.2.0 
 	
 	
@@ -94,13 +110,9 @@ Methods
 
 	.. php:method:: public jsonSerialize()
 	
-		.. rst-class:: phpdoc-description
-		
-			| Return a serializable array for \`json\_encode\`\.
-			
-		
 		
 		:Returns: array 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\ServiceNotSetException <Firstred\\PostNL\\Exception\\ServiceNotSetException>` 
 	
 	
 

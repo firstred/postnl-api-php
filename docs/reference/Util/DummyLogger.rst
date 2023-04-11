@@ -45,119 +45,185 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public emergency( $message, $context=\[\])
+	.. php:method:: public emergency(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| System is unusable\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public alert( $message, $context=\[\])
+	.. php:method:: public alert(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Action must be taken immediately\.
+			
+			| Example: Entire website down, database unavailable, etc\. This should
+			| trigger the SMS alerts and wake you up\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public critical( $message, $context=\[\])
+	.. php:method:: public critical(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Critical conditions\.
+			
+			| Example: Application component unavailable, unexpected exception\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public error( $message, $context=\[\])
+	.. php:method:: public error(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Runtime errors that do not require immediate action but should typically
+			| be logged and monitored\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public warning( $message, $context=\[\])
+	.. php:method:: public warning(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Exceptional occurrences that are not errors\.
+			
+			| Example: Use of deprecated APIs, poor use of an API, undesirable things
+			| that are not necessarily wrong\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public notice( $message, $context=\[\])
+	.. php:method:: public notice(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Normal but significant events\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public info( $message, $context=\[\])
+	.. php:method:: public info(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Interesting events\.
+			
+			| Example: User logs in, SQL logs\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public debug( $message, $context=\[\])
+	.. php:method:: public debug(string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Detailed debug information\.
+			
+		
 		
 		:Parameters:
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public log( $level, $message, $context=\[\])
+	.. php:method:: public log( $level, string|\\Stringable $message, $context=\[\])
 	
+		.. rst-class:: phpdoc-description
+		
+			| Logs with an arbitrary level\.
+			
+		
 		
 		:Parameters:
 			* **$level** (mixed)  
-			* **$message** (string)  
+			* **$message** (string | :any:`\\Stringable <Stringable>`)  
 			* **$context** (array)  
 
 		
+		:Returns: void 
+		:Throws: :any:`\\Psr\\Log\\InvalidArgumentException <Psr\\Log\\InvalidArgumentException>` 
 	
 	
 

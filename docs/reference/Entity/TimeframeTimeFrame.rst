@@ -13,11 +13,6 @@ TimeframeTimeFrame
 .. php:class:: TimeframeTimeFrame
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class TimeframeTimeFrame\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,17 +25,19 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($GetSentDate, $From, $To, $Options\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::\_\_construct\(\)>`
+* :php:meth:`public getDate\(\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::getDate\(\)>`
 * :php:meth:`public setDate\($Date\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::setDate\(\)>`
+* :php:meth:`public getFrom\(\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::getFrom\(\)>`
+* :php:meth:`public setFrom\($From\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::setFrom\(\)>`
+* :php:meth:`public getTo\(\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::getTo\(\)>`
+* :php:meth:`public setTo\($To\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::setTo\(\)>`
+* :php:meth:`public getOptions\(\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::getOptions\(\)>`
+* :php:meth:`public setOptions\($Options\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::setOptions\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::jsonDeserialize\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Date
 
@@ -52,14 +49,14 @@ Properties
 	:Type: string | null 
 
 
-.. php:attr:: protected static Options
-
-	:Type: string[] | null 
-
-
 .. php:attr:: protected static To
 
 	:Type: string | null 
+
+
+.. php:attr:: protected static Options
+
+	:Type: string[] | null 
 
 
 Methods
@@ -70,29 +67,92 @@ Methods
 	.. php:method:: public __construct( $GetSentDate=null, $From=null, $To=null, $Options=null)
 	
 		
-		:Parameters:
-			* **$GetSentDate** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-			* **$From** (string | null)  
-			* **$To** (string | null)  
-			* **$Options** (string[] | null)  
-
-		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public setDate( $Date=null)
+	.. php:method:: public getDate()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setDate(string|\\DateTimeInterface|null $Date=null)
+	
+		
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getFrom()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setFrom( $From)
 	
 		
 		:Parameters:
-			* **$Date** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
+			* **$From** (string | null)  
 
 		
 		:Returns: static 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getTo()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setTo( $To)
+	
+		
+		:Parameters:
+			* **$To** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getOptions()
+	
+		
+		:Returns: string[] | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setOptions( $Options)
+	
+		
+		:Parameters:
+			* **$Options** (string[] | null)  
+
+		
+		:Returns: static 
 	
 	
 
@@ -105,11 +165,16 @@ Methods
 			* **$json** (:any:`stdClass <stdClass>`)  
 
 		
-		:Returns: mixed | :any:`\\stdClass <stdClass>` | null 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\TimeframeTimeFrame <Firstred\\PostNL\\Entity\\TimeframeTimeFrame>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
-		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\DeserializationException <Firstred\\PostNL\\Exception\\DeserializationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.2.0 
 	
 	

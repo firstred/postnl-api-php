@@ -15,7 +15,9 @@ ResponseException
 
 	.. rst-class:: phpdoc-description
 	
-		| Class ResponseException
+		| Class ResponseException\.
+		
+		| Thrown when there was a problem with the response returned by the CIF API\.
 		
 	
 	:Parent:

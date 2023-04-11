@@ -13,11 +13,6 @@ Expectation
 .. php:class:: Expectation
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Expectation\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,17 +25,14 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($ETAFrom, $ETATo\)<Firstred\\PostNL\\Entity\\Expectation::\_\_construct\(\)>`
+* :php:meth:`public getETAFrom\(\)<Firstred\\PostNL\\Entity\\Expectation::getETAFrom\(\)>`
 * :php:meth:`public setETAFrom\($ETAFrom\)<Firstred\\PostNL\\Entity\\Expectation::setETAFrom\(\)>`
+* :php:meth:`public getETATo\(\)<Firstred\\PostNL\\Entity\\Expectation::getETATo\(\)>`
 * :php:meth:`public setETATo\($ETATo\)<Firstred\\PostNL\\Entity\\Expectation::setETATo\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static ETAFrom
 
@@ -57,13 +49,8 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $ETAFrom=null, $ETATo=null)
+	.. php:method:: public __construct(\\DateTimeInterface|string|null $ETAFrom=null, \\DateTimeInterface|string|null $ETATo=null)
 	
-		
-		:Parameters:
-			* **$ETAFrom** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
-			* **$ETATo** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
-
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
@@ -71,14 +58,18 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setETAFrom( $ETAFrom=null)
+	.. php:method:: public getETAFrom()
 	
 		
-		:Parameters:
-			* **$ETAFrom** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
 
+.. rst-class:: public
+
+	.. php:method:: public setETAFrom(\\DateTimeInterface|string|null $ETAFrom=null)
+	
 		
-		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	
@@ -86,14 +77,18 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setETATo( $ETATo=null)
+	.. php:method:: public getETATo()
 	
 		
-		:Parameters:
-			* **$ETATo** (:any:`DateTimeInterface <DateTimeInterface>` | string | null)  
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
 
+.. rst-class:: public
+
+	.. php:method:: public setETATo(\\DateTimeInterface|string|null $ETATo=null)
+	
 		
-		:Returns: static 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
 	

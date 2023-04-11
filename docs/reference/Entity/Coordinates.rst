@@ -13,11 +13,6 @@ Coordinates
 .. php:class:: Coordinates
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Coordinates\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,14 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Latitude, $Longitude\)<Firstred\\PostNL\\Entity\\Coordinates::\_\_construct\(\)>`
+* :php:meth:`public getLatitude\(\)<Firstred\\PostNL\\Entity\\Coordinates::getLatitude\(\)>`
+* :php:meth:`public setLatitude\($Latitude\)<Firstred\\PostNL\\Entity\\Coordinates::setLatitude\(\)>`
+* :php:meth:`public getLongitude\(\)<Firstred\\PostNL\\Entity\\Coordinates::getLongitude\(\)>`
+* :php:meth:`public setLongitude\($Longitude\)<Firstred\\PostNL\\Entity\\Coordinates::setLongitude\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Latitude
 
@@ -59,10 +53,54 @@ Methods
 	
 		
 		:Parameters:
-			* **$Latitude** (string)  
-			* **$Longitude** (string)  
+			* **$Latitude** (string | null)  
+			* **$Longitude** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLatitude()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLatitude( $Latitude)
+	
+		
+		:Parameters:
+			* **$Latitude** (string | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLongitude()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLongitude( $Longitude)
+	
+		
+		:Parameters:
+			* **$Longitude** (string | null)  
+
+		
+		:Returns: static 
 	
 	
 

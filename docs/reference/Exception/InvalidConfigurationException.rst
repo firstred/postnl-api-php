@@ -17,9 +17,11 @@ InvalidConfigurationException
 	
 		| Class InvalidConfigurationException\.
 		
+		| Thrown when there is a configuration error\.
+		
 	
 	:Parent:
-		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`
+		:php:class:`Firstred\\PostNL\\Exception\\PostNLException`
 	
 
 

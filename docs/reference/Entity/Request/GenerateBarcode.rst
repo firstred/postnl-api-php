@@ -13,11 +13,6 @@ GenerateBarcode
 .. php:class:: GenerateBarcode
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class GenerateLabel\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -29,26 +24,15 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Barcode, $Customer, $Message\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Barcode, $Customer\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::\_\_construct\(\)>`
+* :php:meth:`public getCustomer\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::getCustomer\(\)>`
+* :php:meth:`public setCustomer\($Customer\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::setCustomer\(\)>`
+* :php:meth:`public getBarcode\(\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::getBarcode\(\)>`
+* :php:meth:`public setBarcode\($Barcode\)<Firstred\\PostNL\\Entity\\Request\\GenerateBarcode::setBarcode\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	.. rst-class:: phpdoc-description
-	
-		| Default properties and namespaces for the SOAP API\.
-		
-	
-	:Type: array 
-
-
-.. php:attr:: protected static Message
-
-	:Type: :any:`\\Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null 
-
 
 .. php:attr:: protected static Customer
 
@@ -65,20 +49,58 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Barcode=null, $Customer=null, $Message=null)
+	.. php:method:: public __construct( $Barcode=null, $Customer=null)
 	
-		.. rst-class:: phpdoc-description
-		
-			| GenerateBarcode constructor\.
-			
-		
 		
 		:Parameters:
 			* **$Barcode** (:any:`Firstred\\PostNL\\Entity\\Barcode <Firstred\\PostNL\\Entity\\Barcode>` | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
-			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCustomer()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setCustomer( $Customer)
+	
+		
+		:Parameters:
+			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getBarcode()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Barcode <Firstred\\PostNL\\Entity\\Barcode>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setBarcode( $Barcode)
+	
+		
+		:Parameters:
+			* **$Barcode** (:any:`Firstred\\PostNL\\Entity\\Barcode <Firstred\\PostNL\\Entity\\Barcode>` | null)  
+
+		
+		:Returns: static 
 	
 	
 

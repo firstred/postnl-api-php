@@ -19,12 +19,9 @@ Classes
 	:maxdepth: 1
 	
 	GetLocation <GetLocation>
-	CompleteStatusByStatus <CompleteStatusByStatus>
 	GetSignature <GetSignature>
 	GetSentDate <GetSentDate>
 	GetLocationsInArea <GetLocationsInArea>
-	CurrentStatusByPhase <CurrentStatusByPhase>
-	CurrentStatusByStatus <CurrentStatusByStatus>
 	GetNearestLocations <GetNearestLocations>
 	CompleteStatusByReference <CompleteStatusByReference>
 	CompleteStatus <CompleteStatus>
@@ -32,7 +29,6 @@ Classes
 	CurrentStatusByReference <CurrentStatusByReference>
 	GenerateBarcode <GenerateBarcode>
 	CurrentStatus <CurrentStatus>
-	CompleteStatusByPhase <CompleteStatusByPhase>
 	GenerateLabel <GenerateLabel>
 	SendShipment <SendShipment>
 	Confirming <Confirming>

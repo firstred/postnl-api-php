@@ -15,6 +15,9 @@ BaseHttpClient
 .. php:class:: BaseHttpClient
 
 
+	:Implements:
+		:php:interface:`Psr\\Log\\LoggerAwareInterface` 
+	
 
 
 Summary
@@ -27,8 +30,6 @@ Methods
 * :php:meth:`public setTimeout\($seconds\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::setTimeout\(\)>`
 * :php:meth:`public getConnectTimeout\(\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::getConnectTimeout\(\)>`
 * :php:meth:`public setConnectTimeout\($seconds\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::setConnectTimeout\(\)>`
-* :php:meth:`public getVerify\(\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::getVerify\(\)>`
-* :php:meth:`public setVerify\($verify\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::setVerify\(\)>`
 * :php:meth:`public getLogger\(\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::getLogger\(\)>`
 * :php:meth:`public setLogger\($logger\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::setLogger\(\)>`
 * :php:meth:`public getMaxRetries\(\)<Firstred\\PostNL\\HttpClient\\BaseHttpClient::getMaxRetries\(\)>`
@@ -63,57 +64,38 @@ Properties
 
 .. php:attr:: protected static timeout
 
-	:Type: int 
 
 
 .. php:attr:: protected static connectTimeout
 
-	:Type: int 
-
-
-.. php:attr:: protected static verify
-
-	.. rst-class:: phpdoc-description
-	
-		| Verify the server SSL certificate\.
-		
-	
-	:Type: bool | string 
 
 
 .. php:attr:: protected static pendingRequests
 
-	:Type: array 
 
 
 .. php:attr:: protected static logger
 
-	:Type: :any:`\\Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` 
 
 
 .. php:attr:: protected static maxRetries
 
-	:Type: int 
 
 
 .. php:attr:: protected static concurrency
 
-	:Type: int 
 
 
 .. php:attr:: protected static requestFactory
 
-	:Type: :any:`\\Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
 
 
 .. php:attr:: protected static responseFactory
 
-	:Type: :any:`\\Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
 
 
 .. php:attr:: protected static streamFactory
 
-	:Type: :any:`\\Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
 
 
 Methods
@@ -123,13 +105,7 @@ Methods
 
 	.. php:method:: public getTimeout()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Get timeout\.
-			
-		
-		
-		:Returns: int 
 	
 	
 
@@ -137,17 +113,7 @@ Methods
 
 	.. php:method:: public setTimeout( $seconds)
 	
-		.. rst-class:: phpdoc-description
 		
-			| Set timeout\.
-			
-		
-		
-		:Parameters:
-			* **$seconds** (int)  
-
-		
-		:Returns: static 
 	
 	
 
@@ -155,13 +121,7 @@ Methods
 
 	.. php:method:: public getConnectTimeout()
 	
-		.. rst-class:: phpdoc-description
 		
-			| Get connection timeout\.
-			
-		
-		
-		:Returns: int 
 	
 	
 
@@ -169,51 +129,7 @@ Methods
 
 	.. php:method:: public setConnectTimeout( $seconds)
 	
-		.. rst-class:: phpdoc-description
 		
-			| Set connection timeout\.
-			
-		
-		
-		:Parameters:
-			* **$seconds** (int)  
-
-		
-		:Returns: static 
-	
-	
-
-.. rst-class:: public deprecated
-
-	.. php:method:: public getVerify()
-	
-		.. rst-class:: phpdoc-description
-		
-			| Return verify setting\.
-			
-		
-		
-		:Returns: bool | string 
-		:Deprecated:  
-	
-	
-
-.. rst-class:: public deprecated
-
-	.. php:method:: public setVerify( $verify)
-	
-		.. rst-class:: phpdoc-description
-		
-			| Set the verify setting\.
-			
-		
-		
-		:Parameters:
-			* **$verify** (bool | string)  
-
-		
-		:Returns: static 
-		:Deprecated:  
 	
 	
 
@@ -245,7 +161,6 @@ Methods
 			* **$logger** (:any:`Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>`)  
 
 		
-		:Returns: static 
 	
 	
 
@@ -395,7 +310,6 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Since: 1.3.0 
 	
@@ -411,11 +325,6 @@ Methods
 			
 		
 		
-		:Parameters:
-			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\RequestFactoryInterface <Firstred\\PostNL\\Factory\\RequestFactoryInterface>`)  
-
-		
-		:Returns: static 
 		:Since: 1.3.0 
 	
 	
@@ -430,7 +339,6 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Since: 1.3.0 
 	
@@ -446,11 +354,6 @@ Methods
 			
 		
 		
-		:Parameters:
-			* **$responseFactory** (:any:`Psr\\Http\\Message\\ResponseFactoryInterface <Psr\\Http\\Message\\ResponseFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\ResponseFactoryInterface <Firstred\\PostNL\\Factory\\ResponseFactoryInterface>`)  
-
-		
-		:Returns: static 
 		:Since: 1.3.0 
 	
 	
@@ -465,7 +368,6 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Since: 1.3.0 
 	
@@ -481,11 +383,6 @@ Methods
 			
 		
 		
-		:Parameters:
-			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>` | :any:`\\Firstred\\PostNL\\Factory\\StreamFactoryInterface <Firstred\\PostNL\\Factory\\StreamFactoryInterface>`)  
-
-		
-		:Returns: static 
 		:Since: 1.3.0 
 	
 	

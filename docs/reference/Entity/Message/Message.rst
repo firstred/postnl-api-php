@@ -13,11 +13,6 @@ Message
 .. php:class:: Message
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class Message\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,16 +25,14 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($MessageID, $MessageTimeStamp\)<Firstred\\PostNL\\Entity\\Message\\Message::\_\_construct\(\)>`
+* :php:meth:`public getMessageID\(\)<Firstred\\PostNL\\Entity\\Message\\Message::getMessageID\(\)>`
+* :php:meth:`public setMessageID\($MessageID\)<Firstred\\PostNL\\Entity\\Message\\Message::setMessageID\(\)>`
+* :php:meth:`public getMessageTimeStamp\(\)<Firstred\\PostNL\\Entity\\Message\\Message::getMessageTimeStamp\(\)>`
 * :php:meth:`public setMessageTimeStamp\($MessageTimeStamp\)<Firstred\\PostNL\\Entity\\Message\\Message::setMessageTimeStamp\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static MessageID
 
@@ -48,7 +41,7 @@ Properties
 
 .. php:attr:: protected static MessageTimeStamp
 
-	:Type: string | null 
+	:Type: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
 
 
 Methods
@@ -56,13 +49,8 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $MessageID=null, $MessageTimeStamp=null)
+	.. php:method:: public __construct( $MessageID=null, string|\\DateTimeInterface|null $MessageTimeStamp=null)
 	
-		
-		:Parameters:
-			* **$MessageID** (string | null)  
-			* **$MessageTimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
-
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 	
@@ -70,16 +58,41 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public setMessageTimeStamp( $MessageTimeStamp=null)
+	.. php:method:: public getMessageID()
+	
+		
+		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessageID( $MessageID)
 	
 		
 		:Parameters:
-			* **$MessageTimeStamp** (string | :any:`\\DateTimeInterface <DateTimeInterface>` | null)  
+			* **$MessageID** (string | null)  
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getMessageTimeStamp()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setMessageTimeStamp(string|\\DateTimeInterface|null $MessageTimeStamp=null)
+	
+		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
-		:Since: 1.2.0 
 	
 	
 

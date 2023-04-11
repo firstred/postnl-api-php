@@ -13,11 +13,6 @@ MergedLabel
 .. php:class:: MergedLabel
 
 
-	.. rst-class:: phpdoc-description
-	
-		| Class MergedLabel\.
-		
-	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
@@ -30,15 +25,14 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Barcodes, $Labels\)<Firstred\\PostNL\\Entity\\Response\\MergedLabel::\_\_construct\(\)>`
+* :php:meth:`public getBarcodes\(\)<Firstred\\PostNL\\Entity\\Response\\MergedLabel::getBarcodes\(\)>`
+* :php:meth:`public setBarcodes\($Barcodes\)<Firstred\\PostNL\\Entity\\Response\\MergedLabel::setBarcodes\(\)>`
+* :php:meth:`public getLabels\(\)<Firstred\\PostNL\\Entity\\Response\\MergedLabel::getLabels\(\)>`
+* :php:meth:`public setLabels\($Labels\)<Firstred\\PostNL\\Entity\\Response\\MergedLabel::setLabels\(\)>`
 
 
 Properties
 ----------
-
-.. php:attr:: public defaultProperties
-
-	:Type: string[][] 
-
 
 .. php:attr:: protected static Barcodes
 
@@ -59,10 +53,54 @@ Methods
 	
 		
 		:Parameters:
+			* **$Barcodes** (array | null)  
+			* **$Labels** (array | null)  
+
+		
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getBarcodes()
+	
+		
+		:Returns: string[] | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setBarcodes( $Barcodes)
+	
+		
+		:Parameters:
 			* **$Barcodes** (string[] | null)  
+
+		
+		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getLabels()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Label\[\] <Firstred\\PostNL\\Entity\\Label>` | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setLabels( $Labels)
+	
+		
+		:Parameters:
 			* **$Labels** (:any:`Firstred\\PostNL\\Entity\\Label\[\] <Firstred\\PostNL\\Entity\\Label>` | null)  
 
 		
+		:Returns: static 
 	
 	
 

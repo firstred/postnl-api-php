@@ -17,6 +17,8 @@ ApiConnectionException
 	
 		| Class ApiConnectionException\.
 		
+		| Thrown when there is a problem connecting to the CIF API\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\ApiException`

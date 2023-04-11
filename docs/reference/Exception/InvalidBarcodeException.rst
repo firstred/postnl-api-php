@@ -17,6 +17,8 @@ InvalidBarcodeException
 	
 		| Class InvalidBarcodeException\.
 		
+		| Thrown when an invalid barcode has been passed\.
+		
 	
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Exception\\InvalidArgumentException`
