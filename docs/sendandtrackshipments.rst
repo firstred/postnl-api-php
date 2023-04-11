@@ -427,7 +427,7 @@ The following example shows how labels of multiple shipment labels can be merged
             ->setProductCodeDelivery('3085)
     ];
 
-    $label = $postnl->generateShippings(
+    $label = $postnl->sendShipments(
         $shipments,
         'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
         true, // Confirm immediately
