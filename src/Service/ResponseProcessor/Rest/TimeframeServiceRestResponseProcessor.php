@@ -36,7 +36,6 @@ use Firstred\PostNL\Entity\TimeframeTimeFrame;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -52,21 +51,19 @@ use Psr\Http\Message\ResponseInterface;
 class TimeframeServiceRestResponseProcessor extends AbstractRestResponseProcessor implements TimeframeServiceResponseProcessorInterface
 {
     /**
-     * Process GetTimeframes Response REST.
+     * Process the 'get timeframes' server response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return ResponseTimeframes
      *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws \ReflectionException
      *
      * @since 2.0.0
      */

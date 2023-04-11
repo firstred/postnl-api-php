@@ -53,7 +53,11 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/locations';
 
     /**
-     * Build the GenerateLabel request for the REST API.
+     * Build the 'get nearest locations' HTTP request.
+     *
+     * @param GetNearestLocations $getNearestLocations
+     *
+     * @return RequestInterface
      *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
@@ -123,7 +127,11 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     }
 
     /**
-     * Build the GetLocationsInArea request for the REST API.
+     * Build the 'get locations in area' HTTP.
+     *
+     * @param GetLocationsInArea $getLocations
+     *
+     * @return RequestInterface
      *
      * @since 2.0.0
      *
@@ -172,7 +180,11 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     }
 
     /**
-     * Build the GetLocation request for the REST API.
+     * Build the 'get single location' HTTP request.
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return RequestInterface
      *
      * @throws InvalidConfigurationException
      * @throws InvalidArgumentException
@@ -200,6 +212,10 @@ class LocationServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

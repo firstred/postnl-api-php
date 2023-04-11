@@ -95,12 +95,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
         );
-        $this->responseProcessor = new BarcodeServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
+        $this->responseProcessor = new BarcodeServiceRestResponseProcessor();
     }
 
     /**
@@ -158,5 +153,61 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         }
 
         return $barcodes;
+    }
+
+    /**
+     * @param HiddenString $apiKey
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setApiKey(HiddenString $apiKey): static
+    {
+        $this->requestBuilder->setApiKey(apiKey: $apiKey);
+
+        return parent::setApiKey(apiKey: $apiKey);
+    }
+
+    /**
+     * @param bool $sandbox
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setSandbox(bool $sandbox): static
+    {
+        $this->requestBuilder->setSandbox(sandbox: $sandbox);
+
+        return parent::setSandbox(sandbox: $sandbox);
+    }
+
+    /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
+    {
+        $this->requestBuilder->setRequestFactory(requestFactory: $requestFactory);
+
+        return parent::setRequestFactory(requestFactory: $requestFactory);
+    }
+
+    /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
+    {
+        $this->requestBuilder->setStreamFactory(streamFactory: $streamFactory);
+
+        return parent::setStreamFactory(streamFactory: $streamFactory);
     }
 }

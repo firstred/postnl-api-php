@@ -31,6 +31,8 @@ namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -41,12 +43,28 @@ use Psr\Http\Message\RequestInterface;
 interface DeliveryDateServiceRequestBuilderInterface
 {
     /**
+     * Build the 'get delivery date' HTTP request.
+     *
+     * @param GetDeliveryDate $getDeliveryDate
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function buildGetDeliveryDateRequest(GetDeliveryDate $getDeliveryDate): RequestInterface;
 
     /**
-     * Build the `GetSentDate` request.
+     * Build the 'get sent date' HTTP request.
+     *
+     * @param GetSentDateRequest $getSentDate
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

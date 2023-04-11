@@ -53,7 +53,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_2/calculate/date';
 
     /**
-     * Build the GetDeliveryDate request for the REST API.
+     * Build the 'get delivery date' HTTP request.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -148,7 +148,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
     }
 
     /**
-     * Build the GetSentDate request for the REST API.
+     * Build the 'get sent date' HTTP request.
      *
      * @param GetSentDateRequest $getSentDate
      *
@@ -195,6 +195,10 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

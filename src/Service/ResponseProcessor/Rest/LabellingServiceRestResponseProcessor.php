@@ -32,7 +32,6 @@ namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -48,7 +47,7 @@ use Psr\Http\Message\ResponseInterface;
 class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements LabellingServiceResponseProcessorInterface
 {
     /**
-     * Process the GenerateLabel REST Response.
+     * Process the 'generate label' server response.
      *
      * @param ResponseInterface $response
      *
@@ -58,7 +57,6 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws ApiException
      * @throws InvalidConfigurationException
      *
@@ -73,6 +71,6 @@ class LabellingServiceRestResponseProcessor extends AbstractRestResponseProcesso
             return GenerateLabelResponse::jsonDeserialize(json: (object) ['GenerateLabelResponse' => $body]);
         }
 
-        throw new ApiException(message: '`GenerateLabelResponse` does not contain `ResponseShipments`');
+        throw new ResponseException(message: 'Invalid API response', response: $response);
     }
 }

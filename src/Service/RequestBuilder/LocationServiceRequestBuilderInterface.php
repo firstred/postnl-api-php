@@ -32,6 +32,8 @@ namespace Firstred\PostNL\Service\RequestBuilder;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -42,16 +44,42 @@ use Psr\Http\Message\RequestInterface;
 interface LocationServiceRequestBuilderInterface
 {
     /**
+     * Build the 'get nearest locations' HTTP request.
+     *
+     * @param GetNearestLocations $getNearestLocations
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
     public function buildGetNearestLocationsRequest(GetNearestLocations $getNearestLocations): RequestInterface;
 
     /**
+     * Build the 'get locations in area' HTTP.
+     *
+     * @param GetLocationsInArea $getLocations
+     *
+     * @return RequestInterface
+     *
      * @since 2.0.0
+     *
+     * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
      */
     public function buildGetLocationsInAreaRequest(GetLocationsInArea $getLocations): RequestInterface;
 
     /**
+     * Build the 'get single location' HTTP request.
+     *
+     * @param GetLocation $getLocation
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidConfigurationException
+     * @throws InvalidArgumentException
+     *
      * @since 2.0.0
      */
     public function buildGetLocationRequest(GetLocation $getLocation): RequestInterface;

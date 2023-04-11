@@ -30,8 +30,9 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
@@ -44,16 +45,17 @@ use Psr\Http\Message\ResponseInterface;
 interface ShippingServiceResponseProcessorInterface
 {
     /**
-     * Process the SendShipment REST Response.
+     * Process the 'send shipment' server response.
      *
      * @param ResponseInterface $response
      *
      * @return SendShipmentResponse|null
      *
-     * @throws ResponseException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Service\ResponseProcessor\Rest;
 
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -47,7 +46,7 @@ use Psr\Http\Message\ResponseInterface;
 class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ShippingServiceResponseProcessorInterface
 {
     /**
-     * Process the SendShipment REST Response.
+     * Process the 'send shipment' server response.
      *
      * @param ResponseInterface $response
      *
@@ -57,7 +56,6 @@ class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws InvalidConfigurationException
      *
      * @since 2.0.0
@@ -66,10 +64,7 @@ class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor
     {
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->ResponseShipments)) {
-            /** @var SendShipmentResponse $object */
-            $object = SendShipmentResponse::JsonDeserialize(json: (object) ['SendShipmentResponse' => $body]);
-
-            return $object;
+            return SendShipmentResponse::JsonDeserialize(json: (object) ['SendShipmentResponse' => $body]);
         }
 
         return null;

@@ -37,7 +37,6 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -104,12 +103,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
         );
-        $this->responseProcessor = new ShippingServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
+        $this->responseProcessor = new ShippingServiceRestResponseProcessor();
     }
 
     /**
@@ -121,7 +115,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      * @return SendShipmentResponse|null
      *
      * @throws HttpClientException
-     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
@@ -162,10 +155,62 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             return $object;
         }
 
-        if (200 === $response->getStatusCode()) {
-            throw new ResponseException(message: 'Invalid API response', response: $response);
-        }
+        throw new ResponseException(message: 'Invalid API response', response: $response);
+    }
 
-        throw new NotFoundException(message: 'Unable to create shipment');
+    /**
+     * @param HiddenString $apiKey
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setApiKey(HiddenString $apiKey): static
+    {
+        $this->requestBuilder->setApiKey(apiKey: $apiKey);
+
+        return parent::setApiKey(apiKey: $apiKey);
+    }
+
+    /**
+     * @param bool $sandbox
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setSandbox(bool $sandbox): static
+    {
+        $this->requestBuilder->setSandbox(sandbox: $sandbox);
+
+        return parent::setSandbox(sandbox: $sandbox);
+    }
+
+    /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
+    {
+        $this->requestBuilder->setRequestFactory(requestFactory: $requestFactory);
+
+        return parent::setRequestFactory(requestFactory: $requestFactory);
+    }
+
+    /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
+    {
+        $this->requestBuilder->setStreamFactory(streamFactory: $streamFactory);
+
+        return parent::setStreamFactory(streamFactory: $streamFactory);
     }
 }

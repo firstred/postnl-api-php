@@ -129,9 +129,13 @@ abstract class AbstractRequestBuilder
     }
 
     /**
-     * Set the webservice on the object.
+     * Set this service on given entity.
      *
-     * This lets the object know for which service it should serialize
+     * This lets the entity know for which service it should serialize.
+     *
+     * @param AbstractEntity $entity
+     *
+     * @return void
      *
      * @throws InvalidArgumentException
      *

@@ -32,12 +32,11 @@ namespace Firstred\PostNL\Service\ResponseProcessor;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
+use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -51,27 +50,30 @@ use Psr\Http\Message\ResponseInterface;
 interface ShippingStatusServiceResponseProcessorInterface
 {
     /**
-     * Process CurrentStatus Response REST.
+     * Process the 'get current status' server response.
      *
-     * @throws ResponseException
+     * @param ResponseInterface $response
+     *
+     * @return CurrentStatusResponse
+     *
+     * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws DeserializationException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse;
 
     /**
-     * Process CompleteStatus Response REST.
+     * Process the 'get complete status' server response.
      *
      * @param ResponseInterface $response
      *
      * @return CompleteStatusResponse
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
@@ -84,33 +86,34 @@ interface ShippingStatusServiceResponseProcessorInterface
     public function processCompleteStatusResponse(ResponseInterface $response): CompleteStatusResponse;
 
     /**
-     * Process GetSignature Response REST.
-     *
-     * @param ResponseInterface $response
-     *
-     * @return GetSignatureResponseSignature
-     *
-     * @throws ResponseException
-     * @throws HttpClientException
-     * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     *
-     * @since 2.0.0
-     */
-    public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature;
-
-    /**
-     * Process GetSignature Response REST.
+     * Process the 'get signature' server response.
      *
      * @param ResponseInterface $response
      *
      * @return GetSignatureResponseSignature
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
+     * @throws InvalidConfigurationException
+     *
+     * @since 2.0.0
+     */
+    public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature;
+
+    /**
+     * Process the 'get updated shipments' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return UpdatedShipmentsResponse[]
+     *
+     * @throws DeserializationException
+     * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

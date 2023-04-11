@@ -49,6 +49,8 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/confirm';
 
     /**
+     * Build the 'confirm label' HTTP request.
+     *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
      *
@@ -69,6 +71,10 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

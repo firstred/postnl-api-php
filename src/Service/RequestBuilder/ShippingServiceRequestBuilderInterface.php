@@ -30,6 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\SendShipment;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -40,10 +42,15 @@ use Psr\Http\Message\RequestInterface;
 interface ShippingServiceRequestBuilderInterface
 {
     /**
+     * Build the 'send shipment' HTTP request.
+     *
      * @param SendShipment $sendShipment
      * @param bool         $confirm
      *
      * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

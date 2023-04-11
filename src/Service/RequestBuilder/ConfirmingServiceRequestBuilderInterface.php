@@ -30,6 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\Confirming;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -40,6 +42,11 @@ use Psr\Http\Message\RequestInterface;
 interface ConfirmingServiceRequestBuilderInterface
 {
     /**
+     * Build the 'confirm label' HTTP request.
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function buildConfirmRequest(Confirming $confirming): RequestInterface;

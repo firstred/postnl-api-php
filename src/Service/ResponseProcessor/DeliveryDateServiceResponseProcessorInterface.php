@@ -31,9 +31,12 @@ namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
-use Firstred\PostNL\Exception\CifDownException;
-use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -45,20 +48,35 @@ use Psr\Http\Message\ResponseInterface;
 interface DeliveryDateServiceResponseProcessorInterface
 {
     /**
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
+     * Process the 'get delivery date' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetDeliveryDateResponse
+     *
+     * @throws ApiException
      * @throws HttpClientException
+     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
+     * @throws DeserializationException
      *
      * @since 2.0.0
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse;
 
     /**
-     * @throws CifDownException
-     * @throws CifException
-     * @throws ResponseException
+     * Process the 'get sent date' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetSentDateResponse
+     *
+     * @throws ApiException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

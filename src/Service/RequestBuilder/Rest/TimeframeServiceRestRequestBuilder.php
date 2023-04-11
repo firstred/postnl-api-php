@@ -50,7 +50,7 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2_1/calculate/timeframes';
 
     /**
-     * Build the GetTimeframes request for the REST API.
+     * Build the 'get timeframes' HTTP request.
      *
      * @param GetTimeframes $getTimeframes
      *
@@ -107,6 +107,10 @@ class TimeframeServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

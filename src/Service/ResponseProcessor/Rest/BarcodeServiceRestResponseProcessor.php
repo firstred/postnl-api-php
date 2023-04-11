@@ -46,7 +46,11 @@ use Psr\Http\Message\ResponseInterface;
 class BarcodeServiceRestResponseProcessor extends AbstractRestResponseProcessor implements BarcodeServiceResponseProcessorInterface
 {
     /**
-     * Process GenerateBarcode REST response.
+     * Process the 'generate barcode' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return string
      *
      * @throws CifDownException
      * @throws CifException

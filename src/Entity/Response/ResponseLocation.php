@@ -508,7 +508,6 @@ class ResponseLocation extends AbstractEntity
      * @return static
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws NotSupportedException
      * @throws InvalidConfigurationException
      */

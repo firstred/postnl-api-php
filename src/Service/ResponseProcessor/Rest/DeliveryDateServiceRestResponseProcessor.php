@@ -33,7 +33,6 @@ use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
 use Firstred\PostNL\Entity\Response\GetSentDateResponse;
 use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
@@ -50,7 +49,11 @@ use Psr\Http\Message\ResponseInterface;
 class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProcessor implements DeliveryDateServiceResponseProcessorInterface
 {
     /**
-     * Process GetDeliveryDate REST Response.
+     * Process the 'get delivery date' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetDeliveryDateResponse
      *
      * @throws ApiException
      * @throws HttpClientException
@@ -64,34 +67,35 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
     {
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->DeliveryDate)) {
-            $object = GetDeliveryDateResponse::jsonDeserialize(json: (object) ['GetDeliveryDateResponse' => $body]);
-
-            return $object;
+            return GetDeliveryDateResponse::jsonDeserialize(json: (object) ['GetDeliveryDateResponse' => $body]);
         }
 
-        throw new ApiException();
+        throw new ResponseException(message: 'Invalid API response', response: $response);
     }
 
     /**
-     * Process GetSentDate REST Response.
+     * Process the 'get sent date' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetSentDateResponse
      *
      * @throws ApiException
      * @throws DeserializationException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws EntityNotFoundException
      * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
-    public function processGetSentDateResponse(mixed $response): GetSentDateResponse
+    public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
     {
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->SentDate)) {
             return GetSentDateResponse::jsonDeserialize(json: (object) ['GetSentDateResponse' => $body]);
         }
 
-        throw new ApiException();
+        throw new ResponseException(message: 'Invalid API response', response: $response);
     }
 }

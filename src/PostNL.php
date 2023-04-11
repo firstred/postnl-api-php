@@ -62,8 +62,10 @@ use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
+use Firstred\PostNL\Exception\ApiException;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
@@ -86,12 +88,12 @@ use Firstred\PostNL\Service\LabellingService;
 use Firstred\PostNL\Service\LabellingServiceInterface;
 use Firstred\PostNL\Service\LocationService;
 use Firstred\PostNL\Service\LocationServiceInterface;
-use Firstred\PostNL\Service\RequestBuilder\DeliveryDateServiceRequestBuilderInterface;
-use Firstred\PostNL\Service\RequestBuilder\LocationServiceRequestBuilderInterface;
-use Firstred\PostNL\Service\RequestBuilder\TimeframeServiceRequestBuilderInterface;
-use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcessorInterface;
-use Firstred\PostNL\Service\ResponseProcessor\LocationServiceResponseProcessorInterface;
-use Firstred\PostNL\Service\ResponseProcessor\TimeframeServiceResponseProcessorInterface;
+use Firstred\PostNL\Service\RequestBuilder\Rest\DeliveryDateServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Rest\LocationServiceRestRequestBuilder;
+use Firstred\PostNL\Service\RequestBuilder\Rest\TimeframeServiceRestRequestBuilder;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\DeliveryDateServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\LocationServiceRestResponseProcessor;
+use Firstred\PostNL\Service\ResponseProcessor\Rest\TimeframeServiceRestResponseProcessor;
 use Firstred\PostNL\Service\ShippingService;
 use Firstred\PostNL\Service\ShippingServiceInterface;
 use Firstred\PostNL\Service\ShippingStatusService;
@@ -119,7 +121,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionObject;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
 use setasign\Fpdi\PdfParser\PdfParserException;
@@ -1710,7 +1711,7 @@ class PostNL implements LoggerAwareInterface
      * @param bool     $complete Return the complete status (incl. shipment history)
      *
      * @return array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
-     * @psalm-return non-emptyarray<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
+     * @psalm-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      * @phpstan-return non-empty-array<string, CurrentStatusResponseShipment|CompleteStatusResponseShipment>
      *
      * @throws HttpClientException
@@ -2030,16 +2031,22 @@ class PostNL implements LoggerAwareInterface
      * @param GetNearestLocations $getNearestLocations
      * @param GetDeliveryDate     $getDeliveryDate
      *
-     * @return array [
-     *               timeframes => ResponseTimeframes,
-     *               locations => GetNearestLocationsResponse,
-     *               delivery_date => GetDeliveryDateResponse,
-     *               ]
+     * @return array{
+     *             timeframes: ResponseTimeframes,
+     *             locations: GetNearestLocationsResponse,
+     *             delivery_date: GetDeliveryDateResponse,
+     *         }
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws ApiException
+     * @throws DeserializationException
      * @throws HttpClientException
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     * @throws NotSupportedException
      * @throws PsrCacheInvalidArgumentException
-     * @throws \ReflectionException
+     * @throws ResponseException
      *
      * @since 1.0.0
      */
@@ -2062,54 +2069,29 @@ class PostNL implements LoggerAwareInterface
             $results['delivery_date'] = PsrMessage::parseResponse(message: $itemDeliveryDate->get());
         }
 
-        // FIXME: do not rely on reflection
-        $reflectionTimeframeService = new ReflectionObject(object: $this->getTimeframeService());
-        $reflectionTimeframeServiceRequestBuilder = $reflectionTimeframeService->getProperty(name: 'requestBuilder');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionTimeframeServiceRequestBuilder->setAccessible(accessible: true);
-        /** @var TimeframeServiceRequestBuilderInterface $timeframeServiceRequestBuilder */
-        $timeframeServiceRequestBuilder = $reflectionTimeframeServiceRequestBuilder->getValue(object: $this->getTimeframeService());
-        $reflectionTimeframeServiceResponseProcessor = $reflectionTimeframeService->getProperty(name: 'responseProcessor');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionTimeframeServiceResponseProcessor->setAccessible(accessible: true);
-        /** @var TimeframeServiceResponseProcessorInterface $timeframeServiceResponseProcessor */
-        $timeframeServiceResponseProcessor = $reflectionTimeframeServiceResponseProcessor->getValue(object: $this->getTimeframeService());
-        $reflectionTimeframeServiceResponseProcessor = new ReflectionObject(object: $timeframeServiceResponseProcessor);
-        $reflectionTimeframeServiceResponseValidator = $reflectionTimeframeServiceResponseProcessor->getMethod(name: 'validateResponse');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionTimeframeServiceResponseValidator->setAccessible(accessible: true);
+        $timeframeServiceRequestBuilder = new TimeframeServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->getSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        static $timeframeServiceResponseProcessor = new TimeframeServiceRestResponseProcessor();
 
-        $reflectionLocationService = new ReflectionObject(object: $this->getLocationService());
-        $reflectionLocationServiceRequestBuilder = $reflectionLocationService->getProperty(name: 'requestBuilder');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionLocationServiceRequestBuilder->setAccessible(accessible: true);
-        /** @var LocationServiceRequestBuilderInterface $locationServiceRequestBuilder */
-        $locationServiceRequestBuilder = $reflectionLocationServiceRequestBuilder->getValue(object: $this->getLocationService());
-        $reflectionLocationServiceResponseProcessor = $reflectionLocationService->getProperty(name: 'responseProcessor');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionLocationServiceResponseProcessor->setAccessible(accessible: true);
-        /** @var LocationServiceResponseProcessorInterface $locationServiceResponseProcessor */
-        $locationServiceResponseProcessor = $reflectionLocationServiceResponseProcessor->getValue(object: $this->getLocationService());
-        $reflectionLocationServiceResponseProcessor = new ReflectionObject(object: $locationServiceResponseProcessor);
-        $reflectionLocationServiceResponseValidator = $reflectionLocationServiceResponseProcessor->getMethod(name: 'validateResponse');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionLocationServiceResponseValidator->setAccessible(accessible: true);
+        $locationServiceRequestBuilder = new LocationServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->getSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        static $locationServiceResponseProcessor = new LocationServiceRestResponseProcessor();
 
-        $reflectionDeliveryDateService = new ReflectionObject(object: $this->getDeliveryDateService());
-        $reflectionDeliveryDateServiceRequestBuilder = $reflectionDeliveryDateService->getProperty(name: 'requestBuilder');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionDeliveryDateServiceRequestBuilder->setAccessible(accessible: true);
-        /** @var DeliveryDateServiceRequestBuilderInterface $deliveryDateServiceRequestBuilder */
-        $deliveryDateServiceRequestBuilder = $reflectionDeliveryDateServiceRequestBuilder->getValue(object: $this->getDeliveryDateService());
-        $reflectionDeliveryDateServiceResponseProcessor = $reflectionDeliveryDateService->getProperty(name: 'responseProcessor');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionDeliveryDateServiceResponseProcessor->setAccessible(accessible: true);
-        /** @var DeliveryDateServiceResponseProcessorInterface $deliveryDateServiceResponseProcessor */
-        $deliveryDateServiceResponseProcessor = $reflectionDeliveryDateServiceResponseProcessor->getValue(object: $this->getDeliveryDateService());
-        $reflectionDeliveryDateServiceResponseProcessor = new ReflectionObject(object: $deliveryDateServiceResponseProcessor);
-        $reflectionDeliveryDateServiceResponseValidator = $reflectionDeliveryDateServiceResponseProcessor->getMethod(name: 'validateResponse');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $reflectionDeliveryDateServiceResponseValidator->setAccessible(accessible: true);
+        $deliveryDateServiceRequestBuilder = new DeliveryDateServiceRestRequestBuilder(
+            apiKey: $this->getApiKey(),
+            sandbox: $this->getSandbox(),
+            requestFactory: $this->getRequestFactory(),
+            streamFactory: $this->getStreamFactory(),
+        );
+        static $deliveryDateServiceResponseProcessor = new DeliveryDateServiceRestResponseProcessor();
 
         $this->getHttpClient()->addOrUpdateRequest(
             id: 'timeframes',
@@ -2145,11 +2127,6 @@ class PostNL implements LoggerAwareInterface
             } else {
                 switch ($type) {
                     case 'timeframes':
-                        $reflectionTimeframeServiceResponseValidator->invokeArgs(
-                            object: $timeframeServiceResponseProcessor,
-                            args: [$response],
-                        );
-
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemTimeframe->set(value: PsrMessage::toString(message: $response));
                             $this->getTimeframeService()->cacheItem(item: $itemTimeframe);
@@ -2157,11 +2134,6 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'locations':
-                        $reflectionLocationServiceResponseValidator->invokeArgs(
-                            object: $locationServiceResponseProcessor,
-                            args: [$response],
-                        );
-
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemLocation->set(value: PsrMessage::toString(message: $response));
                             $this->getLocationService()->cacheItem(item: $itemLocation);
@@ -2169,11 +2141,6 @@ class PostNL implements LoggerAwareInterface
 
                         break;
                     case 'delivery_date':
-                        $reflectionDeliveryDateServiceResponseValidator->invokeArgs(
-                            object: $deliveryDateServiceResponseProcessor,
-                            args: [$response],
-                        );
-
                         if ($itemTimeframe instanceof CacheItemInterface) {
                             $itemDeliveryDate->set(value: PsrMessage::toString(message: $response));
                             $this->getDeliveryDateService()->cacheItem(item: $itemDeliveryDate);
@@ -2185,24 +2152,9 @@ class PostNL implements LoggerAwareInterface
         }
 
         return [
-            'timeframes'    => $reflectionTimeframeServiceResponseProcessor
-                ->getMethod(name: 'processGetTimeframesResponse')
-                ->invokeArgs(
-                    object: $timeframeServiceResponseProcessor,
-                    args: [$results['timeframes']],
-                ),
-            'locations'     => $reflectionLocationServiceResponseProcessor
-                ->getMethod(name: 'processGetNearestLocationsResponse')
-                ->invokeArgs(
-                    object: $locationServiceResponseProcessor,
-                    args: [$results['locations']],
-                ),
-            'delivery_date' => $reflectionDeliveryDateServiceResponseProcessor
-                ->getMethod(name: 'processGetDeliveryDateResponse')
-                ->invokeArgs(
-                    object: $deliveryDateServiceResponseProcessor,
-                    args: [$results['delivery_date']],
-                ),
+            'timeframes'    => $timeframeServiceResponseProcessor->processGetTimeframesResponse(response: $results['timeframes']),
+            'locations'     => $locationServiceResponseProcessor->processGetNearestLocationsResponse(response: $results['locations']),
+            'delivery_date' => $deliveryDateServiceResponseProcessor->processGetDeliveryDateResponse(response: $results['delivery_date']),
         ];
     }
 

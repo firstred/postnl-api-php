@@ -45,6 +45,10 @@ use Psr\Http\Message\ResponseInterface;
 abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
 {
     /**
+     * @param ResponseInterface $response
+     *
+     * @return bool
+     *
      * @throws CifDownException
      * @throws CifException
      * @throws InvalidConfigurationException
@@ -57,7 +61,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
         try {
             $body = json_decode(json: (string) $response->getBody(), flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            throw new ResponseException(message: 'Invalid response from server', previous: $e, response: $response);
+            throw new ResponseException(message: 'Invalid API response', previous: $e, response: $response);
         }
 
         if (!empty($body->fault->faultstring) && 'Invalid ApiKey' === $body->fault->faultstring) {
@@ -73,8 +77,8 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
             foreach ($body->Errors->Error as $error) {
                 if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => $error->ErrorMsg ?? '',
-                        'message'     => $error->ErrorMsg ?? '',
+                        'description' => $error->ErrorMsg,
+                        'message'     => $error->ErrorMsg,
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {
@@ -91,8 +95,8 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
             foreach ($body->Errors as $error) {
                 if (isset($error->ErrorMsg)) {
                     $exceptionData[] = [
-                        'description' => $error->ErrorMsg ?? '',
-                        'message'     => $error->ErrorMsg ?? '',
+                        'description' => $error->ErrorMsg,
+                        'message'     => $error->ErrorMsg,
                         'code'        => isset($error->ErrorNumber) ? (int) $error->ErrorNumber : 0,
                     ];
                 } else {

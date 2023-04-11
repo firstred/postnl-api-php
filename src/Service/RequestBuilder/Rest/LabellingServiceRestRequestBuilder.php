@@ -57,7 +57,12 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
 
     /**
-     * Build the GenerateLabel request for the REST API.
+     * Build the 'generate label' HTTP request.
+     *
+     * @param GenerateLabel $generateLabel
+     * @param bool          $confirm
+     *
+     * @return RequestInterface
      *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
@@ -88,6 +93,10 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

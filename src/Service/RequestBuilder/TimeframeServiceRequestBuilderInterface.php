@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -41,13 +42,14 @@ use Psr\Http\Message\RequestInterface;
 interface TimeframeServiceRequestBuilderInterface
 {
     /**
-     * Build the GetTimeframes request for the REST API.
+     * Build the 'get timeframes' HTTP request.
      *
      * @param GetTimeframes $getTimeframes
      *
      * @return RequestInterface
      *
      * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

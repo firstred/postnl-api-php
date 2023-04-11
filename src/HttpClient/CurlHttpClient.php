@@ -120,8 +120,6 @@ class CurlHttpClient extends BaseHttpClient implements HttpClientInterface
      * @param RequestInterface[] $requests
      *
      * @return ResponseInterface[]|HttpClientException[]
-     *
-     * @throws InvalidArgumentException
      */
     public function doRequests(array $requests = []): array
     {

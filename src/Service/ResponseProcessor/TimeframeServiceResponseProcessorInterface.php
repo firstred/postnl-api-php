@@ -30,8 +30,11 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
@@ -44,16 +47,19 @@ use Psr\Http\Message\ResponseInterface;
 interface TimeframeServiceResponseProcessorInterface
 {
     /**
-     * Process GetTimeframes Response REST.
+     * Process the 'get timeframes' server response.
      *
      * @param ResponseInterface $response
      *
      * @return ResponseTimeframes
      *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
-     * @throws ResponseException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws ResponseException
      *
      * @since 2.0.0
      */

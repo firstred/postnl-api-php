@@ -29,62 +29,11 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
-use ParagonIE\HiddenString\HiddenString;
-use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-
 /**
  * @since 2.0.0
  *
- * @internal
+ * @internal For future use
  */
 trait ResponseProcessorSettersTrait
 {
-    /**
-     * @since 2.0.0
-     */
-    public function setApiKey(HiddenString $apiKey): static
-    {
-        if (isset($this->responseProcessor)) {
-            $this->responseProcessor->setApiKey(apiKey: $apiKey);
-        }
-
-        return parent::setApiKey(apiKey: $apiKey);
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setSandbox(bool $sandbox): static
-    {
-        if (isset($this->responseProcessor)) {
-            $this->responseProcessor->setSandbox(sandbox: $sandbox);
-        }
-
-        return parent::setSandbox(sandbox: $sandbox);
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
-    {
-        if (isset($this->responseProcessor)) {
-            $this->responseProcessor->setRequestFactory(requestFactory: $requestFactory);
-        }
-
-        return parent::setRequestFactory(requestFactory: $requestFactory);
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
-    {
-        if (isset($this->responseProcessor)) {
-            $this->responseProcessor->setStreamFactory(streamFactory: $streamFactory);
-        }
-
-        return parent::setStreamFactory(streamFactory: $streamFactory);
-    }
 }

@@ -33,7 +33,6 @@ use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -49,7 +48,7 @@ use Psr\Http\Message\ResponseInterface;
 class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ConfirmingServiceResponseProcessorInterface
 {
     /**
-     * Proces Confirm REST Response.
+     * Process the 'confirm label' server response.
      *
      * @param ResponseInterface $response
      *
@@ -58,12 +57,10 @@ class ConfirmingServiceRestResponseProcessor extends AbstractRestResponseProcess
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
      * @throws InvalidConfigurationException
-     * @throws \ReflectionException
      *
      * @since 2.0.0
      */

@@ -55,7 +55,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/shipment/v2/status';
 
     /**
-     * Build the CurrentStatus request for the REST API.
+     * Build the 'get current status' HTTP request.
      *
      * This function auto-detects and adjusts the following requests:
      * - CurrentStatus
@@ -116,7 +116,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     }
 
     /**
-     * Build the CompleteStatus request for the REST API.
+     * Build the 'get complete status' HTTP request.
      *
      * This function auto-detects and adjusts the following requests:
      * - CompleteStatus
@@ -190,7 +190,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     }
 
     /**
-     * Build the GetSignature request for the REST API.
+     * Build the 'get signature' HTTP request.
      *
      * @param GetSignature $getSignature
      *
@@ -214,7 +214,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     }
 
     /**
-     * Build get updated shipments request REST.
+     * Build the 'get updated shipments' HTTP request.
      *
      * @param Customer               $customer
      * @param DateTimeInterface|null $dateTimeFrom
@@ -248,6 +248,10 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

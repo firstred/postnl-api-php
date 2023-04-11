@@ -48,6 +48,7 @@ use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
 use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\StatusAddress;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
@@ -406,9 +407,9 @@ class ShippingStatusServiceTest extends ServiceTestCase
         $mockClient->setHandler(handler: $handler);
         $this->postnl->setHttpClient(httpClient: $mockClient);
 
-        $this->expectException(exception: ShipmentNotFoundException::class);
+        $this->expectException(exception: NotFoundException::class);
 
-        $currentStatus = $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
+        $this->postnl->getShippingStatusByBarcode(barcode: '3S8392302392342');
     }
 
     /**

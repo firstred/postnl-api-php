@@ -30,6 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\RequestBuilder;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -40,7 +42,14 @@ use Psr\Http\Message\RequestInterface;
 interface BarcodeServiceRequestBuilderInterface
 {
     /**
-     * Build the `generateBarcode` HTTP request for the REST API.
+     * Build the 'generate barcode' HTTP request.
+     *
+     * @param GenerateBarcode $generateBarcode
+     *
+     * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

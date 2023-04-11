@@ -50,7 +50,7 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
     private const LIVE_ENDPOINT = 'https://api.postnl.nl/shipment/v1_1/barcode';
 
     /**
-     * Build the `generateBarcode` HTTP request for the REST API.
+     * Build the 'generate barcode' HTTP request.
      *
      * @param GenerateBarcode $generateBarcode
      *
@@ -80,6 +80,10 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

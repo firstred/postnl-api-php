@@ -52,6 +52,8 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     private const SANDBOX_ENDPOINT = 'https://api-sandbox.postnl.nl/v1/shipment';
 
     /**
+     * Build the 'send shipment' HTTP request.
+     *
      * @param SendShipment $sendShipment
      * @param bool         $confirm
      *
@@ -79,6 +81,10 @@ class ShippingServiceRestRequestBuilder extends AbstractRestRequestBuilder imple
     }
 
     /**
+     * Set this service on the given entity.
+     *
+     * This lets the entity know for which service it should serialize.
+     *
      * @param AbstractEntity $entity
      *
      * @return void

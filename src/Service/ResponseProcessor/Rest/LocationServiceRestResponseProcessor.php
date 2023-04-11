@@ -37,7 +37,6 @@ use Firstred\PostNL\Entity\Response\ResponseLocation;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -53,7 +52,7 @@ use Psr\Http\Message\ResponseInterface;
 class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor implements LocationServiceResponseProcessorInterface
 {
     /**
-     * Process GetNearestLocations Response REST.
+     * Process the 'get nearest locations' server response.
      *
      * @param ResponseInterface $response
      *
@@ -62,12 +61,10 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws \ReflectionException
      *
      * @since 2.0.0
      */
@@ -80,16 +77,15 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
     }
 
     /**
-     * Process GetLocationsInArea Response REST.
+     * Process the 'get locations in area' server response.
      *
-     * @param mixed $response
+     * @param ResponseInterface $response
      *
      * @return GetLocationsInAreaResponse
      *
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
@@ -102,16 +98,13 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
         $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
-        /** @var GetLocationsInAreaResponse $object */
-        $object = GetLocationsInAreaResponse::jsonDeserialize(
+        return GetLocationsInAreaResponse::jsonDeserialize(
             json: (object) ['GetLocationsInAreaResponse' => $body]
         );
-
-        return $object;
     }
 
     /**
-     * Process GetLocation Response REST.
+     * Process the 'get location' server response.
      *
      * @param ResponseInterface $response
      *
@@ -120,12 +113,10 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
      * @throws CifDownException
      * @throws CifException
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws \ReflectionException
      *
      * @since 2.0.0
      */
@@ -166,9 +157,6 @@ class LocationServiceRestResponseProcessor extends AbstractRestResponseProcessor
         }
         $body->GetLocationsResult->ResponseLocation = $newLocations;
 
-        /** @var GetLocationsInAreaResponse $object */
-        $object = GetLocationsInAreaResponse::jsonDeserialize(json: (object) ['GetLocationsInAreaResponse' => $body]);
-
-        return $object;
+        return GetLocationsInAreaResponse::jsonDeserialize(json: (object) ['GetLocationsInAreaResponse' => $body]);
     }
 }

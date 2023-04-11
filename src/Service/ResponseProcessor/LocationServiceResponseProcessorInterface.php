@@ -31,8 +31,11 @@ namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
+use Firstred\PostNL\Exception\CifDownException;
+use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
@@ -45,30 +48,57 @@ use Psr\Http\Message\ResponseInterface;
 interface LocationServiceResponseProcessorInterface
 {
     /**
-     * @throws ResponseException
+     * Process the 'get nearest locations' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetNearestLocationsResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
+     * @throws ResponseException
      *
      * @since 2.0.0
      */
     public function processGetNearestLocationsResponse(ResponseInterface $response): GetNearestLocationsResponse;
 
     /**
-     * @throws ResponseException
+     * Process the 'get locations in area' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetLocationsInAreaResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
+     * @throws ResponseException
      *
      * @since 2.0.0
      */
     public function processGetLocationsInAreaResponse(ResponseInterface $response): GetLocationsInAreaResponse;
 
     /**
-     * @throws ResponseException
+     * Process the 'get location' server response.
+     *
+     * @param ResponseInterface $response
+     *
+     * @return GetLocationsInAreaResponse
+     *
+     * @throws CifDownException
+     * @throws CifException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
+     * @throws ResponseException
      *
      * @since 2.0.0
      */

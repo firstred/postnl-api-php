@@ -99,12 +99,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
         );
-        $this->responseProcessor = new ConfirmingServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
+        $this->responseProcessor = new ConfirmingServiceRestResponseProcessor();
     }
 
     /**
@@ -122,7 +117,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -150,7 +144,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
      * @throws InvalidConfigurationException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws ReflectionException
      *
      * @since 1.0.0
      */
@@ -181,5 +174,61 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         }
 
         return $confirmingResponses;
+    }
+
+    /**
+     * @param HiddenString $apiKey
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setApiKey(HiddenString $apiKey): static
+    {
+        $this->requestBuilder->setApiKey(apiKey: $apiKey);
+
+        return parent::setApiKey(apiKey: $apiKey);
+    }
+
+    /**
+     * @param bool $sandbox
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setSandbox(bool $sandbox): static
+    {
+        $this->requestBuilder->setSandbox(sandbox: $sandbox);
+
+        return parent::setSandbox(sandbox: $sandbox);
+    }
+
+    /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
+    {
+        $this->requestBuilder->setRequestFactory(requestFactory: $requestFactory);
+
+        return parent::setRequestFactory(requestFactory: $requestFactory);
+    }
+
+    /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
+    {
+        $this->requestBuilder->setStreamFactory(streamFactory: $streamFactory);
+
+        return parent::setStreamFactory(streamFactory: $streamFactory);
     }
 }

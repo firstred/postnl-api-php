@@ -35,6 +35,8 @@ use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -45,18 +47,20 @@ use Psr\Http\Message\RequestInterface;
 interface ShippingStatusServiceRequestBuilderInterface
 {
     /**
-     * Build the CurrentStatus request for the REST API.
+     * Build the 'get current status' HTTP request.
      *
      * This function auto-detects and adjusts the following requests:
      * - CurrentStatus
      * - CurrentStatusByReference
      *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      * @since 2.0.0
      */
     public function buildCurrentStatusRequest(CurrentStatusByReference|CurrentStatus $currentStatus): RequestInterface;
 
     /**
-     * Build the CompleteStatus request for the REST API.
+     * Build the 'get complete status' HTTP request.
      *
      * This function auto-detects and adjusts the following requests:
      * - CompleteStatus
@@ -68,29 +72,38 @@ interface ShippingStatusServiceRequestBuilderInterface
      *
      * @return RequestInterface
      *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function buildCompleteStatusRequest(CompleteStatus $completeStatus): RequestInterface;
 
     /**
-     * Build the GetSignature request for the REST API.
+     * Build the 'get signature' HTTP request.
      *
      * @param GetSignature $getSignature
      *
      * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
     public function buildGetSignatureRequest(GetSignature $getSignature): RequestInterface;
 
     /**
-     * Build get updated shipments request REST.
+     * Build the 'get updated shipments' HTTP request.
      *
      * @param Customer               $customer
      * @param DateTimeInterface|null $dateTimeFrom
      * @param DateTimeInterface|null $dateTimeTo
      *
      * @return RequestInterface
+     *
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

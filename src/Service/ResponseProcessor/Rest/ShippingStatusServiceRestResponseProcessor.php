@@ -39,7 +39,6 @@ use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
-use Firstred\PostNL\Exception\EntityNotFoundException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
@@ -56,14 +55,13 @@ use function json_decode;
 class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponseProcessor implements ShippingStatusServiceResponseProcessorInterface
 {
     /**
-     * Process CurrentStatus Response REST.
+     * Process the 'get current status' server response.
      *
      * @param ResponseInterface $response
      *
      * @return CurrentStatusResponse
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
@@ -85,14 +83,13 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     }
 
     /**
-     * Process CompleteStatus Response REST.
+     * Process the 'get complete status' server response.
      *
      * @param ResponseInterface $response
      *
      * @return CompleteStatusResponse
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
@@ -176,14 +173,13 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     }
 
     /**
-     * Process GetSignature Response REST.
+     * Process the 'get signature' server response.
      *
      * @param ResponseInterface $response
      *
      * @return GetSignatureResponseSignature
      *
      * @throws DeserializationException
-     * @throws EntityNotFoundException
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
@@ -200,7 +196,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
     }
 
     /**
-     * Process updated shipments response REST.
+     * Process the 'get updated shipments' server response.
      *
      * @param ResponseInterface $response
      *
@@ -210,7 +206,6 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      * @throws HttpClientException
      * @throws NotSupportedException
      * @throws ResponseException
-     * @throws EntityNotFoundException
      * @throws InvalidConfigurationException
      *
      * @since 2.0.0

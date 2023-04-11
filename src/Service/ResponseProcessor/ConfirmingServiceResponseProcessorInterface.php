@@ -32,7 +32,10 @@ namespace Firstred\PostNL\Service\ResponseProcessor;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
+use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -44,16 +47,19 @@ use Psr\Http\Message\ResponseInterface;
 interface ConfirmingServiceResponseProcessorInterface
 {
     /**
+     * Process the 'confirm label' server response.
+     *
      * @param ResponseInterface $response
      *
      * @return ConfirmingResponseShipment[]
-     * @psalm-return non-empty-list<ConfirmingResponseShipment>
-     * @phpstan-return non-empty-list<ConfirmingResponseShipment>
      *
      * @throws CifDownException
      * @throws CifException
-     * @throws ResponseException
+     * @throws DeserializationException
      * @throws HttpClientException
+     * @throws NotSupportedException
+     * @throws ResponseException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */

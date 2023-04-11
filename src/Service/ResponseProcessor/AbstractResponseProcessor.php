@@ -32,10 +32,7 @@ namespace Firstred\PostNL\Service\ResponseProcessor;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\ResponseException;
 use GuzzleHttp\Psr7\Response;
-use ParagonIE\HiddenString\HiddenString;
-use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamFactoryInterface;
 
 /**
  * @since 2.0.0
@@ -44,20 +41,6 @@ use Psr\Http\Message\StreamFactoryInterface;
  */
 abstract class AbstractResponseProcessor
 {
-    /**
-     * @param HiddenString            $apiKey
-     * @param bool                    $sandbox
-     * @param RequestFactoryInterface $requestFactory
-     * @param StreamFactoryInterface  $streamFactory
-     */
-    public function __construct(
-        private HiddenString $apiKey,
-        private bool $sandbox,
-        private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface $streamFactory,
-    ) {
-    }
-
     /**
      * Get the response.
      *
@@ -93,77 +76,5 @@ abstract class AbstractResponseProcessor
         } else {
             throw new ResponseException(message: 'Unknown response type');
         }
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function getApiKey(): HiddenString
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setApiKey(HiddenString $apiKey): AbstractResponseProcessor
-    {
-        $this->apiKey = $apiKey;
-
-        return $this;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function isSandbox(): bool
-    {
-        return $this->sandbox;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setSandbox(bool $sandbox): AbstractResponseProcessor
-    {
-        $this->sandbox = $sandbox;
-
-        return $this;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function getRequestFactory(): RequestFactoryInterface
-    {
-        return $this->requestFactory;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setRequestFactory(RequestFactoryInterface $requestFactory): AbstractResponseProcessor
-    {
-        $this->requestFactory = $requestFactory;
-
-        return $this;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function getStreamFactory(): StreamFactoryInterface
-    {
-        return $this->streamFactory;
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function setStreamFactory(StreamFactoryInterface $streamFactory): AbstractResponseProcessor
-    {
-        $this->streamFactory = $streamFactory;
-
-        return $this;
     }
 }

@@ -42,7 +42,6 @@ use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -107,12 +106,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
         );
-        $this->responseProcessor = new LocationServiceRestResponseProcessor(
-            apiKey: $this->getApiKey(),
-            sandbox: $this->isSandbox(),
-            requestFactory: $this->getRequestFactory(),
-            streamFactory: $this->getStreamFactory(),
-        );
+        $this->responseProcessor = new LocationServiceRestResponseProcessor();
     }
 
     /**
@@ -126,12 +120,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws DeserializationException
      * @throws HttpClientException
      * @throws InvalidConfigurationException
-     * @throws NotFoundException
      * @throws NotSupportedException
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     * @throws \ReflectionException
+     *
      * @since 1.0.0
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
@@ -150,19 +143,15 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         }
 
         $object = $this->responseProcessor->processGetNearestLocationsResponse(response: $response);
-        if ($object instanceof GetNearestLocationsResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
-            return $object;
+        if ($item instanceof CacheItemInterface
+            && $response instanceof ResponseInterface
+            && 200 === $response->getStatusCode()
+        ) {
+            $item->set(value: PsrMessage::toString(message: $response));
+            $this->cacheItem(item: $item);
         }
 
-        throw new NotFoundException(message: 'Unable to retrieve the nearest locations');
+        return $object;
     }
 
     /**
@@ -180,7 +169,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @since 1.0.0
-*/
+     */
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse
     {
         $item = $this->retrieveCachedItem(uuid: $getLocations->getId());
@@ -222,9 +211,9 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      * @throws CifException
      * @throws DeserializationException
      * @throws InvalidConfigurationException
-     * @throws \ReflectionException
+     *
      * @since 1.0.0
-*/
+     */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
     {
         $item = $this->retrieveCachedItem(uuid: $getLocation->getId());
@@ -250,5 +239,61 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         }
 
         return $object;
+    }
+
+    /**
+     * @param HiddenString $apiKey
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setApiKey(HiddenString $apiKey): static
+    {
+        $this->requestBuilder->setApiKey(apiKey: $apiKey);
+
+        return parent::setApiKey(apiKey: $apiKey);
+    }
+
+    /**
+     * @param bool $sandbox
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setSandbox(bool $sandbox): static
+    {
+        $this->requestBuilder->setSandbox(sandbox: $sandbox);
+
+        return parent::setSandbox(sandbox: $sandbox);
+    }
+
+    /**
+     * @param RequestFactoryInterface $requestFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setRequestFactory(RequestFactoryInterface $requestFactory): static
+    {
+        $this->requestBuilder->setRequestFactory(requestFactory: $requestFactory);
+
+        return parent::setRequestFactory(requestFactory: $requestFactory);
+    }
+
+    /**
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
+     * @since 2.0.0
+     */
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): static
+    {
+        $this->requestBuilder->setStreamFactory(streamFactory: $streamFactory);
+
+        return parent::setStreamFactory(streamFactory: $streamFactory);
     }
 }

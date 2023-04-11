@@ -73,7 +73,6 @@ abstract class AbstractService
 
     /**
      * @param HiddenString                            $apiKey
-     * @param int                                     $apiMode
      * @param bool                                    $sandbox
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory

@@ -30,8 +30,10 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service\ResponseProcessor;
 
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
+use Firstred\PostNL\Exception\ApiException;
+use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
+use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
 use Psr\Http\Message\ResponseInterface;
@@ -44,12 +46,18 @@ use Psr\Http\Message\ResponseInterface;
 interface LabellingServiceResponseProcessorInterface
 {
     /**
-     * Process the GenerateLabel REST Response.
+     * Process the 'generate label' server response.
      *
-     * @throws ResponseException
+     * @param ResponseInterface $response
+     *
+     * @return GenerateLabelResponse
+     *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws InvalidArgumentException
+     * @throws ResponseException
+     * @throws DeserializationException
+     * @throws ApiException
+     * @throws InvalidConfigurationException
      *
      * @since 2.0.0
      */
