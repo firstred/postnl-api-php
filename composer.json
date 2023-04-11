@@ -72,10 +72,5 @@
         "docs": "https://postnl-php.readthedocs.io/",
         "source": "https://github.com/firstred/postnl-api-php",
         "issues": "https://github.com/firstred/postnl-api-php/issues"
-   },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    }
+   }
 }
