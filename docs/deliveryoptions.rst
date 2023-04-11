@@ -61,29 +61,30 @@ Here's how you can retrieve the closest delivery date:
 
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
-    foreach (range(1, 7) as $day) {
+    foreach (range(start: 1, end: 7) as $day) {
         if (isset($dropoffDays[$day])) {
             $cutOffTimes[] = new CutOffTime(
-                str_pad($day, 2, '0', STR_PAD_LEFT),
-                date('H:i:00', strtotime($cutoffTime)),
-                true
+                Day: str_pad(string: $day, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT),
+                Time: date(format: 'H:i:00', timestamp: strtotime(datetime: $cutoffTime)),
+                Available: true
             );
         }
     }
+
     $deliveryDate = $postnl->getDeliveryDate(
-        (new GetDeliveryDate())
-            ->setGetDeliveryDate(
-                (new GetDeliveryDate())
-                    ->setAllowSundaySorting(false)
-                    ->setCountryCode('NL')
-                    ->setCutOffTimes($cutOffTimes)
-                    ->setHouseNr('66')
-                    ->setOptions(['Morning', 'Daytime'])
-                    ->setPostalCode('2132WT')
-                    ->setShippingDate(date('d-m-Y H:i:s'))
-                    ->setShippingDuration('1')
-            )
-    );
+        getDeliveryDate: new GetDeliveryDate(
+            GetDeliveryDate: new GetDeliveryDate(
+                    AllowSundaySorting: false,
+                    CountryCode: 'NL',
+                    CutOffTimes: $cutOffTimes,
+                    HouseNr: '66',
+                    Options: ['Morning', 'Daytime'],
+                    PostalCode: '2132WT',
+                    ShippingDate: date(format: 'd-m-Y H:i:s'),
+                    ShippingDuration: '1',
+                ),
+            ),
+        );
 
 The result will be a `GetDeliveryDateResponse`. Calling `getDeliveryDate` on this object will return the delivery date as a string in the `d-m-Y H:i:s` PHP date format.
 
@@ -113,17 +114,17 @@ The Shipping Date service almost works in the same way as the Delivery Date serv
 
     $cutoffTime = '15:00:00';
     $deliveryDate = $postnl->getSentDate(
-        (new GetSentDateRequest())
-            ->setGetSentDate(
-                (new GetSentDate())
-                    ->setAllowSundaySorting(false)
-                    ->setCountryCode('NL')
-                    ->setHouseNr('66')
-                    ->setOptions(['Morning', 'Daytime'])
-                    ->setPostalCode('2132WT')
-                    ->setDeliveryDate(date('d-m-Y H:i:s'))
-                    ->setShippingDuration('1')
-            )
+        getSentDate: new GetSentDateRequest(
+            GetSentDate: new GetSentDate(
+                AllowSundaySorting: false,
+                CountryCode: 'NL',
+                HouseNr: '66',
+                Options: ['Morning', 'Daytime'],
+                PostalCode: '2132WT',
+                DeliveryDate: date(format: 'd-m-Y H:i:s'),
+                ShippingDuration: '1',
+            ),
+        ),
     );
 
 The function accepts the following arguments
@@ -153,20 +154,28 @@ Timeframes
 
 .. code-block:: php
 
+    use Firstred\PostNL\Entity\Timeframe;
+    use Firstred\PostNL\Entity\Request\GetTimeframes;
+
     $deliveryDaysWindow = 7;
     $dropoffDelay = 0;
 
-    $timeframes = $postnl->getTimeframes(new GetTimeframes())
-        ->setTimeframe([
-            (new Timeframe())
-                ->setCountryCode('NL')
-                ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
-                ->setHouseNr('66')
-                ->setOptions(['Daytime', 'Evening'])
-                ->setPostalCode('2132WT')
-                ->setStartDate(date('d-m-Y', strtotime(" +1 day +{$dropoffDelay} days")))
-                ->setSundaySorting(false)
-        ])
+    $postnl = new PostNL();
+
+    $timeframes = $postnl->getTimeframes(
+        getTimeframes: new GetTimeframes(
+            timeframes: [
+                new Timeframe(
+                    CountryCode: 'NL',
+                    EndDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: " +{$deliveryDaysWindow} days +{$dropoffDelay} days")),
+                    HouseNr: '66',
+                    Options: ['Daytime', 'Evening'],
+                    PostalCode: '2132WT',
+                    SundaySorting: false,
+                    StartDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: " +1 day +{$dropoffDelay} days")),
+                ),
+            ],
+        ),
     );
 
 .. confval:: timeframes
@@ -225,31 +234,32 @@ You can also get the locations by specifying a bounding box. One can be drawn by
 
 .. code-block:: php
 
-     $postnl->getLocationsInArea(
-         (new GetLocationsInArea())
-             ->setCountrycode('NL')
-             ->setLocation(
-                 (new Location())
-                     ->setAllowSundaySorting(false)
-                     ->setDeliveryDate(date('d-m-Y', strtotime('+1 day')))
-                     ->setDeliveryOptions([
-                         'PG',
-                     ])
-                     ->setOptions([
-                         'Daytime',
-                     ])
-                     ->setCoordinatesNorthWest(
-                         (new CoordinatesNorthWest())
-                             ->setLatitude((string) 52.156439)
-                             ->setLongitude((string) 5.015643)
-                     )
-                     ->setCoordinatesSouthEast(
-                         (new CoordinatesNorthWest())
-                             ->setLatitude((string) 52.017473)
-                             ->setLongitude((string) 5.065254)
-                     )
-             )
-     );
+    <?php
+
+    use Firstred\PostNL\Entity\CoordinatesNorthWest;
+    use Firstred\PostNL\Entity\CoordinatesSouthEast;
+    use Firstred\PostNL\Entity\Location;
+    use Firstred\PostNL\Entity\Request\GetLocationsInArea;
+
+    $postnl->getLocationsInArea(
+        getLocationsInArea: new GetLocationsInArea(
+            Countrycode: 'NL',
+            Location: new Location(
+                AllowSundaySorting: false,
+                DeliveryDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: '+1 day')),
+                DeliveryOptions: ['PG'],
+                Options: ['Daytime'],
+                CoordinatesNorthWest: new CoordinatesNorthWest(
+                    Latitude: (string) 52.156439,
+                    Longitude: (string) 5.015643,
+                ),
+                CoordinatesSouthEast: new CoordinatesSouthEast(
+                    Latitude: (string) 52.017473,
+                    Longitude: (string) 5.065254,
+                ),
+            ),
+        ),
+    );
 
 This function accepts the arguments:
 
