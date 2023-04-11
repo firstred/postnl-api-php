@@ -215,6 +215,7 @@ class ShippingStatusService extends AbstractCacheableService implements Shipping
             }
         }
         if ($this->getCache() instanceof CacheItemPoolInterface) {
+            /* @noinspection PhpExpressionResultUnusedInspection */
             $this->getCache()->commit();
         }
 
@@ -271,7 +272,6 @@ class ShippingStatusService extends AbstractCacheableService implements Shipping
 
         $object = $this->responseProcessor->processCompleteStatusResponse(response: $response);
         if ($item instanceof CacheItemInterface
-            && $response instanceof ResponseInterface
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
@@ -333,6 +333,7 @@ class ShippingStatusService extends AbstractCacheableService implements Shipping
             }
         }
         if ($this->getCache() instanceof CacheItemPoolInterface) {
+            /* @noinspection PhpExpressionResultUnusedInspection */
             $this->getCache()->commit();
         }
 
@@ -438,6 +439,7 @@ class ShippingStatusService extends AbstractCacheableService implements Shipping
             }
         }
         if ($this->getCache() instanceof CacheItemPoolInterface) {
+            /** @noinspection PhpExpressionResultUnusedInspection */
             $this->getCache()->commit();
         }
 

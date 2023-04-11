@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Cache\Adapter\Void\VoidCachePool;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
@@ -50,7 +49,6 @@ use Firstred\PostNL\Entity\Response\UpdatedShipmentsResponse;
 use Firstred\PostNL\Entity\Shipment;
 use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Exception\NotFoundException;
-use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\RequestBuilder\Rest\ShippingStatusServiceRestRequestBuilder;
@@ -65,10 +63,8 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
-
 use function file_get_contents;
 use function is_array;
-
 use const _RESPONSES_DIR_;
 
 /**
@@ -110,8 +106,6 @@ class ShippingStatusServiceTest extends ServiceTestCase
         $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getShippingStatusService();
-        $this->service->setCache(cache: new VoidCachePool());
-        $this->service->setTtl(ttl: 1);
     }
 
     /** @throws */

@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Cache\Adapter\Void\VoidCachePool;
 use DateTimeInterface;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -55,9 +54,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
-
 use function file_get_contents;
-
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The DeliveryDateService (REST)')]
@@ -97,8 +94,6 @@ class DeliveryDateServiceTest extends ServiceTestCase
         $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getDeliveryDateService();
-        $this->service->setCache(cache: new VoidCachePool());
-        $this->service->setTtl(ttl: 1);
     }
 
     /** @throws */
@@ -228,7 +223,7 @@ class DeliveryDateServiceTest extends ServiceTestCase
     public function testGetSentDateRest(): void
     {
         $mock = new MockHandler(queue: [
-            new Response(status: 200, headers: ['Content-Type' => 'text/xml;charset=UTF-8'], body: json_encode(value: [
+            new Response(status: 200, headers: ['Content-Type' => 'application/json;charset=UTF-8'], body: json_encode(value: [
                 'SentDate' => '29-06-2016',
             ])),
         ]);
@@ -266,7 +261,7 @@ class DeliveryDateServiceTest extends ServiceTestCase
     }
 
     /** @return string[][] */
-    public function singleDeliveryDateResponseProvider(): array
+    public static function singleDeliveryDateResponseProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/deliverydate/deliverydate.http'))],

@@ -31,12 +31,16 @@ namespace Firstred\PostNL\Cache;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Clock\ClockAwareInterface;
 use Firstred\PostNL\Service\ServiceInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 
-interface CacheableServiceInterface extends ServiceInterface
+/**
+ * @since 2.0.0
+ */
+interface CacheableServiceInterface extends ServiceInterface, ClockAwareInterface
 {
     /**
      * Cache an item.

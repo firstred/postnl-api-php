@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Cache\Adapter\Void\VoidCachePool;
 use Exception;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Customer;
@@ -57,10 +56,8 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
 use setasign\Fpdi\PdfReader\PdfReaderException;
-
 use function file_get_contents;
 use function json_decode;
-
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The LabellingService (REST)')]

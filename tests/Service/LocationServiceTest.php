@@ -29,7 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\CoordinatesNorthWest;
 use Firstred\PostNL\Entity\CoordinatesSouthEast;
@@ -57,9 +56,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
-
 use function file_get_contents;
-
 use const _RESPONSES_DIR_;
 
 /**
@@ -101,8 +98,6 @@ class LocationServiceTest extends ServiceTestCase
         $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getLocationService();
-        $this->service->setCache(cache: new VoidCachePool());
-        $this->service->setTtl(ttl: 1);
     }
 
     /** @throws */

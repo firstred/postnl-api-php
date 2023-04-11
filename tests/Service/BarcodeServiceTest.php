@@ -29,11 +29,9 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Tests\Service;
 
-use Cache\Adapter\Void\VoidCachePool;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
-use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Exception\ResponseException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
@@ -48,9 +46,7 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use ReflectionObject;
-
 use function file_get_contents;
-
 use const _RESPONSES_DIR_;
 
 #[TestDox(text: 'The BarcodeService (REST)')]

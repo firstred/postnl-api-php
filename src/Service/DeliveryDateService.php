@@ -140,10 +140,7 @@ class DeliveryDateService extends AbstractCacheableService implements DeliveryDa
         }
 
         $object = $this->responseProcessor->processGetDeliveryDateResponse(response: $response);
-        if ($item instanceof CacheItemInterface
-            && $response instanceof ResponseInterface
-            && 200 === $response->getStatusCode()
-        ) {
+        if ($item instanceof CacheItemInterface && 200 === $response->getStatusCode()) {
             $item->set(value: PsrMessage::toString(message: $response));
             $this->cacheResponseItem(item: $item);
         }
@@ -184,10 +181,7 @@ class DeliveryDateService extends AbstractCacheableService implements DeliveryDa
         }
 
         $object = $this->responseProcessor->processGetSentDateResponse(response: $response);
-        if ($item instanceof CacheItemInterface
-            && $response instanceof ResponseInterface
-            && 200 === $response->getStatusCode()
-        ) {
+        if ($item instanceof CacheItemInterface && 200 === $response->getStatusCode()) {
             $item->set(value: PsrMessage::toString(message: $response));
             $this->cacheResponseItem(item: $item);
         }

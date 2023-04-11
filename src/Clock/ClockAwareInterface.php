@@ -27,50 +27,32 @@
 
 declare(strict_types=1);
 
-namespace Firstred\PostNL\Tests\Service;
+namespace Firstred\PostNL\Clock;
 
-use PHPUnit\Framework\Attributes\TestDox;
-use PHPUnit\Framework\TestCase;
-use ReflectionObject;
-use stdClass;
-use function is_array;
-use function is_object;
+use Psr\Clock\ClockInterface;
 
-#[TestDox(text: 'The AbstractService class')]
-abstract class ServiceTestCase extends TestCase
+/**
+ * @since 2.0.0
+ */
+interface ClockAwareInterface
 {
     /**
-     * @param mixed $value
+     * Get the current clock.
      *
-     * @return bool
+     * @return ClockInterface
+     *
+     * @since 2.0.0
      */
-    public static function containsStdClass(mixed $value): bool
-    {
-        if ($value instanceof stdClass) {
-            return true;
-        }
+    public function getClock(): ClockInterface;
 
-        if (is_array(value: $value)) {
-            foreach ($value as $item) {
-                if (static::containsStdClass(value: $item)) {
-                    return true;
-                }
-            }
-        } elseif (is_object(value: $value)) {
-            $reflectionObject = new ReflectionObject(object: $value);
-            foreach ($reflectionObject->getProperties() as $property) {
-                if (!$property->isInitialized(object: $value)) {
-                    continue;
-                }
-
-                /* @noinspection PhpExpressionResultUnusedInspection */
-                $property->setAccessible(accessible: true);
-                if (static::containsStdClass(value: $property->getValue(object: $value))) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+    /**
+     * Set the current clock.
+     *
+     * @param ClockInterface $clock
+     *
+     * @return void
+     *
+     * @since 2.0.0
+     */
+    public function setClock(ClockInterface $clock): void;
 }

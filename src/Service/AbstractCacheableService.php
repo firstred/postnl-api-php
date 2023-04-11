@@ -33,6 +33,7 @@ use DateInterval;
 use DateTimeInterface;
 use Firstred\PostNL\Cache\CacheableRequestEntityInterface;
 use Firstred\PostNL\Cache\CacheableServiceInterface;
+use Firstred\PostNL\Clock\ClockAwareTrait;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
@@ -40,17 +41,18 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionClass;
 
 /**
  * Class AbstractService.
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @internal
  */
 abstract class AbstractCacheableService extends AbstractService implements CacheableServiceInterface
 {
+    use ClockAwareTrait;
+
     /**
      * TTL for the cache.
      *
@@ -129,23 +131,27 @@ abstract class AbstractCacheableService extends AbstractService implements Cache
      *
      * @param CacheItemInterface $item
      *
+     * @return bool
+     *
      * @since 2.0.0
      */
-    public function cacheResponseItem(CacheItemInterface $item): void
+    public function cacheResponseItem(CacheItemInterface $item): bool
     {
-        if ($this->ttl instanceof DateInterval || is_int(value: $this->ttl)) {
-            // Reset expires at first -- it might have been set
-            $item->expiresAt(expiration: null);
-            // Then set the interval
-            $item->expiresAfter(time: $this->ttl);
-        } else {
-            // Reset expires after first -- it might have been set
-            $item->expiresAfter(time: null);
-            // Then set the expiration time
+        if (is_int(value: $this->ttl)) {
+            $item->expiresAt(
+                expiration: $this->clock->now()->add(
+                    interval: new DateInterval(duration: "PT{$this->ttl}S"),
+                ),
+            );
+        } elseif ($this->ttl instanceof DateInterval) {
+            $item->expiresAt(expiration: $this->getClock()->now()->add(interval: $this->ttl));
+        } elseif ($this->ttl instanceof DateTimeInterface) {
             $item->expiresAt(expiration: $this->ttl);
+        } else {
+            $item->expiresAt(expiration: null);
         }
 
-        $this->cache->save(item: $item);
+        return $this->cache->save(item: $item);
     }
 
     /**
@@ -153,13 +159,15 @@ abstract class AbstractCacheableService extends AbstractService implements Cache
      *
      * @param CacheItemInterface $item
      *
+     * @return bool
+     *
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 2.0.0
      */
-    public function removeCachedResponseItem(CacheItemInterface $item): void
+    public function removeCachedResponseItem(CacheItemInterface $item): bool
     {
-        $this->cache->deleteItem(key: $item->getKey());
+        return $this->cache->deleteItem(key: $item->getKey());
     }
 
     /**
