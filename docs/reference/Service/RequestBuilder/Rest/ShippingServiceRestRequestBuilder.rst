@@ -49,6 +49,11 @@ Methods
 
 	.. php:method:: public buildSendShipmentRequest( $sendShipment, $confirm=true)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Build the \'send shipment\' HTTP request\.
+			
+		
 		
 		:Parameters:
 			* **$sendShipment** (:any:`Firstred\\PostNL\\Entity\\Request\\SendShipment <Firstred\\PostNL\\Entity\\Request\\SendShipment>`)  
@@ -68,6 +73,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

@@ -16,6 +16,9 @@ ShippingStatusServiceInterface
 	:Parent:
 		:php:interface:`Firstred\\PostNL\\Service\\ServiceInterface`
 	
+	:Parent:
+		:php:interface:`Firstred\\PostNL\\Cache\\CacheableServiceInterface`
+	
 
 
 Summary

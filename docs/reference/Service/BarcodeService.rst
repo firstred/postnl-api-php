@@ -30,9 +30,13 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory, $cache, $ttl\)<Firstred\\PostNL\\Service\\BarcodeService::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory\)<Firstred\\PostNL\\Service\\BarcodeService::\_\_construct\(\)>`
 * :php:meth:`public generateBarcode\($generateBarcode\)<Firstred\\PostNL\\Service\\BarcodeService::generateBarcode\(\)>`
 * :php:meth:`public generateBarcodes\($generateBarcodes\)<Firstred\\PostNL\\Service\\BarcodeService::generateBarcodes\(\)>`
+* :php:meth:`public setApiKey\($apiKey\)<Firstred\\PostNL\\Service\\BarcodeService::setApiKey\(\)>`
+* :php:meth:`public setSandbox\($sandbox\)<Firstred\\PostNL\\Service\\BarcodeService::setSandbox\(\)>`
+* :php:meth:`public setRequestFactory\($requestFactory\)<Firstred\\PostNL\\Service\\BarcodeService::setRequestFactory\(\)>`
+* :php:meth:`public setStreamFactory\($streamFactory\)<Firstred\\PostNL\\Service\\BarcodeService::setStreamFactory\(\)>`
 
 
 Properties
@@ -51,7 +55,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory, $cache=null, \\DateInterval|\\DateTimeInterface|int $ttl=null)
+	.. php:method:: public __construct( $apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory)
 	
 		
 		:Parameters:
@@ -60,8 +64,6 @@ Methods
 			* **$httpClient** (:any:`Firstred\\PostNL\\HttpClient\\HttpClientInterface <Firstred\\PostNL\\HttpClient\\HttpClientInterface>`)  
 			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>`)  
 			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
-			* **$cache** (:any:`Psr\\Cache\\CacheItemPoolInterface <Psr\\Cache\\CacheItemPoolInterface>` | null)  
-			* **$ttl** (:any:`DateInterval <DateInterval>` | :any:`\\DateTimeInterface <DateTimeInterface>` | int | null)  
 
 		
 	
@@ -169,6 +171,62 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setApiKey( $apiKey)
+	
+		
+		:Parameters:
+			* **$apiKey** (:any:`ParagonIE\\HiddenString\\HiddenString <ParagonIE\\HiddenString\\HiddenString>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSandbox( $sandbox)
+	
+		
+		:Parameters:
+			* **$sandbox** (bool)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRequestFactory( $requestFactory)
+	
+		
+		:Parameters:
+			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStreamFactory( $streamFactory)
+	
+		
+		:Parameters:
+			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
 	
 	
 

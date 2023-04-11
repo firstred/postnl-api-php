@@ -32,7 +32,21 @@ Methods
 
 	.. php:method:: public buildGetDeliveryDateRequest( $getDeliveryDate)
 	
+		.. rst-class:: phpdoc-description
 		
+			| Build the \'get delivery date\' HTTP request\.
+			
+		
+		
+		:Parameters:
+			* **$getDeliveryDate** (:any:`Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate <Firstred\\PostNL\\Entity\\Request\\GetDeliveryDate>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	
@@ -43,10 +57,19 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the \`GetSentDate\` request\.
+			| Build the \'get sent date\' HTTP request\.
 			
 		
 		
+		:Parameters:
+			* **$getSentDate** (:any:`Firstred\\PostNL\\Entity\\Request\\GetSentDateRequest <Firstred\\PostNL\\Entity\\Request\\GetSentDateRequest>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	

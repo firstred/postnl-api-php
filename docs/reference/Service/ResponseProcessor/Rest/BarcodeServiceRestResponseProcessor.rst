@@ -39,10 +39,15 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Process GenerateBarcode REST response\.
+			| Process the \'generate barcode\' server response\.
 			
 		
 		
+		:Parameters:
+			* **$response** (:any:`Psr\\Http\\Message\\ResponseInterface <Psr\\Http\\Message\\ResponseInterface>`)  
+
+		
+		:Returns: string 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifDownException <Firstred\\PostNL\\Exception\\CifDownException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\CifException <Firstred\\PostNL\\Exception\\CifException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 

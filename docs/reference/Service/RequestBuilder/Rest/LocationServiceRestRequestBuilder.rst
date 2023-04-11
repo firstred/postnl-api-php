@@ -53,10 +53,15 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GenerateLabel request for the REST API\.
+			| Build the \'get nearest locations\' HTTP request\.
 			
 		
 		
+		:Parameters:
+			* **$getNearestLocations** (:any:`Firstred\\PostNL\\Entity\\Request\\GetNearestLocations <Firstred\\PostNL\\Entity\\Request\\GetNearestLocations>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
@@ -71,10 +76,15 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetLocationsInArea request for the REST API\.
+			| Build the \'get locations in area\' HTTP\.
 			
 		
 		
+		:Parameters:
+			* **$getLocations** (:any:`Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea <Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Since: 2.0.0 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
@@ -89,10 +99,15 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetLocation request for the REST API\.
+			| Build the \'get single location\' HTTP request\.
 			
 		
 		
+		:Parameters:
+			* **$getLocation** (:any:`Firstred\\PostNL\\Entity\\Request\\GetLocation <Firstred\\PostNL\\Entity\\Request\\GetLocation>`)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
@@ -105,6 +120,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

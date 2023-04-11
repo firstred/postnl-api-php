@@ -51,6 +51,7 @@ Classes
 	BarcodeService <BarcodeService>
 	DeliveryDateService <DeliveryDateService>
 	TimeframeService <TimeframeService>
+	AbstractCacheableService <AbstractCacheableService>
 	ShippingStatusService <ShippingStatusService>
 	LabellingService <LabellingService>
 	ConfirmingService <ConfirmingService>

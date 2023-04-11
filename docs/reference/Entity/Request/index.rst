@@ -29,6 +29,7 @@ Classes
 	CurrentStatusByReference <CurrentStatusByReference>
 	GenerateBarcode <GenerateBarcode>
 	CurrentStatus <CurrentStatus>
+	GetUpdatedShipments <GetUpdatedShipments>
 	GenerateLabel <GenerateLabel>
 	SendShipment <SendShipment>
 	Confirming <Confirming>

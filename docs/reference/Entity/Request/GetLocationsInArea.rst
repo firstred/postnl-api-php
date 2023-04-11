@@ -16,6 +16,9 @@ GetLocationsInArea
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
+	:Implements:
+		:php:interface:`Firstred\\PostNL\\Cache\\CacheableRequestEntityInterface` 
+	
 
 
 Summary
@@ -31,6 +34,7 @@ Methods
 * :php:meth:`public setLocation\($Location\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::setLocation\(\)>`
 * :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::getMessage\(\)>`
 * :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::setMessage\(\)>`
+* :php:meth:`public getCacheKey\(\)<Firstred\\PostNL\\Entity\\Request\\GetLocationsInArea::getCacheKey\(\)>`
 
 
 Properties
@@ -131,6 +135,21 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCacheKey()
+	
+		.. rst-class:: phpdoc-description
+		
+			| This method returns a unique cache key for every unique cacheable request as defined by PSR\-6\.
+			
+		
+		
+		:See: :any:`https://www\.php\-fig\.org/psr/psr\-6/\#definitions <https://www\.php\-fig\.org/psr/psr\-6/\#definitions>` 
+		:Returns: string 
 	
 	
 

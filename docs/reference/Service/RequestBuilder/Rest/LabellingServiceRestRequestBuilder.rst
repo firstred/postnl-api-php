@@ -59,10 +59,16 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GenerateLabel request for the REST API\.
+			| Build the \'generate label\' HTTP request\.
 			
 		
 		
+		:Parameters:
+			* **$generateLabel** (:any:`Firstred\\PostNL\\Entity\\Request\\GenerateLabel <Firstred\\PostNL\\Entity\\Request\\GenerateLabel>`)  
+			* **$confirm** (bool)  
+
+		
+		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
@@ -75,6 +81,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

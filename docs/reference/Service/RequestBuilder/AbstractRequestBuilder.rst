@@ -24,7 +24,6 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($apiKey, $sandbox, $requestFactory, $streamFactory\)<Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder::\_\_construct\(\)>`
-* :php:meth:`public getApiKey\(\)<Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder::getApiKey\(\)>`
 * :php:meth:`public setApiKey\($apiKey\)<Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder::setApiKey\(\)>`
 * :php:meth:`public isSandbox\(\)<Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder::isSandbox\(\)>`
 * :php:meth:`public setSandbox\($sandbox\)<Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder::setSandbox\(\)>`
@@ -50,15 +49,6 @@ Methods
 			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
 
 		
-	
-	
-
-.. rst-class:: public
-
-	.. php:method:: public getApiKey()
-	
-		
-		:Since: 2.0.0 
 	
 	
 
@@ -131,12 +121,17 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Set the webservice on the object\.
+			| Set this service on given entity\.
 			
-			| This lets the object know for which service it should serialize
+			| This lets the entity know for which service it should serialize\.
 			
 		
 		
+		:Parameters:
+			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  
+
+		
+		:Returns: void 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 2.0.0 
 	

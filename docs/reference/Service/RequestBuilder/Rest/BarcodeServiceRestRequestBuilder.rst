@@ -51,7 +51,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the \`generateBarcode\` HTTP request for the REST API\.
+			| Build the \'generate barcode\' HTTP request\.
 			
 		
 		
@@ -72,6 +72,13 @@ Methods
 
 	.. php:method:: public setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

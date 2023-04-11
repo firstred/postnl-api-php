@@ -24,7 +24,7 @@ Methods
 * :php:meth:`public buildCurrentStatusRequest\($currentStatus\)<Firstred\\PostNL\\Service\\RequestBuilder\\ShippingStatusServiceRequestBuilderInterface::buildCurrentStatusRequest\(\)>`
 * :php:meth:`public buildCompleteStatusRequest\($completeStatus\)<Firstred\\PostNL\\Service\\RequestBuilder\\ShippingStatusServiceRequestBuilderInterface::buildCompleteStatusRequest\(\)>`
 * :php:meth:`public buildGetSignatureRequest\($getSignature\)<Firstred\\PostNL\\Service\\RequestBuilder\\ShippingStatusServiceRequestBuilderInterface::buildGetSignatureRequest\(\)>`
-* :php:meth:`public buildGetUpdatedShipmentsRequest\($customer, $dateTimeFrom, $dateTimeTo\)<Firstred\\PostNL\\Service\\RequestBuilder\\ShippingStatusServiceRequestBuilderInterface::buildGetUpdatedShipmentsRequest\(\)>`
+* :php:meth:`public buildGetUpdatedShipmentsRequest\($getUpdatedShipments\)<Firstred\\PostNL\\Service\\RequestBuilder\\ShippingStatusServiceRequestBuilderInterface::buildGetUpdatedShipmentsRequest\(\)>`
 
 
 Methods
@@ -36,7 +36,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the CurrentStatus request for the REST API\.
+			| Build the \'get current status\' HTTP request\.
 			
 			| This function auto\-detects and adjusts the following requests:
 			| \- CurrentStatus
@@ -44,6 +44,10 @@ Methods
 			
 		
 		
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	
@@ -54,7 +58,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the CompleteStatus request for the REST API\.
+			| Build the \'get complete status\' HTTP request\.
 			
 			| This function auto\-detects and adjusts the following requests:
 			| \- CompleteStatus
@@ -69,6 +73,10 @@ Methods
 
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	
@@ -79,7 +87,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetSignature request for the REST API\.
+			| Build the \'get signature\' HTTP request\.
 			
 		
 		
@@ -88,27 +96,33 @@ Methods
 
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	
 
 .. rst-class:: public
 
-	.. php:method:: public buildGetUpdatedShipmentsRequest( $customer, $dateTimeFrom=null, $dateTimeTo=null)
+	.. php:method:: public buildGetUpdatedShipmentsRequest( $getUpdatedShipments)
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build get updated shipments request REST\.
+			| Build the \'get updated shipments\' HTTP request\.
 			
 		
 		
 		:Parameters:
-			* **$customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>`)  
-			* **$dateTimeFrom** (:any:`DateTimeInterface <DateTimeInterface>` | null)  
-			* **$dateTimeTo** (:any:`DateTimeInterface <DateTimeInterface>` | null)  
+			* **$getUpdatedShipments** (:any:`Firstred\\PostNL\\Entity\\Request\\GetUpdatedShipments <Firstred\\PostNL\\Entity\\Request\\GetUpdatedShipments>`)  
 
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	

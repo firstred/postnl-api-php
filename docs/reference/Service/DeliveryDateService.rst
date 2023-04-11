@@ -14,7 +14,7 @@ DeliveryDateService
 
 
 	:Parent:
-		:php:class:`Firstred\\PostNL\\Service\\AbstractService`
+		:php:class:`Firstred\\PostNL\\Service\\AbstractCacheableService`
 	
 	:Implements:
 		:php:interface:`Firstred\\PostNL\\Service\\DeliveryDateServiceInterface` 
@@ -33,6 +33,10 @@ Methods
 * :php:meth:`public \_\_construct\($apiKey, $sandbox, $httpClient, $requestFactory, $streamFactory, $cache, $ttl\)<Firstred\\PostNL\\Service\\DeliveryDateService::\_\_construct\(\)>`
 * :php:meth:`public getDeliveryDate\($getDeliveryDate\)<Firstred\\PostNL\\Service\\DeliveryDateService::getDeliveryDate\(\)>`
 * :php:meth:`public getSentDate\($getSentDate\)<Firstred\\PostNL\\Service\\DeliveryDateService::getSentDate\(\)>`
+* :php:meth:`public setApiKey\($apiKey\)<Firstred\\PostNL\\Service\\DeliveryDateService::setApiKey\(\)>`
+* :php:meth:`public setSandbox\($sandbox\)<Firstred\\PostNL\\Service\\DeliveryDateService::setSandbox\(\)>`
+* :php:meth:`public setRequestFactory\($requestFactory\)<Firstred\\PostNL\\Service\\DeliveryDateService::setRequestFactory\(\)>`
+* :php:meth:`public setStreamFactory\($streamFactory\)<Firstred\\PostNL\\Service\\DeliveryDateService::setStreamFactory\(\)>`
 
 
 Properties
@@ -73,7 +77,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Get a delivery date\.
+			| Get the delivery date\.
 			
 		
 		
@@ -173,7 +177,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Get the sent date via REST\.
+			| Get the shipping date\.
 			
 		
 		
@@ -283,6 +287,62 @@ Methods
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\NotSupportedException <Firstred\\PostNL\\Exception\\NotSupportedException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 1.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setApiKey( $apiKey)
+	
+		
+		:Parameters:
+			* **$apiKey** (:any:`ParagonIE\\HiddenString\\HiddenString <ParagonIE\\HiddenString\\HiddenString>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSandbox( $sandbox)
+	
+		
+		:Parameters:
+			* **$sandbox** (bool)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setRequestFactory( $requestFactory)
+	
+		
+		:Parameters:
+			* **$requestFactory** (:any:`Psr\\Http\\Message\\RequestFactoryInterface <Psr\\Http\\Message\\RequestFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setStreamFactory( $streamFactory)
+	
+		
+		:Parameters:
+			* **$streamFactory** (:any:`Psr\\Http\\Message\\StreamFactoryInterface <Psr\\Http\\Message\\StreamFactoryInterface>`)  
+
+		
+		:Returns: static 
+		:Since: 2.0.0 
 	
 	
 

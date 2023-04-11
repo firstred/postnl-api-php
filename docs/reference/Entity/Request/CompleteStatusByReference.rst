@@ -16,6 +16,9 @@ CompleteStatusByReference
 	:Parent:
 		:php:class:`Firstred\\PostNL\\Entity\\AbstractEntity`
 	
+	:Implements:
+		:php:interface:`Firstred\\PostNL\\Cache\\CacheableRequestEntityInterface` 
+	
 
 
 Summary
@@ -31,6 +34,7 @@ Methods
 * :php:meth:`public setCustomer\($Customer\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatusByReference::setCustomer\(\)>`
 * :php:meth:`public getShipment\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatusByReference::getShipment\(\)>`
 * :php:meth:`public setShipment\($Shipment\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatusByReference::setShipment\(\)>`
+* :php:meth:`public getCacheKey\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatusByReference::getCacheKey\(\)>`
 
 
 Properties
@@ -131,6 +135,21 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getCacheKey()
+	
+		.. rst-class:: phpdoc-description
+		
+			| This method returns a unique cache key for every unique cacheable request as defined by PSR\-6\.
+			
+		
+		
+		:See: :any:`https://www\.php\-fig\.org/psr/psr\-6/\#definitions <https://www\.php\-fig\.org/psr/psr\-6/\#definitions>` 
+		:Returns: string 
 	
 	
 

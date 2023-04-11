@@ -49,6 +49,11 @@ Methods
 
 	.. php:method:: public buildConfirmRequest( $confirming)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Build the \'confirm label\' HTTP request\.
+			
+		
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
@@ -62,6 +67,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

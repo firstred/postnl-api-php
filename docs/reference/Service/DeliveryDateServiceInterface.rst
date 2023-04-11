@@ -16,6 +16,9 @@ DeliveryDateServiceInterface
 	:Parent:
 		:php:interface:`Firstred\\PostNL\\Service\\ServiceInterface`
 	
+	:Parent:
+		:php:interface:`Firstred\\PostNL\\Cache\\CacheableServiceInterface`
+	
 
 
 Summary
@@ -37,7 +40,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Get a delivery date via REST\.
+			| Get the delivery date\.
 			
 		
 		
@@ -105,7 +108,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Get the sent date via REST\.
+			| Get the shipping date\.
 			
 		
 		

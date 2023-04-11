@@ -52,7 +52,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetDeliveryDate request for the REST API\.
+			| Build the \'get delivery date\' HTTP request\.
 			
 		
 		
@@ -75,7 +75,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetSentDate request for the REST API\.
+			| Build the \'get sent date\' HTTP request\.
 			
 		
 		
@@ -96,6 +96,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

@@ -21,8 +21,6 @@ Classes
 	ApiConnectionException <ApiConnectionException>
 	NotSupportedException <NotSupportedException>
 	ApiException <ApiException>
-	InvalidMessageTimeStampException <InvalidMessageTimeStampException>
-	InvalidApiModeException <InvalidApiModeException>
 	InvalidMethodException <InvalidMethodException>
 	DeserializationException <DeserializationException>
 	ResponseException <ResponseException>

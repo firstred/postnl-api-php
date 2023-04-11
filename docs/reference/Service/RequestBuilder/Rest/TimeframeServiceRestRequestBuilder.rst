@@ -51,7 +51,7 @@ Methods
 	
 		.. rst-class:: phpdoc-description
 		
-			| Build the GetTimeframes request for the REST API\.
+			| Build the \'get timeframes\' HTTP request\.
 			
 		
 		
@@ -72,6 +72,13 @@ Methods
 
 	.. php:method:: protected setService( $entity)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Set this service on the given entity\.
+			
+			| This lets the entity know for which service it should serialize\.
+			
+		
 		
 		:Parameters:
 			* **$entity** (:any:`Firstred\\PostNL\\Entity\\AbstractEntity <Firstred\\PostNL\\Entity\\AbstractEntity>`)  

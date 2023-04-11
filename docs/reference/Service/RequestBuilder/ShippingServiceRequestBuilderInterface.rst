@@ -31,6 +31,11 @@ Methods
 
 	.. php:method:: public buildSendShipmentRequest( $sendShipment, $confirm=true)
 	
+		.. rst-class:: phpdoc-description
+		
+			| Build the \'send shipment\' HTTP request\.
+			
+		
 		
 		:Parameters:
 			* **$sendShipment** (:any:`Firstred\\PostNL\\Entity\\Request\\SendShipment <Firstred\\PostNL\\Entity\\Request\\SendShipment>`)  
@@ -38,6 +43,10 @@ Methods
 
 		
 		:Returns: :any:`\\Psr\\Http\\Message\\RequestInterface <Psr\\Http\\Message\\RequestInterface>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidConfigurationException <Firstred\\PostNL\\Exception\\InvalidConfigurationException>` 
 		:Since: 2.0.0 
 	
 	

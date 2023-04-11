@@ -19,6 +19,8 @@ Namespaces
 	:maxdepth: 1
 	
 	Attribute <Attribute/index>
+	Cache <Cache/index>
+	Clock <Clock/index>
 	Entity <Entity/index>
 	Enum <Enum/index>
 	Exception <Exception/index>
