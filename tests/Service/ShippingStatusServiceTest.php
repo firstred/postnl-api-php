@@ -41,6 +41,7 @@ use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetUpdatedShipments;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseEvent;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponseShipment;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponseShipment;
@@ -338,9 +339,11 @@ class ShippingStatusServiceTest extends ServiceTestCase
         $dateTimeTo = new DateTimeImmutable(datetime: '14-02-2021 16:00');
 
         $this->lastRequest = $request = $this->getRequestBuilder()->buildGetUpdatedShipmentsRequest(
-            customer: $this->postnl->getCustomer(),
-            dateTimeFrom: $dateTimeFrom,
-            dateTimeTo: $dateTimeTo,
+            getUpdatedShipments: new GetUpdatedShipments(
+                Customer: $this->postnl->getCustomer(),
+                DateTimeFrom: $dateTimeFrom,
+                DateTimeTo: $dateTimeTo,
+            ),
         );
 
         $this->assertEquals(expected: "period={$dateTimeFrom->format(format: 'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format: 'Y-m-d\TH:i:s')}", actual: $request->getUri()->getQuery());

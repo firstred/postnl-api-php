@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use DateInterval;
-use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
 use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
@@ -48,14 +46,9 @@ use Firstred\PostNL\Service\RequestBuilder\Rest\LabellingServiceRestRequestBuild
 use Firstred\PostNL\Service\ResponseProcessor\LabellingServiceResponseProcessorInterface;
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\LabellingServiceRestResponseProcessor;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
 /**
@@ -73,13 +66,11 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
     private static array $insuranceProductCodes = [3534, 3544, 3087, 3094];
 
     /**
-     * @param HiddenString                            $apiKey
-     * @param bool                                    $sandbox
-     * @param HttpClientInterface                     $httpClient
-     * @param RequestFactoryInterface                 $requestFactory
-     * @param StreamFactoryInterface                  $streamFactory
-     * @param CacheItemPoolInterface|null             $cache
-     * @param DateInterval|DateTimeInterface|int|null $ttl
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param HttpClientInterface     $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
         HiddenString $apiKey,
@@ -87,8 +78,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        CacheItemPoolInterface $cache = null,
-        DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -96,8 +85,6 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            cache: $cache,
-            ttl: $ttl,
         );
 
         $this->requestBuilder = new LabellingServiceRestRequestBuilder(
@@ -116,6 +103,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @param bool          $confirm
      *
      * @return GenerateLabelResponse
+     *
      * @throws ApiException
      * @throws DeserializationException
      * @throws HttpClientException
@@ -124,36 +112,16 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws PostNLInvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     *
      * @since 1.0.0
      */
     public function generateLabel(GenerateLabel $generateLabel, bool $confirm = true): GenerateLabelResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $generateLabel->getId());
-        $response = null;
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-                // Invalid item in cache, skip
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(
-                request: $this->requestBuilder->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
-            );
-        }
+        $response = $this->getHttpClient()->doRequest(
+            request: $this->requestBuilder->buildGenerateLabelRequest(generateLabel: $generateLabel, confirm: $confirm),
+        );
 
-        $object = $this->responseProcessor->processGenerateLabelResponse(response: $response);
-        if ($item instanceof CacheItemInterface
-            && $response instanceof ResponseInterface
-            && 200 === $response->getStatusCode()
-        ) {
-            $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
-        }
-
-        return $object;
+        return $this->responseProcessor->processGenerateLabelResponse(response: $response);
     }
 
     /**
@@ -171,49 +139,26 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
      * @throws ApiException
      * @throws DeserializationException
      * @throws InvalidConfigurationException
+     *
      * @since 1.0.0
-*/
+     */
     public function generateLabels(array $generateLabels): array
     {
         $httpClient = $this->getHttpClient();
 
         $responses = [];
-        foreach ($generateLabels as $uuid => $generateLabel) {
-            $uuid = (string) $uuid;
-            $item = $this->retrieveCachedItem(uuid: $uuid);
-            $response = null;
-            if ($item instanceof CacheItemInterface && $item->isHit()) {
-                $response = $item->get();
-                $response = PsrMessage::parseResponse(message: $response);
-                $responses[$uuid] = $response;
-            }
-
+        foreach ($generateLabels as $index => $generateLabel) {
+            $index = (string) $index;
             $httpClient->addOrUpdateRequest(
-                id: $uuid,
+                id: $index,
                 request: $this->requestBuilder->buildGenerateLabelRequest(generateLabel: $generateLabel[0], confirm: $generateLabel[1])
             );
         }
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
-            $uuid = (string) $uuid;
-            if ($newResponse instanceof ResponseInterface
-                && 200 === $newResponse->getStatusCode()
-            ) {
-                $item = $this->retrieveCachedItem(uuid: $uuid);
-                if ($item instanceof CacheItemInterface) {
-                    $item->set(value: PsrMessage::toString(message: $newResponse));
-                    $this->getCache()->saveDeferred(item: $item);
-                }
-            }
-        }
-        if ($this->getCache() instanceof CacheItemPoolInterface) {
-            $this->getCache()->commit();
-        }
-
         $labels = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
+        foreach ($responses + $newResponses as $index => $response) {
             $generateLabelResponse = $this->responseProcessor->processGenerateLabelResponse(response: $response);
-            $labels[$uuid] = $generateLabelResponse;
+            $labels[$index] = $generateLabelResponse;
         }
 
         return $labels;

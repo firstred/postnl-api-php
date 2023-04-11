@@ -96,8 +96,6 @@ class ConfirmingServiceTest extends ServiceTestCase
         $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getConfirmingService();
-        $this->service->setCache(cache: new VoidCachePool());
-        $this->service->setTtl(ttl: 1);
     }
 
     /** @throws */

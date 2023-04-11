@@ -35,6 +35,7 @@ use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetUpdatedShipments;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Psr\Http\Message\RequestInterface;
@@ -96,9 +97,7 @@ interface ShippingStatusServiceRequestBuilderInterface
     /**
      * Build the 'get updated shipments' HTTP request.
      *
-     * @param Customer               $customer
-     * @param DateTimeInterface|null $dateTimeFrom
-     * @param DateTimeInterface|null $dateTimeTo
+     * @param GetUpdatedShipments $getUpdatedShipments
      *
      * @return RequestInterface
      *
@@ -107,9 +106,5 @@ interface ShippingStatusServiceRequestBuilderInterface
      *
      * @since 2.0.0
      */
-    public function buildGetUpdatedShipmentsRequest(
-        Customer $customer,
-        DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null
-    ): RequestInterface;
+    public function buildGetUpdatedShipmentsRequest(GetUpdatedShipments $getUpdatedShipments): RequestInterface;
 }

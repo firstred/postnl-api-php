@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use DateInterval;
-use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\Confirming;
 use Firstred\PostNL\Entity\Response\ConfirmingResponseShipment;
 use Firstred\PostNL\Exception\CifDownException;
@@ -48,10 +46,8 @@ use Firstred\PostNL\Service\ResponseProcessor\ConfirmingServiceResponseProcessor
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\ConfirmingServiceRestResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use ReflectionException;
 
 /**
  * @since 2.0.0
@@ -66,13 +62,11 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
     protected ConfirmingServiceResponseProcessorInterface $responseProcessor;
 
     /**
-     * @param HiddenString                            $apiKey
-     * @param bool                                    $sandbox
-     * @param HttpClientInterface                     $httpClient
-     * @param RequestFactoryInterface                 $requestFactory
-     * @param StreamFactoryInterface                  $streamFactory
-     * @param CacheItemPoolInterface|null             $cache
-     * @param DateInterval|DateTimeInterface|int|null $ttl
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param HttpClientInterface     $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
         HiddenString $apiKey,
@@ -80,8 +74,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        CacheItemPoolInterface $cache = null,
-        DateInterval|DateTimeInterface|int $ttl = null
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -89,8 +81,6 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            cache: $cache,
-            ttl: $ttl,
         );
 
         $this->requestBuilder = new ConfirmingServiceRestRequestBuilder(

@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use Firstred\PostNL\Cache\CacheableServiceInterface;
 use Firstred\PostNL\Entity\Request\GetDeliveryDate;
 use Firstred\PostNL\Entity\Request\GetSentDateRequest;
 use Firstred\PostNL\Entity\Response\GetDeliveryDateResponse;
@@ -45,7 +46,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 /**
  * @since 1.0.0
  */
-interface DeliveryDateServiceInterface extends ServiceInterface
+interface DeliveryDateServiceInterface extends ServiceInterface, CacheableServiceInterface
 {
     /**
      * Get the delivery date.

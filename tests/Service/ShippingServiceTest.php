@@ -91,8 +91,6 @@ class ShippingServiceTest extends ServiceTestCase
         $this->postnl->setLogger(logger: $logger);
 
         $this->service = $this->postnl->getShippingService();
-        $this->service->setCache(cache: new VoidCachePool());
-        $this->service->setTtl(ttl: 1);
     }
 
     /** @throws */

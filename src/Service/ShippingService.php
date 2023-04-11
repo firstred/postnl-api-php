@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use DateInterval;
-use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\SendShipment;
 use Firstred\PostNL\Entity\Response\SendShipmentResponse;
 use Firstred\PostNL\Exception\DeserializationException;
@@ -45,14 +43,9 @@ use Firstred\PostNL\Service\RequestBuilder\ShippingServiceRequestBuilderInterfac
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\ShippingServiceRestResponseProcessor;
 use Firstred\PostNL\Service\ResponseProcessor\ShippingServiceResponseProcessorInterface;
-use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
 /**
@@ -68,13 +61,11 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
     protected ShippingServiceResponseProcessorInterface $responseProcessor;
 
     /**
-     * @param HiddenString                            $apiKey
-     * @param bool                                    $sandbox
-     * @param HttpClientInterface                     $httpClient
-     * @param RequestFactoryInterface                 $requestFactory
-     * @param StreamFactoryInterface                  $streamFactory
-     * @param CacheItemPoolInterface|null             $cache
-     * @param DateInterval|DateTimeInterface|int|null $ttl
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param HttpClientInterface     $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
      *
      * @since 2.0.0
      */
@@ -84,8 +75,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        CacheItemPoolInterface $cache = null,
-        DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -93,8 +82,6 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            cache: $cache,
-            ttl: $ttl,
         );
 
         $this->requestBuilder = new ShippingServiceRestRequestBuilder(
@@ -126,32 +113,12 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
      */
     public function sendShipment(SendShipment $sendShipment, bool $confirm = true): ?SendShipmentResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $sendShipment->getId());
-        $response = null;
-
-        if ($item instanceof CacheItemInterface && $item->isHit()) {
-            $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-            }
-        }
-        if (!$response instanceof ResponseInterface) {
-            $response = $this->getHttpClient()->doRequest(
-                request: $this->requestBuilder->buildSendShipmentRequest(sendShipment: $sendShipment, confirm: $confirm)
-            );
-        }
+        $response = $this->getHttpClient()->doRequest(
+            request: $this->requestBuilder->buildSendShipmentRequest(sendShipment: $sendShipment, confirm: $confirm)
+        );
 
         $object = $this->responseProcessor->processSendShipmentResponse(response: $response);
         if ($object instanceof SendShipmentResponse) {
-            if ($item instanceof CacheItemInterface
-                && $response instanceof ResponseInterface
-                && 200 === $response->getStatusCode()
-            ) {
-                $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
-            }
-
             return $object;
         }
 

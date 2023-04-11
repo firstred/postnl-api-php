@@ -37,6 +37,7 @@ use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetUpdatedShipments;
 use Firstred\PostNL\Entity\Response\CompleteStatusResponse;
 use Firstred\PostNL\Entity\Response\CurrentStatusResponse;
 use Firstred\PostNL\Entity\Response\GetSignatureResponseSignature;
@@ -70,7 +71,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  *
  * @internal
  */
-class ShippingStatusService extends AbstractService implements ShippingStatusServiceInterface
+class ShippingStatusService extends AbstractCacheableService implements ShippingStatusServiceInterface
 {
     use ResponseProcessorSettersTrait;
 
@@ -139,7 +140,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      */
     public function currentStatus(CurrentStatusByReference|CurrentStatus $currentStatus): CurrentStatusResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $currentStatus->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $currentStatus);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
@@ -158,7 +159,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -187,7 +188,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $responses = [];
         foreach ($currentStatuses as $index => $currentStatus) {
-            $item = $this->retrieveCachedItem(uuid: $index);
+            $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $currentStatus);
             $response = null;
             if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
@@ -202,11 +203,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
+        foreach ($newResponses as $index => $newResponse) {
             if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
-                $item = $this->retrieveCachedItem(uuid: $uuid);
+                $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $currentStatuses[$index]);
                 if ($item instanceof CacheItemInterface) {
                     $item->set(value: PsrMessage::toString(message: $newResponse));
                     $this->getCache()->saveDeferred(item: $item);
@@ -218,8 +219,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $currentStatusResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $currentStatusResponses[$uuid] = $this->responseProcessor->processCurrentStatusResponse(response: $response);
+        foreach ($responses + $newResponses as $index => $response) {
+            $currentStatusResponses[$index] = $this->responseProcessor->processCurrentStatusResponse(response: $response);
         }
 
         return $currentStatusResponses;
@@ -252,7 +253,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     public function completeStatus(CompleteStatusByReference|CompleteStatus $completeStatus): CompleteStatusResponse
     {
         try {
-            $item = $this->retrieveCachedItem(uuid: $completeStatus->getId());
+            $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $completeStatus);
         } catch (PsrCacheInvalidArgumentException) {
             $item = null;
         }
@@ -274,7 +275,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -305,7 +306,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
         $responses = [];
         foreach ($completeStatuses as $index => $completeStatus) {
-            $item = $this->retrieveCachedItem(uuid: $index);
+            $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $completeStatus);
             $response = null;
             if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
@@ -320,11 +321,11 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
+        foreach ($newResponses as $index => $newResponse) {
             if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
-                $item = $this->retrieveCachedItem(uuid: $uuid);
+                $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $completeStatuses[$index]);
                 if ($item instanceof CacheItemInterface) {
                     $item->set(value: PsrMessage::toString(message: $newResponse));
                     $this->getCache()->saveDeferred(item: $item);
@@ -336,8 +337,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $completeStatusResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $completeStatusResponses[$uuid] = $this->responseProcessor->processCompleteStatusResponse(response: $response);
+        foreach ($responses + $newResponses as $index => $response) {
+            $completeStatusResponses[$index] = $this->responseProcessor->processCompleteStatusResponse(response: $response);
         }
 
         return $completeStatusResponses;
@@ -362,7 +363,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      */
     public function getSignature(GetSignature $getSignature): GetSignatureResponseSignature
     {
-        $item = $this->retrieveCachedItem(uuid: $getSignature->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getSignature);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
@@ -381,7 +382,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -409,8 +410,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         $httpClient = $this->getHttpClient();
 
         $responses = [];
-        foreach ($getSignatures as $index => $getsignature) {
-            $item = $this->retrieveCachedItem(uuid: $index);
+        foreach ($getSignatures as $index => $getSignature) {
+            $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getSignature);
             $response = null;
             if ($item instanceof CacheItemInterface && $item->isHit()) {
                 $response = $item->get();
@@ -420,16 +421,16 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
 
             $httpClient->addOrUpdateRequest(
                 id: $index,
-                request: $this->requestBuilder->buildGetSignatureRequest(getSignature: $getsignature)
+                request: $this->requestBuilder->buildGetSignatureRequest(getSignature: $getSignature)
             );
         }
 
         $newResponses = $httpClient->doRequests();
-        foreach ($newResponses as $uuid => $newResponse) {
+        foreach ($newResponses as $index => $newResponse) {
             if ($newResponse instanceof ResponseInterface
                 && 200 === $newResponse->getStatusCode()
             ) {
-                $item = $this->retrieveCachedItem(uuid: $uuid);
+                $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getSignatures[$index]);
                 if ($item instanceof CacheItemInterface) {
                     $item->set(value: PsrMessage::toString(message: $newResponse));
                     $this->getCache()->saveDeferred(item: $item);
@@ -441,8 +442,8 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         }
 
         $signatureResponses = [];
-        foreach ($responses + $newResponses as $uuid => $response) {
-            $signatureResponses[$uuid] = $this->responseProcessor->processGetSignatureResponse(response: $response);
+        foreach ($responses + $newResponses as $index => $response) {
+            $signatureResponses[$index] = $this->responseProcessor->processGetSignatureResponse(response: $response);
         }
 
         return $signatureResponses;
@@ -477,25 +478,17 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
             throw new NotSupportedException(message: 'Either pass both dates or none. A single date is not supported.');
         }
 
-        $dateTimeFromString = $dateTimeFrom ? $dateTimeFrom->format(format: 'YmdHis') : '';
-        $dateTimeToString = $dateTimeTo ? $dateTimeTo->format(format: 'YmdHis') : '';
+        $getUpdatedShipments = new GetUpdatedShipments(Customer: $customer, DateTimeFrom: $dateTimeFrom, DateTimeTo: $dateTimeTo);
 
-        $item = $this->retrieveCachedItem(uuid: "{$customer->getCustomerNumber()}-$dateTimeFromString-$dateTimeToString");
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getUpdatedShipments);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-            }
+            $response = PsrMessage::parseResponse(message: $response);
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(
-                request: $this->requestBuilder->buildGetUpdatedShipmentsRequest(
-                    customer: $customer,
-                    dateTimeFrom: $dateTimeFrom,
-                    dateTimeTo: $dateTimeTo,
-                ),
+                request: $this->requestBuilder->buildGetUpdatedShipmentsRequest(getUpdatedShipments: $getUpdatedShipments),
             );
         }
 
@@ -506,7 +499,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
                 && 200 === $response->getStatusCode()
             ) {
                 $item->set(value: PsrMessage::toString(message: $response));
-                $this->cacheItem(item: $item);
+                $this->cacheResponseItem(item: $item);
             }
 
             return $object;

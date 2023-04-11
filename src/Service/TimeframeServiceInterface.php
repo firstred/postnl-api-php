@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use Firstred\PostNL\Cache\CacheableServiceInterface;
 use Firstred\PostNL\Entity\Request\GetTimeframes;
 use Firstred\PostNL\Entity\Response\ResponseTimeframes;
 use Firstred\PostNL\Exception\CifDownException;
@@ -43,7 +44,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 /**
  * @since 1.2.0
  */
-interface TimeframeServiceInterface extends ServiceInterface
+interface TimeframeServiceInterface extends ServiceInterface, CacheableServiceInterface
 {
     /**
      * Get timeframes via REST.

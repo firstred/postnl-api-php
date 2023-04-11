@@ -29,18 +29,18 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service\RequestBuilder\Rest;
 
-use DateTimeInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
-use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatus;
 use Firstred\PostNL\Entity\Request\CurrentStatusByReference;
 use Firstred\PostNL\Entity\Request\GetSignature;
+use Firstred\PostNL\Entity\Request\GetUpdatedShipments;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Service\RequestBuilder\ShippingStatusServiceRequestBuilderInterface;
 use Firstred\PostNL\Service\ShippingStatusServiceInterface;
 use Psr\Http\Message\RequestInterface;
+
 use const PHP_QUERY_RFC3986;
 
 /**
@@ -63,6 +63,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      *
      * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
+     *
      * @since 2.0.0
      */
     public function buildCurrentStatusRequest(CurrentStatusByReference|CurrentStatus $currentStatus): RequestInterface
@@ -216,9 +217,7 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
     /**
      * Build the 'get updated shipments' HTTP request.
      *
-     * @param Customer               $customer
-     * @param DateTimeInterface|null $dateTimeFrom
-     * @param DateTimeInterface|null $dateTimeTo
+     * @param GetUpdatedShipments $getUpdatedShipments
      *
      * @return RequestInterface
      *
@@ -227,11 +226,12 @@ class ShippingStatusServiceRestRequestBuilder extends AbstractRestRequestBuilder
      *
      * @since 2.0.0
      */
-    public function buildGetUpdatedShipmentsRequest(
-        Customer $customer,
-        DateTimeInterface $dateTimeFrom = null,
-        DateTimeInterface $dateTimeTo = null,
-    ): RequestInterface {
+    public function buildGetUpdatedShipmentsRequest(GetUpdatedShipments $getUpdatedShipments): RequestInterface
+    {
+        $customer = $getUpdatedShipments->getCustomer();
+        $dateTimeFrom = $getUpdatedShipments->getDateTimeFrom();
+        $dateTimeTo = $getUpdatedShipments->getDateTimeTo();
+
         $range = '';
         if ($dateTimeFrom) {
             $range = "?period={$dateTimeFrom->format(format: 'Y-m-d\TH:i:s')}&period={$dateTimeTo->format(format: 'Y-m-d\TH:i:s')}";

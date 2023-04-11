@@ -2125,74 +2125,71 @@ class PostNL implements LoggerAwareInterface
         GetDeliveryDate $getDeliveryDate
     ): array {
         $results = [];
-        $itemTimeframe = $this->getTimeframeService()->retrieveCachedItem(uuid: $getTimeframes->getId());
+        $itemTimeframe = $this->getTimeframeService()->retrieveCachedResponseItem(cacheableRequestEntity: $getTimeframes);
         if ($itemTimeframe instanceof CacheItemInterface && $itemTimeframe->get()) {
             $results['timeframes'] = PsrMessage::parseResponse(message: $itemTimeframe->get());
+        } else {
+            $this->getHttpClient()->addOrUpdateRequest(
+                id: 'timeframes',
+                request: $this->timeframeServiceRequestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes)
+            );
         }
-        $itemLocation = $this->getLocationService()->retrieveCachedItem(uuid: $getNearestLocations->getId());
+        $itemLocation = $this->getLocationService()->retrieveCachedResponseItem(cacheableRequestEntity: $getNearestLocations);
         if ($itemLocation instanceof CacheItemInterface && $itemLocation->get()) {
             $results['locations'] = PsrMessage::parseResponse(message: $itemLocation->get());
+        } else {
+            $this->getHttpClient()->addOrUpdateRequest(
+                id: 'locations',
+                request: $this->locationServiceRequestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
+            );
         }
-        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedItem(uuid: $getDeliveryDate->getId());
+        $itemDeliveryDate = $this->getDeliveryDateService()->retrieveCachedResponseItem(cacheableRequestEntity: $getDeliveryDate);
         if ($itemDeliveryDate instanceof CacheItemInterface && $itemDeliveryDate->get()) {
             $results['delivery_date'] = PsrMessage::parseResponse(message: $itemDeliveryDate->get());
+        } else {
+            $this->getHttpClient()->addOrUpdateRequest(
+                id: 'delivery_date',
+                request: $this->deliveryDateServiceRequestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate)
+            );
         }
-
-        $this->getHttpClient()->addOrUpdateRequest(
-            id: 'timeframes',
-            request: $this->timeframeServiceRequestBuilder->buildGetTimeframesRequest(getTimeframes: $getTimeframes)
-        );
-        $this->getHttpClient()->addOrUpdateRequest(
-            id: 'locations',
-            request: $this->locationServiceRequestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations)
-        );
-        $this->getHttpClient()->addOrUpdateRequest(
-            id: 'delivery_date',
-            request: $this->deliveryDateServiceRequestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate)
-        );
 
         $responses = $this->getHttpClient()->doRequests();
-        foreach ($responses as $uuid => $response) {
+        foreach ($responses as $requestType => $response) {
             if ($response instanceof Response) {
-                $results[$uuid] = $response;
+                if (200 === $response->getStatusCode()) {
+                    $results[$requestType] = $response;
+                    switch ($requestType) {
+                        case 'timeframes':
+                            $cacheItem = $this->getTimeframeService()->retrieveCachedResponseItem(cacheableRequestEntity: $getTimeframes);
+                            if ($cacheItem instanceof CacheItemInterface) {
+                                $cacheItem->set(value: PsrMessage::toString(message: $response));
+                                $this->getTimeframeService()->cacheResponseItem(item: $cacheItem);
+                            }
+
+                            break;
+                        case 'locations':
+                            $cacheItem = $this->getLocationService()->retrieveCachedResponseItem(cacheableRequestEntity: $getNearestLocations);
+                            if ($cacheItem instanceof CacheItemInterface) {
+                                $cacheItem->set(value: PsrMessage::toString(message: $response));
+                                $this->getLocationService()->cacheResponseItem(item: $cacheItem);
+                            }
+
+                            break;
+                        case 'delivery_date':
+                            $cacheItem = $this->getDeliveryDateService()->retrieveCachedResponseItem(cacheableRequestEntity: $getDeliveryDate);
+                            if ($cacheItem instanceof CacheItemInterface) {
+                                $cacheItem->set(value: PsrMessage::toString(message: $response));
+                                $this->getDeliveryDateService()->cacheResponseItem(item: $cacheItem);
+                            }
+
+                            break;
+                    }
+                }
             } else {
                 if ($response instanceof Exception) {
                     throw $response;
                 }
                 throw new InvalidArgumentException(message: 'Invalid multi-request');
-            }
-        }
-
-        foreach ($responses as $type => $response) {
-            if (!$response instanceof Response) {
-                if ($response instanceof Exception) {
-                    throw $response;
-                }
-                throw new InvalidArgumentException(message: 'Invalid multi-request');
-            } else {
-                switch ($type) {
-                    case 'timeframes':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemTimeframe->set(value: PsrMessage::toString(message: $response));
-                            $this->getTimeframeService()->cacheItem(item: $itemTimeframe);
-                        }
-
-                        break;
-                    case 'locations':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemLocation->set(value: PsrMessage::toString(message: $response));
-                            $this->getLocationService()->cacheItem(item: $itemLocation);
-                        }
-
-                        break;
-                    case 'delivery_date':
-                        if ($itemTimeframe instanceof CacheItemInterface) {
-                            $itemDeliveryDate->set(value: PsrMessage::toString(message: $response));
-                            $this->getDeliveryDateService()->cacheItem(item: $itemDeliveryDate);
-                        }
-
-                        break;
-                }
             }
         }
 

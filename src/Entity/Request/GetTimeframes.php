@@ -145,7 +145,7 @@ class GetTimeframes extends AbstractEntity implements CacheableRequestEntityInte
     public function getCacheKey(): string
     {
         return hash(
-            algo: 'xx128',
+            algo: 'xxh128',
             data: "GetTimeframes.{$this->getTimeframes()[0]->getHouseNr()}",
         );
     }

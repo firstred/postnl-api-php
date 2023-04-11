@@ -62,7 +62,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  *
  * @internal
  */
-class TimeframeService extends AbstractService implements TimeframeServiceInterface
+class TimeframeService extends AbstractCacheableService implements TimeframeServiceInterface
 {
     use ResponseProcessorSettersTrait;
 
@@ -127,7 +127,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
      */
     public function getTimeframes(GetTimeframes $getTimeframes): ResponseTimeframes
     {
-        $item = $this->retrieveCachedItem(uuid: $getTimeframes->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getTimeframes);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
@@ -146,7 +146,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;

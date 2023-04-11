@@ -40,6 +40,7 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\HttpClientException;
+use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\ResponseException;
@@ -50,7 +51,6 @@ use Firstred\PostNL\Service\ResponseProcessor\DeliveryDateServiceResponseProcess
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\DeliveryDateServiceRestResponseProcessor;
 use GuzzleHttp\Psr7\Message as PsrMessage;
-use InvalidArgumentException;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -64,7 +64,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  *
  * @internal
  */
-class DeliveryDateService extends AbstractService implements DeliveryDateServiceInterface
+class DeliveryDateService extends AbstractCacheableService implements DeliveryDateServiceInterface
 {
     use ResponseProcessorSettersTrait;
 
@@ -122,20 +122,18 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws HttpClientException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws InvalidConfigurationException
+     *
      * @since 1.0.0
      */
     public function getDeliveryDate(GetDeliveryDate $getDeliveryDate): GetDeliveryDateResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $getDeliveryDate->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getDeliveryDate);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-            }
+            $response = PsrMessage::parseResponse(message: $response);
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetDeliveryDateRequest(getDeliveryDate: $getDeliveryDate));
@@ -147,7 +145,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -167,21 +165,19 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
      * @throws ResponseException
      * @throws ApiException
      * @throws DeserializationException
-     * @throws \Firstred\PostNL\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws NotSupportedException
      * @throws InvalidConfigurationException
+     *
      * @since 1.0.0
      */
     public function getSentDate(GetSentDateRequest $getSentDate): GetSentDateResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $getSentDate->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getSentDate);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-            }
+            $response = PsrMessage::parseResponse(message: $response);
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetSentDateRequest(getSentDate: $getSentDate));
@@ -193,7 +189,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;

@@ -184,7 +184,7 @@ class TimeframeServiceTest extends ServiceTestCase
     /**
      * @return array[]
      */
-    public function timeframesProvider(): array
+    public static function timeframesProvider(): array
     {
         return [
             [PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/timeframes/timeframes.http'))],

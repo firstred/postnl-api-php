@@ -29,8 +29,6 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
-use DateInterval;
-use DateTimeInterface;
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -45,7 +43,6 @@ use Firstred\PostNL\Service\ResponseProcessor\BarcodeServiceResponseProcessorInt
 use Firstred\PostNL\Service\ResponseProcessor\ResponseProcessorSettersTrait;
 use Firstred\PostNL\Service\ResponseProcessor\Rest\BarcodeServiceRestResponseProcessor;
 use ParagonIE\HiddenString\HiddenString;
-use Psr\Cache\CacheItemPoolInterface;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
@@ -67,8 +64,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
      * @param HttpClientInterface                     $httpClient
      * @param RequestFactoryInterface                 $requestFactory
      * @param StreamFactoryInterface                  $streamFactory
-     * @param CacheItemPoolInterface|null             $cache
-     * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
         HiddenString $apiKey,
@@ -76,8 +71,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         HttpClientInterface $httpClient,
         RequestFactoryInterface $requestFactory,
         StreamFactoryInterface $streamFactory,
-        CacheItemPoolInterface $cache = null,
-        DateInterval|DateTimeInterface|int $ttl = null,
     ) {
         parent::__construct(
             apiKey: $apiKey,
@@ -85,8 +78,6 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
             httpClient: $httpClient,
             requestFactory: $requestFactory,
             streamFactory: $streamFactory,
-            cache: $cache,
-            ttl: $ttl,
         );
 
         $this->requestBuilder = new BarcodeServiceRestRequestBuilder(

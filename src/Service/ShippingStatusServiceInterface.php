@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Service;
 
 use DateTimeInterface;
+use Firstred\PostNL\Cache\CacheableServiceInterface;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Request\CompleteStatus;
 use Firstred\PostNL\Entity\Request\CompleteStatusByReference;
@@ -52,7 +53,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 /**
  * @since 1.2.0
  */
-interface ShippingStatusServiceInterface extends ServiceInterface
+interface ShippingStatusServiceInterface extends ServiceInterface, CacheableServiceInterface
 {
     /**
      * Gets the current status.

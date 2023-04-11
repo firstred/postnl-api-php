@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Service;
 
+use Firstred\PostNL\Cache\CacheableServiceInterface;
 use Firstred\PostNL\Entity\Request\GetLocation;
 use Firstred\PostNL\Entity\Request\GetLocationsInArea;
 use Firstred\PostNL\Entity\Request\GetNearestLocations;
@@ -46,7 +47,7 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 /**
  * @since 1.2.0
  */
-interface LocationServiceInterface extends ServiceInterface
+interface LocationServiceInterface extends ServiceInterface, CacheableServiceInterface
 {
     /**
      * Get the nearest locations.

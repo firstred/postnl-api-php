@@ -31,6 +31,7 @@ namespace Firstred\PostNL\Service;
 
 use DateInterval;
 use DateTimeInterface;
+use Firstred\PostNL\Cache\CacheableServiceInterface;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
@@ -47,159 +48,22 @@ use ReflectionClass;
  *
  * @internal
  */
-abstract class AbstractService
+abstract class AbstractService implements ServiceInterface
 {
     /**
-     * TTL for the cache.
-     *
-     * `null` disables the cache
-     * `int` is the TTL in seconds
-     * Any `DateTime` will be used as the exact date/time at which to expire the data (auto calculate TTL)
-     * A `DateInterval` can be used as well to set the TTL
-     *
-     * @var int|DateTimeInterface|DateInterval|null
-     */
-    private int|DateTimeInterface|DateInterval|null $ttl;
-
-    /**
-     * The [PSR-6](https://www.php-fig.org/psr/psr-6/) CacheItemPoolInterface.
-     *
-     * Use a caching library that implements [PSR-6](https://www.php-fig.org/psr/psr-6/) and you'll be good to go
-     * `null` disables the cache
-     *
-     * @var CacheItemPoolInterface|null
-     */
-    private ?CacheItemPoolInterface $cache;
-
-    /**
-     * @param HiddenString                            $apiKey
-     * @param bool                                    $sandbox
-     * @param HttpClientInterface                     $httpClient
-     * @param RequestFactoryInterface                 $requestFactory
-     * @param StreamFactoryInterface                  $streamFactory
-     * @param CacheItemPoolInterface|null             $cache
-     * @param DateInterval|DateTimeInterface|int|null $ttl
+     * @param HiddenString            $apiKey
+     * @param bool                    $sandbox
+     * @param HttpClientInterface     $httpClient
+     * @param RequestFactoryInterface $requestFactory
+     * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        protected HiddenString             $apiKey,
-        private bool                       $sandbox,
-        private HttpClientInterface        $httpClient,
-        private RequestFactoryInterface    $requestFactory,
-        private StreamFactoryInterface     $streamFactory,
-        CacheItemPoolInterface             $cache = null,
-        DateInterval|DateTimeInterface|int $ttl = null
+        protected HiddenString $apiKey,
+        protected bool $sandbox,
+        protected HttpClientInterface $httpClient,
+        protected RequestFactoryInterface $requestFactory,
+        protected StreamFactoryInterface $streamFactory,
     ) {
-        $this->cache = $cache;
-        $this->ttl = $ttl;
-    }
-
-    /**
-     * Retrieve a cached item.
-     *
-     * @param string $uuid
-     *
-     * @return CacheItemInterface|null
-     *
-     * @throws PsrCacheInvalidArgumentException
-     *
-     * @since 1.0.0
-     */
-    public function retrieveCachedItem(string $uuid): ?CacheItemInterface
-    {
-        $reflection = new ReflectionClass(objectOrClass: $this);
-        $uuid = strtolower(string: substr(string: $reflection->getShortName(), offset: 0, length: strlen(string: $reflection->getShortName()) - 7));
-        $item = null;
-        if ($this->cache instanceof CacheItemPoolInterface && !is_null(value: $this->ttl)) {
-            $item = $this->cache->getItem(key: $uuid);
-        }
-
-        return $item;
-    }
-
-    /**
-     * Cache an item.
-     *
-     * @param CacheItemInterface $item
-     *
-     * @since 1.0.0
-     */
-    public function cacheItem(CacheItemInterface $item): void
-    {
-        if ($this->ttl instanceof DateInterval || is_int(value: $this->ttl)) {
-            // Reset expires at first -- it might have been set
-            $item->expiresAt(expiration: null);
-            // Then set the interval
-            $item->expiresAfter(time: $this->ttl);
-        } else {
-            // Reset expires after first -- it might have been set
-            $item->expiresAfter(time: null);
-            // Then set the expiration time
-            $item->expiresAt(expiration: $this->ttl);
-        }
-
-        $this->cache->save(item: $item);
-    }
-
-    /**
-     * Delete an item from cache.
-     *
-     * @param CacheItemInterface $item
-     *
-     * @throws PsrCacheInvalidArgumentException
-     *
-     * @since 1.2.0
-     */
-    public function removeCachedItem(CacheItemInterface $item): void
-    {
-        $this->cache->deleteItem(key: $item->getKey());
-    }
-
-    /**
-     * @return DateInterval|DateTimeInterface|int|null
-     *
-     * @since 1.2.0
-     */
-    public function getTtl(): DateInterval|DateTimeInterface|int|null
-    {
-        return $this->ttl;
-    }
-
-    /**
-     * @param DateInterval|DateTimeInterface|int|null $ttl
-     *
-     * @return static
-     *
-     * @since 1.2.0
-     */
-    public function setTtl(DateInterval|DateTimeInterface|int|null $ttl = null): static
-    {
-        $this->ttl = $ttl;
-
-        return $this;
-    }
-
-    /**
-     * @return CacheItemPoolInterface|null
-     *
-     * @since 1.2.0
-     */
-    public function getCache(): ?CacheItemPoolInterface
-    {
-        return $this->cache;
-    }
-
-    /**
-     * @param CacheItemPoolInterface|null $cache
-     *
-     * @return static
-     *
-     * @since 1.2.0
-     */
-    public function setCache(?CacheItemPoolInterface $cache = null): static
-    {
-        $this->cache = $cache;
-
-        return $this;
     }
 
     /**

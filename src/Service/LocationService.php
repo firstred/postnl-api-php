@@ -65,7 +65,7 @@ use Psr\Http\Message\StreamFactoryInterface;
  *
  * @internal
  */
-class LocationService extends AbstractService implements LocationServiceInterface
+class LocationService extends AbstractCacheableService implements LocationServiceInterface
 {
     use ResponseProcessorSettersTrait;
 
@@ -129,14 +129,11 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      */
     public function getNearestLocations(GetNearestLocations $getNearestLocations): GetNearestLocationsResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $getNearestLocations->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getNearestLocations);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
-            try {
-                $response = PsrMessage::parseResponse(message: $response);
-            } catch (InvalidArgumentException) {
-            }
+            $response = PsrMessage::parseResponse(message: $response);
         }
         if (!$response instanceof ResponseInterface) {
             $response = $this->getHttpClient()->doRequest(request: $this->requestBuilder->buildGetNearestLocationsRequest(getNearestLocations: $getNearestLocations));
@@ -148,7 +145,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -172,7 +169,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      */
     public function getLocationsInArea(GetLocationsInArea $getLocations): GetLocationsInAreaResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $getLocations->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getLocations);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
@@ -191,7 +188,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;
@@ -216,7 +213,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
      */
     public function getLocation(GetLocation $getLocation): GetLocationsInAreaResponse
     {
-        $item = $this->retrieveCachedItem(uuid: $getLocation->getId());
+        $item = $this->retrieveCachedResponseItem(cacheableRequestEntity: $getLocation);
         $response = null;
         if ($item instanceof CacheItemInterface && $item->isHit()) {
             $response = $item->get();
@@ -235,7 +232,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
             && 200 === $response->getStatusCode()
         ) {
             $item->set(value: PsrMessage::toString(message: $response));
-            $this->cacheItem(item: $item);
+            $this->cacheResponseItem(item: $item);
         }
 
         return $object;

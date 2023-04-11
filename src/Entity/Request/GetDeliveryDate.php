@@ -443,7 +443,7 @@ class GetDeliveryDate extends AbstractEntity implements CacheableRequestEntityIn
      */
     public function getCacheKey(): string
     {
-        $cacheKey = "GetDeliveryDate.{$this->getAllowSundaySorting()}.{$this->getShippingDuration()}.{$this->getShippingDate()->format(format: 'Y-m-d')}";
+        $cacheKey = "GetDeliveryDate.{$this->getAllowSundaySorting()}.{$this->getShippingDuration()}.{$this->getShippingDate()?->format(format: 'Y-m-d')}";
         foreach ($this->getOptions() as $option) {
             $cacheKey .= ".$option";
         }
