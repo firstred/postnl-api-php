@@ -5,7 +5,12 @@ Caching
 =======
 
 PSR-6 caching is supported, which means you can grab any caching library for PHP that you like and plug it right into this library.
-Make sure you install a PSR-20 clock implementation as well, e.g.: ``composer require symfony/clock``
+Make sure you install a PSR-20 clock implementation as well, e.g.:
+
+.. code-block:: bash
+
+    composer require symfony/cache symfony/clock
+
 
 Note that not all services can be cached. At the moment cacheable services are:
 
