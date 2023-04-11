@@ -121,11 +121,6 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 
     composer test
 
-.. note::
-
-    You'll need to use PHP 7.3 or newer in order to perform
-    the tests.
-
 
 Building the documentation
 ==========================
