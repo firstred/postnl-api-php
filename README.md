@@ -1,4 +1,4 @@
-> ⚠️ **This version is end-of-life**: support ended on  Aug 9, 2020 ⚠️
+> ⚠️ **This version is end-of-life**: maintenance ended on  Aug 9, 2020 ⚠️
 
 # PostNL REST/SOAP API PHP Bindings
 
