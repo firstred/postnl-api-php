@@ -1,3 +1,5 @@
+> ⚠️ **This version is end-of-life**: support ended on  Apr 11, 2023 ⚠️
+
 # PostNL REST/SOAP API PHP Bindings
 
 [![Latest Stable Version](https://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
