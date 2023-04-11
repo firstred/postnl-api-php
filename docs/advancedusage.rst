@@ -16,7 +16,7 @@ There are four ways in which entities can be instantiated. Either by
 
 #. passing all arguments to the constructor in the right order
 #. or using named parameters,
-#. invoking the `create` method on an entity
+#. invoking the `create` method on an entity (deprecated
 #. or by instantiating an empty entity and calling the setters one by one.
 
 | Which method to use is entirely up to you. They are all supported by the library.
@@ -71,7 +71,7 @@ There are four ways in which entities can be instantiated. Either by
                 ),
             );
 
-    .. tab:: 3 - Create
+    .. tab:: 3 - Create (deprecated)
 
         .. code-block:: php
 

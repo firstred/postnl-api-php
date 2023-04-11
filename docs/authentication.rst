@@ -114,29 +114,28 @@ When you have all the required information, you are ready to configure the libra
         use Firstred\PostNL\Entity\Customer;
 
         $apiKey = 'qjsdjufhjasudhfaSDFasdifh324';
-        $customer = (new Customer())
-            ->setCollectionLocation('123456')
-            ->setCustomerCode('DEVC')
-            ->setCustomerNumber('11223344')
-            ->setContactPerson('Test')
-            ->setAddress((new Address())
-                ->setAddressType('02')
-                ->setCity('Hoofddorp')
-                ->setCompanyName('PostNL')
-                ->setCountrycode('NL')
-                ->setHouseNr('42')
-                ->setStreet('Siriusdreef')
-                ->setZipcode('2132WT')
-            )
-            ->setGlobalPackBarcodeType('AB')
-            ->setGlobalPackCustomerCode('1234')
-        ;
+        $customer = new Customer(
+            CustomerNumber: '11223344',
+            CustomerCode: 'DEVC',
+            CollectionLocation: '123456',
+            ContactPerson: 'Test',
+            Address: new Address(
+                AddressType: '02',
+                CompanyName: 'PostNL',
+                Street: 'Siriusdreef',
+                HouseNr: '42',
+                Zipcode: '2132WT',
+                City: 'Hoofddorp',
+                Countrycode: 'NL',
+            ),
+            GlobalPackCustomerCode: '1234',
+            GlobalPackBarcodeType: 'AB',
+        );
 
         $postnl = new PostNL(
-            $customer,        // The filled Customer object
-            $apiKey,          // The API key
-            false,            // Sandbox = false, meaning we are now using the live environment
-            PostNL::MODE_REST // We are going to use the REST API (default)
+            customer: $customer,  // The filled Customer object
+            apiKey: $apiKey,      // The API key
+            sandbox: false,       // Sandbox = false, meaning we are now using the live environment
         );
 
     You might have noticed that several different ways have been used to instantiate an object. More information about this can be found in the :ref:`object instantiation` section.
@@ -157,25 +156,25 @@ The PostNL client constructor accepts a few options:
         use Firstred\PostNL\Entity\Customer;
 
         // Create a new customer
-        $client = (new Customer())
-            ->setCollectionLocation('123456')       // Your collection location
-            ->CustomerCode('DEVC')                  // Your Customer Code
-            ->CustomerNumber('11223344')            // Your Customer Number
-            ->setGlobalPackBarcodeType('CX')        // Add your GlobalPack information if you need
-            ->setGlobalPackCustomerCode('1234')     // to create international shipment labels
-            ->setContactPerson('Sander')
-            ->setAddress((new Address())
-                ->setAddressType('02')              // This address will be shown on the label
-                ->setCity('Hoofddorp')
-                ->setCompanyName('PostNL')
-                ->setCountrycode('NL')
-                ->setHouseNr('42')
-                ->setStreet('Siriusdreef')
-                ->setZipcode('2132WT')
-            )
-            ->setEmail('test@voorbeeld.nl')
-            ->setName('Michael')
-        ;
+        $client = new Customer(
+            CustomerNumber: '11223344',     // Your collection location
+            CustomerCode: 'DEVC',           // Your Customer Code
+            CollectionLocation: '123456',   // Your Customer Number
+            ContactPerson: 'Sander',        // Add your GlobalPack information if you need
+            Email: 'test@voorbeeld.nl',     // to create international shipment labels
+            Name: 'Michael',
+            Address: new Address(
+                AddressType: '02',          // This address will be shown on the label
+                CompanyName: 'PostNL',
+                Street: 'Siriusdreef',
+                HouseNr: '42',
+                Zipcode: '2132WT',
+                City: 'Hoofddorp',
+                Countrycode: 'NL',
+            ),
+            GlobalPackCustomerCode: '1234',
+            GlobalPackBarcodeType: 'CX',
+        );
 
 .. confval:: apiKey
 
@@ -191,21 +190,10 @@ The PostNL client constructor accepts a few options:
     You can request an API key for the sandbox environment on this page: https://developer.postnl.nl/content/request-api-key
     For a live key you should contact your PostNL account manager.
 
-
-
 .. confval:: sandbox
     :required: true
 
     Indicate whether you'd like to connect to the sandbox environment. When `false` the library uses the live endpoints.
-
-.. confval:: mode
-    :required: true
-
-    This library provides three ways to connect to the API:
-
-    - :php:const:`Firstred\\PostNL\\PostNL::MODE_REST`: REST mode
-    - :php:const:`Firstred\\PostNL\\PostNL::MODE_SOAP`: SOAP mode
-    - :php:const:`Firstred\\PostNL\\PostNL::MODE_LEGACY`: Legacy mode -- This is the previous SOAP API, which, at the moment of writing, has been disabled.
 
 -------------
 Authorization

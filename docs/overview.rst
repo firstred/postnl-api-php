@@ -10,13 +10,6 @@ Overview
 Requirements
 ------------
 
-Nowadays there are two APIs you can choose from: SOAP or REST. PostNL's REST API provides all of the functionality and is currently the recommended way to connect.
-
-.. _rest api requirements:
-
-Requirements
-=====================
-
 #. PHP 8.1 or higher (up to and including 8.2)
 
 .. note::
@@ -69,12 +62,12 @@ Contributing
 Guidelines
 ==========
 
-1. This library supports PSR-1, PSR-2, PSR-3, PSR-4, PSR-6, PSR-7 and PSR-18.
-2. The library is meant to be lean, fast and sticks to the standards of the SOAP API. This means
+1. This library supports PSR-1, PSR-2, PSR-3, PSR-4, PSR-6, PSR-7, PSR-17, PSR-18 and PSR-20.
+2. The library is meant to be lean, fast and sticks to the standards of the SOAP API (when it comes to data transfer objects). This means
    that not every feature request can be accepted. When in doubt, please open an issue first.
-3. The PostNL library has a minimum PHP version requirement of PHP 5.6. Pull requests must
-   not require a PHP version greater than PHP 5.6.
-4. All pull requests must include unit tests to ensure the change works as
+3. The PostNL library has a minimum PHP version requirement of PHP 8.1. Pull requests must
+   not require a PHP version lower than PHP 8.1.
+4. Pull requests must include unit tests to ensure the change works as
    expected and to prevent regressions.
 
 
@@ -94,11 +87,6 @@ This library is unit tested with PHPUnit. Run the tests using the included PHPUn
 .. code-block:: bash
 
     composer test
-
-.. note::
-
-    You'll need to use PHP 7.3 or newer in order to perform
-    the tests.
 
 
 Building the documentation
