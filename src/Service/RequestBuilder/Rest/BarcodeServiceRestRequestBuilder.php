@@ -76,7 +76,7 @@ class BarcodeServiceRestRequestBuilder extends AbstractRestRequestBuilder implem
             ], arg_separator: '&', encoding_type: PHP_QUERY_RFC3986)
         )
             ->withHeader('Accept', value: 'application/json')
-            ->withHeader('apikey', value: $this->getApiKey()->getString());
+            ->withHeader('apikey', value: $this->apiKey->getString());
     }
 
     /**

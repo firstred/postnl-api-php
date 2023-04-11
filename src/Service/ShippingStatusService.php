@@ -106,7 +106,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
         );
 
         $this->requestBuilder = new ShippingStatusServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
@@ -122,11 +122,6 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
      *   - Fill the Shipment->Barcode property. Leave the rest empty.
      * - CurrentStatusByReference:
      *   - Fill the Shipment->Reference property. Leave the rest empty.
-     * - CurrentStatusByPhase:
-     *   - Fill the Shipment->PhaseCode property, do not pass Barcode or Reference.
-     *     Optionally add DateFrom and/or DateTo.
-     * - CurrentStatusByStatus:
-     *   - Fill the Shipment->StatusCode property. Leave the rest empty.
      *
      * @param CurrentStatus|CurrentStatusByReference $currentStatus
      *
@@ -170,7 +165,7 @@ class ShippingStatusService extends AbstractService implements ShippingStatusSer
     }
 
     /**
-     * Get current statuses REST.
+     * Get current statuses.
      *
      * @param CurrentStatus[] $currentStatuses
      *

@@ -49,19 +49,11 @@ abstract class AbstractRequestBuilder
      * @param StreamFactoryInterface  $streamFactory
      */
     public function __construct(
-        private HiddenString $apiKey,
-        private bool $sandbox,
+        protected HiddenString          $apiKey,
+        private bool                    $sandbox,
         private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface $streamFactory,
+        private StreamFactoryInterface  $streamFactory,
     ) {
-    }
-
-    /**
-     * @since 2.0.0
-     */
-    public function getApiKey(): HiddenString
-    {
-        return $this->apiKey;
     }
 
     /**

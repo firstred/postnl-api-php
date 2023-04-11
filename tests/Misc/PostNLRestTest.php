@@ -48,6 +48,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\Error;
 use PHPUnit\Framework\TestCase;
 
 #[TestDox(text: 'The PostNL object')]
@@ -352,19 +353,6 @@ class PostNLRestTest extends TestCase
         $this->assertInstanceOf(expected: ResponseTimeframes::class, actual: $results['timeframes']);
         $this->assertInstanceOf(expected: GetNearestLocationsResponse::class, actual: $results['locations']);
         $this->assertInstanceOf(expected: GetDeliveryDateResponse::class, actual: $results['delivery_date']);
-    }
-
-    /** @throws */
-    #[TestDox(text: 'returns `false` when the API key is missing')]
-    public function testNegativeKeyMissing(): void
-    {
-        $this->expectException(exception: InvalidArgumentException::class);
-
-        $reflection = new \ReflectionClass(objectOrClass: PostNL::class);
-        /** @var PostNL $postnl */
-        $postnl = $reflection->newInstanceWithoutConstructor();
-
-        $postnl->getApiKey();
     }
 
     /** @throws */

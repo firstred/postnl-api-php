@@ -98,7 +98,7 @@ class TimeframeService extends AbstractService implements TimeframeServiceInterf
         );
 
         $this->requestBuilder = new TimeframeServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),

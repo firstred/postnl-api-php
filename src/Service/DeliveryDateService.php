@@ -100,7 +100,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
         );
 
         $this->requestBuilder = new DeliveryDateServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
@@ -109,7 +109,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     }
 
     /**
-     * Get a delivery date.
+     * Get the delivery date.
      *
      * @param GetDeliveryDate $getDeliveryDate
      *
@@ -154,7 +154,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
     }
 
     /**
-     * Get the sent date via REST.
+     * Get the shipping date.
      *
      * @param GetSentDateRequest $getSentDate
      *

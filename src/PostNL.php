@@ -287,24 +287,6 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
-     * Get API Key.
-     *
-     * @return HiddenString
-     *
-     * @throws InvalidArgumentException
-     *
-     * @since 1.4.1
-     */
-    public function getApiKey(): HiddenString
-    {
-        if (!isset($this->apiKey)) {
-            throw new InvalidArgumentException(message: 'API key not set');
-        }
-
-        return $this->apiKey;
-    }
-
-    /**
      * @param HiddenString|string $apiKey
      *
      * @return static
@@ -726,7 +708,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->barcodeService)) {
             $this->setBarcodeService(service: new BarcodeService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -769,7 +751,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->labellingService)) {
             $this->setLabellingService(service: new LabellingService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -810,7 +792,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->confirmingService)) {
             $this->setConfirmingService(service: new ConfirmingService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -851,7 +833,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->shippingStatusService)) {
             $this->setShippingStatusService(service: new ShippingStatusService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -894,7 +876,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->deliveryDateService)) {
             $this->setDeliveryDateService(service: new DeliveryDateService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -937,7 +919,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->timeframeService)) {
             $this->setTimeframeService(service: new TimeframeService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -980,7 +962,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->locationService)) {
             $this->setLocationService(service: new LocationService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),
@@ -1023,7 +1005,7 @@ class PostNL implements LoggerAwareInterface
     {
         if (!isset($this->shippingService)) {
             $this->setShippingService(service: new ShippingService(
-                apiKey: $this->getApiKey(),
+                apiKey: $this->apiKey,
                 sandbox: $this->getSandbox(),
                 httpClient: $this->getHttpClient(),
                 requestFactory: $this->getRequestFactory(),

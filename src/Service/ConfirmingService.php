@@ -94,7 +94,7 @@ class ConfirmingService extends AbstractService implements ConfirmingServiceInte
         );
 
         $this->requestBuilder = new ConfirmingServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),

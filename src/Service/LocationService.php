@@ -101,7 +101,7 @@ class LocationService extends AbstractService implements LocationServiceInterfac
         );
 
         $this->requestBuilder = new LocationServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),

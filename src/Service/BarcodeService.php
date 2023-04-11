@@ -90,7 +90,7 @@ class BarcodeService extends AbstractService implements BarcodeServiceInterface
         );
 
         $this->requestBuilder = new BarcodeServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),

@@ -143,7 +143,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
             method: 'GET',
             uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint
         )
-            ->withHeader('apikey', value: $this->getApiKey()->getString())
+            ->withHeader('apikey', value: $this->apiKey->getString())
             ->withHeader('Accept', value: 'application/json');
     }
 
@@ -190,7 +190,7 @@ class DeliveryDateServiceRestRequestBuilder extends AbstractRestRequestBuilder i
             method: 'GET',
             uri: ($this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT).$endpoint,
         )
-            ->withHeader('apikey', value: $this->getApiKey()->getString())
+            ->withHeader('apikey', value: $this->apiKey->getString())
             ->withHeader('Accept', value: 'application/json');
     }
 

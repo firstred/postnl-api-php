@@ -81,12 +81,12 @@ abstract class AbstractService
      * @param DateInterval|DateTimeInterface|int|null $ttl
      */
     public function __construct(
-        private HiddenString $apiKey,
-        private bool $sandbox,
-        private HttpClientInterface $httpClient,
-        private RequestFactoryInterface $requestFactory,
-        private StreamFactoryInterface $streamFactory,
-        CacheItemPoolInterface $cache = null,
+        protected HiddenString             $apiKey,
+        private bool                       $sandbox,
+        private HttpClientInterface        $httpClient,
+        private RequestFactoryInterface    $requestFactory,
+        private StreamFactoryInterface     $streamFactory,
+        CacheItemPoolInterface             $cache = null,
         DateInterval|DateTimeInterface|int $ttl = null
     ) {
         $this->cache = $cache;

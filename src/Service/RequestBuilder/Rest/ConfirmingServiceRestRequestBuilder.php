@@ -64,7 +64,7 @@ class ConfirmingServiceRestRequestBuilder extends AbstractRestRequestBuilder imp
             method: 'POST',
             uri: $this->isSandbox() ? static::SANDBOX_ENDPOINT : static::LIVE_ENDPOINT
         )
-            ->withHeader('apikey', value: $this->getApiKey()->getString())
+            ->withHeader('apikey', value: $this->apiKey->getString())
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: json_encode(value: $confirming)));

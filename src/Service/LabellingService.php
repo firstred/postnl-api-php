@@ -101,7 +101,7 @@ class LabellingService extends AbstractService implements LabellingServiceInterf
         );
 
         $this->requestBuilder = new LabellingServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),

@@ -86,7 +86,7 @@ class LabellingServiceRestRequestBuilder extends AbstractRestRequestBuilder impl
                 'confirm' => ($confirm ? 'true' : 'false'),
             ], numeric_prefix: '', arg_separator: '&', encoding_type: PHP_QUERY_RFC3986)
         )
-            ->withHeader('apikey', value: $this->getApiKey()->getString())
+            ->withHeader('apikey', value: $this->apiKey->getString())
             ->withHeader('Accept', value: 'application/json')
             ->withHeader('Content-Type', value: 'application/json;charset=UTF-8')
             ->withBody(body: $this->getStreamFactory()->createStream(content: json_encode(value: $generateLabel)));

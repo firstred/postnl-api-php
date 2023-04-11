@@ -98,7 +98,7 @@ class ShippingService extends AbstractService implements ShippingServiceInterfac
         );
 
         $this->requestBuilder = new ShippingServiceRestRequestBuilder(
-            apiKey: $this->getApiKey(),
+            apiKey: $this->apiKey,
             sandbox: $this->isSandbox(),
             requestFactory: $this->getRequestFactory(),
             streamFactory: $this->getStreamFactory(),
