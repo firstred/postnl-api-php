@@ -54,6 +54,11 @@ Here's how you can retrieve the closest delivery date:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\CutOffTime;
+    use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+
     $cutoffTime = '15:00:00';
     $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
     foreach (range(1, 7) as $day) {
@@ -101,28 +106,22 @@ The Shipping Date service almost works in the same way as the Delivery Date serv
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Request\GetSentDate;
+    use Firstred\PostNL\Entity\Request\GetSentDateRequest;
+
     $cutoffTime = '15:00:00';
-    $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
-    foreach (range(1, 7) as $day) {
-        if (isset($dropoffDays[$day])) {
-            $cutOffTimes[] = new CutOffTime(
-                str_pad($day, 2, '0', STR_PAD_LEFT),
-                date('H:i:00', strtotime($cutoffTime)),
-                true
-            );
-        }
-    }
-    $deliveryDate = $postnl->getDeliveryDate(
-        (new GetDeliveryDate())
-            ->setGetDeliveryDate(
-                (new GetDeliveryDate())
+    $deliveryDate = $postnl->getSentDate(
+        (new GetSentDateRequest())
+            ->setGetSentDate(
+                (new GetSentDate())
                     ->setAllowSundaySorting(false)
                     ->setCountryCode('NL')
-                    ->setCutOffTimes($cutOffTimes)
                     ->setHouseNr('66')
                     ->setOptions(['Morning', 'Daytime'])
                     ->setPostalCode('2132WT')
-                    ->setShippingDate(date('d-m-Y H:i:s'))
+                    ->setDeliveryDate(date('d-m-Y H:i:s'))
                     ->setShippingDuration('1')
             )
     );
