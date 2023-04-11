@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Cache\CacheableRequestEntityInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Location;
 use Firstred\PostNL\Entity\Message\Message;
@@ -37,7 +38,7 @@ use Firstred\PostNL\Entity\Message\Message;
 /**
  * @since 1.0.0
  */
-class GetNearestLocations extends AbstractEntity
+class GetNearestLocations extends AbstractEntity implements CacheableRequestEntityInterface
 {
     /** @var string|null $Countrycode */
     #[SerializableProperty(type: 'string')]
@@ -126,5 +127,24 @@ class GetNearestLocations extends AbstractEntity
         $this->Message = $Message;
 
         return $this;
+    }
+
+    /**
+     * This method returns a unique cache key for every unique cacheable request as defined by PSR-6.
+     *
+     * @see https://www.php-fig.org/psr/psr-6/#definitions
+     *
+     * @return string
+     */
+    public function getCacheKey(): string
+    {
+        $cacheKey = "GetNearestLocations.{$this->getCountrycode()}.{$this->getLocation()?->getAllowSundaySorting()}";
+        $cacheKey .= '.'.implode(separator: '_', array: $this->getLocation()?->getOptions() ?: []);
+        $cacheKey .= ".{$this->getLocation()?->getPostalcode()}.{$this->getLocation()?->getHouseNr()}.{$this->getLocation()?->getHouseNrExt()}";
+
+        return hash(
+            algo: 'xxh128',
+            data: $cacheKey,
+        );
     }
 }

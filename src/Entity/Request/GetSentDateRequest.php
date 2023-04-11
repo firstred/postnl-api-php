@@ -30,13 +30,14 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Cache\CacheableRequestEntityInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 
 /**
  * @since 1.0.0
  */
-class GetSentDateRequest extends AbstractEntity
+class GetSentDateRequest extends AbstractEntity implements CacheableRequestEntityInterface
 {
     /** @var GetSentDate|null $GetSentDate */
     #[SerializableProperty(type: GetSentDate::class)]
@@ -98,5 +99,26 @@ class GetSentDateRequest extends AbstractEntity
         $this->Message = $Message;
 
         return $this;
+    }
+
+    /**
+     * This method returns a unique cache key for every unique cacheable request as defined by PSR-6.
+     *
+     * @see https://www.php-fig.org/psr/psr-6/#definitions
+     *
+     * @return string
+     */
+    public function getCacheKey(): string
+    {
+        $cacheKey = "GetSentDate.{$this->getGetSentDate()?->getAllowSundaySorting()}.{$this->getGetSentDate()?->getShippingDuration()}.{$this->getGetSentDate()?->getDeliveryDate()->format(format: 'Y-m-d')}";
+        foreach ($this->getGetSentDate()?->getOptions() as $option) {
+            $cacheKey .= ".$option";
+        }
+        $cacheKey .= ".{$this->getGetSentDate()?->getCountryCode()}.{$this->getGetSentDate()?->getPostalCode()}.{$this->getGetSentDate()?->getHouseNr()}.{$this->getGetSentDate()?->getHouseNrExt()}";
+
+        return hash(
+            algo: 'xxh128',
+            data: $cacheKey,
+        );
     }
 }

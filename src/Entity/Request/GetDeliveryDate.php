@@ -34,6 +34,7 @@ use DateTimeInterface;
 use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Cache\CacheableRequestEntityInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\CutOffTime;
 use Firstred\PostNL\Entity\Message\Message;
@@ -43,7 +44,7 @@ use function in_array;
 /**
  * @since 1.0.0
  */
-class GetDeliveryDate extends AbstractEntity
+class GetDeliveryDate extends AbstractEntity implements CacheableRequestEntityInterface
 {
     /** @var bool|null $AllowSundaySorting */
     #[SerializableProperty(type: 'bool')]
@@ -247,7 +248,7 @@ class GetDeliveryDate extends AbstractEntity
     }
 
     /**
-     * @param array|null $Options
+     * @param string[]|null $Options
      *
      * @return static
      */
@@ -431,5 +432,36 @@ class GetDeliveryDate extends AbstractEntity
         $this->AllowSundaySorting = $AllowSundaySorting;
 
         return $this;
+    }
+
+    /**
+     * This method returns a unique cache key for every unique cacheable request as defined by PSR-6.
+     *
+     * @see https://www.php-fig.org/psr/psr-6/#definitions
+     *
+     * @return string
+     */
+    public function getCacheKey(): string
+    {
+        $cacheKey = "GetDeliveryDate.{$this->getAllowSundaySorting()}.{$this->getShippingDuration()}.{$this->getShippingDate()->format(format: 'Y-m-d')}";
+        foreach ($this->getOptions() as $option) {
+            $cacheKey .= ".$option";
+        }
+        $cutOffTimes = $this->getCutOffTimes();
+
+        if (isset($cutOffTimes[0])) {
+            $cacheKey .= ".$cutOffTimes[0]";
+        } else {
+            $cacheKey .= '.';
+            foreach ($cutOffTimes as $day => $cutOffTime) {
+                $cacheKey .= "{$day}_{$cutOffTime->getTime()}_";
+            }
+        }
+        $cacheKey .= ".{$this->getOriginCountryCode()}.{$this->getPostalCode()}.{$this->getHouseNr()}.{$this->getHouseNrExt()}";
+
+        return hash(
+            algo: 'xxh128',
+            data: $cacheKey,
+        );
     }
 }

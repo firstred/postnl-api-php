@@ -29,10 +29,12 @@ declare(strict_types=1);
 
 namespace Firstred\PostNL\Cache;
 
-interface CacheableRequestInterface
+interface CacheableRequestEntityInterface
 {
     /**
-     * This method should return a unique cache key for every unique cacheable request.
+     * This method returns a unique cache key for every unique cacheable request as defined by PSR-6.
+     *
+     * @see https://www.php-fig.org/psr/psr-6/#definitions
      *
      * @return string
      */

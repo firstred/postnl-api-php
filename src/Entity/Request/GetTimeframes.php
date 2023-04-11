@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace Firstred\PostNL\Entity\Request;
 
 use Firstred\PostNL\Attribute\SerializableProperty;
+use Firstred\PostNL\Cache\CacheableRequestEntityInterface;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Message\Message;
 use Firstred\PostNL\Entity\Timeframe;
@@ -38,7 +39,7 @@ use http\Exception\InvalidArgumentException;
 /**
  * @since 1.0.0
  */
-class GetTimeframes extends AbstractEntity
+class GetTimeframes extends AbstractEntity implements CacheableRequestEntityInterface
 {
     /** @var Message|null $Message */
     #[SerializableProperty(type: Message::class)]
@@ -132,5 +133,20 @@ class GetTimeframes extends AbstractEntity
         $this->Message = $Message;
 
         return $this;
+    }
+
+    /**
+     * This method returns a unique cache key for every unique cacheable request as defined by PSR-6.
+     *
+     * @see https://www.php-fig.org/psr/psr-6/#definitions
+     *
+     * @return string
+     */
+    public function getCacheKey(): string
+    {
+        return hash(
+            algo: 'xx128',
+            data: "GetTimeframes.{$this->getTimeframes()[0]->getHouseNr()}",
+        );
     }
 }

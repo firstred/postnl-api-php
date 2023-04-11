@@ -203,16 +203,6 @@ abstract class AbstractService
     }
 
     /**
-     * @return HiddenString
-     *
-     * @since 2.0.0
-     */
-    public function getApiKey(): HiddenString
-    {
-        return $this->apiKey;
-    }
-
-    /**
      * @param HiddenString $apiKey
      *
      * @return static
