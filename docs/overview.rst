@@ -99,7 +99,7 @@ Guidelines
 2. The library is meant to be lean, fast and sticks to the standards of the SOAP API. This means
    that not every feature request can be accepted. When in doubt, please open an issue first.
 3. The PostNL library has a minimum PHP version requirement of PHP 5.6. Pull requests must
-   not require a PHP version greater than PHP 5.6.
+   not require a PHP version lower than PHP 5.6.
 4. All pull requests must include unit tests to ensure the change works as
    expected and to prevent regressions.
 
