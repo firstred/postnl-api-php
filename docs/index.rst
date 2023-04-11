@@ -70,6 +70,7 @@ Developer Guide
     caching.rst
     logging.rst
     advancedusage.rst
+    migratingv1v2.rst
     reference/index.rst
     authors.rst
 
