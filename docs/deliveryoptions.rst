@@ -206,18 +206,24 @@ Here's an example of how you can retrieve the nearest location by postcode:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Location;
+    use Firstred\PostNL\Entity\Request\GetNearestLocations;
+    use Firstred\PostNL\PostNL;
+
     $postnl->getNearestLocations(
-        (new GetNearestLocations())
-            ->setCountrycode('NL')
-            ->setLocation(
-                (new Location())
-                    ->setAllowSundaySorting(false)
-                    ->setDeliveryOptions(['PG'])
-                    ->setOptions(['Daytime'])
-                    ->setHouseNr('66')
-                    ->setPostalcode('2132WT')
-            )
-        );
+        getNearestLocations: new GetNearestLocations(
+            Countrycode: 'NL',
+            Location: new Location(
+                Postalcode: '2132WT',
+                AllowSundaySorting: false,
+                DeliveryOptions: ['PG'],
+                Options: ['Daytime'],
+                HouseNr: '66',
+            ),
+        ),
+    );
 
 .. confval:: getNearestLocations
     :required: true
