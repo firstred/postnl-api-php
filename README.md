@@ -1,3 +1,5 @@
+> ⚠️ **This version is end-of-life**: support ended on  Apr 19, 2021 ⚠️
+
 # PostNL REST/SOAP API PHP Bindings
 
 [![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
