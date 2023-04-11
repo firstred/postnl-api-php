@@ -31,7 +31,6 @@ namespace Firstred\PostNL\Service;
 
 use Firstred\PostNL\Entity\Request\GenerateBarcode;
 use Firstred\PostNL\Entity\Request\GenerateLabel;
-use Firstred\PostNL\Entity\Response\GenerateBarcodeResponse;
 use Firstred\PostNL\Entity\Response\GenerateLabelResponse;
 use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
@@ -68,7 +67,7 @@ interface LabellingServiceInterface extends ServiceInterface
      *
      * @param array<int|string, array<GenerateBarcode, bool>> $generateLabels
      *
-     * @return array<int|string, GenerateBarcodeResponse>
+     * @return array<int|string, GenerateLabelResponse>
      *
      * @throws HttpClientException
      * @throws NotSupportedException

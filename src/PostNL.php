@@ -66,14 +66,12 @@ use Firstred\PostNL\Exception\CifDownException;
 use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\Exception\HttpClientException;
 use Firstred\PostNL\Exception\InvalidArgumentException;
-use Firstred\PostNL\Exception\InvalidArgumentException as PostNLInvalidArgumentException;
 use Firstred\PostNL\Exception\InvalidBarcodeException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
-use Firstred\PostNL\Exception\NotFoundException as PostNLNotFoundException;
+use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\ResponseException;
-use Firstred\PostNL\Exception\ShipmentNotFoundException;
 use Firstred\PostNL\HttpClient\CurlHttpClient;
 use Firstred\PostNL\HttpClient\GuzzleHttpClient;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
@@ -111,10 +109,8 @@ use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
 use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\NotFoundException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
-use JetBrains\PhpStorm\Deprecated;
 use ParagonIE\HiddenString\HiddenString;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
@@ -239,7 +235,7 @@ class PostNL implements LoggerAwareInterface
      * @param string|HiddenString $apiKey   API key or UsernameToken object
      * @param bool                $sandbox  whether the testing environment should be used
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(
         Customer $customer,
@@ -254,7 +250,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get API Key.
      *
-     * @throws PostNLInvalidArgumentException
+     * @return HiddenString
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.4.1
      */
@@ -268,6 +266,10 @@ class PostNL implements LoggerAwareInterface
     }
 
     /**
+     * @param HiddenString|string $apiKey
+     *
+     * @return static
+     *
      * @since 2.0.0
      */
     public function setApiKey(HiddenString|string $apiKey): static
@@ -280,6 +282,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PostNL Customer.
      *
+     * @return Customer
+     *
      * @since 1.0.0
      */
     public function getCustomer(): Customer
@@ -289,6 +293,10 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * Set PostNL Customer.
+     *
+     * @param Customer $customer
+     *
+     * @return static
      *
      * @since 1.0.0
      */
@@ -302,6 +310,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get sandbox mode.
      *
+     * @return bool
+     *
      * @since 1.0.0
      */
     public function getSandbox(): bool
@@ -312,7 +322,11 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set sandbox mode.
      *
-     * @throws PostNLInvalidArgumentException
+     * @param bool $sandbox
+     *
+     * @return static
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -337,7 +351,10 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load Guzzle when available
      *
-     * @throws PostNLInvalidArgumentException
+     * @return HTTPlugHttpClient|CurlHttpClient|HttpClientInterface|GuzzleHttpClient
+     *
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function getHttpClient(): HTTPlugHttpClient|CurlHttpClient|HttpClientInterface|GuzzleHttpClient
@@ -401,12 +418,16 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the HttpClient.
      *
-     * @throws PostNLInvalidArgumentException
+     * @param HttpClientInterface $httpClient
      *
-     * @since 2.0.0 Renamed `$client` to `$httpClient`
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
+     * @since 2.0.0 Renamed `$client` to `$httpClient`, return `$this`
      */
-    public function setHttpClient(HttpClientInterface $httpClient): void
+    public function setHttpClient(HttpClientInterface $httpClient): static
     {
         $this->httpClient = $httpClient;
 
@@ -420,10 +441,14 @@ class PostNL implements LoggerAwareInterface
         $this->getTimeframeService()->setHttpClient(httpClient: $httpClient);
 
         $this->httpClient->setLogger(logger: $this->getLogger());
+
+        return $this;
     }
 
     /**
      * Get the logger.
+     *
+     * @return LoggerInterface
      *
      * @since 1.0.0
      */
@@ -439,6 +464,12 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the logger.
      *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     *
+     * @throws InvalidArgumentException
+     *
      * @since 1.0.0
      */
     public function setLogger(LoggerInterface $logger): void
@@ -452,6 +483,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set a dummy logger.
      *
+     * @return static
+     *
      * @since 1.2.0
      */
     public function resetLogger(): static
@@ -464,7 +497,9 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PSR-7 Request factory.
      *
-     * @throws PostNLInvalidArgumentException
+     * @return RequestFactoryInterface
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -480,11 +515,15 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Request factory.
      *
-     * @throws PostNLInvalidArgumentException
+     * @param RequestFactoryInterface $requestFactory
      *
+     * @return static
+     *
+     * @throws InvalidArgumentException
+     *
+     * @since 1.2.0
      * @since 1.3.0 Also sets the request factory on the HTTP client
      * @since 2.0.0 Also sets the request factory on services
-     * @since 1.2.0
      */
     public function setRequestFactory(RequestFactoryInterface $requestFactory): static
     {
@@ -507,6 +546,8 @@ class PostNL implements LoggerAwareInterface
     /**
      * Get PSR-7 Response factory.
      *
+     * @return ResponseFactoryInterface
+     *
      * @since 1.2.0
      */
     public function getResponseFactory(): ResponseFactoryInterface
@@ -521,8 +562,14 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Response factory.
      *
+     * @param ResponseFactoryInterface $responseFactory
+     *
+     * @return static
+     *
      * @since 1.2.0
      * @since 1.3.0 Also sets the response factory on the HTTP client
+     *
+     * @throws InvalidArgumentException
      */
     public function setResponseFactory(ResponseFactoryInterface $responseFactory): static
     {
@@ -535,6 +582,8 @@ class PostNL implements LoggerAwareInterface
 
     /**
      * Set PSR-7 Stream factory.
+     *
+     * @return StreamFactoryInterface
      *
      * @since 1.2.0
      */
@@ -550,9 +599,15 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set PSR-7 Stream factory.
      *
+     * @param StreamFactoryInterface $streamFactory
+     *
+     * @return static
+     *
      * @since 1.2.0
      * @since 1.3.0 Also sets the stream factory on the HTTP client
      * @since 2.0.0 Also sets the stream factory on services
+     *
+     * @throws InvalidArgumentException
      */
     public function setStreamFactory(StreamFactoryInterface $streamFactory): static
     {
@@ -577,7 +632,11 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the barcode service
      *
+     * @return BarcodeServiceInterface
+     *
      * @since 1.0.0
+     *
+     * @throws InvalidArgumentException
      */
     public function getBarcodeService(): BarcodeServiceInterface
     {
@@ -597,11 +656,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the barcode service.
      *
+     * @param BarcodeServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setBarcodeService(BarcodeServiceInterface $service): void
+    public function setBarcodeService(BarcodeServiceInterface $service): static
     {
         $this->barcodeService = $service;
+
+        return $this;
     }
 
     /**
@@ -609,7 +675,9 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the labelling service
      *
-     * @throws PostNLInvalidArgumentException
+     * @return LabellingServiceInterface
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -631,11 +699,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the labelling service.
      *
+     * @param LabellingServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setLabellingService(LabellingServiceInterface $service): void
+    public function setLabellingService(LabellingServiceInterface $service): static
     {
         $this->labellingService = $service;
+
+        return $this;
     }
 
     /**
@@ -643,7 +718,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the confirming service
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -665,11 +740,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the confirming service.
      *
+     * @param ConfirmingServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setConfirmingService(ConfirmingServiceInterface $service): void
+    public function setConfirmingService(ConfirmingServiceInterface $service): static
     {
         $this->confirmingService = $service;
+
+        return $this;
     }
 
     /**
@@ -677,7 +759,7 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the shipping status service
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -701,11 +783,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @param ShippingStatusServiceInterface $service
      *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setShippingStatusService(ShippingStatusServiceInterface $service)
+    public function setShippingStatusService(ShippingStatusServiceInterface $service): static
     {
         $this->shippingStatusService = $service;
+
+        return $this;
     }
 
     /**
@@ -715,7 +802,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return DeliveryDateServiceInterface
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -739,11 +826,16 @@ class PostNL implements LoggerAwareInterface
      *
      * @param DeliveryDateServiceInterface $service
      *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setDeliveryDateService(DeliveryDateServiceInterface $service)
+    public function setDeliveryDateService(DeliveryDateServiceInterface $service): static
     {
         $this->deliveryDateService = $service;
+
+        return $this;
     }
 
     /**
@@ -753,7 +845,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @return TimeframeServiceInterface
      *
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -775,11 +867,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the timeframe service.
      *
+     * @param TimeframeServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setTimeframeService(TimeframeServiceInterface $service): void
+    public function setTimeframeService(TimeframeServiceInterface $service): static
     {
         $this->timeframeService = $service;
+
+        return $this;
     }
 
     /**
@@ -787,7 +886,9 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load the location service
      *
-     * @throws PostNLInvalidArgumentException
+     * @return LocationServiceInterface
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -809,17 +910,28 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the location service.
      *
+     * @param LocationServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.0.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setLocationService(LocationServiceInterface $service)
+    public function setLocationService(LocationServiceInterface $service): static
     {
         $this->locationService = $service;
+
+        return $this;
     }
 
     /**
      * Shipping service.
      *
      * Automatically load the shipping service
+     *
+     * @return ShippingServiceInterface
+     *
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -841,11 +953,18 @@ class PostNL implements LoggerAwareInterface
     /**
      * Set the shipping service.
      *
+     * @param ShippingServiceInterface $service
+     *
+     * @return static
+     *
      * @since 1.2.0
+     * @since 2.0.0 Return `$this`
      */
-    public function setShippingService(ShippingServiceInterface $service): void
+    public function setShippingService(ShippingServiceInterface $service): static
     {
         $this->shippingService = $service;
+
+        return $this;
     }
 
     /**
@@ -864,6 +983,7 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidBarcodeException
      * @throws InvalidConfigurationException
      * @throws ResponseException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -913,6 +1033,7 @@ class PostNL implements LoggerAwareInterface
      * @throws InvalidBarcodeException
      * @throws InvalidConfigurationException
      * @throws ResponseException
+     * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
@@ -952,6 +1073,7 @@ class PostNL implements LoggerAwareInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
+     * @throws InvalidArgumentException
      * @throws InvalidBarcodeException
      * @throws InvalidConfigurationException
      * @throws ResponseException
@@ -1019,8 +1141,8 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1089,13 +1211,13 @@ class PostNL implements LoggerAwareInterface
      * @throws PdfParserException
      * @throws PdfTypeException
      * @throws PdfReaderException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws ResponseException
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      *
      * @since 1.2.0
      */
@@ -1201,11 +1323,10 @@ class PostNL implements LoggerAwareInterface
                         foreach ($label->getResponseShipments()[0]->getLabels() as $labelContent) {
                             $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
                         }
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
                         $stream = StreamReader::createByString(content: $pdfContent);
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
+                    $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
         }
@@ -1215,16 +1336,11 @@ class PostNL implements LoggerAwareInterface
             if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
                 // Multilabel
                 $pdf->rotateCounterClockWise();
-                if (2 === count(value: $deferred['stream'])) {
-                    $pdf->setSourceFile(file: $defer['stream'][0]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-                    $pdf->setSourceFile(file: $defer['stream'][1]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
-                } else {
-                    $pdf->setSourceFile(file: $defer['stream'][0]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-                    $pdf->setSourceFile(file: $defer['stream'][1]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                $pdf->setSourceFile(file: $defer['stream'][0]);
+                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+                $pdf->setSourceFile(file: $defer['stream'][1]);
+                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                if (2 !== count(value: $deferred['stream'])) {
                     for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
                         $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
                         for ($j = 1; $j < $pages + 1; ++$j) {
@@ -1264,8 +1380,8 @@ class PostNL implements LoggerAwareInterface
      * @throws PsrCacheInvalidArgumentException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      *
      * @since 1.0.0
      */
@@ -1335,7 +1451,7 @@ class PostNL implements LoggerAwareInterface
      * @throws PdfReaderException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1448,11 +1564,10 @@ class PostNL implements LoggerAwareInterface
                         foreach ($responseShipment->getResponseShipments()[0]->getLabels() as $labelContent) {
                             $stream[] = StreamReader::createByString(content: base64_decode(string: $labelContent->getContent()));
                         }
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     } else {
                         $stream = StreamReader::createByString(content: $pdfContent);
-                        $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                     }
+                    $deferred[] = ['stream' => $stream, 'sizes' => $sizes];
                 }
             }
         }
@@ -1462,16 +1577,11 @@ class PostNL implements LoggerAwareInterface
             if (is_array(value: $defer['stream']) && count(value: $defer['stream']) > 1) {
                 // Multilabel
                 $pdf->rotateCounterClockWise();
-                if (2 === count(value: $deferred['stream'])) {
-                    $pdf->setSourceFile(file: $defer['stream'][0]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-                    $pdf->setSourceFile(file: $defer['stream'][1]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
-                } else {
-                    $pdf->setSourceFile(file: $defer['stream'][0]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
-                    $pdf->setSourceFile(file: $defer['stream'][1]);
-                    $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                $pdf->setSourceFile(file: $defer['stream'][0]);
+                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 0);
+                $pdf->setSourceFile(file: $defer['stream'][1]);
+                $pdf->useTemplate(tpl: $pdf->importPage(pageNumber: 1), x: -190, y: 148);
+                if (2 !== count(value: $deferred['stream'])) {
                     for ($i = 2; $i < count(value: $defer['stream']); ++$i) {
                         $pages = $pdf->setSourceFile(file: $defer['stream'][$i]);
                         for ($j = 1; $j < $pages + 1; ++$j) {
@@ -1507,8 +1617,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws ResponseException
      *
      * @since 1.0.0
@@ -1557,14 +1667,13 @@ class PostNL implements LoggerAwareInterface
      *
      * @return CurrentStatusResponseShipment|CompleteStatusResponseShipment
      *
-     * @throws ShipmentNotFoundException
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws ResponseException
-     * @throws PostNLNotFoundException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      *
      * @since 1.2.0
@@ -1588,7 +1697,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (empty($shipments) || !is_array(value: $shipments)) {
-            throw new ShipmentNotFoundException(message: $barcode);
+            throw new NotFoundException(message: "Barcode `$barcode`` not found");
         }
 
         return $shipments[0];
@@ -1604,7 +1713,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1650,12 +1759,10 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      * @throws NotFoundException
-     * @throws ShipmentNotFoundException
-     * @throws PostNLNotFoundException
      *
      * @since 1.2.0
      */
@@ -1678,7 +1785,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (empty($shipments) || !is_array(value: $shipments)) {
-            throw new ShipmentNotFoundException(message: $reference);
+            throw new NotFoundException(message: "Shipment with reference `$reference` not found");
         }
 
         return $shipments[0];
@@ -1694,7 +1801,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1740,8 +1847,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1767,8 +1874,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1794,7 +1901,7 @@ class PostNL implements LoggerAwareInterface
      *
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1828,8 +1935,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifDownException
      * @throws CifException
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1851,8 +1958,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1874,8 +1981,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1897,8 +2004,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -1926,7 +2033,7 @@ class PostNL implements LoggerAwareInterface
      *               ]
      *
      * @throws HttpClientException
-     * @throws PostNLInvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws PsrCacheInvalidArgumentException
      * @throws \ReflectionException
      *
@@ -2106,8 +2213,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
@@ -2129,8 +2236,8 @@ class PostNL implements LoggerAwareInterface
      * @throws CifException
      * @throws HttpClientException
      * @throws NotSupportedException
-     * @throws PostNLInvalidArgumentException
-     * @throws PostNLNotFoundException
+     * @throws InvalidArgumentException
+     * @throws NotFoundException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
      *
