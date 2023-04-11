@@ -61,7 +61,6 @@ Developer Guide
     exceptionhandling.rst
     formats.rst
     httpclient.rst
-    caching.rst
     logging.rst
     advancedusage.rst
     reference/index.rst
