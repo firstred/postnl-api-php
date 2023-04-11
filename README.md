@@ -1,3 +1,5 @@
+> ⚠️ **This version is end-of-life**: it is an abandoned attempt at making v2 ⚠️
+
 # PostNL REST API PHP Bindings
 
 [![Build Status](https://travis-ci.org/firstred/postnl-api-php.svg?branch=master)](https://travis-ci.org/firstred/postnl-api-php)
