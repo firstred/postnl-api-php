@@ -384,7 +384,7 @@ class PostNL implements LoggerAwareInterface
             '`getRestApiKey` is deprecated, use `getApiKey` instead'
         );
 
-        if (null == $this->apiKey) {
+        if (!isset($this->apiKey)) {
             return false;
         }
 
@@ -397,9 +397,17 @@ class PostNL implements LoggerAwareInterface
      * @return null|string
      *
      * @since 1.4.1
+     * @deprecated 1.4.1 Will be removed from 2.0.0 on, without a replacement.
      */
+    #[Deprecated]
     public function getApiKey()
     {
+        static::triggerDeprecation(
+            'firstred/postnl-api-php',
+            '1.4.1',
+            '`PostNL::getApiKey` will be removed from 2.0.0 on, without a replacement.'
+        );
+
         return $this->apiKey;
     }
 
@@ -419,6 +427,10 @@ class PostNL implements LoggerAwareInterface
             '1.4.1',
             '`getToken` is deprecated, use `getApiKey` instead'
         );
+
+        if (!isset($this->apiKey)) {
+            return false;
+        }
 
         return new UsernameToken(null, $this->apiKey);
     }
