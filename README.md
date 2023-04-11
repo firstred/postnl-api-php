@@ -138,7 +138,14 @@ Generating the documentation consists of two steps:
 
 #### Generating the PHP classes reference
 
-First install the PHPdoc to RST tool.
+Generating the references depends on a pretty old library. Removing other dependencies first from `require-dev` may be the best workaround to install `abbadon1334/phpdoc-to-rst`.
+
+```
+  "require-dev": {
+  },
+```
+
+Then install the PHPdoc to RST tool.
 ```bash
 composer require abbadon1334/phpdoc-to-rst -W
 ```
