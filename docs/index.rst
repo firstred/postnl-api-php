@@ -13,11 +13,11 @@ These PHP API bindings aim to make it easier to connect to PostNL's CIF API, use
 
 - Follows PHP standards, some of them are:
 
-  - PSR-7 interfaces for requests and responses. Build and process functions are provided for every service so you can create your own mix of batch requests. See the `Firstred\\PostNL\\PostNL::getTimeframesAndNearestLocations <https://github.com/firstred/postnl-api-php/blob/b3f5c6e5a92edabb759ba32720b3fcb5a49635c0/src/PostNL.php#L2076-L2158>`_ method for an example.
-    
-  - PSR-6 caching, so you can use your favorite cache for caching API responses. Chapter :ref:`caching`.
-    
   - PSR-3 logging. You can log the requests and responses for debugging purposes. More info on the page :ref:`logging`.
+
+  - PSR-6 caching, so you can use your favorite cache for caching API responses. Chapter :ref:`caching`.
+
+  - PSR-7 interfaces for requests and responses. Build and process functions are provided for every service so you can create your own mix of batch requests. See the `Firstred\\PostNL\\PostNL::getTimeframesAndNearestLocations <https://github.com/firstred/postnl-api-php/blob/b3f5c6e5a92edabb759ba32720b3fcb5a49635c0/src/PostNL.php#L2076-L2158>`_ method for an example.
 
   - PSR-18 HTTP Clients or HTTPlug clients.
 
@@ -27,20 +27,29 @@ These PHP API bindings aim to make it easier to connect to PostNL's CIF API, use
 
 .. code-block:: php
 
-   $postnl = new PostNL(...);
-   $timeframes = $postnl->getTimeframes(
-       (new GetTimeframes())
-           ->setTimeframe([Timeframe::create([
-               'CountryCode'   => 'NL',
-               'StartDate'     => date('d-m-Y', strtotime('+1 day')),
-               'EndDate'       => date('d-m-Y', strtotime('+14 days')),
-               'HouseNr'       => 42,
-               'PostalCode'    => '2132WT',
-               'SundaySorting' => true,
-               'Options'       => ['Daytime', 'Evening'],
-           ])])
-   );
-   var_dump($timeframes);
+    <?php
+
+    use Firstred\PostNL\PostNL;
+    use Firstred\PostNL\Entity\Request\GetTimeframes;
+    use Firstred\PostNL\Entity\Timeframe;
+
+    $postnl = new PostNL();
+    $timeframes = $postnl->getTimeframes(
+        getTimeframes: new GetTimeframes(
+            Timeframes: [
+                new Timeframe(
+                    CountryCode: 'NL',
+                    EndDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: '+14 days')),
+                    HouseNr: 42,
+                    Options: ['Daytime', 'Evening'],
+                    PostalCode: '2132WT',
+                    SundaySorting: true,
+                    StartDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: '+1 day')),
+                ),
+            ],
+        ),
+    );
+    var_dump(value: $timeframes);
 
 Developer Guide
 ---------------

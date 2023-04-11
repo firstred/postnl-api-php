@@ -33,6 +33,8 @@ You can generate a single barcode for domestic shipments as follows:
 
 .. code-block:: php
 
+    <?php
+
     $postnl->generateBarcode();
 
 This will generate a 3S barcode meant for domestic shipments only.
@@ -77,6 +79,8 @@ Example:
 
 .. code-block:: php
 
+    <?php
+
     $postnl->generateBarcodeByCountryCode('BE');
 
 This will generate a 3S barcode meant for domestic shipments only.
@@ -99,11 +103,15 @@ Example:
 
 .. code-block:: php
 
+    <?php
+
     $postnl->generatesBarcodeByCountryCodes(['NL' => 2, 'DE' => 3]);
 
 The method :php:meth:`Firstred\\PostNL\\PostNL::generateBarcodesByCountryCodes` will return a list of barcodes:
 
 .. code-block:: php
+
+    <?php
 
     [
         'NL' => [
@@ -148,42 +156,53 @@ The following example generates a single shipment label for a domestic shipment:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\PostNL;
+
+    $barcode = '3S...';
     $postnl = new PostNL(...);
     $postnl->generateLabel(
-        Shipment::create()
-            ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
-            ])
-            ->setBarcode($barcode)
-            ->setDeliveryAddress('01')
-            ->setDimension(new Dimension('2000'))
-            ->setProductCodeDelivery('3085'),
-        'GraphicFile|PDF',
-        false
+        Shipment: new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
+                new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+            ],
+            Barcode: $barcode,
+            DeliveryAddress: '01',
+            Dimension: new Dimension('2000'),
+            ProductCodeDelivery: '3085',
+        ),
+        printertype: 'GraphicFile|PDF',
+        confirm: false
     );
+
 
 This will create a standard shipment (product code 3085). You can access the label (base64 encoded PDF) this way:
 
 .. code-block:: php
+
+    <?php
 
     $pdf = base64_decode($label->getResponseShipments()[0]->getLabels()[0]->getContent());
 
@@ -213,43 +232,57 @@ The following example shows how a label can be merged:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Enum\LabelPosition;
+
+    $postnl = new PostNL(...);
+
+    $barcodes = [
+        'NL' => ['3S...', '3S...'],
+    ];
+
     $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+        new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+            Barcode: $barcodes['NL'][0],
+            Dimension: new Dimension(Weight: '1000'),
+            ProductCodeDelivery: '3085',
+        ),
+        new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+            Barcode: $barcodes['NL'][1],
+            Dimension: new Dimension(Weight: '1000'),
+            ProductCodeDelivery: '3085',
+        ),
     ];
 
     $label = $postnl->generateLabels(
@@ -259,10 +292,10 @@ The following example shows how a label can be merged:
         true, // Merge
         Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
         [
-            1 => true,
-            2 => true,
-            3 => true,
-            4 => true,
+            LabelPosition::TopLeft->value => true,
+            LabelPosition::TopRight->value => true,
+            LabelPosition::BottomLeft->value => true,
+            LabelPosition::BottomRight->value => true,
         ] // Positions
     );
 
@@ -333,41 +366,51 @@ The following example sends a single domestic shipment:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\PostNL;
+
     $postnl = new PostNL(...);
     $postnl->sendShipment(
-        Shipment::create()
-            ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
-            ])
-            ->setDeliveryAddress('01')
-            ->setDimension(new Dimension('2000'))
-            ->setProductCodeDelivery('3085'),
-        'GraphicFile|PDF',
-        false
+        shipment: new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
+                new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+            ],
+            DeliveryAddress: '01',
+            Dimension: new Dimension(Weight: '2000'),
+            ProductCodeDelivery: '3085',
+        ),
+        printertype: 'GraphicFile|PDF',
+        confirm: false
     );
 
 This will create a standard shipment (product code 3085). You can access the label (base64 encoded PDF) this way:
 
 .. code-block:: php
+
+    <?php
 
     $pdf = base64_decode($shipping->getResponseShipments()[0]->getLabels()[0]->getContent());
 
@@ -400,54 +443,65 @@ The following example shows how labels of multiple shipment labels can be merged
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Enum\LabelPosition;
+    use Firstred\PostNL\PostNL;
+
+    $postnl = new PostNL(...);
+
     $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+        new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+            Dimension: new Dimension(Weight: '1000'),
+            ProductCodeDelivery: '3085',
+        ),
+        new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+            Dimension: new Dimension(Weight: '1000'),
+            ProductCodeDelivery: '3085',
+        ),
     ];
 
-    $label = $postnl->generateShippings(
-        $shipments,
-        'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
-        true, // Confirm immediately
-        true, // Merge
-        Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
-        [
-            1 => true,
-            2 => true,
-            3 => true,
-            4 => true,
+    $label = $postnl->sendShipments(
+        shipments: $shipments,
+        printertype: 'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
+        confirm: true, // Confirm immediately
+        merge: true, // Merge
+        format: Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
+        positions: [
+            LabelPosition::TopLeft->value     => true,
+            LabelPosition::TopRight->value    => true,
+            LabelPosition::BottomLeft->value  => true,
+            LabelPosition::BottomRight->value => true,
         ] // Positions
     );
 
@@ -513,36 +567,44 @@ Example code:
 
 .. code-block:: php
 
+    <?php
+
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\PostNL;
+
     $postnl = new PostNL(...);
 
     $confirmedShipment = $postnl->confirmShipment(
-        (new Shipment())
-            ->setAddresses([
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
-                Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
-            ])
-            ->setBarcode('3SDEVC201611210')
-            ->setDeliveryAddress('01')
-            ->setDimension(new Dimension('2000'))
-            ->setProductCodeDelivery('3085')
+        shipment: new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
+                new Address(
+                    AddressType: '02',
+                    CompanyName: 'PostNL',
+                    Street: 'Siriusdreef',
+                    HouseNr: '42',
+                    Zipcode: '2132WT',
+                    City: 'Hoofddorp',
+                    Countrycode: 'NL',
+                ),
+            ],
+            Barcode: '3SDEVC201611210',
+            DeliveryAddress: '01',
+            Dimension: new Dimension('2000'),
+            ProductCodeDelivery: '3085',
+        ),
     );
 
 The output is a :php:class:`Firstred\\PostNL\\Entity\\Respone\\ConfirmingResponseShipment` or an array with these objects in case you are confirming multiple shipments. The results array will have the same index keys as the request input.
@@ -570,8 +632,10 @@ Gets the current or complete status by barcode. A complete status also includes 
 
 .. code-block:: php
 
-     $postnl = new PostNL(...);
-     $postnl->getShippingStatusByBarcode('3SDEVC98237423');
+    <?php
+
+    $postnl = new PostNL(...);
+    $postnl->getShippingStatusByBarcode('3SDEVC98237423');
 
 .. confval:: barcode
     :required: true
@@ -595,8 +659,10 @@ Gets multiple current or complete statuses by barcodes. A complete status also i
 
 .. code-block:: php
 
-     $postnl = new PostNL(...);
-     $postnl->getShippingStatusesByBarcodes(['3SDEVC98237423', '3SDEVC98237423']);
+    <?php
+
+    $postnl = new PostNL(...);
+    $postnl->getShippingStatusesByBarcodes(['3SDEVC98237423', '3SDEVC98237423']);
 
 .. confval:: barcodes
     :required: true
@@ -621,8 +687,10 @@ Gets the current or complete status by reference. A complete status also include
 
 .. code-block:: php
 
-     $postnl = new PostNL(...);
-     $postnl->getShippingStatusByReference('order-12');
+    <?php
+
+    $postnl = new PostNL(...);
+    $postnl->getShippingStatusByReference('order-12');
 
 .. confval:: reference
     :required: true
@@ -646,8 +714,10 @@ Gets multiple current or complete statuses by references. A complete status also
 
 .. code-block:: php
 
-     $postnl = new PostNL(...);
-     $postnl->getShippingStatusesByReferences(['order-12', 'order-16']);
+    <?php
+
+    $postnl = new PostNL(...);
+    $postnl->getShippingStatusesByReferences(['order-12', 'order-16']);
 
 .. confval:: barcodes
     :required: true
@@ -709,6 +779,8 @@ Gets the signature of the shipment when available. A signature can be accessed b
 
 .. code-block:: php
 
+    <?php
+
     $postnl = new PostNL(...);
     $postnl->getSignatureByBarcode('3SDEVC23987423');
 
@@ -722,6 +794,8 @@ It accepts the following arguments
 This method returns a :php:class:`Firstred\\PostNL\\Entity\\Response\\GetSignatureResponseSignature` object. To get the actual signature in binary format you will have to use:
 
 .. code-block:: php
+
+    <?php
 
     $postnl = new PostNL(...);
 
@@ -741,6 +815,8 @@ Get multiple signatures by barcodes
 Gets multiple signatures of multiple shipments, when available.
 
 .. code-block:: php
+
+    <?php
 
     $postnl = new PostNL(...);
     $postnl->getSignaturesByBarcodes(['3SDEVC23987423', '3SDEVC23987425']);

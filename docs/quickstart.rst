@@ -31,202 +31,104 @@ You can request the timeframes, locations and delivery date at once to quickly r
 
 Here's how it is done from scratch:
 
-.. tabs::
+ .. code-block:: php
 
-    .. tab:: PHP 5/7
+    <?php
 
-        .. code-block:: php
+    use Firstred\PostNL\Entity\Address;
+    use Firstred\PostNL\Entity\Customer;
+    use Firstred\PostNL\Entity\CutOffTime;
+    use Firstred\PostNL\Entity\Location;
+    use Firstred\PostNL\Entity\Request\GetDeliveryDate;
+    use Firstred\PostNL\Entity\Request\GetNearestLocations;
+    use Firstred\PostNL\Entity\Request\GetTimeframes;
+    use Firstred\PostNL\Entity\Timeframe;
+    use Firstred\PostNL\PostNL;
 
-            <?php
+    require_once __DIR__.'/vendor/autoload.php';
 
-            use Firstred\PostNL\Entity\CutOffTime;
-            use Firstred\PostNL\Entity\Location;
-            use Firstred\PostNL\Entity\Message\Message;
-            use Firstred\PostNL\Entity\Request\GetDeliveryDate;
-            use Firstred\PostNL\Entity\Request\GetNearestLocations;
-            use Firstred\PostNL\Entity\Request\GetTimeframes;
-            use Firstred\PostNL\Entity\Timeframe;
-            use Firstred\PostNL\PostNL;
-            use Firstred\PostNL\Entity\Customer;
-            use Firstred\PostNL\Entity\Address;
+    // Your PostNL credentials
+    $customer = new Customer(
+        CustomerNumber: '11223344',
+        CustomerCode: 'DEVC',
+        CollectionLocation: '123456',
+        ContactPerson: 'Sander',
+        Email: 'test@voorbeeld.nl',
+        Name: 'Michael',
+        Address: new Address(
+            AddressType: '02',
+            CompanyName: 'PostNL',
+            Street: 'Siriusdreef',
+            HouseNr: '42',
+            Zipcode: '2132WT',
+            City: 'Hoofddorp',
+            Countrycode: 'NL',
+        ),
+    );
 
-            require_once __DIR__.'/vendor/autoload.php';
+    $apikey = 'YOUR_API_KEY_HERE';
+    $sandbox = true;
 
-            // Your PostNL credentials
-            $customer = Customer::create([
-                'CollectionLocation' => '123456',
-                'CustomerCode'       => 'DEVC',
-                'CustomerNumber'     => '11223344',
-                'ContactPerson'      => 'Sander',
-                'Address'            => Address::create([
-                    'AddressType' => '02',
-                    'City'        => 'Hoofddorp',
-                    'CompanyName' => 'PostNL',
-                    'Countrycode' => 'NL',
-                    'HouseNr'     => '42',
-                    'Street'      => 'Siriusdreef',
-                    'Zipcode'     => '2132WT',
-                ]),
-                'Email'              => 'test@voorbeeld.nl',
-                'Name'               => 'Michael',
-            ]);
+    $postnl = new PostNL(
+        customer: $customer,
+        apiKey: $apikey,
+        sandbox: $sandbox,
+    );
 
-            $apikey = 'YOUR_API_KEY_HERE';
-            $sandbox = true;
+    $mondayDelivery = true;
+    $deliveryDaysWindow = 7; // Amount of days to show ahead
+    $dropoffDelay = 0;       // Amount of days to delay delivery
 
-            $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_REST);
-
-            $mondayDelivery = true;
-            $deliveryDaysWindow = 7; // Amount of days to show ahead
-            $dropoffDelay = 0;       // Amount of days to delay delivery
-
-            // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
-            $cutoffTime = '15:00:00';
-            $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
-            foreach (range(1, 7) as $day) {
-                if ($dropoffDays[$day]) {
-                    $cutOffTimes[] = new CutOffTime(
-                        str_pad($day, 2, '0', STR_PAD_LEFT),
-                        date('H:i:00', strtotime($cutoffTime)),
-                        true
-                    );
-                }
-            }
-
-            $response = $postnl->getTimeframesAndNearestLocations(
-                (new GetTimeframes())
-                    ->setTimeframe([
-                        (new Timeframe())
-                            ->setCountryCode('NL')
-                            ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
-                            ->setHouseNr('66')
-                            ->setOptions(['Morning', 'Daytime'])
-                            ->setPostalCode('2132WT')
-                            ->setStartDate(date('d-m-Y', strtotime("+1 days")))
-                            ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
-                    ]),
-                (new GetNearestLocations())
-                    ->setCountrycode('NL')
-                    ->setLocation(
-                        (new Location())
-                            ->setAllowSundaySorting(!empty($mondayDelivery))
-                            ->setDeliveryOptions(['PG'])
-                            ->setOptions(['Daytime'])
-                            ->setHouseNr('66')
-                            ->setPostalcode('2132WT')
-                    ),
-                (new GetDeliveryDate())
-                    ->setGetDeliveryDate(
-                        (new GetDeliveryDate())
-                            ->setAllowSundaySorting(!empty($mondayDelivery))
-                            ->setCountryCode('NL')
-                            ->setCutOffTimes($cutOffTimes)
-                            ->setHouseNr('12')
-                            ->setOptions(['Daytime', 'Evening'])
-                            ->setPostalCode('2132WT')
-                            ->setShippingDate(date('d-m-Y H:i:s'))
-                            ->setShippingDuration(strval(1 + (int) $dropoffDelay))
-                    )
-                    ->setMessage(new Message())
+    // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
+    $cutoffTime = '15:00:00';
+    $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
+    foreach (range(start: 1, end: 7) as $day) {
+        if ($dropoffDays[$day]) {
+            $cutOffTimes[] = new CutOffTime(
+                Day: str_pad(string: $day, length: 2, pad_string: '0', pad_type: STR_PAD_LEFT),
+                Time: date(format: 'H:i:00', timestamp: strtotime(datetime: $cutoffTime)),
+                Available: true,
             );
+        }
+    }
 
-    .. tab:: PHP 8
-
-         .. code-block:: php
-
-            <?php
-
-            use Firstred\PostNL\Entity\Label;
-            use Firstred\PostNL\PostNL;
-            use Firstred\PostNL\Entity\Customer;
-            use Firstred\PostNL\Entity\Address;
-            use Firstred\PostNL\Entity\Shipment;
-            use Firstred\PostNL\Entity\Dimension;
-
-            require_once __DIR__.'/vendor/autoload.php';
-
-            // Your PostNL credentials
-            $customer = new Customer(
-                CustomerNumber: '11223344',
-                CustomerCode: 'DEVC',
-                CollectionLocation: '123456',
-                ContactPerson: 'Sander',
-                Email: 'test@voorbeeld.nl',
-                Name: 'Michael',
-                Address: new Address(
-                    AddressType: '02',
-                    CompanyName: 'PostNL',
-                    Street: 'Siriusdreef',
-                    HouseNr: '42',
-                    Zipcode: '2132WT',
-                    City: 'Hoofddorp',
-                    Countrycode: 'NL',
+    $response = $postnl->getTimeframesAndNearestLocations(
+        GetTimeframes: new GetTimeframes(
+            Timeframes: [
+                new Timeframe(
+                    CountryCode: 'NL',
+                    EndDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: " +{$deliveryDaysWindow} days +{$dropoffDelay} days")),
+                    HouseNr: '66',
+                    Options: ['Morning', 'Daytime'],
+                    PostalCode: '2132WT',
+                    SundaySorting: !empty($mondayDelivery) && date(format: 'w', timestamp: strtotime(datetime: "+{$dropoffDelay} days")),
+                    StartDate: date(format: 'd-m-Y', timestamp: strtotime(datetime: '+1 days')),
                 ),
-            );
-
-            $apikey = 'YOUR_API_KEY_HERE';
-            $sandbox = true;
-
-            $postnl = new PostNL(
-                customer: $customer,
-                apiKey: $apikey,
-                sandbox: $sandbox,
-                mode: PostNL::MODE_REST,
-            );
-
-            $mondayDelivery = true;
-            $deliveryDaysWindow = 7; // Amount of days to show ahead
-            $dropoffDelay = 0;       // Amount of days to delay delivery
-
-            // Configure the cut-off window for every day, 1 = Monday, 7 = Sunday
-            $cutoffTime = '15:00:00';
-            $dropoffDays = [1 => true, 2 => true, 3 => true, 4 => true, 5 => true, 6 => false, 7 => false];
-            foreach (range(1, 7) as $day) {
-                if ($dropoffDays[$day]) {
-                    $cutOffTimes[] = new CutOffTime(
-                        str_pad($day, 2, '0', STR_PAD_LEFT),
-                        date('H:i:00', strtotime($cutoffTime)),
-                        true
-                    );
-                }
-            }
-
-            $response = $postnl->getTimeframesAndNearestLocations(
-                (new GetTimeframes())
-                    ->setTimeframe([
-                        (new Timeframe())
-                            ->setCountryCode('NL')
-                            ->setEndDate(date('d-m-Y', strtotime(" +{$deliveryDaysWindow} days +{$dropoffDelay} days")))
-                            ->setHouseNr('66')
-                            ->setOptions(['Morning', 'Daytime'])
-                            ->setPostalCode('2132WT')
-                            ->setStartDate(date('d-m-Y', strtotime("+1 days")))
-                            ->setSundaySorting(!empty($mondayDelivery) && date('w', strtotime("+{$dropoffDelay} days")))
-                    ]),
-                (new GetNearestLocations())
-                    ->setCountrycode('NL')
-                    ->setLocation(
-                        (new Location())
-                            ->setAllowSundaySorting(!empty($mondayDelivery))
-                            ->setDeliveryOptions(['PG'])
-                            ->setOptions(['Daytime'])
-                            ->setHouseNr('66')
-                            ->setPostalcode('2132WT')
-                    ),
-                (new GetDeliveryDate())
-                    ->setGetDeliveryDate(
-                        (new GetDeliveryDate())
-                            ->setAllowSundaySorting(!empty($mondayDelivery))
-                            ->setCountryCode('NL')
-                            ->setCutOffTimes($cutOffTimes)
-                            ->setHouseNr('12')
-                            ->setOptions(['Daytime', 'Evening'])
-                            ->setPostalCode('2132WT')
-                            ->setShippingDate(date('d-m-Y H:i:s'))
-                            ->setShippingDuration(strval(1 + (int) $dropoffDelay))
-                    )
-                    ->setMessage(new Message())
-            );
+            ],
+        ),
+        GetNearestLocations: new GetNearestLocations(
+            Countrycode: 'NL',
+            Location: new Location(
+                Postalcode: '2132WT',
+                AllowSundaySorting: !empty($mondayDelivery),
+                DeliveryOptions: ['PG'],
+                Options: ['Daytime'],
+                HouseNr: '66',
+            ),
+        ),
+        GetDeliveryDate: new GetDeliveryDate(
+            GetDeliveryDate: new GetDeliveryDate(
+                AllowSundaySorting: !empty($mondayDelivery),
+                CountryCode: 'NL',
+                CutOffTimes: $cutOffTimes,
+                HouseNr: '12',
+                Options: ['Daytime', 'Evening'],
+                PostalCode: '2132WT',
+                ShippingDate: date(format: 'd-m-Y H:i:s'),
+                ShippingDuration: strval(value: 1 + $dropoffDelay),
+            ),
+        )
+    );
 
 
 The response variable will be an associative array containing the timeframes, nearest locations and delivery date. It has the following keys:
@@ -300,92 +202,95 @@ Example code:
 
 .. code-block:: php
 
-    use Firstred\PostNL\Entity\Label;
-    use Firstred\PostNL\PostNL;
-    use Firstred\PostNL\Entity\Customer;
+    <?php
+
     use Firstred\PostNL\Entity\Address;
-    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Entity\Customer;
     use Firstred\PostNL\Entity\Dimension;
+    use Firstred\PostNL\Entity\Label;
+    use Firstred\PostNL\Entity\Shipment;
+    use Firstred\PostNL\Enum\LabelPosition;
+    use Firstred\PostNL\PostNL;
 
     require_once __DIR__.'/vendor/autoload.php';
 
     // Your PostNL credentials
-    $customer = Customer::create([
-        'CollectionLocation' => '123456',
-        'CustomerCode'       => 'DEVC',
-        'CustomerNumber'     => '11223344',
-        'ContactPerson'      => 'Sander',
-        'Address'            => Address::create([
-            'AddressType' => '02',
-            'City'        => 'Hoofddorp',
-            'CompanyName' => 'PostNL',
-            'Countrycode' => 'NL',
-            'HouseNr'     => '42',
-            'Street'      => 'Siriusdreef',
-            'Zipcode'     => '2132WT',
-        ]),
-        'Email'              => 'test@voorbeeld.nl',
-        'Name'               => 'Michael',
-    ]);
+    $customer = new Customer(
+        CustomerNumber: '11223344',
+        CustomerCode: 'DEVC',
+        CollectionLocation: '123456',
+        ContactPerson: 'Sander',
+        Email: 'test@voorbeeld.nl',
+        Name: 'Michael',
+        Address: new Address(
+            AddressType: '02',
+            CompanyName: 'PostNL',
+            Street: 'Siriusdreef',
+            HouseNr: '42',
+            Zipcode: '2132WT',
+            City: 'Hoofddorp',
+            Countrycode: 'NL',
+        ),
+    );
 
     $apikey = 'YOUR_API_KEY_HERE';
     $sandbox = true;
 
-    $postnl = new PostNL($customer, $apikey, $sandbox, PostNL::MODE_SOAP);
+    $postnl = new PostNL(customer: $customer, apiKey: $apikey, sandbox: $sandbox);
 
-    $barcodes = $postnl->generateBarcodesByCountryCodes(['NL' => 2]);
+    $barcodes = $postnl->generateBarcodesByCountryCodes(isos: ['NL' => 2]);
 
     $shipments = [
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+        new Shipment(
+            Addresses: [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Barcode'             => $barcodes['NL'][0],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
-        Shipment::create([
-            'Addresses'           => [
-                Address::create([
-                    'AddressType' => '01',
-                    'City'        => 'Utrecht',
-                    'Countrycode' => 'NL',
-                    'FirstName'   => 'Peter',
-                    'HouseNr'     => '9',
-                    'HouseNrExt'  => 'a bis',
-                    'Name'        => 'de Ruijter',
-                    'Street'      => 'Bilderdijkstraat',
-                    'Zipcode'     => '3521VA',
-                ]),
+            Barcode: $barcodes['NL'][0],
+            Dimension  : new Dimension(Weight: '1000'),
+            ProductCodeDelivery : '3085',
+        ),
+        new Shipment(
+            Addresses           : [
+                new Address(
+                    AddressType: '01',
+                    FirstName: 'Peter',
+                    Name: 'de Ruijter',
+                    Street: 'Bilderdijkstraat',
+                    HouseNr: '9',
+                    HouseNrExt: 'a bis',
+                    Zipcode: '3521VA',
+                    City: 'Utrecht',
+                    Countrycode: 'NL',
+                ),
             ],
-            'Barcode'             => $barcodes['NL'][1],
-            'Dimension'           => new Dimension('1000'),
-            'ProductCodeDelivery' => '3085',
-        ]),
+            Barcode  : $barcodes['NL'][1],
+            Dimension        : new Dimension(Weight: '1000'),
+            ProductCodeDelivery: '3085',
+        ),
     ];
 
     $label = $postnl->generateLabels(
-        $shipments,
-        'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
-        true, // Confirm immediately
-        true, // Merge
-        Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
-        [
-            1 => true,
-            2 => true,
-            3 => true,
-            4 => true,
-        ] // Positions
+        shipments: $shipments,
+        printertype: 'GraphicFile|PDF', // Printertype (only PDFs can be merged -- no need to use the Merged types)
+        confirm: true, // Confirm immediately
+        merge: true, // Merge
+        format: Label::FORMAT_A4, // Format -- this merges multiple A6 labels onto an A4
+        positions: [
+            LabelPosition::TopLeft->value     => true,
+            LabelPosition::TopRight->value    => true,
+            LabelPosition::BottomLeft->value  => true,
+            LabelPosition::BottomRight->value => true,
+        ],
     );
 
     file_put_contents('labels.pdf', $label);
@@ -495,28 +400,15 @@ It accepts the following parameters:
 
 Code example:
 
-.. tabs::
+.. code-block:: php
 
-    .. tab:: PHP 5/7
+    <?php
 
-        .. code-block:: php
+    $postnl = new PostNL(...);
 
-            $postnl = new PostNL(...);
-
-            $currentStatusResponse = $postnl->getShippingStatusByBarcode(
-                '3SABCD1837238723', // Barcode
-                false               // Return just the current status (complete = false)
-            );
-
-    .. tab:: PHP 8
-
-        .. code-block:: php
-
-            $postnl = new PostNL(...);
-
-            $currentStatusResponse = $postnl->getShippingStatusByBarcode(
-                barcode: '3SABCD1837238723',
-                complete: false,
-            );
+    $currentStatusResponse = $postnl->getShippingStatusByBarcode(
+        barcode: '3SABCD1837238723',
+        complete: false,
+    );
 
 

@@ -9,20 +9,23 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. code-block:: php
 
-    use League\Flysystem\Adapter\Local;
-    use League\Flysystem\Filesystem;
+    <?php
 
-    use Psr\Log\LogLevel;
-    use wappr\Logger;
+    use Monolog\Handler\StreamHandler;
+    use Monolog\Level;
+    use Monolog\Logger;
 
-    // Initialize the file system adapter
-    $logfs = new Filesystem($adapter);
-
-    // Set the DEBUG log level
-    $logger = new Logger($logfs, LogLevel::DEBUG);
-
+    $logger = new Logger(name: 'postnl_client');
     // Set the filename format, we're creating one file for every minute of request/responses
-    $logger->setFilenameFormat('Y-m-d H:i');
+    $debugHandler = new StreamHandler(stream: __DIR__.'/logs/'.date(format: 'Y-m-d H:i').'.log', level: Level::Debug);
+    $formatter = new Monolog\Formatter\LineFormatter(
+        format: null,                     // Format of message in log, default [%datetime%] %channel%.%level_name%: %message% %context% %extra%\n
+        dateFormat: null,                 // Datetime format
+        allowInlineLineBreaks: true,      // allowInlineLineBreaks option, default false
+        ignoreEmptyContextAndExtra: true  // ignoreEmptyContextAndExtra option, default false
+    );
+    $debugHandler->setFormatter(formatter: $formatter);
+    $logger->pushHandler(handler: $debugHandler);
 
     // Set this logger for all services at once
     $postnl->setLogger($logger);
@@ -32,6 +35,6 @@ In order to enable logging you will need to pass a PSR-3 compatible logger.
 
 .. note::
 
-     This example used the Wappr logger. You can use any logger you like, as long as it implements the PSR-3 standard.
-     To log all responses the level needs to be set at ``DEBUG``.
-     For error responses you can set the debug level to ``ERROR``.
+     This example used the Monolog logger. You can use any logger you like, as long as it implements the PSR-3 standard.
+     To log all responses the level needs to be set at ``Debug``.
+     For error responses you can set the debug level to ``Error``.

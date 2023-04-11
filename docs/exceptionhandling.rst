@@ -20,10 +20,8 @@ on each other.
         │   └── Firstred\PostNL\Exception\ShipmentNotFoundException
         ├── Firstred\PostNL\Exception\HttpClientException
         └── Firstred\PostNL\Exception\InvalidArgumentException
-            ├── Firstred\PostNL\Exception\InvalidApiModeException
             ├── Firstred\PostNL\Exception\InvalidBarcodeException
             ├── Firstred\PostNL\Exception\InvalidConfigurationException
-            ├── Firstred\PostNL\Exception\InvalidMessageTimeStampException
             ├── Firstred\PostNL\Exception\InvalidMethodException
             ├── Firstred\PostNL\Exception\NotImplementedException
             └── Firstred\PostNL\Exception\NotSupportedException
@@ -116,11 +114,6 @@ This exception is thrown when there is a problem with generating a barcode. Usua
 -----------------------------------------------------------------------
 
 When a problem occurs due to configuration errors, this exception is thrown. For example, an invalid API key.
-
-``deprecated`` :php:class:`Firstred\\PostNL\\Exception\\InvalidMessageTimeStampException`
------------------------------------------------------------------------------------------
-
-This occurs when a :php:class:`Firstred\\PostNL\\Entity\\SOAP\\Message` has an invalid timestamp. Deprecated, because SOAP support is being removed.
 
 :php:class:`Firstred\\PostNL\\Exception\\InvalidMethodException`
 ----------------------------------------------------------------

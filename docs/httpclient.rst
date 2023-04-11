@@ -20,6 +20,8 @@ By default the library will use cURL or Guzzle when available. You can always sw
 
 .. code-block:: php
 
+    <?php
+
     $postnl = new PostNL(...);
     $postnl->setHttpClient(\Firstred\PostNL\HttpClient\CurlClient::getInstance());
 
@@ -50,6 +52,8 @@ If you haven't installed Guzzle itself, this library should now auto-detect the 
 If you have installed Guzzle already, then you can still configure the PostNL library to use the Symfony HTTP Client. To do this, pass the new client to the :php:class:`Firstred\\PostNL\\PostNL` constructor or :php:meth:`Firstred\\PostNL\\PostNL::setHttpClient` method. Example:
 
 .. code-block:: php
+
+    <?php
 
     use Symfony\Component\HttpClient\HttplugClient;
     use Firstred\PostNL\HttpClient\HTTPlugClient;
