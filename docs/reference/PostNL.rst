@@ -328,7 +328,7 @@ Methods
 	
 	
 
-.. rst-class:: public
+.. rst-class:: public deprecated
 
 	.. php:method:: public getApiKey()
 	
@@ -340,6 +340,7 @@ Methods
 		
 		:Returns: null | string 
 		:Since: 1.4.1 
+		:Deprecated: 1.4.1 Will be removed from 2\.0\.0 on, without a replacement\.
 	
 	
 
