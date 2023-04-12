@@ -29,6 +29,7 @@ namespace Firstred\PostNL\Entity\Response;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
+use Firstred\PostNL\Entity\Sustainability;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -57,6 +58,7 @@ use stdClass;
  * @method Warning[]|null    getWarnings()
  * @method string|null       getDownPartnerID()
  * @method string|null       getDownPartnerLocation()
+ * @method string|null       getSustainability()
  * @method ResponseLocation  setAddress(Address|null $Address = null)
  * @method ResponseLocation  setDeliveryOptions(string[]|null $DeliveryOptions)
  * @method ResponseLocation  setDistance(string|null $Distance = null)
@@ -73,6 +75,7 @@ use stdClass;
  * @method ResponseLocation  setWarnings(Warning[]|null $Warnings = null)
  * @method ResponseLocation  setDownPartnerID(string|null $DownPartnerID = null)
  * @method ResponseLocation  setDownPartnerLocation(string|null $DownPartnerLocation = null)
+ * @method ResponseLocation  setSustainability(Sustainability|null $Sustainability = null)
  *
  * @since 1.0.0
  */
@@ -101,6 +104,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => BarcodeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => BarcodeService::DOMAIN_NAMESPACE,
+            'Sustainability' => BarcodeService::DOMAIN_NAMESPACE,
         ],
         'Confirming' => [
             'Address'             => ConfirmingService::DOMAIN_NAMESPACE,
@@ -119,6 +123,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => ConfirmingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Sustainability' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
         'Labelling' => [
             'Address'             => LabellingService::DOMAIN_NAMESPACE,
@@ -137,6 +142,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => LabellingService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LabellingService::DOMAIN_NAMESPACE,
+            'Sustainability' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
             'Address'             => DeliveryDateService::DOMAIN_NAMESPACE,
@@ -155,6 +161,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => DeliveryDateService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Sustainability' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
         'Location' => [
             'Address'             => LocationService::DOMAIN_NAMESPACE,
@@ -173,6 +180,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => LocationService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => LocationService::DOMAIN_NAMESPACE,
+            'Sustainability' => LocationService::DOMAIN_NAMESPACE,
         ],
         'Timeframe' => [
             'Address'             => TimeframeService::DOMAIN_NAMESPACE,
@@ -191,6 +199,7 @@ class ResponseLocation extends AbstractEntity
             'Warnings'            => TimeframeService::DOMAIN_NAMESPACE,
             'DownPartnerID'       => TimeframeService::DOMAIN_NAMESPACE,
             'DownPartnerLocation' => TimeframeService::DOMAIN_NAMESPACE,
+            'Sustainability' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
 
@@ -227,27 +236,30 @@ class ResponseLocation extends AbstractEntity
     protected $DownPartnerID;
     /** @var string|null */
     protected $DownPartnerLocation;
+    /** @var Sustainability|null */
+    protected $Sustainability;
     // @codingStandardsIgnoreEnd
 
     /**
      * ResponseLocation constructor.
      *
-     * @param Address|null   $Address
-     * @param string[]|null  $DeliveryOptions
-     * @param string|null    $Distance
-     * @param string|null    $Latitude
-     * @param string|null    $Longitude
-     * @param string|null    $Name
-     * @param string[]|null  $OpeningHours
-     * @param string|null    $PartnerName
-     * @param string|null    $PhoneNumber
-     * @param string|null    $LocationCode
-     * @param string|null    $RetailNetworkID
-     * @param string|null    $Saleschannel
-     * @param string|null    $TerminalType
-     * @param Warning[]|null $Warnings
-     * @param string|null    $DownPartnerID
-     * @param string|null    $DownPartnerLocation
+     * @param Address|null        $Address
+     * @param string[]|null       $DeliveryOptions
+     * @param string|null         $Distance
+     * @param string|null         $Latitude
+     * @param string|null         $Longitude
+     * @param string|null         $Name
+     * @param string[]|null       $OpeningHours
+     * @param string|null         $PartnerName
+     * @param string|null         $PhoneNumber
+     * @param string|null         $LocationCode
+     * @param string|null         $RetailNetworkID
+     * @param string|null         $Saleschannel
+     * @param string|null         $TerminalType
+     * @param Warning[]|null      $Warnings
+     * @param string|null         $DownPartnerID
+     * @param string|null         $DownPartnerLocation
+     * @param Sustainability|null $Sustainability
      */
     public function __construct(
         Address $Address = null,
@@ -265,7 +277,8 @@ class ResponseLocation extends AbstractEntity
         $TerminalType = null,
         $Warnings = null,
         $DownPartnerID = null,
-        $DownPartnerLocation = null
+        $DownPartnerLocation = null,
+        $Sustainability = null
     ) {
         parent::__construct();
 
@@ -285,6 +298,7 @@ class ResponseLocation extends AbstractEntity
         $this->setWarnings($Warnings);
         $this->setDownPartnerID($DownPartnerID);
         $this->setDownPartnerLocation($DownPartnerLocation);
+        $this->setSustainability($Sustainability);
     }
 
     public static function jsonDeserialize(stdClass $json)

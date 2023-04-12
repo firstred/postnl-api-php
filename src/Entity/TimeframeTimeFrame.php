@@ -49,9 +49,11 @@ use function is_string;
  * @method string|null            getFrom()
  * @method string|null            getTo()
  * @method string[]|null          getOptions()
+ * @method Sustainability|null    getSustainability()
  * @method TimeframeTimeFrame     setFrom(string|null $From = null)
  * @method TimeframeTimeFrame     setTo(string|null $To = null)
  * @method TimeframeTimeFrame     setOptions(string[]|null $Options = null)
+ * @method TimeframeTimeFrame     setSustainability(Sustainability|null $Sustainability = null)
  *
  * @since 1.0.0
  */
@@ -59,41 +61,47 @@ class TimeframeTimeFrame extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode'        => [
-            'Date'    => BarcodeService::DOMAIN_NAMESPACE,
-            'From'    => BarcodeService::DOMAIN_NAMESPACE,
-            'Options' => BarcodeService::DOMAIN_NAMESPACE,
-            'To'      => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'      => [
+            'Date'           => BarcodeService::DOMAIN_NAMESPACE,
+            'From'           => BarcodeService::DOMAIN_NAMESPACE,
+            'Options'        => BarcodeService::DOMAIN_NAMESPACE,
+            'To'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Sustainability' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming'     => [
-            'Date'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'    => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options' => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'      => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'   => [
+            'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'From'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'Options'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'To'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Sustainability' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling'      => [
-            'Date'    => LabellingService::DOMAIN_NAMESPACE,
-            'From'    => LabellingService::DOMAIN_NAMESPACE,
-            'Options' => LabellingService::DOMAIN_NAMESPACE,
-            'To'      => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'    => [
+            'Date'           => LabellingService::DOMAIN_NAMESPACE,
+            'From'           => LabellingService::DOMAIN_NAMESPACE,
+            'Options'        => LabellingService::DOMAIN_NAMESPACE,
+            'To'             => LabellingService::DOMAIN_NAMESPACE,
+            'Sustainability' => LabellingService::DOMAIN_NAMESPACE,
         ],
-        'DeliveryDate'   => [
-            'Date'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'    => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'      => DeliveryDateService::DOMAIN_NAMESPACE,
+        'DeliveryDate' => [
+            'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'From'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Options'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'To'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Sustainability' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location'       => [
-            'Date'    => LocationService::DOMAIN_NAMESPACE,
-            'From'    => LocationService::DOMAIN_NAMESPACE,
-            'Options' => LocationService::DOMAIN_NAMESPACE,
-            'To'      => LocationService::DOMAIN_NAMESPACE,
+        'Location'     => [
+            'Date'           => LocationService::DOMAIN_NAMESPACE,
+            'From'           => LocationService::DOMAIN_NAMESPACE,
+            'Options'        => LocationService::DOMAIN_NAMESPACE,
+            'To'             => LocationService::DOMAIN_NAMESPACE,
+            'Sustainability' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe'      => [
-            'Date'    => TimeframeService::DOMAIN_NAMESPACE,
-            'From'    => TimeframeService::DOMAIN_NAMESPACE,
-            'Options' => TimeframeService::DOMAIN_NAMESPACE,
-            'To'      => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'    => [
+            'Date'           => TimeframeService::DOMAIN_NAMESPACE,
+            'From'           => TimeframeService::DOMAIN_NAMESPACE,
+            'Options'        => TimeframeService::DOMAIN_NAMESPACE,
+            'To'             => TimeframeService::DOMAIN_NAMESPACE,
+            'Sustainability' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -105,6 +113,8 @@ class TimeframeTimeFrame extends AbstractEntity
     protected $Options;
     /** @var string|null */
     protected $To;
+    /** @var Sustainability|null */
+    protected $Sustainability;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -112,10 +122,11 @@ class TimeframeTimeFrame extends AbstractEntity
      * @param string|null                   $From
      * @param string|null                   $To
      * @param string[]|null                 $Options
+     * @param Sustainability|null           $Sustainability
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($GetSentDate = null, $From = null, $To = null, array $Options = null)
+    public function __construct($GetSentDate = null, $From = null, $To = null, array $Options = null, $Sustainability = null)
     {
         parent::__construct();
 
@@ -123,6 +134,7 @@ class TimeframeTimeFrame extends AbstractEntity
         $this->setFrom($From);
         $this->setTo($To);
         $this->setOptions($Options);
+        $this->setSustainability($Sustainability);
     }
 
     /**
@@ -164,7 +176,7 @@ class TimeframeTimeFrame extends AbstractEntity
         if (isset($json->TimeframeTimeFrame->Options)) {
             /** @psalm-var list<string> $deliveryOptions */
             $deliveryOptions = [];
-            if (!is_array($json->TimeframeTimeFrame->Options)){
+            if (!is_array($json->TimeframeTimeFrame->Options)) {
                 $json->TimeframeTimeFrame->Options = [$json->TimeframeTimeFrame->Options];
             }
 

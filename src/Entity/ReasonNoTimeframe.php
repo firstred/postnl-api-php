@@ -52,11 +52,13 @@ use function is_string;
  * @method string[]|null          getOptions()
  * @method string|null            getFrom()
  * @method string|null            getTo()
+ * @method Sustainability|null    getSustainability()
  * @method ReasonNoTimeframe      setCode(string|null $Code = null)
  * @method ReasonNoTimeframe      setDescription(string|null $Description = null)
  * @method ReasonNoTimeframe      setOptions(string[]|null $Options = null)
  * @method ReasonNoTimeframe      setFrom(string|null $From = null)
  * @method ReasonNoTimeframe      setTo(string|null $To = null)
+ * @method ReasonNoTimeframe      setSustainability(Sustainability|null $Sustainability = null)
  *
  * @since 1.0.0
  */
@@ -64,53 +66,59 @@ class ReasonNoTimeframe extends AbstractEntity
 {
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
-            'Code'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Date'        => BarcodeService::DOMAIN_NAMESPACE,
-            'Description' => BarcodeService::DOMAIN_NAMESPACE,
-            'Options'     => BarcodeService::DOMAIN_NAMESPACE,
-            'From'        => BarcodeService::DOMAIN_NAMESPACE,
-            'To'          => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'      => [
+            'Code'           => BarcodeService::DOMAIN_NAMESPACE,
+            'Date'           => BarcodeService::DOMAIN_NAMESPACE,
+            'Description'    => BarcodeService::DOMAIN_NAMESPACE,
+            'Options'        => BarcodeService::DOMAIN_NAMESPACE,
+            'From'           => BarcodeService::DOMAIN_NAMESPACE,
+            'To'             => BarcodeService::DOMAIN_NAMESPACE,
+            'Sustainability' => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
-            'Code'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Date'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'Description' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Options'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'From'        => ConfirmingService::DOMAIN_NAMESPACE,
-            'To'          => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'   => [
+            'Code'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'Date'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'Description'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'Options'        => ConfirmingService::DOMAIN_NAMESPACE,
+            'From'           => ConfirmingService::DOMAIN_NAMESPACE,
+            'To'             => ConfirmingService::DOMAIN_NAMESPACE,
+            'Sustainability' => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
-            'Code'        => LabellingService::DOMAIN_NAMESPACE,
-            'Date'        => LabellingService::DOMAIN_NAMESPACE,
-            'Description' => LabellingService::DOMAIN_NAMESPACE,
-            'Options'     => LabellingService::DOMAIN_NAMESPACE,
-            'From'        => LabellingService::DOMAIN_NAMESPACE,
-            'To'          => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'    => [
+            'Code'           => LabellingService::DOMAIN_NAMESPACE,
+            'Date'           => LabellingService::DOMAIN_NAMESPACE,
+            'Description'    => LabellingService::DOMAIN_NAMESPACE,
+            'Options'        => LabellingService::DOMAIN_NAMESPACE,
+            'From'           => LabellingService::DOMAIN_NAMESPACE,
+            'To'             => LabellingService::DOMAIN_NAMESPACE,
+            'Sustainability' => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
-            'Code'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Date'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Description' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Options'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'From'        => DeliveryDateService::DOMAIN_NAMESPACE,
-            'To'          => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Code'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Date'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Description'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Options'        => DeliveryDateService::DOMAIN_NAMESPACE,
+            'From'           => DeliveryDateService::DOMAIN_NAMESPACE,
+            'To'             => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Sustainability' => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
-            'Code'        => LocationService::DOMAIN_NAMESPACE,
-            'Date'        => LocationService::DOMAIN_NAMESPACE,
-            'Description' => LocationService::DOMAIN_NAMESPACE,
-            'Options'     => LocationService::DOMAIN_NAMESPACE,
-            'From'        => LocationService::DOMAIN_NAMESPACE,
-            'To'          => LocationService::DOMAIN_NAMESPACE,
+        'Location'     => [
+            'Code'           => LocationService::DOMAIN_NAMESPACE,
+            'Date'           => LocationService::DOMAIN_NAMESPACE,
+            'Description'    => LocationService::DOMAIN_NAMESPACE,
+            'Options'        => LocationService::DOMAIN_NAMESPACE,
+            'From'           => LocationService::DOMAIN_NAMESPACE,
+            'To'             => LocationService::DOMAIN_NAMESPACE,
+            'Sustainability' => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
-            'Code'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Date'        => TimeframeService::DOMAIN_NAMESPACE,
-            'Description' => TimeframeService::DOMAIN_NAMESPACE,
-            'Options'     => TimeframeService::DOMAIN_NAMESPACE,
-            'From'        => TimeframeService::DOMAIN_NAMESPACE,
-            'To'          => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'    => [
+            'Code'           => TimeframeService::DOMAIN_NAMESPACE,
+            'Date'           => TimeframeService::DOMAIN_NAMESPACE,
+            'Description'    => TimeframeService::DOMAIN_NAMESPACE,
+            'Options'        => TimeframeService::DOMAIN_NAMESPACE,
+            'From'           => TimeframeService::DOMAIN_NAMESPACE,
+            'To'             => TimeframeService::DOMAIN_NAMESPACE,
+            'Sustainability' => TimeframeService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -126,6 +134,8 @@ class ReasonNoTimeframe extends AbstractEntity
     protected $From;
     /** @var string|null */
     protected $To;
+    /** @var Sustainability|null */
+    protected $Sustainability;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -137,6 +147,7 @@ class ReasonNoTimeframe extends AbstractEntity
      * @param string[]|null                 $Options
      * @param string|null                   $From
      * @param string|null                   $To
+     * @param Sustainability|null           $Sustainability
      *
      * @throws InvalidArgumentException
      */
@@ -146,7 +157,8 @@ class ReasonNoTimeframe extends AbstractEntity
         $Description = null,
         array $Options = null,
         $From = null,
-        $To = null
+        $To = null,
+        $Sustainability = null
     ) {
         parent::__construct();
 
@@ -156,6 +168,7 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setOptions($Options);
         $this->setFrom($From);
         $this->setTo($To);
+        $this->setSustainability($Sustainability);
     }
 
     /**
@@ -199,7 +212,7 @@ class ReasonNoTimeframe extends AbstractEntity
         if (isset($json->ReasonNoTimeframe->Options)) {
             /** @psalm-var list<string> $deliveryOptions */
             $deliveryOptions = [];
-            if (!is_array($json->ReasonNoTimeframe->Options)){
+            if (!is_array($json->ReasonNoTimeframe->Options)) {
                 $json->ReasonNoTimeframe->Options = [$json->ReasonNoTimeframe->Options];
             }
 
