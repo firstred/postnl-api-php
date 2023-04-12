@@ -93,7 +93,7 @@ Here's how it is done from scratch:
     }
 
     $response = $postnl->getTimeframesAndNearestLocations(
-        GetTimeframes: new GetTimeframes(
+        getTimeframes: new GetTimeframes(
             Timeframes: [
                 new Timeframe(
                     CountryCode: 'NL',
@@ -106,7 +106,7 @@ Here's how it is done from scratch:
                 ),
             ],
         ),
-        GetNearestLocations: new GetNearestLocations(
+        getNearestLocations: new GetNearestLocations(
             Countrycode: 'NL',
             Location: new Location(
                 Postalcode: '2132WT',
@@ -116,7 +116,7 @@ Here's how it is done from scratch:
                 HouseNr: '66',
             ),
         ),
-        GetDeliveryDate: new GetDeliveryDate(
+        getDeliveryDate: new GetDeliveryDate(
             GetDeliveryDate: new GetDeliveryDate(
                 AllowSundaySorting: !empty($mondayDelivery),
                 CountryCode: 'NL',
