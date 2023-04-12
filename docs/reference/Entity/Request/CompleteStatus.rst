@@ -27,7 +27,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Shipment, $Customer\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Shipment, $Customer, $Message\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::\_\_construct\(\)>`
 * :php:meth:`public getMessage\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::getMessage\(\)>`
 * :php:meth:`public setMessage\($Message\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::setMessage\(\)>`
 * :php:meth:`public getCustomer\(\)<Firstred\\PostNL\\Entity\\Request\\CompleteStatus::getCustomer\(\)>`
@@ -60,12 +60,13 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Shipment=null, $Customer=null)
+	.. php:method:: public __construct( $Shipment=null, $Customer=null, $Message=null)
 	
 		
 		:Parameters:
 			* **$Shipment** (:any:`Firstred\\PostNL\\Entity\\Shipment <Firstred\\PostNL\\Entity\\Shipment>` | null)  
 			* **$Customer** (:any:`Firstred\\PostNL\\Entity\\Customer <Firstred\\PostNL\\Entity\\Customer>` | null)  
+			* **$Message** (:any:`Firstred\\PostNL\\Entity\\Message\\Message <Firstred\\PostNL\\Entity\\Message\\Message>` | null)  
 
 		
 	

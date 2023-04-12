@@ -34,6 +34,7 @@ Methods
 * :php:meth:`public getFrom\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getFrom\(\)>`
 * :php:meth:`public setFrom\($From\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setFrom\(\)>`
 * :php:meth:`public getTo\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getTo\(\)>`
+* :php:meth:`public getDate\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getDate\(\)>`
 * :php:meth:`public setTo\($To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setTo\(\)>`
 * :php:meth:`public setDate\($date\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setDate\(\)>`
 * :php:meth:`public getSustainability\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getSustainability\(\)>`
@@ -185,6 +186,15 @@ Methods
 	
 		
 		:Returns: string | null 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getDate()
+	
+		
+		:Returns: :any:`\\DateTimeInterface <DateTimeInterface>` | null 
 	
 	
 
