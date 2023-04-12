@@ -38,10 +38,10 @@ use Firstred\PostNL\Service\TimeframeService;
  * Class Label.
  *
  * @method string|null getContent()
- * @method string|null getContentType()
+ * @method string|null getOutputType()
  * @method string|null getLabeltype()
  * @method Label       setContent(string|null $Content = null)
- * @method Label       setContentType(string|null $ContentType = null)
+ * @method Label       setOutputType(string|null $OutputType = null)
  * @method Label       setLabeltype(string|null $Labeltype = null)
  *
  * @since 1.0.0
@@ -53,40 +53,40 @@ class Label extends AbstractEntity
 
     /** @var string[][] */
     public static $defaultProperties = [
-        'Barcode' => [
-            'Content'     => BarcodeService::DOMAIN_NAMESPACE,
-            'ContentType' => BarcodeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => BarcodeService::DOMAIN_NAMESPACE,
+        'Barcode'      => [
+            'Content'    => BarcodeService::DOMAIN_NAMESPACE,
+            'OutputType' => BarcodeService::DOMAIN_NAMESPACE,
+            'Labeltype'  => BarcodeService::DOMAIN_NAMESPACE,
         ],
-        'Confirming' => [
-            'Content'     => ConfirmingService::DOMAIN_NAMESPACE,
-            'ContentType' => ConfirmingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ConfirmingService::DOMAIN_NAMESPACE,
+        'Confirming'   => [
+            'Content'    => ConfirmingService::DOMAIN_NAMESPACE,
+            'OutputType' => ConfirmingService::DOMAIN_NAMESPACE,
+            'Labeltype'  => ConfirmingService::DOMAIN_NAMESPACE,
         ],
-        'Labelling' => [
-            'Content'     => LabellingService::DOMAIN_NAMESPACE,
-            'ContentType' => LabellingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LabellingService::DOMAIN_NAMESPACE,
+        'Labelling'    => [
+            'Content'    => LabellingService::DOMAIN_NAMESPACE,
+            'OutputType' => LabellingService::DOMAIN_NAMESPACE,
+            'Labeltype'  => LabellingService::DOMAIN_NAMESPACE,
         ],
         'DeliveryDate' => [
-            'Content'     => DeliveryDateService::DOMAIN_NAMESPACE,
-            'ContentType' => DeliveryDateService::DOMAIN_NAMESPACE,
-            'Labeltype'   => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Content'    => DeliveryDateService::DOMAIN_NAMESPACE,
+            'OutputType' => DeliveryDateService::DOMAIN_NAMESPACE,
+            'Labeltype'  => DeliveryDateService::DOMAIN_NAMESPACE,
         ],
-        'Location' => [
-            'Content'     => LocationService::DOMAIN_NAMESPACE,
-            'ContentType' => LocationService::DOMAIN_NAMESPACE,
-            'Labeltype'   => LocationService::DOMAIN_NAMESPACE,
+        'Location'     => [
+            'Content'    => LocationService::DOMAIN_NAMESPACE,
+            'OutputType' => LocationService::DOMAIN_NAMESPACE,
+            'Labeltype'  => LocationService::DOMAIN_NAMESPACE,
         ],
-        'Timeframe' => [
-            'Content'     => TimeframeService::DOMAIN_NAMESPACE,
-            'ContentType' => TimeframeService::DOMAIN_NAMESPACE,
-            'Labeltype'   => TimeframeService::DOMAIN_NAMESPACE,
+        'Timeframe'    => [
+            'Content'    => TimeframeService::DOMAIN_NAMESPACE,
+            'OutputType' => TimeframeService::DOMAIN_NAMESPACE,
+            'Labeltype'  => TimeframeService::DOMAIN_NAMESPACE,
         ],
-        'Shipping' => [
-            'Content'     => ShippingService::DOMAIN_NAMESPACE,
-            'ContentType' => ShippingService::DOMAIN_NAMESPACE,
-            'Labeltype'   => ShippingService::DOMAIN_NAMESPACE,
+        'Shipping'     => [
+            'Content'    => ShippingService::DOMAIN_NAMESPACE,
+            'OutputType' => ShippingService::DOMAIN_NAMESPACE,
+            'Labeltype'  => ShippingService::DOMAIN_NAMESPACE,
         ],
     ];
     // @codingStandardsIgnoreStart
@@ -97,7 +97,7 @@ class Label extends AbstractEntity
      */
     protected $Content;
     /** @var string|null */
-    protected $Contenttype;
+    protected $OutputType;
     /** @var string|null */
     protected $Labeltype;
     // @codingStandardsIgnoreEnd
@@ -112,7 +112,29 @@ class Label extends AbstractEntity
         parent::__construct();
 
         $this->setContent($Content);
-        $this->setContenttype($ContentType);
+        $this->setOutputType($ContentType);
         $this->setLabeltype($Labeltype);
+    }
+
+    /**
+     * @return string|null
+     *
+     * @deprecated 1.4.2 Use `getOutputType` instead
+     */
+    public function getContenttype()
+    {
+        return $this->getOutputType();
+    }
+
+    /**
+     * @param string|null $Contenttype
+     *
+     * @return static
+     *
+     * @deprecated 1.4.2 Use `getOutputType` instead
+     */
+    public function setContenttype($Contenttype)
+    {
+        return $this->setOutputType($Contenttype);
     }
 }
