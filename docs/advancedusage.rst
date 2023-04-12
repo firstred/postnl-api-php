@@ -140,23 +140,22 @@ There is no direct need to manually handle concurrent requests. This library han
 and even provides a special function to quickly grab timeframe and location data for frontend delivery options widgets.
 
 In case you manually want to send a custom mix of requests, you can look up the corresponding functions in the
-Service class of your choice and call the ```buildXXXXXXRequest()``` functions manually. Thanks to the PSR-7 standard
+Service class of your choice and call the ```buildXXXXXXRequest()``` functions of a request builder class implementing :php:class:`Firstred\\PostNL\\Service\\RequestBuilder\\AbstractRequestBuilder` manually. Thanks to the PSR-7 standard
 used by this library you can use the :php:interface:`Psr\Http\Message\RequestInterface` object that is returned to access the full request that would otherwise
 be sent directly. To pick up where you left off you can then grab the response and pass it to one of the ``processXXXXXXXResponse()```
-functions of the Service class. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
+functions of the corresponding class implementing :php:class:`Firstred\\PostNL\\Service\\ResponseProcessor\\AbstractResponseProcessor`. The easiest method is to grab the raw HTTP message and parse it with the included PSR-7 library.
 An example can be found in the `cURL client <https://github.com/firstred/postnl-api-php/blob/b3837cec23e1b8e806c5ea29d79d0fae82a0e956/src/HttpClient/CurlClient.php#L258>`_.
 
 Processing Response objects
-======================
+===========================
 
 .. note::
 
-    This section refers to Response objects returned by the library, not the standardized PSR-7 messages.
+    This section refers to Response entities returned by the library, not the standardized PSR-7 messages.
 
-As soon as you've done your first request with this library, you will find that it returns a Response object.
-As mentioned in the `Building Requests` section, these Response objects are based on the SOAP API, regardless of the mode set.
-The properties of a Response object can be looked up in the code, but it can be a bit confusing at times, since the
+As soon as you've done your first request with this library, you will find that it returns a response entity (``Firstred\\PostNL\\Entity\\Response`` namespace).
+As mentioned in the `Building Requests` section, these response entities are based on the SOAP API, regardless of the mode set.
+The properties of a response entity can be looked up in the code, but it can be a bit confusing at times, since the
 Response object will likely not contain all properties at once. It often depends on the context of the request. For this reason,
-you're better off by having a look at the `SOAP API documentation <https://developer.postnl.nl>`_ directly or by checking out some of
+you're better off by having a look at the `API documentation <https://developer.postnl.nl>`_ directly or by checking out some of
 the examples in this documentation.
-
