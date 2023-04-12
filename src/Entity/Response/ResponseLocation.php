@@ -33,6 +33,7 @@ use Firstred\PostNL\Attribute\SerializableProperty;
 use Firstred\PostNL\Entity\AbstractEntity;
 use Firstred\PostNL\Entity\Address;
 use Firstred\PostNL\Entity\OpeningHours;
+use Firstred\PostNL\Entity\Sustainability;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\DeserializationException;
 use Firstred\PostNL\Exception\InvalidConfigurationException;
@@ -108,23 +109,28 @@ class ResponseLocation extends AbstractEntity
     #[SerializableProperty(type: 'string')]
     protected ?string $DownPartnerLocation = null;
 
+    /** @var Sustainability|null $Sustainability */
+    #[SerializableProperty(type: Sustainability::class)]
+    protected ?Sustainability $Sustainability = null;
+
     /**
-     * @param Address|null      $Address
-     * @param array|null        $DeliveryOptions
-     * @param string|null       $Distance
-     * @param string|null       $Latitude
-     * @param string|null       $Longitude
-     * @param string|null       $Name
-     * @param OpeningHours|null $OpeningHours
-     * @param string|null       $PartnerName
-     * @param string|null       $PhoneNumber
-     * @param string|null       $LocationCode
-     * @param string|null       $RetailNetworkID
-     * @param string|null       $Saleschannel
-     * @param string|null       $TerminalType
-     * @param array|null        $Warnings
-     * @param string|null       $DownPartnerID
-     * @param string|null       $DownPartnerLocation
+     * @param Address|null        $Address
+     * @param array|null          $DeliveryOptions
+     * @param string|null         $Distance
+     * @param string|null         $Latitude
+     * @param string|null         $Longitude
+     * @param string|null         $Name
+     * @param OpeningHours|null   $OpeningHours
+     * @param string|null         $PartnerName
+     * @param string|null         $PhoneNumber
+     * @param string|null         $LocationCode
+     * @param string|null         $RetailNetworkID
+     * @param string|null         $Saleschannel
+     * @param string|null         $TerminalType
+     * @param array|null          $Warnings
+     * @param string|null         $DownPartnerID
+     * @param string|null         $DownPartnerLocation
+     * @param Sustainability|null $Sustainability
      */
     public function __construct(
         Address $Address = null,
@@ -144,7 +150,8 @@ class ResponseLocation extends AbstractEntity
         /* @param Warning[]|null $Warnings */
         ?array $Warnings = null,
         ?string $DownPartnerID = null,
-        ?string $DownPartnerLocation = null
+        ?string $DownPartnerLocation = null,
+        ?Sustainability $Sustainability = null,
     ) {
         parent::__construct();
 
@@ -164,6 +171,7 @@ class ResponseLocation extends AbstractEntity
         $this->setWarnings(Warnings: $Warnings);
         $this->setDownPartnerID(DownPartnerID: $DownPartnerID);
         $this->setDownPartnerLocation(DownPartnerLocation: $DownPartnerLocation);
+        $this->setSustainability(Sustainability: $Sustainability);
     }
 
     /**
@@ -498,6 +506,30 @@ class ResponseLocation extends AbstractEntity
     public function setDownPartnerLocation(?string $DownPartnerLocation): static
     {
         $this->DownPartnerLocation = $DownPartnerLocation;
+
+        return $this;
+    }
+
+    /**
+     * @return Sustainability|null
+     *
+     * @since 1.4.2
+     */
+    public function getSustainability(): ?Sustainability
+    {
+        return $this->Sustainability;
+    }
+
+    /**
+     * @param Sustainability|null $Sustainability
+     *
+     * @return static
+     *
+     * @since 1.4.2
+     */
+    public function setSustainability(?Sustainability $Sustainability): static
+    {
+        $this->Sustainability = $Sustainability;
 
         return $this;
     }

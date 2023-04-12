@@ -64,6 +64,10 @@ class TimeframeTimeFrame extends AbstractEntity
     #[SerializableProperty(type: 'string', isArray: true)]
     protected ?array $Options = null;
 
+    /** @var Sustainability|null $Sustainability */
+    #[SerializableProperty(type: Sustainability::class)]
+    protected ?Sustainability $Sustainability = null;
+
     /**
      * @throws InvalidArgumentException
      */
@@ -73,6 +77,7 @@ class TimeframeTimeFrame extends AbstractEntity
         ?string $To = null,
         /* @param string[]|null $Options */
         ?array $Options = null,
+        ?Sustainability $Sustainability = null,
     ) {
         parent::__construct();
 
@@ -80,6 +85,7 @@ class TimeframeTimeFrame extends AbstractEntity
         $this->setFrom(From: $From);
         $this->setTo(To: $To);
         $this->setOptions(Options: $Options);
+        $this->setSustainability(Sustainability: $Sustainability);
     }
 
     /**
@@ -166,6 +172,30 @@ class TimeframeTimeFrame extends AbstractEntity
     public function setOptions(?array $Options): static
     {
         $this->Options = $Options;
+
+        return $this;
+    }
+
+    /**
+     * @return Sustainability|null
+     *
+     * @since 1.4.2
+     */
+    public function getSustainability(): ?Sustainability
+    {
+        return $this->Sustainability;
+    }
+
+    /**
+     * @param Sustainability|null $Sustainability
+     *
+     * @return static
+     *
+     * @since 1.4.2
+     */
+    public function setSustainability(?Sustainability $Sustainability): static
+    {
+        $this->Sustainability = $Sustainability;
 
         return $this;
     }

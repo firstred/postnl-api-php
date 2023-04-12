@@ -73,6 +73,10 @@ class ReasonNoTimeframe extends AbstractEntity
     #[SerializableProperty(type: 'string')]
     protected ?string $To = null;
 
+    /** @var Sustainability|null $Sustainability */
+    #[SerializableProperty(type: Sustainability::class)]
+    protected ?Sustainability $Sustainability = null;
+
     /**
      * @throws InvalidArgumentException
      */
@@ -83,7 +87,8 @@ class ReasonNoTimeframe extends AbstractEntity
         /* @param string[]|null $Options */
         ?array $Options = null,
         ?string $From = null,
-        ?string $To = null
+        ?string $To = null,
+        ?Sustainability $Sustainability = null,
     ) {
         parent::__construct();
 
@@ -93,6 +98,7 @@ class ReasonNoTimeframe extends AbstractEntity
         $this->setOptions(Options: $Options);
         $this->setFrom(From: $From);
         $this->setTo(To: $To);
+        $this->setSustainability(Sustainability: $Sustainability);
     }
 
     /**
@@ -223,6 +229,30 @@ class ReasonNoTimeframe extends AbstractEntity
         }
 
         $this->Date = $date;
+
+        return $this;
+    }
+
+    /**
+     * @return Sustainability|null
+     *
+     * @since 1.4.2
+     */
+    public function getSustainability(): ?Sustainability
+    {
+        return $this->Sustainability;
+    }
+
+    /**
+     * @param Sustainability|null $Sustainability
+     *
+     * @return static
+     *
+     * @since 1.4.2
+     */
+    public function setSustainability(?Sustainability $Sustainability): static
+    {
+        $this->Sustainability = $Sustainability;
 
         return $this;
     }
