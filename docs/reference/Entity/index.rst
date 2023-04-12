@@ -54,6 +54,7 @@ Classes
 	ProductOption <ProductOption>
 	Shipment <Shipment>
 	Status <Status>
+	Sustainability <Sustainability>
 	Timeframe <Timeframe>
 	Customs <Customs>
 	TimeframeTimeFrame <TimeframeTimeFrame>

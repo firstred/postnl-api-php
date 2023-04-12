@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Code, $Date, $Description, $Options, $From, $To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Code, $Date, $Description, $Options, $From, $To, $Sustainability\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::\_\_construct\(\)>`
 * :php:meth:`public setDate\($date\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setDate\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::jsonDeserialize\(\)>`
 * :php:meth:`public xmlSerialize\($writer\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::xmlSerialize\(\)>`
@@ -73,12 +73,17 @@ Properties
 	:Type: string | null 
 
 
+.. php:attr:: protected static Sustainability
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null)
+	.. php:method:: public __construct( $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null, $Sustainability=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -93,6 +98,7 @@ Methods
 			* **$Options** (string[] | null)  
 			* **$From** (string | null)  
 			* **$To** (string | null)  
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
 
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 

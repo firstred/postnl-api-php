@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Address, $DeliveryOptions, $Distance, $Latitude, $Longitude, $Name, $OpeningHours, $PartnerName, $PhoneNumber, $LocationCode, $RetailNetworkID, $Saleschannel, $TerminalType, $Warnings, $DownPartnerID, $DownPartnerLocation\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Address, $DeliveryOptions, $Distance, $Latitude, $Longitude, $Name, $OpeningHours, $PartnerName, $PhoneNumber, $LocationCode, $RetailNetworkID, $Saleschannel, $TerminalType, $Warnings, $DownPartnerID, $DownPartnerLocation, $Sustainability\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::\_\_construct\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::jsonDeserialize\(\)>`
 
 
@@ -126,12 +126,17 @@ Properties
 	:Type: string | null 
 
 
+.. php:attr:: protected static Sustainability
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Address=null, $DeliveryOptions=null, $Distance=null, $Latitude=null, $Longitude=null, $Name=null, $OpeningHours=null, $PartnerName=null, $PhoneNumber=null, $LocationCode=null, $RetailNetworkID=null, $Saleschannel=null, $TerminalType=null, $Warnings=null, $DownPartnerID=null, $DownPartnerLocation=null)
+	.. php:method:: public __construct( $Address=null, $DeliveryOptions=null, $Distance=null, $Latitude=null, $Longitude=null, $Name=null, $OpeningHours=null, $PartnerName=null, $PhoneNumber=null, $LocationCode=null, $RetailNetworkID=null, $Saleschannel=null, $TerminalType=null, $Warnings=null, $DownPartnerID=null, $DownPartnerLocation=null, $Sustainability=null)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -156,6 +161,7 @@ Methods
 			* **$Warnings** (:any:`Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null)  
 			* **$DownPartnerID** (string | null)  
 			* **$DownPartnerLocation** (string | null)  
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
 
 		
 	

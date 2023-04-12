@@ -30,6 +30,8 @@ Methods
 ~~~~~~~
 
 * :php:meth:`public \_\_construct\($Content, $ContentType, $Labeltype\)<Firstred\\PostNL\\Entity\\Label::\_\_construct\(\)>`
+* :php:meth:`public getContenttype\(\)<Firstred\\PostNL\\Entity\\Label::getContenttype\(\)>`
+* :php:meth:`public setContenttype\($Contenttype\)<Firstred\\PostNL\\Entity\\Label::setContenttype\(\)>`
 
 
 Constants
@@ -56,7 +58,7 @@ Properties
 	:Type: string | null Base 64 encoded content
 
 
-.. php:attr:: protected static Contenttype
+.. php:attr:: protected static OutputType
 
 	:Type: string | null 
 
@@ -80,6 +82,30 @@ Methods
 			* **$Labeltype** (string | null)  
 
 		
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public getContenttype()
+	
+		
+		:Returns: string | null 
+		:Deprecated: 1.4.2 Use \`getOutputType\` instead
+	
+	
+
+.. rst-class:: public deprecated
+
+	.. php:method:: public setContenttype( $Contenttype)
+	
+		
+		:Parameters:
+			* **$Contenttype** (string | null)  
+
+		
+		:Returns: static 
+		:Deprecated: 1.4.2 Use \`getOutputType\` instead
 	
 	
 

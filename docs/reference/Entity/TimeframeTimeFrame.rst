@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($GetSentDate, $From, $To, $Options\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($GetSentDate, $From, $To, $Options, $Sustainability\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::\_\_construct\(\)>`
 * :php:meth:`public setDate\($Date\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::setDate\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\TimeframeTimeFrame::jsonDeserialize\(\)>`
 
@@ -62,12 +62,17 @@ Properties
 	:Type: string | null 
 
 
+.. php:attr:: protected static Sustainability
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $GetSentDate=null, $From=null, $To=null, $Options=null)
+	.. php:method:: public __construct( $GetSentDate=null, $From=null, $To=null, $Options=null, $Sustainability=null)
 	
 		
 		:Parameters:
@@ -75,6 +80,7 @@ Methods
 			* **$From** (string | null)  
 			* **$To** (string | null)  
 			* **$Options** (string[] | null)  
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
 
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
