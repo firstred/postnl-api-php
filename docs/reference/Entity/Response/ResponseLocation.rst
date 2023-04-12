@@ -24,7 +24,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Address, $DeliveryOptions, $Distance, $Latitude, $Longitude, $Name, $OpeningHours, $PartnerName, $PhoneNumber, $LocationCode, $RetailNetworkID, $Saleschannel, $TerminalType, $Warnings, $DownPartnerID, $DownPartnerLocation\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Address, $DeliveryOptions, $Distance, $Latitude, $Longitude, $Name, $OpeningHours, $PartnerName, $PhoneNumber, $LocationCode, $RetailNetworkID, $Saleschannel, $TerminalType, $Warnings, $DownPartnerID, $DownPartnerLocation, $Sustainability\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::\_\_construct\(\)>`
 * :php:meth:`public getAddress\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getAddress\(\)>`
 * :php:meth:`public setAddress\($Address\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setAddress\(\)>`
 * :php:meth:`public getDeliveryOptions\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDeliveryOptions\(\)>`
@@ -57,6 +57,8 @@ Methods
 * :php:meth:`public setDownPartnerID\($DownPartnerID\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDownPartnerID\(\)>`
 * :php:meth:`public getDownPartnerLocation\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getDownPartnerLocation\(\)>`
 * :php:meth:`public setDownPartnerLocation\($DownPartnerLocation\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setDownPartnerLocation\(\)>`
+* :php:meth:`public getSustainability\(\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::getSustainability\(\)>`
+* :php:meth:`public setSustainability\($Sustainability\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::setSustainability\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\Response\\ResponseLocation::jsonDeserialize\(\)>`
 
 
@@ -143,12 +145,17 @@ Properties
 	:Type: string | null 
 
 
+.. php:attr:: protected static Sustainability
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Address=null, $DeliveryOptions=null, $Distance=null, $Latitude=null, $Longitude=null, $Name=null, $OpeningHours=null, $PartnerName=null, $PhoneNumber=null, $LocationCode=null, $RetailNetworkID=null, $Saleschannel=null, $TerminalType=null, $Warnings=null, $DownPartnerID=null, $DownPartnerLocation=null)
+	.. php:method:: public __construct( $Address=null, $DeliveryOptions=null, $Distance=null, $Latitude=null, $Longitude=null, $Name=null, $OpeningHours=null, $PartnerName=null, $PhoneNumber=null, $LocationCode=null, $RetailNetworkID=null, $Saleschannel=null, $TerminalType=null, $Warnings=null, $DownPartnerID=null, $DownPartnerLocation=null, $Sustainability=null)
 	
 		
 		:Parameters:
@@ -168,6 +175,7 @@ Methods
 			* **$Warnings** (array | null)  
 			* **$DownPartnerID** (string | null)  
 			* **$DownPartnerLocation** (string | null)  
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
 
 		
 	
@@ -522,6 +530,30 @@ Methods
 
 		
 		:Returns: static 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSustainability()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+		:Since: 1.4.2 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSustainability( $Sustainability)
+	
+		
+		:Parameters:
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
+
+		
+		:Returns: static 
+		:Since: 1.4.2 
 	
 	
 

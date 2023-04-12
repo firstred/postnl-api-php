@@ -24,7 +24,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Code, $Date, $Description, $Options, $From, $To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Code, $Date, $Description, $Options, $From, $To, $Sustainability\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::\_\_construct\(\)>`
 * :php:meth:`public getCode\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getCode\(\)>`
 * :php:meth:`public setCode\($Code\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setCode\(\)>`
 * :php:meth:`public getDescription\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getDescription\(\)>`
@@ -36,6 +36,8 @@ Methods
 * :php:meth:`public getTo\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getTo\(\)>`
 * :php:meth:`public setTo\($To\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setTo\(\)>`
 * :php:meth:`public setDate\($date\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setDate\(\)>`
+* :php:meth:`public getSustainability\(\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::getSustainability\(\)>`
+* :php:meth:`public setSustainability\($Sustainability\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::setSustainability\(\)>`
 * :php:meth:`public static jsonDeserialize\($json\)<Firstred\\PostNL\\Entity\\ReasonNoTimeframe::jsonDeserialize\(\)>`
 
 
@@ -72,12 +74,17 @@ Properties
 	:Type: string | null 
 
 
+.. php:attr:: protected static Sustainability
+
+	:Type: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct(int|string|null $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null)
+	.. php:method:: public __construct(int|string|null $Code=null, $Date=null, $Description=null, $Options=null, $From=null, $To=null, $Sustainability=null)
 	
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
@@ -201,6 +208,30 @@ Methods
 		
 		:Throws: :any:`\\Firstred\\PostNL\\Exception\\InvalidArgumentException <Firstred\\PostNL\\Exception\\InvalidArgumentException>` 
 		:Since: 1.2.0 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public getSustainability()
+	
+		
+		:Returns: :any:`\\Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null 
+		:Since: 1.4.2 
+	
+	
+
+.. rst-class:: public
+
+	.. php:method:: public setSustainability( $Sustainability)
+	
+		
+		:Parameters:
+			* **$Sustainability** (:any:`Firstred\\PostNL\\Entity\\Sustainability <Firstred\\PostNL\\Entity\\Sustainability>` | null)  
+
+		
+		:Returns: static 
+		:Since: 1.4.2 
 	
 	
 
