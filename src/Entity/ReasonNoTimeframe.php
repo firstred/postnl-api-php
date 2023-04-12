@@ -202,6 +202,15 @@ class ReasonNoTimeframe extends AbstractEntity
     }
 
     /**
+     * @return DateTimeInterface|null
+     *
+     */
+    public function getDate(): ?DateTimeInterface
+    {
+        return $this->Date;
+    }
+
+    /**
      * @param string|null $To
      *
      * @return static

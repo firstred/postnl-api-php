@@ -58,12 +58,13 @@ class CompleteStatus extends AbstractEntity implements CacheableRequestEntityInt
      * @param Customer|null $Customer
      * @param Message|null  $Message
      */
-    public function __construct(?Shipment $Shipment = null, ?Customer $Customer = null)
+    public function __construct(?Shipment $Shipment = null, ?Customer $Customer = null, ?Message $Message = null)
     {
         parent::__construct();
 
         $this->setShipment(Shipment: $Shipment);
         $this->setCustomer(Customer: $Customer);
+        $this->setMessage(Message: $Message);
     }
 
     /**
