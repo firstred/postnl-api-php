@@ -48,8 +48,8 @@ class Label extends AbstractEntity
     protected ?string $Content = null;
 
     /** @var string|null $Contenttype */
-    #[SerializableProperty(type: 'string')]
-    protected ?string $Contenttype = null;
+    #[SerializableProperty(type: 'string', aliases: ['Contenttype'])]
+    protected ?string $OutputType = null;
 
     /** @var string|null $Labeltype */
     #[SerializableProperty(type: 'string')]
@@ -57,18 +57,18 @@ class Label extends AbstractEntity
 
     /**
      * @param string|null $Content
-     * @param string|null $ContentType
+     * @param string|null $OutputType
      * @param string|null $Labeltype
      */
     public function __construct(
         ?string $Content = null,
-        ?string $ContentType = null,
+        ?string $OutputType = null,
         ?string $Labeltype = null,
     ) {
         parent::__construct();
 
         $this->setContent(Content: $Content);
-        $this->setContenttype(Contenttype: $ContentType);
+        $this->setOutputType(OutputType: $OutputType);
         $this->setLabeltype(Labeltype: $Labeltype);
     }
 
@@ -94,22 +94,48 @@ class Label extends AbstractEntity
 
     /**
      * @return string|null
+     *
+     * @since 1.4.2
+     */
+    public function getOutputType(): ?string
+    {
+        return $this->OutputType;
+    }
+
+    /**
+     * @param string|null $OutputType
+     *
+     * @return static
+     *
+     * @since 1.4.2
+     */
+    public function setOutputType(?string $OutputType): static
+    {
+        $this->OutputType = $OutputType;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     *
+     * @deprecated 1.4.2
      */
     public function getContenttype(): ?string
     {
-        return $this->Contenttype;
+        return $this->getOutputType();
     }
 
     /**
      * @param string|null $Contenttype
      *
      * @return static
+     *
+     * @deprecated 1.4.2
      */
     public function setContenttype(?string $Contenttype): static
     {
-        $this->Contenttype = $Contenttype;
-
-        return $this;
+        return $this->setOutputType(OutputType: $Contenttype);
     }
 
     /**
