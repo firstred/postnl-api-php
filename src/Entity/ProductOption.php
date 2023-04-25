@@ -45,7 +45,7 @@ class ProductOption extends AbstractEntity
     protected ?string $Option = null;
 
     /** @var string|null $Description */
-    #[SerializableProperty(type: 'string', aliases: ['OptionDescription'])]
+    #[SerializableProperty(type: 'string', aliases: ['CharacteristicDescription', 'OptionDescription'])]
     protected ?string $Description = null;
 
     /**
