@@ -31,49 +31,40 @@ namespace Firstred\PostNL\HttpClient;
 
 use Exception;
 use Firstred\PostNL\Exception\HttpClientException;
-use Firstred\PostNL\Exception\InvalidArgumentException;
-use GuzzleHttp\Promise\EachPromise;
 use GuzzleHttp\Psr7\Message as PsrMessage;
-use Http\Client\Exception\HttpException;
-use Http\Client\Exception\TransferException;
-use Http\Client\HttpAsyncClient;
-use Http\Client\HttpClient;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\Exception\NotFoundException as DiscoveryNotFoundException;
-use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use Psr\Http\Client\ClientExceptionInterface;
+use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 /**
- * Class HTTPlugClient.
+ * Class Psr18HttpClient.
  *
- * @since 1.2.0
- *
- * @deprecated
+ * @since 2.0.0
  */
-class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
+class Psr18HttpClient extends BaseHttpClient implements HttpClientInterface
 {
     /** @var static */
-    protected static HTTPlugHttpClient $instance;
+    protected static Psr18HttpClient $instance;
 
     /**
-     * @var HttpAsyncClient|HttpClient
+     * @var ClientInterface
      */
-    protected HttpClient|HttpAsyncClient $client;
+    protected ClientInterface $client;
 
     /**
      * HTTPlugClient constructor.
      *
-     * @param HttpAsyncClient|HttpClient|null $client
-     * @param LoggerInterface|null            $logger
-     * @param int                             $concurrency
-     * @param int                             $maxRetries
+     * @param ClientInterface|null $client
+     * @param LoggerInterface|null $logger
+     * @param int                  $concurrency
+     * @param int                  $maxRetries
      *
      * @throws HttpClientException
      *
@@ -81,17 +72,11 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
      * @since 1.3.0 $maxRetries param
      */
     public function __construct(
-        HttpAsyncClient|HttpClient $client = null,
+        ClientInterface $client = null,
         LoggerInterface $logger = null,
         int $concurrency = 5,
         int $maxRetries = 5,
     ) {
-        trigger_deprecation(
-            package: 'firstred/postnl-api-php',
-            version: '2.0.0',
-            message: 'Using the HTTPlug HTTP client is deprecated. Use either the PSR-18 or async HTTP client as a valid alternative.',
-        );
-
         $this->logger = $logger;
         $this->concurrency = $concurrency;
         $this->maxRetries = $maxRetries;
@@ -99,21 +84,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
         $previous = null;
         if (null === $client) {
             try {
-                $client = HttpAsyncClientDiscovery::find();
-            } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException $e) {
-                $previous = $e;
-            }
-        }
-        if (null === $client) {
-            try {
                 $client = Psr18ClientDiscovery::find();
-            } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException $e) {
-                $previous = $e;
-            }
-        }
-        if (null === $client) {
-            try {
-                $client = HttpClientDiscovery::find();
             } catch (DiscoveryNotFoundException|NoCandidateFoundException|DiscoveryFailedException $e) {
                 $previous = $e;
             }
@@ -134,8 +105,6 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
      * @param RequestInterface[] $requests
      *
      * @return HttpClientException[]|ResponseInterface[]
-     *
-     * @throws InvalidArgumentException
      */
     public function doRequests(array $requests = []): array
     {
@@ -143,50 +112,12 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
         $requests = $this->pendingRequests + $requests;
         $this->clearRequests();
 
-        $client = $this->getClient();
-
         $responses = [];
-        if ($client instanceof HttpAsyncClient) {
-            // Concurrent requests
-            $promises = call_user_func(callback: function () use ($requests, $client) {
-                foreach ($requests as $index => $request) {
-                    try {
-                        yield $index => $client->sendAsyncRequest(request: $request);
-                    } catch (Exception) {
-                    }
-                }
-            });
-
+        foreach ($requests as $idx => $request) {
             try {
-                $promise = (new EachPromise(
-                    iterable: $promises,
-                    config: [
-                        'concurrency' => $this->concurrency,
-                        'fulfilled'   => function (ResponseInterface $response, $index) use (&$responses) {
-                            $responses[$index] = $response;
-                        },
-                        'rejected'    => function (ResponseInterface $response, $index) use (&$responses) {
-                            $responses[$index] = $response;
-                        },
-                    ]
-                ))->promise();
-
-                $promise?->wait(unwrap: true);
-            } catch (HttpException) {
-                // Ignore HttpExceptions, we are going to handle them in the response validator
-            } catch (TransferException $e) {
-                // Other transfer exceptions should be thrown
-                throw $e;
-            } catch (Exception) {
-                // Unreachable code, these kinds of exceptions should not be unwrapped
-            }
-        } else {
-            foreach ($requests as $idx => $request) {
-                try {
-                    $responses[$idx] = $this->doRequest(request: $request);
-                } catch (HttpClientException $e) {
-                    $responses[$idx] = $e;
-                }
+                $responses[$idx] = $this->doRequest(request: $request);
+            } catch (HttpClientException $e) {
+                $responses[$idx] = $e;
             }
         }
 
@@ -228,13 +159,7 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
         $client = $this->getClient();
 
         try {
-            if ($client instanceof HttpAsyncClient) {
-                $response = $client->sendAsyncRequest(request: $request)->wait();
-            } else {
-                $response = $client->sendRequest(request: $request);
-            }
-
-            return $response;
+            return $client->sendRequest(request: $request);
         } catch (Exception $e) {
             throw new HttpClientException(message: $e->getMessage(), code: $e->getCode(), previous: $e);
         } catch (ClientExceptionInterface $e) {
@@ -255,19 +180,19 @@ class HTTPlugHttpClient extends BaseHttpClient implements HttpClientInterface
     }
 
     /**
-     * @return HttpAsyncClient|HttpClient
+     * @return ClientInterface
      */
-    public function getClient(): HttpAsyncClient|HttpClient
+    public function getClient(): ClientInterface
     {
         return $this->client;
     }
 
     /**
-     * @param HttpAsyncClient|HttpClient $client
+     * @param ClientInterface $client
      *
      * @return static
      */
-    public function setClient(HttpAsyncClient|HttpClient $client): static
+    public function setClient(ClientInterface $client): static
     {
         $this->client = $client;
 

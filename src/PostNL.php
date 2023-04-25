@@ -74,10 +74,12 @@ use Firstred\PostNL\Exception\NotFoundException;
 use Firstred\PostNL\Exception\NotSupportedException;
 use Firstred\PostNL\Exception\PostNLException;
 use Firstred\PostNL\Exception\ResponseException;
+use Firstred\PostNL\HttpClient\AsyncHttpClient;
 use Firstred\PostNL\HttpClient\CurlHttpClient;
 use Firstred\PostNL\HttpClient\GuzzleHttpClient;
 use Firstred\PostNL\HttpClient\HttpClientInterface;
-use Firstred\PostNL\HttpClient\HTTPlugHttpClient;
+use Firstred\PostNL\HttpClient\Psr18HttpClient;
+use Firstred\PostNL\HttpClient\SymfonyHttpClient;
 use Firstred\PostNL\Service\BarcodeService;
 use Firstred\PostNL\Service\BarcodeServiceInterface;
 use Firstred\PostNL\Service\ConfirmingService;
@@ -116,7 +118,6 @@ use Http\Discovery\Exception\ClassInstantiationFailedException;
 use Http\Discovery\Exception\DiscoveryFailedException;
 use Http\Discovery\Exception\NoCandidateFoundException;
 use Http\Discovery\HttpAsyncClientDiscovery;
-use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 use ParagonIE\HiddenString\HiddenString;
@@ -127,13 +128,13 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpClient\HttpClient as SymfonyHttpClientImplementation;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
 use setasign\Fpdi\PdfParser\Filter\FilterException;
 use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
 use setasign\Fpdi\PdfParser\Type\PdfTypeException;
 use setasign\Fpdi\PdfReader\PdfReaderException;
-
 use function array_map;
 use function base64_decode;
 use function class_exists;
@@ -403,13 +404,13 @@ class PostNL implements LoggerAwareInterface
      *
      * Automatically load Guzzle when available
      *
-     * @return HTTPlugHttpClient|CurlHttpClient|HttpClientInterface|GuzzleHttpClient
+     * @return HttpClientInterface
      *
      * @throws InvalidArgumentException
      *
      * @since 1.0.0
      */
-    public function getHttpClient(): HTTPlugHttpClient|CurlHttpClient|HttpClientInterface|GuzzleHttpClient
+    public function getHttpClient(): HttpClientInterface
     {
         // @codeCoverageIgnoreStart
         if (!isset($this->httpClient)) {
@@ -422,11 +423,15 @@ class PostNL implements LoggerAwareInterface
                 $this->setHttpClient(httpClient: new GuzzleHttpClient());
             }
 
+            if (!isset($this->httpClient) && class_exists(class: SymfonyHttpClientImplementation::class)) {
+                $this->setHttpClient(httpClient: new SymfonyHttpClient());
+            }
+
             if (!isset($this->httpClient) && class_exists(class: HttpAsyncClientDiscovery::class)) {
                 try {
                     // Detect PHP HTTPlug async HTTP client support
                     if (HttpAsyncClientDiscovery::find()) {
-                        $this->setHttpClient(httpClient: new HTTPlugHttpClient());
+                        $this->setHttpClient(httpClient: new AsyncHttpClient());
                     }
                 } catch (NotFoundException|\Http\Discovery\Exception\NotFoundException|NoCandidateFoundException|ClassInstantiationFailedException|DiscoveryFailedException) {
                 }
@@ -436,19 +441,9 @@ class PostNL implements LoggerAwareInterface
                 try {
                     // Detect PHP HTTPlug PSR-18 HTTP client support
                     if (Psr18ClientDiscovery::find()) {
-                        $this->setHttpClient(httpClient: new HTTPlugHttpClient());
+                        $this->setHttpClient(httpClient: new Psr18HttpClient());
                     }
                 } catch (NotFoundException|\Http\Discovery\Exception\NotFoundException|DiscoveryFailedException|NoCandidateFoundException|ClassInstantiationFailedException) {
-                }
-            }
-
-            if (!isset($this->httpClient) && class_exists(class: HttpClientDiscovery::class)) {
-                try {
-                    // Detect PHP HTTPlug HTTP client support
-                    if (HttpClientDiscovery::find()) {
-                        $this->setHttpClient(httpClient: new HTTPlugHttpClient());
-                    }
-                } catch (NotFoundException|DiscoveryFailedException|NoCandidateFoundException|\Http\Discovery\Exception\NotFoundException|ClassInstantiationFailedException) {
                 }
             }
 

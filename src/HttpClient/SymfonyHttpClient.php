@@ -37,9 +37,9 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\HttpClient\HttpClient as SymfonyHttpClient;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\Retry\GenericRetryStrategy;
-use Symfony\Component\HttpClient\RetryableHttpClient as RetryableSymfonyHttpClient;
+use Symfony\Component\HttpClient\RetryableHttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface as SymfonyHttpClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -49,13 +49,11 @@ use Symfony\Contracts\HttpClient\ResponseInterface as SymfonyHttpClientResponseI
 use function array_merge;
 
 /**
- * Class SymfonyHttpClientInterface.
+ * Class SymfonyHttpClient.
  *
- * @since 1.0.0
- *
- * @internal
+ * @since 2.0.0
  */
-class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterface
+class SymfonyHttpClient extends BaseHttpClient implements HttpClientInterface
 {
     public const DEFAULT_TIMEOUT = 60;
     public const DEFAULT_CONNECT_TIMEOUT = 20;
@@ -69,15 +67,15 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
     /**
      * SymfonyHttpClient constructor.
      *
-     * @param RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null $client
-     * @param LoggerInterface|null                                       $logger
-     * @param int                                                        $concurrency
-     * @param int                                                        $maxRetries
+     * @param SymfonyHttpClientInterface|null $client
+     * @param LoggerInterface|null            $logger
+     * @param int                             $concurrency
+     * @param int                             $maxRetries
      *
      * @since 1.3.0 Custom constructor
      */
     public function __construct(
-        RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null $client = null,
+        SymfonyHttpClientInterface|null $client = null,
         LoggerInterface|null $logger = null,
         int $concurrency = 5,
         int $maxRetries = 5
@@ -91,11 +89,20 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
     /**
      * Get the Symfony HTTP Client.
      *
-     * @return RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null
+     * @return SymfonyHttpClientInterface|null
+     *
+     * @throws HttpClientException
      */
-    private function getClient(): RetryableSymfonyHttpClient|SymfonyHttpClientInterface|null
+    private function getClient(): SymfonyHttpClientInterface|null
     {
         if (!$this->client) {
+            if (!class_exists(class: GenericRetryStrategy::class)
+                || !class_exists(class: RetryableHttpClient::class)
+                || !class_exists(class: HttpClient::class)
+            ) {
+                throw new HttpClientException(message: 'Symfony HTTP client not installed.');
+            }
+
             $retryStrategy = new GenericRetryStrategy(
                 statusCodes: [0, 423, 425, 429, 500, 502, 503, 504, 507, 510],
                 delayMs: 1000,
@@ -103,7 +110,7 @@ class SymfonyHttpHttpClient extends BaseHttpClient implements HttpClientInterfac
                 maxDelayMs: 5000,
                 jitter: 0.3
             );
-            $client = new RetryableSymfonyHttpClient(client: SymfonyHttpClient::create(defaultOptions: array_merge(
+            $client = new RetryableHttpClient(client: HttpClient::create(defaultOptions: array_merge(
                 [
                     'max_duration'  => $this->getTimeout(),
                     'timeout'       => $this->getConnectTimeout(),
