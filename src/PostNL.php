@@ -30,7 +30,8 @@ declare(strict_types=1);
 namespace Firstred\PostNL;
 
 use DateTimeInterface;
-use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 use Firstred\PostNL\Entity\Barcode;
 use Firstred\PostNL\Entity\Customer;
 use Firstred\PostNL\Entity\Label;
@@ -2111,6 +2112,7 @@ class PostNL implements LoggerAwareInterface
      * @throws NotSupportedException
      * @throws PsrCacheInvalidArgumentException
      * @throws ResponseException
+     * @throws Throwable
      *
      * @since 1.0.0
      */
@@ -2150,40 +2152,39 @@ class PostNL implements LoggerAwareInterface
 
         $responses = $this->getHttpClient()->doRequests();
         foreach ($responses as $requestType => $response) {
-            if ($response instanceof Response) {
-                if (200 === $response->getStatusCode()) {
-                    $results[$requestType] = $response;
-                    switch ($requestType) {
-                        case 'timeframes':
-                            $cacheItem = $this->getTimeframeService()->retrieveCachedResponseItem(cacheableRequestEntity: $getTimeframes);
-                            if ($cacheItem instanceof CacheItemInterface) {
-                                $cacheItem->set(value: PsrMessage::toString(message: $response));
-                                $this->getTimeframeService()->cacheResponseItem(item: $cacheItem);
-                            }
+            if (200 === $response->getStatusCode()) {
+                $results[$requestType] = $response;
+                switch ($requestType) {
+                    case 'timeframes':
+                        $cacheItem = $this->getTimeframeService()->retrieveCachedResponseItem(cacheableRequestEntity: $getTimeframes);
+                        if ($cacheItem instanceof CacheItemInterface) {
+                            $cacheItem->set(value: PsrMessage::toString(message: $response));
+                            $this->getTimeframeService()->cacheResponseItem(item: $cacheItem);
+                        }
 
-                            break;
-                        case 'locations':
-                            $cacheItem = $this->getLocationService()->retrieveCachedResponseItem(cacheableRequestEntity: $getNearestLocations);
-                            if ($cacheItem instanceof CacheItemInterface) {
-                                $cacheItem->set(value: PsrMessage::toString(message: $response));
-                                $this->getLocationService()->cacheResponseItem(item: $cacheItem);
-                            }
+                        break;
+                    case 'locations':
+                        $cacheItem = $this->getLocationService()->retrieveCachedResponseItem(cacheableRequestEntity: $getNearestLocations);
+                        if ($cacheItem instanceof CacheItemInterface) {
+                            $cacheItem->set(value: PsrMessage::toString(message: $response));
+                            $this->getLocationService()->cacheResponseItem(item: $cacheItem);
+                        }
 
-                            break;
-                        case 'delivery_date':
-                            $cacheItem = $this->getDeliveryDateService()->retrieveCachedResponseItem(cacheableRequestEntity: $getDeliveryDate);
-                            if ($cacheItem instanceof CacheItemInterface) {
-                                $cacheItem->set(value: PsrMessage::toString(message: $response));
-                                $this->getDeliveryDateService()->cacheResponseItem(item: $cacheItem);
-                            }
+                        break;
+                    case 'delivery_date':
+                        $cacheItem = $this->getDeliveryDateService()->retrieveCachedResponseItem(cacheableRequestEntity: $getDeliveryDate);
+                        if ($cacheItem instanceof CacheItemInterface) {
+                            $cacheItem->set(value: PsrMessage::toString(message: $response));
+                            $this->getDeliveryDateService()->cacheResponseItem(item: $cacheItem);
+                        }
 
-                            break;
-                    }
+                        break;
                 }
+            } else if ($response instanceof ResponseInterface) {
+                throw new ResponseException(message: 'Invalid multi-request', response: $response);
+            } elseif ($response instanceof Throwable) {
+                throw $response;
             } else {
-                if ($response instanceof Exception) {
-                    throw $response;
-                }
                 throw new InvalidArgumentException(message: 'Invalid multi-request');
             }
         }
