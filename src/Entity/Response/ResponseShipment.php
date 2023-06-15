@@ -175,6 +175,6 @@ class ResponseShipment extends AbstractEntity
         $this->setDownPartnerLocation($DownPartnerLocation);
         $this->setLabels($Labels);
         $this->setWarnings($Warnings);
-        $this->setCodingText(CodingText: $CodingText);
+        $this->setCodingText($CodingText);
     }
 }
