@@ -29,7 +29,7 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($Barcode, $ProductCodeDelivery, $Labels, $DownPartnerBarcode, $DownPartnerID, $DownPartnerLocation, $Warnings\)<Firstred\\PostNL\\Entity\\Response\\ResponseShipment::\_\_construct\(\)>`
+* :php:meth:`public \_\_construct\($Barcode, $ProductCodeDelivery, $Labels, $DownPartnerBarcode, $DownPartnerID, $DownPartnerLocation, $Warnings, $CodingText\)<Firstred\\PostNL\\Entity\\Response\\ResponseShipment::\_\_construct\(\)>`
 
 
 Properties
@@ -75,12 +75,17 @@ Properties
 	:Type: :any:`\\Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null 
 
 
+.. php:attr:: protected static CodingText
+
+	:Type: string | null 
+
+
 Methods
 -------
 
 .. rst-class:: public
 
-	.. php:method:: public __construct( $Barcode=null, $ProductCodeDelivery=null, $Labels=null, $DownPartnerBarcode=null, $DownPartnerID=null, $DownPartnerLocation=null, $Warnings=null)
+	.. php:method:: public __construct( $Barcode=null, $ProductCodeDelivery=null, $Labels=null, $DownPartnerBarcode=null, $DownPartnerID=null, $DownPartnerLocation=null, $Warnings=null, $CodingText=null)
 	
 		
 		:Parameters:
@@ -91,6 +96,7 @@ Methods
 			* **$DownPartnerID** (string | null)  
 			* **$DownPartnerLocation** (string | null)  
 			* **$Warnings** (:any:`Firstred\\PostNL\\Entity\\Warning\[\] <Firstred\\PostNL\\Entity\\Warning>` | null)  
+			* **$CodingText** (string | null)  
 
 		
 	
