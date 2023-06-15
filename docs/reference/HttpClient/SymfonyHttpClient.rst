@@ -4,18 +4,18 @@
 	:language: php
 
 
-SymfonyHttpHttpClient
-=====================
+SymfonyHttpClient
+=================
 
 
 .. php:namespace:: Firstred\PostNL\HttpClient
 
-.. php:class:: SymfonyHttpHttpClient
+.. php:class:: SymfonyHttpClient
 
 
 	.. rst-class:: phpdoc-description
 	
-		| Class SymfonyHttpClientInterface\.
+		| Class SymfonyHttpClient\.
 		
 	
 	:Parent:
@@ -32,16 +32,16 @@ Summary
 Methods
 ~~~~~~~
 
-* :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::\_\_construct\(\)>`
-* :php:meth:`private getClient\(\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::getClient\(\)>`
-* :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::setOption\(\)>`
-* :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::getOption\(\)>`
-* :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::doRequest\(\)>`
-* :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::doRequests\(\)>`
-* :php:meth:`public setMaxRetries\($maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::setMaxRetries\(\)>`
-* :php:meth:`public setConcurrency\($concurrency\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::setConcurrency\(\)>`
-* :php:meth:`private convertPsrRequestToSymfonyHttpClientRequestParams\($psrRequest\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::convertPsrRequestToSymfonyHttpClientRequestParams\(\)>`
-* :php:meth:`private convertSymfonyHttpClientResponseToPsrResponse\($symfonyHttpClientResponse\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpHttpClient::convertSymfonyHttpClientResponseToPsrResponse\(\)>`
+* :php:meth:`public \_\_construct\($client, $logger, $concurrency, $maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::\_\_construct\(\)>`
+* :php:meth:`private getClient\(\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getClient\(\)>`
+* :php:meth:`public setOption\($name, $value\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setOption\(\)>`
+* :php:meth:`public getOption\($name\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::getOption\(\)>`
+* :php:meth:`public doRequest\($request\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::doRequest\(\)>`
+* :php:meth:`public doRequests\($requests\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::doRequests\(\)>`
+* :php:meth:`public setMaxRetries\($maxRetries\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setMaxRetries\(\)>`
+* :php:meth:`public setConcurrency\($concurrency\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::setConcurrency\(\)>`
+* :php:meth:`private convertPsrRequestToSymfonyHttpClientRequestParams\($psrRequest\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::convertPsrRequestToSymfonyHttpClientRequestParams\(\)>`
+* :php:meth:`private convertSymfonyHttpClientResponseToPsrResponse\($symfonyHttpClientResponse\)<Firstred\\PostNL\\HttpClient\\SymfonyHttpClient::convertSymfonyHttpClientResponseToPsrResponse\(\)>`
 
 
 Constants
@@ -73,7 +73,7 @@ Methods
 
 .. rst-class:: public
 
-	.. php:method:: public __construct(\\Symfony\\Component\\HttpClient\\RetryableHttpClient|\\Symfony\\Contracts\\HttpClient\\HttpClientInterface|null $client=null, \\Psr\\Log\\LoggerInterface|null $logger=null, $concurrency=5, $maxRetries=5)
+	.. php:method:: public __construct(\\Symfony\\Contracts\\HttpClient\\HttpClientInterface|null $client=null, \\Psr\\Log\\LoggerInterface|null $logger=null, $concurrency=5, $maxRetries=5)
 	
 		.. rst-class:: phpdoc-description
 		
@@ -82,7 +82,7 @@ Methods
 		
 		
 		:Parameters:
-			* **$client** (:any:`Symfony\\Component\\HttpClient\\RetryableHttpClient <Symfony\\Component\\HttpClient\\RetryableHttpClient>` | :any:`\\Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` | null)  
+			* **$client** (:any:`Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` | null)  
 			* **$logger** (:any:`Psr\\Log\\LoggerInterface <Psr\\Log\\LoggerInterface>` | null)  
 			* **$concurrency** (int)  
 			* **$maxRetries** (int)  
@@ -102,7 +102,8 @@ Methods
 			
 		
 		
-		:Returns: :any:`\\Symfony\\Component\\HttpClient\\RetryableHttpClient <Symfony\\Component\\HttpClient\\RetryableHttpClient>` | :any:`\\Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` | null 
+		:Returns: :any:`\\Symfony\\Contracts\\HttpClient\\HttpClientInterface <Symfony\\Contracts\\HttpClient\\HttpClientInterface>` | null 
+		:Throws: :any:`\\Firstred\\PostNL\\Exception\\HttpClientException <Firstred\\PostNL\\Exception\\HttpClientException>` 
 	
 	
 

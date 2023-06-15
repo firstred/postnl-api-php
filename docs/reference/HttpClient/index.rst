@@ -30,8 +30,10 @@ Classes
 	CurlHttpClient <CurlHttpClient>
 	BaseHttpClient <BaseHttpClient>
 	GuzzleHttpClient <GuzzleHttpClient>
-	SymfonyHttpHttpClient <SymfonyHttpHttpClient>
+	AsyncHttpClient <AsyncHttpClient>
+	SymfonyHttpClient <SymfonyHttpClient>
 	HTTPlugHttpClient <HTTPlugHttpClient>
 	MockHttpClient <MockHttpClient>
+	Psr18HttpClient <Psr18HttpClient>
 
 
