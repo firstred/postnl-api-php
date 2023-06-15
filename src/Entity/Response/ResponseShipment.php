@@ -67,6 +67,10 @@ class ResponseShipment extends AbstractEntity
     #[SerializableProperty(type: Warning::class, isArray: true)]
     protected ?array $Warnings = null;
 
+    /** @var string|null $CodingText */
+    #[SerializableProperty(type: 'string')]
+    protected ?string $CodingText = null;
+
     /**
      * @param string|null $Barcode
      * @param string|null $ProductCodeDelivery
@@ -85,7 +89,8 @@ class ResponseShipment extends AbstractEntity
         ?string $DownPartnerID = null,
         ?string $DownPartnerLocation = null,
         /* @param Warning[]|null $Warnings */
-        ?array $Warnings = null
+        ?array $Warnings = null,
+        ?string $CodingText = null
     ) {
         parent::__construct();
 
@@ -96,6 +101,7 @@ class ResponseShipment extends AbstractEntity
         $this->setDownPartnerLocation(DownPartnerLocation: $DownPartnerLocation);
         $this->setLabels(Labels: $Labels);
         $this->setWarnings(Warnings: $Warnings);
+        $this->setCodingText(CodingText: $CodingText);
     }
 
     /**
@@ -234,6 +240,18 @@ class ResponseShipment extends AbstractEntity
     public function setWarnings(?array $Warnings): static
     {
         $this->Warnings = $Warnings;
+
+        return $this;
+    }
+
+    /**
+     * @param string|null $CodingText
+     *
+     * @return static
+     */
+    public function setCodingText(?string $CodingText): static
+    {
+        $this->CodingText = $CodingText;
 
         return $this;
     }
