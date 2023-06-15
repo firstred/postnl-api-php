@@ -47,6 +47,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method string|null      getDownPartnerLocation()
  * @method Label[]|null     getLabels()
  * @method Warning[]|null   getWarnings()
+ * @method string|null      getCodingText()
  * @method ResponseShipment setBarcode(string|null $Barcode = null)
  * @method ResponseShipment setProductCodeDelivery(string|null $ProductCodeDelivery = null)
  * @method ResponseShipment setDownPartnerBarcode(string|null $DownPartnerCode = null)
@@ -54,6 +55,7 @@ use Firstred\PostNL\Service\TimeframeService;
  * @method ResponseShipment setDownPartnerLocation(string|null $DownPartnerLocation = null)
  * @method ResponseShipment setLabels(Label[]|null $Labels = null)
  * @method ResponseShipment setWarnings(Warning[]|null $Warnings = null)
+ * @method ResponseShipment setCodingText(string|null $CodingText = null)
  *
  * @since 1.0.0
  */
@@ -140,6 +142,8 @@ class ResponseShipment extends AbstractEntity
     protected $ProductCodeDelivery;
     /** @var Warning[]|null */
     protected $Warnings;
+    /** @var string|null $CodingText */
+    protected $CodingText;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -150,6 +154,7 @@ class ResponseShipment extends AbstractEntity
      * @param string|null    $DownPartnerID
      * @param string|null    $DownPartnerLocation
      * @param Warning[]|null $Warnings
+     * @param string|null $CodingText
      */
     public function __construct(
         $Barcode = null,
@@ -158,7 +163,8 @@ class ResponseShipment extends AbstractEntity
         $DownPartnerBarcode = null,
         $DownPartnerID = null,
         $DownPartnerLocation = null,
-        $Warnings = null
+        $Warnings = null,
+        $CodingText = null
     ) {
         parent::__construct();
 
@@ -169,5 +175,6 @@ class ResponseShipment extends AbstractEntity
         $this->setDownPartnerLocation($DownPartnerLocation);
         $this->setLabels($Labels);
         $this->setWarnings($Warnings);
+        $this->setCodingText(CodingText: $CodingText);
     }
 }
