@@ -63,7 +63,7 @@ class CurrentStatusResponseShipment extends AbstractEntity
     protected ?array $Addresses = null;
 
     /** @var Amount[]|null $Amounts */
-    #[SerializableProperty(type: Amount::class, isArray: true)]
+    #[SerializableProperty(type: Amount::class, isArray: true, aliases: ['Amount'])]
     protected ?array $Amounts = null;
 
     /** @var string|null $Barcode */
