@@ -41,21 +41,21 @@ use Psr\Http\Message\ResponseInterface;
  */
 class HttpClientException extends PostNLException
 {
-    private ResponseInterface $response;
+    private ?ResponseInterface $response;
 
-    public function __construct(string $message = '', int $code = 0, ?Exception $previous = null, ResponseInterface $response = null)
+    public function __construct(string $message = '', int $code = 0, ?Exception $previous = null, ?ResponseInterface $response = null)
     {
         parent::__construct(message: $message, code: $code, previous: $previous);
 
         $this->response = $response;
     }
 
-    public function setResponse(ResponseInterface $response)
+    public function setResponse(?ResponseInterface $response)
     {
         $this->response = $response;
     }
 
-    public function getResponse(): ResponseInterface
+    public function getResponse(): ?ResponseInterface
     {
         return $this->response;
     }
