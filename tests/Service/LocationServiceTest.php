@@ -41,6 +41,7 @@ use Firstred\PostNL\Entity\Request\GetNearestLocations;
 use Firstred\PostNL\Entity\Response\GetLocationsInAreaResponse;
 use Firstred\PostNL\Entity\Response\GetNearestLocationsResponse;
 use Firstred\PostNL\Entity\Response\ResponseLocation;
+use Firstred\PostNL\Exception\CifException;
 use Firstred\PostNL\HttpClient\MockHttpClient;
 use Firstred\PostNL\PostNL;
 use Firstred\PostNL\Service\LocationServiceInterface;
@@ -56,7 +57,9 @@ use PHPUnit\Framework\Attributes\TestDox;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionObject;
+
 use function file_get_contents;
+
 use const _RESPONSES_DIR_;
 
 /**
@@ -318,6 +321,37 @@ class LocationServiceTest extends ServiceTestCase
 
         $result = $response->getGetLocationsResult()->getResponseLocation()[0];
         $this->assertEquals(expected: '161503', actual: $result->getLocationCode());
+    }
+
+    /** @throws */
+    #[TestDox(text: 'can handle HTTP 400 error response correctly')]
+    public function testHttp400Error(): void
+    {
+        $response = PsrMessage::parseResponse(message: file_get_contents(filename: _RESPONSES_DIR_.'/rest/location/nearestlocationsbypostcode-error400.http'));
+
+        $mock = new MockHandler(queue: [$response]);
+        $handler = HandlerStack::create(handler: $mock);
+        $mockClient = new MockHttpClient();
+        $mockClient->setHandler(handler: $handler);
+        $this->postnl->setHttpClient(httpClient: $mockClient);
+
+        $this->expectException(exception: CifException::class);
+        $this->expectExceptionMessage(message: 'Request format is invalid');
+
+        $this->postnl->getNearestLocations(getNearestLocations: (new GetNearestLocations())
+            ->setCountrycode(Countrycode: 'NL')
+            ->setLocation(Location: new Location(
+                Postalcode: '0000AB',
+                AllowSundaySorting: true,
+                DeliveryDate: '29-06-2016',
+                DeliveryOptions: ['PG', 'PGE'],
+                OpeningTime: '09:00:00',
+                Options: ['Daytime'],
+                City: 'Hoofddorp',
+                Street: 'Siriusdreef',
+                HouseNr: '42',
+                HouseNrExt: 'A',
+            )));
     }
 
     /**
