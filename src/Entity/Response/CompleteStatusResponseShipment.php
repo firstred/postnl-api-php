@@ -360,6 +360,24 @@ class CompleteStatusResponseShipment extends AbstractEntity
     }
 
     /**
+     * @return Amount[]|null
+     */
+    public function getAmount()
+    {
+        return $this->getAmounts();
+    }
+
+    /**
+     * @param Amount[]|null $Amount
+     *
+     * @return static
+     */
+    public function setAmount($Amount = null)
+    {
+        return $this->setAmounts($Amount);
+    }
+
+    /**
      * @param stdClass $json
      *
      * @return mixed|stdClass|null
