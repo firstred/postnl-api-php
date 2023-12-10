@@ -109,7 +109,7 @@ abstract class AbstractRestResponseProcessor extends AbstractResponseProcessor
             }
             throw new CifException(message: $exceptionData);
         } elseif (!empty($body->Error)) {
-            throw new CifException(message: $body->Error->ErrorDescription, code: $body->Error->ErrorCode);
+            throw new CifException(message: (string) $body->Error->ErrorDescription, code: (int) $body->Error->ErrorCode);
         } elseif (!empty($body->Array->Item->ErrorMsg)) {
             // {"Array":{"Item":{"ErrorMsg":"Unknown option GetDeliveryDate.Options='DayTime' specified","ErrorNumber":26}}}
             $exceptionData = [
