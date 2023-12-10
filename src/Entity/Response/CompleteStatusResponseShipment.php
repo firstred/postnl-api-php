@@ -39,6 +39,7 @@ use Firstred\PostNL\Entity\Expectation;
 use Firstred\PostNL\Entity\Group;
 use Firstred\PostNL\Entity\ProductOption;
 use Firstred\PostNL\Entity\Status;
+use Firstred\PostNL\Entity\StatusAddress;
 use Firstred\PostNL\Entity\Warning;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use Firstred\PostNL\Service\BarcodeService;
