@@ -1,0 +1,19 @@
+HTTP/1.1 400 OK
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:42:12 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+{
+  "Date": "2019-08-24T14:15:22Z",
+  "Error": {
+    "ErrorCode": "3000",
+    "ErrorDescription": "Request format is invalid"
+  },
+  "RequestId": "09fd61fe-0099-4349-b71d-dce5c2472be9"
+}
