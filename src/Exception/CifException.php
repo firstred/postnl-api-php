@@ -60,6 +60,9 @@ class CifException extends ApiException
             $this->messages = $message;
 
             $message = $this->messages[0]['message'];
+            if (!empty($this->messages[0]['description'])) {
+                $message .= ' (' . $this->messages[0]['description'] . ')';
+            }
             $code = $this->messages[0]['code'];
         }
 
