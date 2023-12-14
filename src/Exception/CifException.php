@@ -64,6 +64,14 @@ class CifException extends ApiException
                 $message .= ' (' . $this->messages[0]['description'] . ')';
             }
             $code = $this->messages[0]['code'];
+        } else {
+            $this->messages = [
+                [
+                    'message'     => $message,
+                    'description' => $message,
+                    'code'        => $code,
+                ],
+            ];
         }
 
         parent::__construct(message: $message, code: $code, previous: $previous);
