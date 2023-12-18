@@ -13,7 +13,7 @@ Connection: keep-alive
   "Date": "2019-08-24T14:15:22Z",
   "Error": {
     "ErrorCode": "3000",
-    "ErrorDescription": "Request format is invalid"
+    "ErrorMessage": "Request format is invalid"
   },
   "RequestId": "09fd61fe-0099-4349-b71d-dce5c2472be9"
 }
