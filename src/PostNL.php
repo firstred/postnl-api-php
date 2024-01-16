@@ -177,6 +177,7 @@ class PostNL implements LoggerAwareInterface
         'LT',
         'LU',
         'LV',
+        'MT',
         'NL',
         'PL',
         'PT',
