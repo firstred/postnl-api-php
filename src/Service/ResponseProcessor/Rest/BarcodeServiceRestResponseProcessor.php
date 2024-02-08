@@ -63,18 +63,12 @@ class BarcodeServiceRestResponseProcessor extends AbstractRestResponseProcessor 
     public function processGenerateBarcodeResponse(ResponseInterface $response): string
     {
         $this->validateResponse(response: $response);
-        $responseContent = $this->getResponseText(response: $response);
+        $body = json_decode(json: static::getResponseText(response: $response));
 
-        try {
-            $json = json_decode(json: $responseContent, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new ResponseException(message: 'Invalid API Response', previous: $e, response: $response);
-        }
-
-        if (!isset($json->Barcode)) {
+        if (!isset($body->Barcode)) {
             throw new ResponseException(message: 'Invalid API Response', response: $response);
         }
 
-        return $json->Barcode;
+        return $body->Barcode;
     }
 }

@@ -71,6 +71,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      */
     public function processCurrentStatusResponse(ResponseInterface $response): CurrentStatusResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
         /* @var CurrentStatusResponse $object */
@@ -189,6 +190,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      */
     public function processGetSignatureResponse(ResponseInterface $response): GetSignatureResponseSignature
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
 
         /* @var GetSignatureResponseSignature $object */
@@ -212,6 +214,7 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
      */
     public function processGetUpdatedShipmentsResponse(ResponseInterface $response): array
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
         if (!is_array(value: $body)) {
             return [];
