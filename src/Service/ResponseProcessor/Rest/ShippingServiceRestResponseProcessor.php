@@ -62,6 +62,7 @@ class ShippingServiceRestResponseProcessor extends AbstractRestResponseProcessor
      */
     public function processSendShipmentResponse(ResponseInterface $response): ?SendShipmentResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->ResponseShipments)) {
             return SendShipmentResponse::JsonDeserialize(json: (object) ['SendShipmentResponse' => $body]);

@@ -65,6 +65,7 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
      */
     public function processGetDeliveryDateResponse(ResponseInterface $response): GetDeliveryDateResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->DeliveryDate)) {
             return GetDeliveryDateResponse::jsonDeserialize(json: (object) ['GetDeliveryDateResponse' => $body]);
@@ -91,6 +92,7 @@ class DeliveryDateServiceRestResponseProcessor extends AbstractRestResponseProce
      */
     public function processGetSentDateResponse(ResponseInterface $response): GetSentDateResponse
     {
+        $this->validateResponse(response: $response);
         $body = json_decode(json: static::getResponseText(response: $response));
         if (isset($body->SentDate)) {
             return GetSentDateResponse::jsonDeserialize(json: (object) ['GetSentDateResponse' => $body]);
