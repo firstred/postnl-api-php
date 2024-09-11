@@ -464,7 +464,7 @@ class DeliveryDateService extends AbstractService implements DeliveryDateService
 
         $sentDate = $getSentDate->getGetSentDate();
         $query = [
-            'ShippingDate' => $sentDate->getDeliveryDate(),
+            'DeliveryDate' => $sentDate->getDeliveryDate()->format('d-m-Y'),
         ];
         $query['CountryCode'] = $sentDate->getCountryCode();
         if ($duration = $sentDate->getShippingDuration()) {
