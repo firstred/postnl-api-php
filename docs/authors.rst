@@ -30,5 +30,6 @@ These contributors have helped with making this library possible. Thank you so m
 * `Daniel Schipper <https://github.com/daniel-memo-ict>`_ (contributor)
 * `Joshua Bours <https://github.com/jbours>`_ (contributor)
 * `Hidde Schuurman <https://github.com/ISMHiddeSchuurman>`_ (contributor)
+* `Gijs <https://github.com/gsdkkr>`_ (contributor)
 * Mathieu Haverkamp (contributor)
 * Jeroen Smit (contributor)
