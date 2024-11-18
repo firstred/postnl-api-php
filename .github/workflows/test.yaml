@@ -32,7 +32,7 @@ jobs:
             -   name: Cache composer dependencies
                 uses: actions/cache@v4
                 with:
-                    path: ${{ steps.composer-cache.outputs.stdout }}
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.json') }}
                     restore-keys: ${{ runner.os }}-${{ matrix.php-versions }}-composer-
 
