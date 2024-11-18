@@ -21,13 +21,13 @@ jobs:
                     tools: php-cs-fixer
 
             -   name: Setup problem matchers for PHPUnit
+                shell: bash
                 run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
             -   name: Get composer cache directory
-                uses: mathiasvr/command-output@v2.0.0
                 id: composer-cache
-                with:
-                    run: composer config cache-files-dir
+                shell: bash
+                run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -   name: Cache composer dependencies
                 uses: actions/cache@v4
@@ -37,18 +37,21 @@ jobs:
                     restore-keys: ${{ runner.os }}-${{ matrix.php-versions }}-composer-
 
             -   name: Install Composer dependencies
+                shell: bash
                 run: composer install --no-progress --prefer-dist --optimize-autoloader
 
             -   name: Test with PHPUnit
                 if: matrix.php-versions != '8.3' || matrix.operating-system != 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
+                shell: bash
                 run: vendor/bin/phpunit --testdox -- tests
 
             -   name: Test with PHPUnit (coverage)
                 if: matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
+                shell: bash
                 run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml -- tests
 
             -   name: Codecov
