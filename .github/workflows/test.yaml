@@ -41,19 +41,19 @@ jobs:
                 run: composer install --no-progress --prefer-dist --optimize-autoloader
 
             -   name: Test with PHPUnit
-                if: matrix.php-versions != '8.3' || matrix.operating-system != 'ubuntu-latest'
+                if: matrix.php-versions != '8.4' || matrix.operating-system != 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
                 shell: bash
                 run: vendor/bin/phpunit --testdox -- tests
 
             -   name: Test with PHPUnit (coverage)
-                if: matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest'
+                if: matrix.php-versions == '8.4' && matrix.operating-system == 'ubuntu-latest'
                 env:
                     XDEBUG_MODE: coverage
                 shell: bash
                 run: vendor/bin/phpunit --testdox --coverage-clover coverage.xml -- tests
 
             -   name: Codecov
-                if: matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest'
+                if: matrix.php-versions == '8.4' && matrix.operating-system == 'ubuntu-latest'
                 uses: codecov/codecov-action@v5
