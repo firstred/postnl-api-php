@@ -56,7 +56,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The ShippingStatusService (SOAP)
  */
-class ShippingStatusServiceSoapTest extends ServiceTest
+class ShippingStatusServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

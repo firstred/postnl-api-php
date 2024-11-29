@@ -50,7 +50,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The ShippingService (REST)
  */
-class ShippingServiceRestTest extends ServiceTest
+class ShippingServiceRestTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

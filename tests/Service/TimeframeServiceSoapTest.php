@@ -46,7 +46,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The TimeframeService (SOAP)
  */
-class TimeframeServiceSoapTest extends ServiceTest
+class TimeframeServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

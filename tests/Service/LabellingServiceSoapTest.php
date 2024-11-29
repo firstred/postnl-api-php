@@ -50,7 +50,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The LabellingService (SOAP)
  */
-class LabellingServiceSoapTest extends ServiceTest
+class LabellingServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

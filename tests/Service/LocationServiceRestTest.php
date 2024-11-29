@@ -58,7 +58,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The LocationService (REST)
  */
-class LocationServiceRestTest extends ServiceTest
+class LocationServiceRestTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

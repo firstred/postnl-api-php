@@ -53,7 +53,7 @@ use ReflectionException;
  *
  * @testdox The DeliveryDateService (SOAP)
  */
-class DeliveryDateServiceSoapTest extends ServiceTest
+class DeliveryDateServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

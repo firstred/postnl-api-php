@@ -51,7 +51,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The TimeframeService (REST)
  */
-class TimeframeServiceRestTest extends ServiceTest
+class TimeframeServiceRestTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

@@ -55,7 +55,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The ConfirmingService (REST)
  */
-class ConfirmingServiceRestTest extends ServiceTest
+class ConfirmingServiceRestTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

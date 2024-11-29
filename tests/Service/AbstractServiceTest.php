@@ -40,7 +40,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The AbstractService class
  */
-class AbstractServiceTest extends ServiceTest
+class AbstractServiceTest extends ServiceTestAbstract
 {
     /**
      * @testdox can get the response text from the value property

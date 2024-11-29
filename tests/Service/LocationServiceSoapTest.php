@@ -52,7 +52,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The LocationService (SOAP)
  */
-class LocationServiceSoapTest extends ServiceTest
+class LocationServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

@@ -34,11 +34,11 @@ use function is_array;
 use function is_object;
 
 /**
- * Abstract class AbstractServiceTest.
+ * Abstract class ServiceTestAbstract.
  *
  * @testdox The AbstractService class
  */
-abstract class ServiceTest extends TestCase
+abstract class ServiceTestAbstract extends TestCase
 {
     public static function containsStdClass($value)
     {

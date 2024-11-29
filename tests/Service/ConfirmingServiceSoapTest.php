@@ -49,7 +49,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The ConfirmingService (SOAP)
  */
-class ConfirmingServiceSoapTest extends ServiceTest
+class ConfirmingServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

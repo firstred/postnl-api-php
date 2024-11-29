@@ -50,7 +50,7 @@ use const _RESPONSES_DIR_;
  *
  * @testdox The BarcodeService (REST)
  */
-class BarcodeServiceRestTest extends ServiceTest
+class BarcodeServiceRestTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;

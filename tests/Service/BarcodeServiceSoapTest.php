@@ -45,7 +45,7 @@ use GuzzleHttp\Psr7\Response;
  *
  * @testdox The BarcodeService (SOAP)
  */
-class BarcodeServiceSoapTest extends ServiceTest
+class BarcodeServiceSoapTest extends ServiceTestAbstract
 {
     /** @var PostNL */
     protected $postnl;
