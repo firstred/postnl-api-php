@@ -52,14 +52,14 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PostNL PHP bindings'
-copyright = u'2017-2023, Michael Dekker - not affiliated with PostNL'
+copyright = u'2017-2024, Michael Dekker - not affiliated with PostNL'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
-version = 'v1.4.x'
+version = '1.4'
 # The full version, including alpha/beta/rc tags.
 release = 'v1.4.x'
 
