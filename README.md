@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/firstred/postnl-api-php/v)](https://packagist.org/packages/firstred/postnl-api-php)
 [![Total Downloads](https://poser.pugx.org/firstred/postnl-api-php/downloads)](https://packagist.org/packages/firstred/postnl-api-php)
 [![.github/workflows/test.yaml](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml/badge.svg)](https://github.com/firstred/postnl-api-php/actions/workflows/test.yaml)
-[![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=latest)](https://postnl-php.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/postnl-php/badge/?version=v1.4.x)](https://postnl-php.readthedocs.io/en/v1.4.x/)
 [![codecov](https://codecov.io/gh/firstred/postnl-api-php/branch/master/graph/badge.svg)](https://codecov.io/gh/firstred/postnl-api-php)
 [![license mit](https://poser.pugx.org/firstred/postnl-api-php/license.svg)](https://packagist.org/packages/firstred/postnl-api-php)
 [![PHP Version Require](.github/badges/php_required.svg)](https://packagist.org/packages/firstred/postnl-api-php)
