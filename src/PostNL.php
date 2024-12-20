@@ -1760,7 +1760,7 @@ class PostNL implements LoggerAwareInterface
         }
 
         if (empty($shipments) || !is_array(value: $shipments)) {
-            throw new NotFoundException(message: "Barcode `$barcode`` not found");
+            throw new NotFoundException(message: "Barcode `$barcode` not found");
         }
 
         return $shipments[0];
