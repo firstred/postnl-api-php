@@ -7,28 +7,31 @@ Maintainers:
 
 * `Michael Dekker <https://github.com/firstred>`_ <git@michaeldekker.nl> (maintainer)
 
-Looking for maintainers! If you'd like to help keep this library up to date please send and email to git@michaeldekker.nl
+Looking for maintainers! If you'd like to help keep this library up to date please send an email to git@michaeldekker.nl
 
 Contributors:
 ================
 
 These contributors have helped with making this library possible. Thank you so much!
 
+* Jeroen Smit (contributor)
+* Mathieu Haverkamp (contributor)
 * `Bert Brunekreeft <https://github.com/BBrunekreeft>`_ (contributor)
 * `Daniel Schipper <https://github.com/daniel-memo-ict>`_ (contributor)
 * `GetMagented <https://github.com/GetMagented>`_ (contributor)
 * `Gijs <https://github.com/gsdkkr>`_ (contributor)
 * `Hidde Schuurman <https://github.com/ISMHiddeSchuurman>`_ (contributor)
-* Jeroen Smit (contributor)
 * `Joshua Bours <https://github.com/jbours>`_ (contributor)
-* Mathieu Haverkamp (contributor)
+* `Jurjen12 <https://github.com/Jurjen12>`_ (contributor)
+* `SanderHagen <https://github.com/SanderHagen>`_ (contributor)
 * `TomKriek <https://github.com/TomKriek>`_ (contributor)
+* `annuh <https://github.com/annuh>`_ (contributor)
 * `fgd007 <https://github.com/fgd007>`_ (contributor)
 * `janwilletje <https://github.com/janwilletje>`_ (contributor)
 * `jbours <https://github.com/jbours>`_ (contributor)
 * `lenvanessen <https://github.com/lenvanessen>`_ (contributor)
+* `mtkweb <https://github.com/mtkweb>`_ (contributor)
 * `niccifor <https://github.com/niccifor>`_ (contributor)
-* `SanderHagen <https://github.com/SanderHagen>`_ (contributor)
 * `rdanklof <https://github.com/rdanklof>`_ (contributor)
 * `rowhel95 <https://github.com/rowhel95>`_ (contributor)
 * `rvanvelzen <https://github.com/rvanvelzen>`_ (contributor)
