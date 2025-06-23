@@ -184,6 +184,8 @@ class PostNL implements LoggerAwareInterface
         'LV',
         'LT',
         'LU',
+        'LV',
+        'MC', // Monaco
         'MT',
         'NL',
         'PL',
