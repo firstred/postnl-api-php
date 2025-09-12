@@ -46,7 +46,7 @@ jobs:
                 shell: bash
                 run: |
                   composer install --no-progress --prefer-dist --optimize-autoloader
-                  composer require setasign/fpdi:2.6.2
+                  composer require setasign/fpdi:2.6.1
 
             -   name: Test with PHPUnit
                 if: matrix.php-versions != '8.4' || matrix.operating-system != 'ubuntu-latest'
