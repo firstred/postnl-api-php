@@ -42,7 +42,7 @@ jobs:
                 run: composer install --no-progress --prefer-dist --optimize-autoloader
 
             -   name: Install Composer dependencies on macOS + PHP 7.4
-                if: matrix.php-versions == '7.4' || matrix.operating-system == 'macos-latest'
+                if: matrix.php-versions == '7.4' && matrix.operating-system == 'macos-latest'
                 shell: bash
                 run: |
                   composer install --no-progress --prefer-dist --optimize-autoloader
