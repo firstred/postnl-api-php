@@ -35,7 +35,9 @@ use DateTimeZone;
 use Exception;
 use Firstred\PostNL\Exception\InvalidArgumentException;
 use setasign\Fpdi\Fpdi;
+use setasign\Fpdi\PdfParser\PdfParserException;
 use setasign\Fpdi\PdfParser\StreamReader;
+use setasign\Fpdi\PdfReader\PdfReaderException;
 
 /**
  * Class Util.
@@ -94,35 +96,33 @@ class Util
      *                            Sizes are in mm
      *
      * @since 1.0.0
+     *
+     * @throws PdfParserException|PdfReaderException
      */
     public static function getPdfSizeAndOrientation(string $pdf): bool|array|string
     {
-        try {
-            $fpdi = new Fpdi(orientation: 'P', unit: 'mm');
-            $fpdi->setSourceFile(file: StreamReader::createByString(content: $pdf));
-            // import page 1
-            $tplIdx1 = $fpdi->importPage(pageNumber: 1);
-            $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
-            $width = $size['width'];
-            $height = $size['height'];
-            $orientation = $size['orientation'];
+        $fpdi = new Fpdi(orientation: 'P', unit: 'mm');
+        $fpdi->setSourceFile(file: StreamReader::createByString(content: $pdf));
+        // import page 1
+        $tplIdx1 = $fpdi->importPage(pageNumber: 1);
+        $size = $fpdi->getTemplateSize(tpl: $tplIdx1);
+        $width = $size['width'];
+        $height = $size['height'];
+        $orientation = $size['orientation'];
 
-            $length = 'P' === $orientation ? $height : $width;
-            if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
-                $iso = 'A6';
-            } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
-                $iso = 'A5';
-            } elseif ($length >= (420 - static::ERROR_MARGIN) && $length <= (420 + static::ERROR_MARGIN)) {
-                $iso = 'A3';
-            } elseif ($length >= (594 - static::ERROR_MARGIN) && $length <= (594 + static::ERROR_MARGIN)) {
-                $iso = 'A2';
-            } elseif ($length >= (841 - static::ERROR_MARGIN) && $length <= (841 + static::ERROR_MARGIN)) {
-                $iso = 'A1';
-            } else {
-                $iso = 'A4';
-            }
-        } catch (Exception $e) {
-            return false;
+        $length = 'P' === $orientation ? $height : $width;
+        if ($length >= (148 - static::ERROR_MARGIN) && $length <= (148 + static::ERROR_MARGIN)) {
+            $iso = 'A6';
+        } elseif ($length >= (210 - static::ERROR_MARGIN) && $length <= (210 + static::ERROR_MARGIN)) {
+            $iso = 'A5';
+        } elseif ($length >= (420 - static::ERROR_MARGIN) && $length <= (420 + static::ERROR_MARGIN)) {
+            $iso = 'A3';
+        } elseif ($length >= (594 - static::ERROR_MARGIN) && $length <= (594 + static::ERROR_MARGIN)) {
+            $iso = 'A2';
+        } elseif ($length >= (841 - static::ERROR_MARGIN) && $length <= (841 + static::ERROR_MARGIN)) {
+            $iso = 'A1';
+        } else {
+            $iso = 'A4';
         }
 
         return [
