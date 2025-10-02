@@ -5,45 +5,8 @@ jobs:
         runs-on: ${{ matrix.operating-system }}
         strategy:
             matrix:
-                operating-system: [ 'ubuntu-24.04', 'windows-2025', 'macos-15' ]
-                php-versions: [ '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
-                include:
-                    - operating-system: 'ubuntu-24.04'
-                      php-versions: '5.6'
-                    - operating-system: 'windows-2025'
-                      php-versions: '5.6'
-                    - operating-system: 'macos-13'
-                      php-versions: '5.6'
-                    - operating-system: 'ubuntu-24.04'
-                      php-versions: '7.0'
-                    - operating-system: 'windows-2025'
-                      php-versions: '7.0'
-                    - operating-system: 'macos-13'
-                      php-versions: '7.0'
-                    - operating-system: 'ubuntu-24.04'
-                      php-versions: '7.1'
-                    - operating-system: 'windows-2025'
-                      php-versions: '7.1'
-                    - operating-system: 'macos-13'
-                      php-versions: '7.1'
-                    - operating-system: 'ubuntu-24.04'
-                      php-versions: '7.2'
-                    - operating-system: 'windows-2025'
-                      php-versions: '7.2'
-                    - operating-system: 'macos-13'
-                      php-versions: '7.2'
-                    - operating-system: 'ubuntu-24.04'
-                      php-versions: '7.3'
-                    - operating-system: 'windows-2025'
-                      php-versions: '7.3'
-                    - operating-system: 'macos-13'
-                      php-versions: '7.3'
-                    - operating-system:  'ubuntu-24.04'
-                      php-versions: '7.4'
-                    - operating-system: 'windows-2025'
-                      php-versions: '7.4'
-                    - operating-system: 'macos-13'
-                      php-versions: '7.4'
+                operating-system: [ 'ubuntu-24.04', 'windows-2025', 'macos-15-intel' ]
+                php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
         steps:
             -   name: Checkout repo
                 uses: actions/checkout@v4
