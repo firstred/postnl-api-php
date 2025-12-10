@@ -1,0 +1,106 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: origin, x-requested-with, accept, apikey, Content-Type
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Origin: *
+Access-Control-Max-Age: 3628800
+Cache-Control: private, max-age=0
+Content-Type: application/json;charset=UTF-8
+Date: Wed, 31 Mar 2021 12:24:44 GMT
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-Robots-Tag: noindex
+X-XSS-Protection: 1; mode=block
+Connection: keep-alive
+
+
+{
+  "CurrentStatus": {
+    "Shipment": {
+      "MainBarcode": "3S8392302392342",
+      "Barcode": "3S8392302392342",
+      "ShipmentAmount": "1",
+      "ShipmentCounter": "1",
+      "Customer": {
+        "Address": {
+          "AddressType": "02",
+          "City": "Den Haag",
+          "CompanyName": "Sender Company B.V.",
+          "Countrycode": "NL",
+          "HouseNr": "3",
+          "Street": "Waldorpstraat",
+          "Zipcode": "2521CA"
+        },
+        "CollectionLocation": "123456",
+        "CustomerCode": "DEVC",
+        "CustomerNumber": "11223344",
+        "Email": "sender@example.com"
+      },
+      "ProductCode": "003087",
+      "ProductDescription": "Verhoogde Aansprakelijkheid Zending",
+      "Reference": "ORDER-2023-001234",
+      "Dimension": {
+        "Height": "390",
+        "Length": "600",
+        "Volume": "93600",
+        "Weight": "8820",
+        "Width": "400"
+      },
+      "Amount": {
+        "VerzekerdBedrag": "EUR800.00"
+      },
+      "ProductOptions": [
+        {
+          "OptionCode": "27",
+          "CharacteristicCode": "122"
+        },
+        {
+          "OptionCode": "17",
+          "CharacteristicCode": "122"
+        },
+        {
+          "OptionCode": "21",
+          "CharacteristicCode": "122"
+        },
+        {
+          "OptionCode": "1",
+          "CharacteristicCode": "112"
+        }
+      ],
+      "Expectation": {
+        "ETAFrom": "2023-10-11T14:35:00",
+        "ETATo": "2023-10-11T16:35:00"
+      },
+      "Status": {
+        "TimeStamp": "11-10-2023 15:32:16",
+        "StatusCode": "11",
+        "StatusDescription": "Zending afgeleverd",
+        "PhaseCode": "4",
+        "PhaseDescription": "Afgeleverd"
+      },
+      "Addresses": [
+        {
+          "AddressType": "01",
+          "FirstName": "Jan",
+          "LastName": "Jansen",
+          "CompanyName": "Receiver B.V.",
+          "Street": "Damrak",
+          "HouseNumber": "10",
+          "HouseNumberSuffix": "A",
+          "Zipcode": "1012LG",
+          "City": "Amsterdam",
+          "CountryCode": "NL"
+        },
+        {
+          "AddressType": "02",
+          "CompanyName": "Sender Company B.V.",
+          "Street": "Waldorpstraat",
+          "HouseNumber": "3",
+          "Zipcode": "2521CA",
+          "City": "Den Haag",
+          "CountryCode": "NL"
+        }
+      ]
+    }
+  }
+}
