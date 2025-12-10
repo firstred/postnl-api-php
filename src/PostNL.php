@@ -2154,7 +2154,7 @@ class PostNL implements LoggerAwareInterface
 
         $responses = $this->getHttpClient()->doRequests();
         foreach ($responses as $requestType => $response) {
-            if (200 === $response->getStatusCode()) {
+            if ($response instanceof ResponseInterface && 200 === $response->getStatusCode()) {
                 $results[$requestType] = $response;
                 switch ($requestType) {
                     case 'timeframes':
