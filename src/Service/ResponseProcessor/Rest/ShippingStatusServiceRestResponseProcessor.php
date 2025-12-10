@@ -139,6 +139,9 @@ class ShippingStatusServiceRestResponseProcessor extends AbstractRestResponsePro
                     unset($shipment->Event);
                 }
 
+                if (!isset($shipment->Events)) {
+                    $shipment->Events = [];
+                }
                 if (!is_array(value: $shipment->Events)) {
                     $shipment->Events = [$shipment->Events];
                 }
