@@ -392,8 +392,6 @@ class LocationServiceTest extends ServiceTestCase
     {
         $serviceReflection = new ReflectionObject(object: $this->service);
         $requestBuilderReflection = $serviceReflection->getProperty(name: 'requestBuilder');
-        /* @noinspection PhpExpressionResultUnusedInspection */
-        $requestBuilderReflection->setAccessible(accessible: true);
         /** @var LocationServiceRestRequestBuilder $requestBuilder */
         $requestBuilder = $requestBuilderReflection->getValue(object: $this->service);
 
