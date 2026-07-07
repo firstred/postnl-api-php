@@ -27,85 +27,14 @@
 
 namespace Firstred\PostNL\Util;
 
-use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class DummyLogger.
  *
  * @internal
+ * @deprecated Use \Psr\Log\NullLogger directly instead.
  */
-class DummyLogger implements LoggerInterface
+class DummyLogger extends NullLogger
 {
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function emergency($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function alert($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function critical($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function error($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function warning($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function notice($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function info($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param string $message
-     * @param array  $context
-     */
-    public function debug($message, array $context = [])
-    {
-    }
-
-    /**
-     * @param mixed  $level
-     * @param string $message
-     * @param array  $context
-     */
-    public function log($level, $message, array $context = [])
-    {
-    }
 }
