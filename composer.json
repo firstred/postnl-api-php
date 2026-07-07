@@ -34,9 +34,9 @@
         "php-http/mock-client": "^1.3",
         "phpunit/phpunit": ">=5.7",
         "sabre/xml": "^1.5",
-        "symfony/dotenv": "^3.0 || ^4.0 || ^5.0",
-        "yoast/phpunit-polyfills": "^0.2",
-        "monolog/monolog": "^1.0 || ^2.0"
+        "symfony/dotenv": "^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+        "yoast/phpunit-polyfills": "^0.2 || ^1.0 || ^2.0",
+        "monolog/monolog": "^1.0 || ^2.0 || ^3.0"
     },
     "suggest": {
         "sabre/xml": "To use the SOAP API -- supports ^1.5",
