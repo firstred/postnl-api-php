@@ -34,7 +34,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\HttpClient\HttpClient;
@@ -56,7 +55,7 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.0.0
  */
-class SymfonyHttpClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class SymfonyHttpClient extends BaseHttpClient implements ClientInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;

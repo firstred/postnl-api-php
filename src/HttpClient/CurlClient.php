@@ -35,7 +35,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
 use function define;
 use function defined;
@@ -63,7 +62,7 @@ if (!defined('CURLE_SSL_CACERT_BADFILE')) {
  *
  * @since 1.0.0
  */
-class CurlClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class CurlClient extends BaseHttpClient implements ClientInterface
 {
     /** @var static */
     private static $instance;

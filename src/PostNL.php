@@ -120,7 +120,6 @@ use Psr\Cache\InvalidArgumentException as PsrCacheInvalidArgumentException;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Sabre\Xml\Version;
 use setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException;
@@ -148,7 +147,7 @@ use const E_USER_WARNING;
  *
  * @since 1.0.0
  */
-class PostNL implements LoggerAwareInterface
+class PostNL
 {
     /** @deprecated 1.4.0 */
     #[Deprecated]

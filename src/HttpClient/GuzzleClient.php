@@ -44,7 +44,6 @@ use GuzzleHttp\Utils;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use function is_array;
@@ -57,7 +56,7 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.0.0
  */
-class GuzzleClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class GuzzleClient extends BaseHttpClient implements ClientInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;

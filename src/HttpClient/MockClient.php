@@ -38,7 +38,6 @@ use GuzzleHttp\Psr7\Message as PsrMessage;
 use JetBrains\PhpStorm\Deprecated;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LogLevel;
 use function is_array;
 use function user_error;
@@ -49,7 +48,7 @@ use const E_USER_DEPRECATED;
  *
  * @since 1.0.0
  */
-class MockClient extends BaseHttpClient implements ClientInterface, LoggerAwareInterface
+class MockClient extends BaseHttpClient implements ClientInterface
 {
     const DEFAULT_TIMEOUT = 60;
     const DEFAULT_CONNECT_TIMEOUT = 20;
